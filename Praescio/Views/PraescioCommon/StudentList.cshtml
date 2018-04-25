@@ -1,0 +1,227 @@
+﻿@{
+    ViewBag.Title = "Student List";
+    var institutionid = ViewBag.InstitutionId;
+    var isIndividual = institutionid > 1 ? false :true;
+}
+
+<style>
+    .uploadbtn {
+        color: #fff !important;
+        text-decoration: none !important;
+        background: #3F7CFF !important;
+        font-size: 14px;
+        text-transform: uppercase;
+        padding: 5px 8px 3px;
+        border-radius: 2px;
+        text-decoration: none;
+        position: relative;
+        box-shadow: none;
+        line-height: 1;
+        display: inline-block;
+        margin-top: 0;
+    }
+</style>
+<!-- page content -->
+<div class="right_col" role="main" ng-controller="StudentListCtrl">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Dashboard</h3>
+            </div>
+            <div class="title_right">
+                <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <ol class="breadcrumb">
+                            <li><a href="@Url.Action("index", "Home")"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                            <li class="active">Student's List</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>List of Student</h2>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+
+                        <div class="col-sm-6">
+                            <label style="float:left;white-space:nowrap;">
+                                @*Show &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <select name="filtertype" style="display:inline !important;width:60px !important;" class="form-control input-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;entries*@
+
+                                <a href="@Url.Action("Download", "PraescioCommon", new { filePath = @Praescio.Domain.AppCode.CommonCode.StudentList, @class = "btn btn-primary uploadbtn" })" class="btn btn-primary uploadbtn">Download Excel Template</a>
+                                <a href="#" class="btn btn-primary uploadbtn" data-toggle="modal" data-target=".bs-example-modal-sm">Bulk Upload Student</a>
+                            </label>
+
+
+                        </div>
+                        <div class="col-sm-6">
+                            <label style="float:right;padding-right:53px;white-space:nowrap;">Search:&nbsp;&nbsp;&nbsp;&nbsp;<input type="search" style="display:inline !important" class="form-control input-sm" placeholder=""></label>
+                        </div>
+
+                        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                        <h4 class="modal-title" id="myModalLabel2">Upload Student</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="x_content">
+                                            <!-- start form for validation -->
+                                            <form id="demo-form" data-parsley-validate>
+                                                <div class="form-group">
+                                                    <label for="Upload File">Upload File</label>
+                                                    <input type="file" name="file" class="form-control"
+                                                           onchange="angular.element(this).scope().loadFile(this.files)" />
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <span class="btn btn-primary" ng-click="UserBulkUpload()" ng-disabled="savinguploaduser">
+                                            Save
+                                            <i class="fa fa-spinner fa-spin" ng-show="savinguploaduser"></i>
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <table id="datatable1" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone No.</th>
+                                    <th>Registration Date</th>
+                                    <th>Expiry Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr dir-paginate="student in StudentList |itemsPerPage:10|filter:searchText" total-items="totalcount">
+                                    <td><a href="@Url.Action("StudentProfile", "InstitutionStudent")?StudentAccountId={{student.AccountId}}&isIndividual=@Convert.ToString(ViewBag.IsIndividual)">{{student.FirstName}}</a></td>
+                                    <td>{{student.Email}}</td>
+                                    <td>{{student.MobileNo}}</td>
+                                    <td>{{student.CreatedOn| date:'dd MMM yyyy'}}</td>
+                                    <td>{{student.ExpiredOn| date:'dd MMM yyyy'}}</td>
+                                    <td>{{student.IsActive==true?'Active':'DeActive'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <dir-pagination-controls max-size="10"
+                                                 direction-links="true"
+                                                 on-page-change="onPageChange(newPageNumber)"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        myApp.controller('StudentListCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+            $scope.itemPerPage = 10;
+
+            $scope.Teacher = {};
+            $scope.TitleName = 'List of Student'
+
+            NetworkService.get('PraescioCommon/GetStudentList?isIndividual=@ViewBag.IsIndividual&version=@ViewBag.Version&institutionId=@ViewBag.InstitutionId').success(function (data) {
+                $scope.StudentList = data.AccountDetail;
+                $scope.totalcount = data.TotalRecord;
+            });
+
+            $scope.onPageChange = function (pageno) {
+                var url = '&pageNo=' + pageno + '&itemPerPage=' + $scope.itemPerPage;
+
+                NetworkService.get('PraescioCommon/GetStudentList?isIndividual=@ViewBag.IsIndividual&version=@ViewBag.Version&institutionId=@ViewBag.InstitutionId' + url).success(function (data) {
+                    $scope.StudentList = data.AccountDetail;
+                    $scope.totalcount = data.TotalRecord;
+                });
+            }
+
+
+            //CREATE BULK TEACHER USING EXCEL
+            $scope.selectedFile = null;
+            $scope.msg = "";
+
+
+            $scope.loadFile = function (files) {
+                $scope.$apply(function () {
+                    $scope.selectedFile = files[0];
+                })
+
+            }
+
+            $scope.UserBulkUpload = function () {
+                $scope.savinguploaduser = true;
+                var file = $scope.selectedFile;
+
+                if (file) {
+
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+
+                        var data = e.target.result;
+
+                        var workbook = XLSX.read(data, { type: 'binary' });
+
+                        var first_sheet_name = workbook.SheetNames[0];
+
+                        var sheet1 = XLSX.utils.sheet_to_json(workbook.Sheets[first_sheet_name]);
+
+                        jQuery.map(sheet1, function (item, index) {
+                            item.DateOfBirth = ConvertDateFormat(item.DateOfBirth);
+                            item.ActivateOn = ConvertDateFormat(item.ActivateOn);
+                            item.ExpiredOn = ConvertDateFormat(item.ExpiredOn);
+                            return sheet1;
+                        });
+
+                        var data = '{"Account":' + JSON.stringify(sheet1) + ',"institutionId":@institutionid' + '}';
+
+                        NetworkService.insert('PraescioCommon/UploadBulkStudent?isIndividual=@isIndividual', data).success(function (data) {
+                            $scope.savinguploaduser = false;
+                            $('.modal').modal('toggle');
+                            swal({
+                                title: data,
+                                text: "Press Ok to Continue.",
+                                type: "success",
+                                confirmButtonColor: "green",
+                                showCancelButton: false,
+                            });
+
+                        }).error(function (data, status) {
+                            $scope.savinguploaduser = false;
+                        });;
+                    }
+
+                    reader.onerror = function (ex) {
+                        $scope.savinguploaduser = false;
+                    }
+
+                    reader.readAsBinaryString(file);
+                }
+            }
+
+
+        });
+    </script>
+}

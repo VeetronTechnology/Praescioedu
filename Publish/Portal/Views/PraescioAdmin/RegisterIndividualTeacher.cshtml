@@ -1,0 +1,324 @@
+﻿@{
+    ViewBag.Title = "Teacher";
+}
+
+<style>
+    .col-xs-12, .col-md-12 {
+        padding-right: 0px !important;
+        padding-left: 0px !important;
+    }
+</style>
+
+<!-- page content -->
+<div class="right_col" role="main" ng-controller="TeacherRegisterCtrl">
+    <div class="">
+
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Registration</h3>
+            </div>
+            <div class="title_right">
+                <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <ol class="breadcrumb">
+                            <li><a href="@Url.Action("Dashboard", "PraescioAdmin")"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                            <li class="active">Teacher Registration</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Teacher Registration</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <!-- start form for validation -->
+                        <form id="TeacherRegistration" name="TeacherRegistration" autocomplete="off" data-parsley-validate>
+
+                            <div class="form-group">
+                                <label for="TeacherUsername" class="required">UserName</label>
+                                <input type="text" id="TeacherUsername" ng-model="Teacher.UserName" readonly onfocus="this.removeAttribute('readonly');" class="form-control" name="TeacherUsername" placeholder="Enter First Name" required />
+                                <p ng-show="TeacherRegistration.TeacherUsername.$invalid && (TeacherRegistration.TeacherUsername.$dirty || submitted ||TeacherRegistration.TeacherUsername.$touched )" class="text-danger">Username is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Password" class="required">Password</label>
+                                <input type="password" id="Password" ng-model="Teacher.Password" readonly onfocus="this.removeAttribute('readonly');" class="form-control" name="Password" placeholder="Enter Password" required />
+                                <p ng-show="TeacherRegistration.Password.$invalid && (TeacherRegistration.Password.$dirty || submitted ||TeacherRegistration.Password.$touched )" class="text-danger">Password is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="firstname" class="required">First Name</label>
+                                <input type="text" id="firstname" ng-model="Teacher.FirstName" class="form-control" name="firstname" placeholder="Enter First Name" required />
+                                <p ng-show="TeacherRegistration.firstname.$invalid && (TeacherRegistration.firstname.$dirty || submitted ||TeacherRegistration.firstname.$touched )" class="text-danger">First Name is required.</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastname" class="required">Last Name</label>
+                                <input type="text" id="lastname" ng-model="Teacher.LastName" class="form-control" name="lastname" data-parsley-trigger="change" placeholder=" Enter Last Name" required />
+                                <p ng-show="TeacherRegistration.lastname.$invalid && (TeacherRegistration.lastname.$dirty || submitted ||TeacherRegistration.lastname.$touched )" class="text-danger">Last Name is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="regno" class="required">Mobile Number</label>
+                                <input type="text" id="MobileNo" ng-model="Teacher.MobileNo" class="form-control number" name="MobileNo" data-parsley-trigger="change" placeholder="Mobile Number" required />
+                                <p ng-show="TeacherRegistration.MobileNo.$invalid && (TeacherRegistration.MobileNo.$dirty || submitted ||TeacherRegistration.MobileNo.$touched )" class="text-danger">Mobile is required.</p>
+
+
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email" class="required">Email id</label>
+                                <input type="email" id="Email" ng-model="Teacher.Email" class="form-control" name="Email" data-parsley-trigger="change" placeholder="Enter Email Id" required />
+                                <p ng-show="TeacherRegistration.Email.$invalid && (TeacherRegistration.Email.$dirty || submitted ||TeacherRegistration.Email.$touched )" class="text-danger">Enter valid Email ID.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <textarea id="address" ng-model="Teacher.Address" required="required" class="form-control" name="Address" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.." placeholder="Enter Address"
+                                          data-parsley-validation-threshold="10"></textarea>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="Version">Select Version</label>
+                                <select id="Version" name="Version" class="input-sm form-control" ng-model="Teacher.VersionType" ng-options="option.Name as option.Name for option in VersionType" ng-change="" ng-required="true">
+                                    <option value="">-- Select Version --</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Version">Select Activate Date</label>
+                                <input type="text" id="ActivateDate" name="ActivateDate" ng-model="Teacher.ActivateOn" class="form-control" data-space="false">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Version">Select Expired Date</label>
+                                <input type="text" id="ExpiredDate" name="ExpiredDate" ng-model="Teacher.ExpiredOn" class="form-control" data-space="false">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Board" class="required">Select Board</label>
+                                <select id="Board" name="Board" class="input-sm form-control" ng-model="Teacher.BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-change="" ng-required="true">
+                                    <option value="">-- Select Board --</option>
+                                </select>
+                                <p ng-show="TeacherRegistration.Board.$invalid && (TeacherRegistration.Board.$dirty || submitted ||TeacherRegistration.Board.$touched )" class="text-danger">Board is required.</p>
+                            </div>
+
+                            <div class="col-md-12 col-xs-12">
+                                <span class="btn btn-primary" ng-click="addstandard()">Add Standard</span>
+                            </div>
+                            <div class="col-md-12 col-xs-12" >
+                                <div ng-repeat="option in Teacher.TeacherMappingStandard" class="col-md-4 col-xs-4" style="padding:0px !important">
+                                    <div class="form-group" style="padding-right:10px !important">
+                                        <div>
+                                            <label for="SubjectName">Select Standard</label>
+                                            <select id="Standard" name="Standard" class="input-sm form-control" ng-model="option.StandardId" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="" ng-required="true">
+                                                <option value="">-- Select Standard --</option>
+                                            </select>
+                                        </div>
+                                        <p ng-show="Teacher.Subject.length > 3 || (TeacherRegistration.Subject.$invalid && submitted)" class="text-danger">Max 3 Subject is required.</p>
+                                    </div>
+
+                                    <div class="form-group"  style="padding-right:10px !important">
+                                        <div>
+                                            <label for="heard">Select Subject</label>
+                                            <select class="input-sm form-control select2" multiple="" id="Subject{{$index}}" name="Subject{{$index}}"
+                                                    data-placeholder="Select team members" ng-required="true" ng-model="option.SubjectId">
+                                                <option value=""></option>
+                                                <option ng-repeat="option in SubjectList" value="{{option.Id}}">{{option.SubjectName}}</option>
+                                            </select>
+                                        </div>
+                                        <p ng-show="(TeacherRegistration.Standard.$invalid && submitted)" class="text-danger">Standard is required.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*<div class="form-group">
+                                    <div>
+                                        <label for="SubjectName">Select Subject</label>
+                                        <select class="input-sm form-control select2" multiple="" id="Subject" name="Subject"
+                                                data-placeholder="Select team members" ng-required="true" ng-model="Teacher.Subject">
+                                            <option value=""></option>
+                                            <option ng-repeat="option in SubjectList" value="{{option.Id}}">{{option.SubjectName}}</option>
+                                        </select>
+                                    </div>
+                                    <p ng-show="Teacher.Subject.length > 3 || (TeacherRegistration.Subject.$invalid && submitted)" class="text-danger">Max 3 Subject is required.</p>
+                                </div>
+
+                                <div class="form-group">
+                                    <div>
+                                        <label for="heard">Select Standard</label>
+                                        <select class="input-sm form-control select2" multiple="" ng-model="Teacher.Standard" id="Standard" name="Standard"
+                                                data-placeholder="Select Standard" ng-required="true">
+                                            <option value=""></option>
+                                            <option ng-repeat="option in StandardList" value="{{option.Id}}">{{option.StandardName}}</option>
+                                        </select>
+                                    </div>
+                                    <p ng-show="(TeacherRegistration.Standard.$invalid && submitted)" class="text-danger">Standard is required.</p>
+                                </div>*@
+
+                            <div class="form-group">
+                                <label for="schoolname">Name Of School</label>
+                                <input type="text" id="InstitutionName" ng-model="Teacher.InstitutionName" class="form-control" name="InstitutionName" data-parsley-trigger="change" placeholder="Institution Name" required />
+                                <p ng-show="TeacherRegistration.InstitutionName.$invalid && (TeacherRegistration.InstitutionName.$dirty || submitted ||TeacherRegistration.InstitutionName.$touched )" class="text-danger">Institution Name is required</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="address">School Address</label>
+                                <textarea id="InstitutionAddress" name="InstitutionAddress" required="required" class="form-control" ng-model="Teacher.InstitutionAddress" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.." placeholder="Enter School Address"
+                                          data-parsley-validation-threshold="10"></textarea>
+                                <p ng-show="TeacherRegistration.InstitutionAddress.$invalid && (TeacherRegistration.InstitutionAddress.$dirty || submitted ||TeacherRegistration.InstitutionAddress.$touched )" class="text-danger">Institution Address is required</p>
+                            </div>
+
+                            <br />
+                            <span class="btn btn-primary" ng-click="reset()">Reset</span>
+                            <span class="btn btn-primary" ng-click="RegisterTeacher()" ng-disabled="savingRequest">
+                                Submit
+                                <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                            </span>
+                        </form>
+                        <!-- end form for validations -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- footer content -->
+@section Scripts{
+
+    <script type="text/javascript">
+
+
+        myApp.controller('TeacherRegisterCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+
+            $scope.Teacher = {};
+            $scope.Teacher.TeacherMappingStandard = [{
+                "StandardId": null,
+                "SubjectId": null
+            }];
+
+            $scope.addstandard = function () {
+                $scope.Teacher.TeacherMappingStandard.push({ "StandardId": null, "SubjectId": null })
+                $(".select2").trigger("chosen:updated");
+                setTimeout(function () {
+                    $(".select2").select2();
+                }, 200)
+            }
+
+            setTimeout(function () {
+                $(".select2").select2();
+            }, 200)
+
+            $scope.Teacher.UserName = '';
+            $scope.Teacher.ActivateOn = '@DateTime.Parse(DateTime.Now.ToString().Trim()).ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)';
+            $scope.Teacher.ExpiredOn = '@DateTime.Parse(DateTime.Now.AddYears(1).ToString().Trim()).ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)';
+            $scope.TitleName = 'Register School'
+
+            $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
+                               { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }]
+
+            $scope.SubjectList = [{ Id: 1, SubjectName: 'English' }, { Id: 2, SubjectName: 'Hindi' }, { Id: 3, SubjectName: 'Marathi' },
+                               { Id: 4, SubjectName: 'Science' }, { Id: 5, SubjectName: 'Mathematics' }];
+
+            $scope.VersionType = [{ Id: 1, Name: '@Praescio.Domain.AppCode.VersionType.Paid' }, { Id: 2, Name: '@Praescio.Domain.AppCode.VersionType.Trail' }]
+
+
+            NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
+                $scope.BoardList = data;
+            });
+
+            NetworkService.get('PraescioAdmin/GetState').success(function (data) {
+                $scope.StateList = data;
+            });
+
+
+            $scope.reset = function () {
+
+                $scope.Teacher.UserName = '';
+                $scope.Teacher.FirstName = '';
+                $scope.Teacher.Password = '';
+                $scope.Teacher.LastName = '';
+                $scope.Teacher.Email = '';
+                $scope.Teacher.Address = '';
+                $scope.Teacher.MobileNo = '';
+                $scope.Teacher.InstitutionName = '';
+                $scope.Teacher.InstitutionAddress = '';
+
+
+            };
+
+            $scope.RegisterTeacher = function () {
+
+                console.log($scope.Teacher);
+                var ActivateOn = $scope.Teacher.ActivateOn;
+                var ExpiredOn = $scope.Teacher.ExpiredOn;
+                $scope.Teacher.ActivateOn = ConvertDateFormat($scope.Teacher.ActivateOn);
+                $scope.Teacher.ExpiredOn = ConvertDateFormat($scope.Teacher.ExpiredOn);
+
+                if (!$scope.TeacherRegistration.$valid) {
+                    $scope.submitted = true;
+                }
+                else {
+
+                    $scope.savingRequest = true;
+
+                    $scope.Teacher.IsIndividual = true;
+                    $scope.Teacher.InstitutionAccountId = '@Praescio.Models.Common.ACCOUNT.InstitutionAccountId';
+                    $scope.Teacher.AccountTypeId = '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)'
+                    var data = '{"account":' + JSON.stringify($scope.Teacher) + ',"TeacherMappingStandard":' + JSON.stringify($scope.Teacher.TeacherMappingStandard) + ',"accounttypeid":' + '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)' + ',"isTeacher":' + true + '}';
+                    NetworkService.insert('PraescioAdmin/RegisterTeacher', data).success(function (data) {
+                        $scope.savingRequest = false;
+                        $scope.Teacher.ActivateOn = ActivateOn;
+                        $scope.Teacher.ExpiredOn = ExpiredOn;
+
+                        swal({
+                            title: "Teacher has been successfully registered!!!",
+                            text: "Press Ok to Continue.",
+                            type: "success",
+                            confirmButtonColor: "green",
+                            showCancelButton: false,
+                        });
+
+                    }).error(function (data) {
+                        $scope.Teacher.ActivateOn = ActivateOn;
+                        $scope.Teacher.ExpiredOn = ExpiredOn;
+                        $scope.savingRequest = false;
+                        swal({
+                            title: data,
+                            text: "Press Ok to Continue.",
+                            type: "error",
+                            confirmButtonColor: "red",
+                            showCancelButton: false,
+                        });
+                    });
+                }
+            }
+
+
+
+            var pickerDefault = new Pikaday(
+            {
+                field: document.getElementById('ActivateDate'),
+                format: 'DD/MM/YYYY',
+                minDate: new Date()
+            });
+            var pickerDefault = new Pikaday(
+            {
+                field: document.getElementById('ExpiredDate'),
+                format: 'DD/MM/YYYY',
+                minDate: new Date()
+            });
+
+
+        });
+    </script>
+}

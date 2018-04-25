@@ -1,0 +1,124 @@
+﻿
+@{
+    ViewBag.Title = "AddStudent";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="right_col" role="main" ng-controller="AddStudentCtrl">
+    <div class="cont">
+
+        <ol class="breadcrumb breadcrumb-bg-teal align-right">
+            <li><a href="@Url.Action("Dashboard", "IndividualTeacher")"><i class="material-icons">home</i> Home</a></li>
+            <li><i class="material-icons">person_add</i> Add Student</li>
+        </ol>
+
+        <div class="container-fluid">
+            <!-- Vertical Layout -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                Add Student
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <form>
+                                <label for="First Name">First Name</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" id="password" class="form-control" placeholder="Enter First Name">
+                                    </div>
+                                </div>
+                                <label for="Last Name">Last Name</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" id="password" class="form-control" placeholder="Enter Last Name">
+                                    </div>
+                                </div>
+                                <label for="Students Parent’s Mobile Number">Students Parent’s Mobile Number</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" id="password" class="form-control" placeholder="Enter Mobile Number">
+                                    </div>
+                                </div>
+                                <label class="form-label">Address</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" id="password" class="form-control" placeholder="Enter Address">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="heard">Select Standard</label>
+                                    <select class="input-sm form-control select2" multiple="" ng-model="Student.Standard" id="Standard" name="Standard"
+                                            data-placeholder="Select Standard" ng-required="true">
+                                        <option value=""></option>
+                                        <option ng-repeat="option in StandardList" value="{{option.Id}}">{{option.StandardName}}</option>
+                                    </select>
+                                </div>
+                                    <div class="form-group">
+                                        <label for="heard">Select Medium</label>
+                                        <select class="input-sm form-control select2" multiple="" id="SubjectName" name="SubjectName"
+                                                data-placeholder="Select Medium" ng-required="true" ng-model="Student.Subject">
+                                            <option value=""></option>
+                                            <option ng-repeat="option in SubjectList" value="{{option.Id}}">{{option.SubjectName}}</option>
+                                        </select>
+                                    </div>
+                                    <br>
+                                    <button type="button" class="btn btn-primary m-t-15 waves-effect">Save</button>
+                                    <a href="@Url.Action("UpgradePackage", "IndividualTeacher")" class="btn btn-success m-t-15 waves-effect">Purchase Package</a>
+</form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- #END# Vertical Layout -->
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+
+        myApp.controller('AddStudentCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+
+            $scope.Student = {};
+            $scope.TitleName = 'Add Student'
+
+            $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
+                               { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }]
+
+            $scope.SubjectList = [{ Id: 1, SubjectName: 'English' }, { Id: 2, SubjectName: 'Hindi' }, { Id: 3, SubjectName: 'Marathi' },
+                               { Id: 4, SubjectName: 'Science' }, { Id: 5, SubjectName: 'Mathematics' }];
+
+            $scope.VersionType = [{ Id: 1, Name: 'Paid' }, { Id: 2, Name: 'Trail' }];
+
+            NetworkService.get('Admin/GetBoardList').success(function (data) {
+                $scope.BoardList = data;
+            });
+
+            NetworkService.get('Admin/GetSchoolList').success(function (data) {
+                $scope.SchoolList = data;
+            });
+
+            NetworkService.get('Admin/GetState').success(function (data) {
+                $scope.StateList = data;
+            });
+
+            $scope.RegisterStudent = function () {
+                $scope.Student.IsIndividual = true;
+                var data = '{"account":' + JSON.stringify($scope.Student) + ',"subject":' + JSON.stringify($scope.Student.Subject) + ',"standard":' + JSON.stringify($scope.Student.Standard) + ',"isTeacher":' + false + '}';
+                console.log(data);
+                NetworkService.insert('Admin/RegisterStudent', data).success(function (data) {
+                    console.log('success');
+                });
+            }
+
+            $(".select2").select2();
+
+        });
+    </script>
+}

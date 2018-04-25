@@ -1,0 +1,112 @@
+﻿
+@{
+    ViewBag.Title = "ExerciseHistory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="right_col" role="main" style="background:#48c9b0" ng-controller="ExerciseCheckCtrl">
+    <div class="cont">
+        <div class="table-agile-info">
+            <ol class="breadcrumb">
+                <li><a href="lesson_history.html">Lesson</a></li>
+                <li><a href="test_history.html">Test History</a></li>
+                <li class="active">Exercise - [other type of Question] </li>
+            </ol>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Exercise - [other type of Question]
+                    <span class="tools pull-right" style="font-size:12px;font-weight:600;">
+                        <a href="javascript:;">Total: Duration : ddd:hh:mm</a>
+                    </span>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped b-t b-light">
+                        <tbody>
+                            <tr>
+                                <th>Lesson Summary:</th>
+                                <td>
+                                    Sylvia, who narrates the story, is a young girl living in a poor area of New York City. She and her friends are developing their strategies to cope with life as they know it. She has adopted the pose of a know-it-all who can figure out things for herself, and she tells herself that she resents and has no use for Miss Moore, the college-educated African American woman who frequently serves as a guide and unofficial teacher for the local children.
+                                    Miss Moore arranges a trip for Sylvia, Sugar, and six other children to go to the F. A. O. Schwarz toy store at Fifth Avenue and Fifty-seventh Street. Miss Moore knows that this will be a new experience for the children, who have been isolated in their neighborhood, and that they will encounter items they have never seen, items that are far beyond their economic means. She wants the youngsters to learn that there is much more to the world than the slum area they know, and particularly for them to realize that wealth is unfairly and unequally distributed.
+                                    The emphasis on the relative value of money begins for Sylvia when Miss Moore gives her a five-dollar bill to pay the taxi fare to the store. Sylvia is told to include a 10 percent tip for the driver and return the change to Miss Moore. Sylvia gives the cab driver the fare of eighty-five cents but decides that she needs money more than he does and keeps not only the tip but the remainder of the money.
+                                    At the toy store, the children feel uneasy and out of place. Looking through the window, they are stunned by the products offered and by their high prices. Ronald sees what he recognizes as a...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-striped b-t b-light">
+                        <tbody>
+                            <tr>
+                                <th>Answer</th>
+                                <th>Correct Answer</th>
+                                <th>Result</th>
+                                <th>Marks Obtained</th>
+
+                            </tr>
+                            <tr ng-repeat="act in Acitivity.studentActivity">
+                                <td>{{$index+1}}. {{act.Question.Title}}</td>
+                                <td>{{act.Question.CorrectAnswer}}</td>
+                                <td>
+                                    <i ng-if="act.UserAssessment.MarkScored==1" class="fa fa-check text-success text-active"></i>
+                                    <i ng-if="act.UserAssessment.MarkScored==0" class="fa fa-times text-danger text-active"></i>
+                                </td>
+                                <td>{{act.UserAssessment.MarkScored}}</td>
+                            </tr>
+
+                            <tr>
+                                <td><b>Total Marks  {{Acitivity.MarksScored}}/{{Acitivity.totalMarks}}</b> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    @*<table class="table table-striped b-t b-light">
+                        <tbody>
+                            <tr>
+                                <th>Question</th>
+                                <th>Answer</th>
+                                <th>Result</th>
+                                <th>Marks Obtained</th>
+                            </tr>
+                            <tr>
+                                <td>1. How long has it been raining ?</td>
+                                <td>Lorem Ipsum is simply dummy text of the printing and typesetting industry</td>
+                                <td><i class="fa fa-check text-success text-active"></i></td>
+                                <td>03/05</td>
+                            </tr>
+                            <tr>
+                                <td>2. What is trees?</td>
+                                <td>Lorem Ipsum is simply dummy text of the printing and typesetting industry</td>
+                                <td><i class="fa fa-check text-success text-active"></i></td>
+                                <td>04/05</td>
+                            </tr>
+                            <tr>
+                                <td>3. Why was Pinocchio not go to school ?</td>
+                                <td>Lorem Ipsum is simply dummy text of the printing and typesetting industry</td>
+                                <td><i class="fa fa-check text-success text-active"></i></td>
+                                <td>02/05</td>
+                            </tr>
+                            <tr>
+                                <td><b>Total Marks</b></td>
+                                <td colspan="3">09/15</td>
+                            </tr>
+                        </tbody>
+                    </table>*@
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        myApp.controller('ExerciseCheckCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+            $scope.Student = {};
+
+            NetworkService.get('PraescioCommon/GetStudentActivityMarks?assignmentid=@ViewBag.AssignmentId&QuestionType=@Convert.ToInt16(Praescio.BusinessEntities.Common.TypeOfQuestion.Exercise)').success(function (data) {
+                $scope.Acitivity = data;
+            });
+        });
+    </script>
+}

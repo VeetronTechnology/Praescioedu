@@ -1,0 +1,141 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="right_col" style="background:#48c9b0" role="main">
+
+    <div class="">
+        <!-- Small boxes (Stat box) -->
+
+        <div class="block-header">
+            <h2>DASHBOARD</h2>
+        </div>
+        <div class="row clearfix">
+
+            <div class="market-updates">
+                <div class="col-md-3 market-update-gd">
+                    <a href="@Url.Action("AssignmentList", "InstitutionStudent")">
+                        <div class="market-update-block clr-block-2">
+                            <div class="col-md-4 market-update-right">
+                                <i class="fa fa-eye"> </i>
+                            </div>
+                            <div class="col-md-8 market-update-left">
+                                <h4>Assignments</h4>
+                            </div>
+                            <div class="clearfix"> </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 market-update-gd">
+                    <a href="@Url.Action("UploadCreativity", "InstitutionStudent")">
+                        <div class="market-update-block clr-block-1">
+                            <div class="col-md-4 market-update-right">
+                                <i class="fa fa-users"></i>
+                            </div>
+                            <div class="col-md-8 market-update-left">
+                                <h4>Upload Creativity</h4>
+                            </div>
+                            <div class="clearfix"> </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 market-update-gd">
+                    <a href="@Url.Action("AssignmentList", "InstitutionStudent")">
+                        <div class="market-update-block clr-block-3">
+                            <div class="col-md-4 market-update-right">
+                                <i class="fa fa-usd"></i>
+                            </div>
+                            <div class="col-md-8 market-update-left">
+                                <h4>P-Extra Act</h4>
+                            </div>
+                            <div class="clearfix"> </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 market-update-gd">
+                    <a href="@Url.Action("TestHistory", "InstitutionStudent")">
+                        <div class="market-update-block clr-block-4">
+                            <div class="col-md-4 market-update-right">
+                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                            </div>
+                            <div class="col-md-8 market-update-left">
+                                <h4>History Of Exam</h4>
+                            </div>
+                            <div class="clearfix"> </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+
+        </div><!-- /.row -->
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Notifications</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <article class="media event">
+                            <a class="pull-left date">
+                                <p class="month">April</p>
+                                <p class="day">23</p>
+                            </a>
+                            <div class="media-body">
+                                <a class="title" href="notification_details.html">Staff Meeting</a>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            </div>
+                        </article>
+                        <article class="media event">
+                            <a class="pull-left date">
+                                <p class="month">April</p>
+                                <p class="day">23</p>
+                            </a>
+                            <div class="media-body">
+                                <a class="title" href="notification_details.html">Urgent meeting for next proposal </a>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            </div>
+                        </article>
+                        <article class="media event">
+                            <a class="pull-left date">
+                                <p class="month">April</p>
+                                <p class="day">23</p>
+                            </a>
+                            <div class="media-body">
+                                <a class="title" href="notification_details.html"> Domain Renew Deadline</a>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            </div>
+                        </article>
+                        <article class="media event">
+                            <a class="pull-left date">
+                                <p class="month">April</p>
+                                <p class="day">23</p>
+                            </a>
+                            <div class="media-body">
+                                <a class="title" href="notification_details.html">Upgrade Package</a>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            </div>
+                        </article>
+                        <article class="media event">
+                            <a class="pull-left date">
+                                <p class="month">April</p>
+                                <p class="day">23</p>
+                            </a>
+                            <div class="media-body">
+                                <a class="title" href="notification_details.html">Parent's Meeting</a>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+

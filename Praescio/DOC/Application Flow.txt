@@ -1,0 +1,123 @@
+﻿==============================================
+Package Detail
+
+{
+  "NoOfStudent": 5000,
+  "NoOfTeacher": 5000,
+  "PackageType": "Institution Package"
+}
+
+==============================================
+
+*praescio admin ==> individual school register
+*praescio admin ==> individual teacher register
+*praescio admin ==> individual student register
+
+*institution admin ==> teacher register
+*institution admin ==> student register
+
+*individual teacher ==> individual student register
+
+
+==============================================
+
+*praescio admin  ==> Add (Lession) Assignment  ==> Seen by all individual/institutional
+
+*institution admin  ==> Add Assignment with teacher mapping /  mapped teacher can assign question
+
+institution teacher  ==> Add Assignment as well as question
+
+institution teacher  ==> Add Assignment as well as question
+
+individual teacher  ==> Add Assignment as well as question / seen by all individual student
+
+
+==============================================
+
+*institution admin  ==> Add Assignment with teacher mapping
+
+=========================================================
+
+use praeskmq_sch
+select * from sys.Tables where create_date > '2017-12-16 00:50:49.827'
+DROP TABLE UserAssessment
+DROP TABLE UserAssessmentDetail
+DROP TABLE Mst_StudentParentAccount
+DROP TABLE AssignmentTeacherMapping
+DROP TABLE Mst_PackageHistory
+DROP TABLE QuestionOption
+DROP TABLE Question
+DROP TABLE Assignment
+DROP TABLE TeacherStandardMapping
+DROP TABLE Subject
+DROP TABLE QuestionContent
+DROP TABLE Mst_CategoryType
+DROP TABLE KnowledgeBank
+DROP TABLE Mst_PrincipalDetail
+DROP TABLE PasswordResetAccount
+DROP TABLE QuestionType
+DROP TABLE Mst_ExceptionLog
+DROP TABLE Mst_Activities
+DROP TABLE Mst_Account
+DROP TABLE Mst_InstitutionAccount
+DROP TABLE Medium
+DROP TABLE Mst_AssignmentType
+DROP TABLE Mst_Package
+DROP TABLE Mst_State
+DROP TABLE Standard
+DROP TABLE Mst_AccountType
+DROP TABLE Mst_Board
+
+
+==========================================================
+ <customErrors mode="Off"/>
+	  <trust level="Full" />
+
+=======================================20/12/2017================================
+
+*1. In school List Status should be Active and InActive not true or false
+*2. On the school Details page Update functionality should be happen and when click on block button school should be Inactive Status.
+*3. When click on List of teacher/ List of Student button list of that school teacher and student should be display on the model pop up or different page it's ur choice.
+*4. Teacher List of Trial/Paid npt working.
+*5. Student List of Trial/Paid not working.
+*6. In View Knowleage Bank Page Edit and Delete functionality. 
+
+
+
+
+
+==================================================================================================================================================================
+ "STANDARDMapping": [{
+    "Standard": "6",
+    "Subject": ["ENG","MARATHI","HINDI"]
+  },{
+    "Standard": "5",
+    "Subject": ["ENG","MARATHI","HINDI"]
+  }],
+
+
+  ======================================================================================================================================================
+  
+INSERT INTO MST_Package
+SELECT 'INSTITUTION PACKAGE 1',1000,'{  "NoOfStudent": 5000,  "NoOfTeacher": 5000,  "PackageType": "Institution Package"}',2,NULL,GETDATE(),NULL,1
+UNION																													
+SELECT 'INSTITUTION PACKAGE 2',2000,'{  "NoOfStudent": 2000,  "NoOfTeacher": 2000,  "PackageType": "Institution Package"}',2,NULL,GETDATE(),NULL,1
+UNION																													
+SELECT 'INSTITUTION PACKAGE 3',3000,'{  "NoOfStudent": 1000,  "NoOfTeacher": 1000,  "PackageType": "Institution Package"}',2,NULL,GETDATE(),NULL,1
+
+UNION																													
+SELECT 'INSTITUTION PACKAGE 1',1000,'{  "NoOfStudent": 5000,  "NoOfTeacher": 5000,  "PackageType": "Individual Teacher Package"}',5,NULL,GETDATE(),NULL,1
+UNION																													
+SELECT 'INSTITUTION PACKAGE 2',2000,'{  "NoOfStudent": 5000,  "NoOfTeacher": 5000,  "PackageType": "Individual Teacher Package"}',5,NULL,GETDATE(),NULL,1
+UNION																													
+SELECT 'INSTITUTION PACKAGE 3',3000,'{  "NoOfStudent": 5000,  "NoOfTeacher": 5000,  "PackageType": "Individual Teacher Package"}',5,NULL,GETDATE(),NULL,1
+
+UNION																													
+SELECT 'INSTITUTION PACKAGE 1',1000,'{  "NoOfStudent": 5000,  "NoOfTeacher": 5000,  "PackageType": "Individual Student Package"}',6,NULL,GETDATE(),NULL,1
+UNION																													
+SELECT 'INSTITUTION PACKAGE 2',2000,'{  "NoOfStudent": 5000,  "NoOfTeacher": 5000,  "PackageType": "Individual Student Package"}',6,NULL,GETDATE(),NULL,1
+UNION																													
+SELECT 'INSTITUTION PACKAGE 3',3000,'{  "NoOfStudent": 5000,  "NoOfTeacher": 5000,  "PackageType": "Individual Student Package"}',6,NULL,GETDATE(),NULL,1
+
+
+

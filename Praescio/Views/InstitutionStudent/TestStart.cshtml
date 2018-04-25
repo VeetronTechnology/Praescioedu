@@ -1,0 +1,236 @@
+﻿
+@{
+    ViewBag.Title = "TestStart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="right_col" role="main" style="background:#48c9b0">
+    <div class="cont">
+
+        <div class="table-agile-info">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Assignment
+                    <span class="tools pull-right" style="font-size:12px;font-weight:600;">
+                        <a href="javascript:;">Active: Duration : ddd:hh:mm</a>
+                    </span>
+                </div>
+
+                <div class="pdf">
+                    <object data="downloads/pdf.pdf" type="application/pdf" width="900" height="400">
+                        <a href="downloads/pdf.pdf">PDF TITLE</a>
+                    </object>
+                </div>
+                <div class="market-updates">
+                    <div class="col-md-3 market-update-gd">
+                        <a href="@Url.Action("Meaningoflesson", "InstitutionStudent")">
+                            <div class="market-update-block clr-block-2">
+                                <div class="col-md-4 market-update-right">
+                                    <i class="fa fa-file-text"> </i>
+                                </div>
+                                <div class="col-md-8 market-update-left">
+                                    <p>Meaning Of Lesson</p>
+                                </div>
+                                <div class="clearfix"> </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3 market-update-gd">
+                        <a href="@Url.Action("Synonyms", "InstitutionStudent")">
+                            <div class="market-update-block clr-block-1">
+                                <div class="col-md-4 market-update-right">
+                                    <i class="fa fa-exchange"></i>
+                                </div>
+                                <div class="col-md-8 market-update-left">
+                                    <p>Synonyms In Lesson</p>
+                                </div>
+                                <div class="clearfix"> </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3 market-update-gd">
+                        <a href="@Url.Action("Antonyms", "InstitutionStudent")">
+                            <div class="market-update-block clr-block-3">
+                                <div class="col-md-4 market-update-right">
+                                    <i class="fa fa-times"></i>
+                                </div>
+                                <div class="col-md-8 market-update-left">
+                                    <p>Antonyms In Lesson</p>
+                                </div>
+                                <div class="clearfix"> </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3 market-update-gd">
+                        <a href="@Url.Action("WriteReason", "InstitutionStudent")">
+                            <div class="market-update-block clr-block-4">
+                                <div class="col-md-4 market-update-right">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                </div>
+                                <div class="col-md-8 market-update-left">
+                                    <p>Write A Reason</p>
+                                </div>
+                                <div class="clearfix"> </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="clearfix"> </div>
+                </div>
+                <div class="market-updates">
+                    <div class="col-md-3 market-update-gd">
+                        <a href="@Url.Action("FillInTheBlanks", "InstitutionStudent")">
+                            <div class="market-update-block clr-block-4">
+                                <div class="col-md-4 market-update-right">
+                                    <i class="fa fa-font"> </i>
+                                </div>
+                                <div class="col-md-8 market-update-left">
+                                    <p>Fill In The Blanks</p>
+                                </div>
+                                <div class="clearfix"> </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3 market-update-gd">
+                        <a href="@Url.Action("MatchTheFollowing", "InstitutionStudent")">
+                            <div class="market-update-block clr-block-3">
+                                <div class="col-md-4 market-update-right">
+                                    <i class="fa fa-check-square"></i>
+                                </div>
+                                <div class="col-md-8 market-update-left">
+                                    <p>Match The Following</p>
+                                </div>
+                                <div class="clearfix"> </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3 market-update-gd">
+                        <a href="@Url.Action("MultipleChoiceQuestions", "InstitutionStudent")">
+                            <div class="market-update-block clr-block-1">
+                                <div class="col-md-4 market-update-right">
+                                    <i class="fa fa-cubes"></i>
+                                </div>
+                                <div class="col-md-8 market-update-left">
+                                    <p>Multiple Choice Questions</p>
+                                </div>
+                                <div class="clearfix"> </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3 market-update-gd">
+                        <a href="@Url.Action("TrueFalseQuestions", "InstitutionStudent")">
+                            <div class="market-update-block clr-block-2">
+                                <div class="col-md-4 market-update-right">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </div>
+                                <div class="col-md-8 market-update-left">
+                                    <p>True/False Questions</p>
+                                </div>
+                                <div class="clearfix"> </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="clearfix"> </div>
+                </div>
+                <div class="market-updates">
+                    <div class="col-md-3 market-update-gd">
+                        <a href="@Url.Action("WriteAnswerInOneSentence", "InstitutionStudent")">
+                            <div class="market-update-block clr-block-2">
+                                <div class="col-md-4 market-update-right">
+                                    <i class="fa fa-pencil"> </i>
+                                </div>
+                                <div class="col-md-8 market-update-left">
+                                    <p>Write Answer In One Sentence</p>
+                                </div>
+                                <div class="clearfix"> </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3 market-update-gd">
+                        <a href="@Url.Action("DescribeBriefly", "InstitutionStudent")">
+                            <div class="market-update-block clr-block-1">
+                                <div class="col-md-4 market-update-right">
+                                    <i class="fa fa-file-text"></i>
+                                </div>
+                                <div class="col-md-8 market-update-left">
+                                    <p>Describe Briefly</p>
+                                </div>
+                                <div class="clearfix"> </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3 market-update-gd">
+                        <a href="@Url.Action("DifferentiateBetween", "InstitutionStudent")">
+                            <div class="market-update-block clr-block-3">
+                                <div class="col-md-4 market-update-right">
+                                    <i class="fa fa-adjust"></i>
+                                </div>
+                                <div class="col-md-8 market-update-left">
+                                    <p>Differentiate Between</p>
+                                </div>
+                                <div class="clearfix"> </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3 market-update-gd">
+                        <a href="@Url.Action("Exercise", "InstitutionStudent")">
+                            <div class="market-update-block clr-block-4">
+                                <div class="col-md-4 market-update-right">
+                                    <i class="fa fa-question-circle" aria-hidden="true"></i>
+                                </div>
+                                <div class="col-md-8 market-update-left">
+                                    <p>Exercise</p>
+                                </div>
+                                <div class="clearfix"> </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="clearfix"> </div>
+                </div>
+                <div class="market-updates">
+                    <div class="col-md-3 market-update-gd">
+                        <a href="@Url.Action("WriteShortNote", "InstitutionStudent")">
+                            <div class="market-update-block clr-block-4">
+                                <div class="col-md-4 market-update-right">
+                                    <i class="fa fa-pencil"> </i>
+                                </div>
+                                <div class="col-md-8 market-update-left">
+                                    <p>Write Short Note On</p>
+                                </div>
+                                <div class="clearfix"> </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3 market-update-gd">
+                        <a href="@Url.Action("ConceptOfAnyTopicOfLesson", "InstitutionStudent")">
+                            <div class="market-update-block clr-block-3">
+                                <div class="col-md-4 market-update-right">
+                                    <i class="fa fa-file-text"></i>
+                                </div>
+                                <div class="col-md-8 market-update-left">
+                                    <p>Concept Of Any Topic</p>
+                                </div>
+                                <div class="clearfix"> </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-md-3 market-update-gd">
+                        <a href="@Url.Action("ViewVideo", "InstitutionStudent")">
+                            <div class="market-update-block clr-block-1">
+                                <div class="col-md-4 market-update-right">
+                                    <i class="fa fa-file-text"></i>
+                                </div>
+                                <div class="col-md-8 market-update-left">
+                                    <p>View Video</p>
+                                </div>
+                                <div class="clearfix"> </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="clearfix"> </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+

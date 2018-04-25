@@ -1,0 +1,149 @@
+﻿
+@{
+    ViewBag.Title = "ViewAssignment";
+
+    var assignmentTitle = Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.SuperAdmin ? "Lessons" : "Assignment";
+    assignmentTitle = (int)Praescio.BusinessEntities.Common.AssignmentType.PExtra == ViewBag.AssignmentType ? "P Extra" : assignmentTitle;
+
+    var AssignmentType = ViewBag.AssignmentType;
+}
+
+<h2>ViewAssignment</h2>
+
+<!-- page content -->
+<div class="right_col" role="main" ng-controller="ViewAssignmentCtrl">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>@assignmentTitle</h3>
+            </div>
+            <div class="title_right">
+                <div class="col-md-8 col-sm-8 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <ol class="breadcrumb">
+                            <li><a href="@Url.Action("Dashboard", "PraescioAdmin")"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                            <li><a href="#"><i class="fa fa-list"></i> View @assignmentTitle</a></li>
+                            <li class="active">List Of @assignmentTitle</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>List Of @assignmentTitle </h2>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        @if (Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.SuperAdmin) == Praescio.Models.Common.ACCOUNT.AccountTypeId || Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)== Praescio.Models.Common.ACCOUNT.AccountTypeId || Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Teacher)== Praescio.Models.Common.ACCOUNT.AccountTypeId)
+                        {
+                            <a ng-click="ShowHide()" href="#" class="btn btn-primary uploadbtn">Publish</a>
+                        }
+
+                        <table class="table table-bordered table-striped table-hover js-basic-example " id="myTable1" role="grid" aria-describedby="myTable_info">
+                            <thead>
+                                <tr role="row">
+                                    <th width="80px" ng-show="IsVisible"></th>
+                                    <th class="sorting_desc" tabindex="0" aria-controls="myTable" rowspan="1" colspan="1" style="width: 57px;" aria-label="Standard: activate to sort column ascending" aria-sort="descending">Standard</th>
+                                    <th class="sorting" tabindex="0" aria-controls="myTable" rowspan="1" colspan="1" style="width: 47px;" aria-label="Subject: activate to sort column ascending">Subject</th>
+                                    <th class="sorting" tabindex="0" aria-controls="myTable" rowspan="1" colspan="1" style="width: 46px;" aria-label="Title: activate to sort column ascending">Title</th>
+                                    <th class="sorting" tabindex="0" aria-controls="myTable" rowspan="1" colspan="1" style="width: 137px;" aria-label="Description: activate to sort column ascending">Description</th>
+                                    <th class="sorting" tabindex="0" aria-controls="myTable" rowspan="1" colspan="1" style="width: 95px;" aria-label="View Questions: activate to sort column ascending">Published Date</th>
+                                    <th class="sorting" tabindex="0" aria-controls="myTable" rowspan="1" colspan="1" style="width: 95px;" aria-label="View Questions: activate to sort column ascending">View Result</th>
+                                    <th class="sorting" tabindex="0" aria-controls="myTable" rowspan="1" colspan="1" style="width: 28px;" aria-label="File: activate to sort column ascending">File</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr role="row" class="odd" dir-paginate="assignment in AssignmentList |itemsPerPage:10|filter:searchText" total-items="totalcount">
+                                    <td ng-show="IsVisible"><input type="checkbox" ng-model="assignment.IsPublished" style="cursor:pointer;" /></td>
+                                    <td class="sorting_1">{{assignment.Standard.StandardName}}</td>
+                                    <td>{{assignment.Medium.Name}}</td>
+                                    <td>{{assignment.Title}}</td>
+                                    <td data-toggle="modal" data-target="#defaultModal" class="pointer">{{assignment.Description}}</td>
+                                    <td data-toggle="modal" data-target="#defaultModal" class="pointer">{{assignment.PublishedDate | date:"dd MMM, yyyy"}}</td>
+                                    <td><a ng-href="@Url.Content("~/InstitutionStudent/TestHistory?assignmentId="){{assignment.AssignmentId}}"><span class="badge bg-teal">View Result</span></a></td>
+                                    <td><a ng-href='~/{{assignment.UploadFileSrc}}' target="_blank">File</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <dir-pagination-controls max-size="10"
+                                                 direction-links="true"
+                                                 on-page-change="onPageChange(newPageNumber)"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                        <span ng-show="IsVisible" class="btn btn-primary uploadbtn" ng-click="PublishAssignment()" ng-disabled="savingRequest">
+                            Submit
+                            <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+
+        myApp.controller('ViewAssignmentCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+            $scope.itemPerPage = 10;
+
+            $scope.ShowHide = function () {
+                $scope.IsVisible = $scope.IsVisible ? false : true;
+            }
+
+            NetworkService.get('PraescioCommon/GetAssignmentList?AssignmentType=@ViewBag.AssignmentType').success(function (data) {
+                $scope.AssignmentList = data.dataContent;
+                $scope.totalcount = data.totalRecord;
+            });
+
+            $scope.onPageChange = function (pageno) {
+                var url = '&pageNo=' + pageno + '&itemPerPage=' + $scope.itemPerPage + '&AssignmentType=@ViewBag.AssignmentType';
+
+                NetworkService.get('PraescioCommon/GetAssignmentList?' + url).success(function (data) {
+                    $scope.AssignmentList = data.dataContent;
+                    $scope.totalcount = data.totalRecord;
+                });
+            }
+
+            $scope.PublishAssignment = function () {
+                var data = '{"dataContent":' + JSON.stringify($scope.AssignmentList) + '}';
+                NetworkService.insert('PraescioCommon/PublishAssignment', data).success(function (data) {
+
+                    swal({
+                        title: "@assignmentTitle has been published successfully !!!",
+                        text: "Press Ok to Continue.",
+                        type: "success",
+                        confirmButtonColor: "green",
+                        showCancelButton: false,
+                    });
+
+                    NetworkService.get('PraescioCommon/GetAssignmentList?AssignmentType=@ViewBag.AssignmentType').success(function (data) {
+                        $scope.AssignmentList = data.dataContent;
+                        $scope.totalcount = data.totalRecord;
+                    });
+
+                    $scope.savingRequest = false;
+                    $scope.IsVisible = false;
+                }).error(function (data, status) {
+                    $scope.savingRequest = false;
+                    swal({
+                        title: data.Message,
+                        text: "Press Ok to Continue.",
+                        type: "error",
+                        confirmButtonColor: "red",
+                        showCancelButton: false,
+                    });
+                });
+            }
+
+        });
+    </script>
+}

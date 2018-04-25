@@ -1,0 +1,275 @@
+﻿@{
+    ViewBag.Title = "AddKnowledgeBank";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="right_col" role="main" ng-controller="KnowledgeBankCtrl">
+    <div class="">
+
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Knowledge Bank</h3>
+            </div>
+            <div class="title_right">
+                <div class="col-md-9 col-sm-9 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <ol class="breadcrumb">
+                            <li><a href="@Url.Action("Dashboard", "PraescioAdmin")"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                            <li class="active">Add Knowledge Bank</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Add Knowledge Bank</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <!-- start form for validation -->
+                        <form id="KnowledgeForm" name="KnowledgeForm" novalidate ng-submit="KnowledgeForm.$valid" data-parsley-validate>
+                            <div class="form-group">
+                                <label for="Title">Title:</label>
+                                <input type="text" class="form-control" ng-model="Knowledge.Title" id="Title" name="Title" placeholder="" />
+                                <p ng-show="KnowledgeForm.Title.$invalid && (AssignmentForm.Title.$dirty || submitted ||AssignmentForm.Title.$touched )" class="text-danger">Title is required.</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="Description">Description:</label>
+                                <textarea name="text" class="form-control" ng-model="Knowledge.Description" id="text"></textarea>
+                            </div>
+
+                            <label for="First Name">Upload File</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input id="KnowledgePDF" ng-model="file" valid-file name="KnowledgePDF" ng-required="@ViewBag.KnowledgeBankId==null" type="file" multiple ng-files="getTheFiles($files)" accept="application/pdf" />
+                                    <p ng-show="AssignmentForm.KnowledgePDF.$invalid  && (AssignmentForm.KnowledgePDF.$dirty || submitted)" class="text-danger">Upload PDF is required.</p>
+                                </div>(*Only PDF Files)
+                            </div>
+
+                            <br />
+                            @if (ViewBag.KnowledgeBankId != null)
+                            {
+                                <span class="btn btn-primary waves-effect" ng-click="UpdateKnowledge('@Praescio.Domain.AppCode.KnowledgeBankReceiver.ALL','updatingSTA')" ng-disabled="updatingSTA">
+                                    SEND TO ALL
+                                    <i class="fa fa-spinner fa-spin" ng-show="updatingSTA"></i>
+                                </span>
+                                <span class="btn btn-success waves-effect" ng-click="UpdateKnowledge('@Praescio.Domain.AppCode.KnowledgeBankReceiver.STUDENT','updatingSTS')" ng-disabled="updatingSTS">
+                                    SEND TO STUDENTS
+                                    <i class="fa fa-spinner fa-spin" ng-show="updatingSTS"></i>
+                                </span>
+                                <span class="btn btn-info waves-effect" ng-click="UpdateKnowledge('@Praescio.Domain.AppCode.KnowledgeBankReceiver.TEACHER','updatingSTT')" ng-disabled="updatingSTT">
+                                    SEND TO TEACHERS
+                                    <i class="fa fa-spinner fa-spin" ng-show="updatingSTT"></i>
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="btn btn-primary waves-effect" ng-click="AddKnowledge('@Praescio.Domain.AppCode.KnowledgeBankReceiver.ALL','savingSTA')" ng-disabled="savingSTA">
+                                    SEND TO ALL
+                                    <i class="fa fa-spinner fa-spin" ng-show="savingSTA"></i>
+                                </span>
+                                <span class="btn btn-success waves-effect" ng-click="AddKnowledge('@Praescio.Domain.AppCode.KnowledgeBankReceiver.STUDENT','savingSTS')" ng-disabled="savingSTS">
+                                    SEND TO STUDENTS
+                                    <i class="fa fa-spinner fa-spin" ng-show="savingSTS"></i>
+                                </span>
+                                <span class="btn btn-info waves-effect" ng-click="AddKnowledge('@Praescio.Domain.AppCode.KnowledgeBankReceiver.TEACHER','savingSTT')" ng-disabled="savingSTT">
+                                    SEND TO TEACHERS
+                                    <i class="fa fa-spinner fa-spin" ng-show="savingSTT"></i>
+                                </span>
+                            }
+
+                        </form>
+                        <!-- end form for validations -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+@section Scripts{
+    <script type="text/javascript">
+
+        myApp.directive('ngFiles', ['$parse', function ($parse) {
+            function fn_link(scope, element, attrs) {
+                var onChange = $parse(attrs.ngFiles);
+                element.on('change', function (event) {
+                    onChange(scope, { $files: event.target.files });
+                });
+            };
+
+            return {
+                link: fn_link
+            }
+        }])
+        .directive('ngInitial', function () {
+            return {
+                restrict: 'A',
+                controller: [
+                  '$scope', '$element', '$attrs', '$parse', function ($scope, $element, $attrs, $parse) {
+                      var getter, setter, val;
+                      val = $attrs.ngInitial || $attrs.value;
+                      getter = $parse($attrs.ngModel);
+                      setter = getter.assign;
+                      setter($scope, val);
+                  }
+                ]
+            };
+        })
+        .directive('validFile', function () {
+            return {
+                require: 'ngModel',
+                link: function (scope, el, attrs, ngModel) {
+                    //change event is fired when file is selected
+                    el.bind('change', function () {
+                        scope.$apply(function () {
+                            ngModel.$setViewValue(el.val());
+                            ngModel.$render();
+                        });
+                    });
+                }
+            }
+        })
+
+        myApp.controller('KnowledgeBankCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+            var formdata = new FormData();
+
+            $scope.getTheFiles = function ($files) {
+                $scope.isDisplay = true;
+                if ($files.length != 0)
+                    $scope.FileUpload = [];
+                for (var i = 0; i < $files.length; i++) {
+                    $scope.FileUpload.push({ FileName: $files[i].name, ContentType: $files[i].type, Size: $files[i].size });
+                }
+                $scope.isDisplay = true;
+                angular.forEach($files, function (value, key) {
+                    formdata.append(0, value);
+                });
+
+            };
+
+            $scope.TitleName = 'Register School';
+
+            $scope.Toggle = function (flag, status) {
+                if (flag == 'savingSTA') {
+                    $scope.savingSTA = status;
+                }
+                else if (flag == 'savingSTS') {
+                    $scope.savingSTS = status;
+                }
+                else if (flag == 'savingSTT') {
+                    $scope.savingSTT = status;
+                }
+                else if (flag == 'updatingSTA') {
+                    $scope.updatingSTA = status;
+                }
+                else if (flag == 'updatingSTS') {
+                    $scope.updatingSTS = status;
+                }
+                else if (flag == 'updatingSTT') {
+                    $scope.updatingSTT = status;
+                }
+
+            }
+
+            $scope.AddKnowledge = function (visiblerole, saving) {
+                $scope.Toggle(saving, true);
+
+                $scope.Knowledge.VisibleToRole = visiblerole + ',@Praescio.Models.Common.ACCOUNT.AccountId';
+
+                if (!$scope.KnowledgeForm.$valid) {
+                    $scope.submitted = true;
+                    $scope.Toggle(saving, false);
+                }
+                else {
+
+                    NetworkService.UploadFiles('@Url.Content("~/PraescioAdmin/SaveFile")', formdata).then(function (response) {
+                        $scope.Knowledge.PDFFileSrc = response.data.filelocation;
+
+                        var data = {};
+                        var data = '{"KnowledgeBank":' + JSON.stringify($scope.Knowledge) + '}';
+
+                        NetworkService.insert('PraescioCommon/AddKnowledge', data).success(function (data) {
+
+                            swal({
+                                title: "KnowledgeBank has been successfully saved!!!",
+                                text: "Press Ok to Continue.",
+                                type: "success",
+                                confirmButtonColor: "green",
+                                showCancelButton: false,
+                            });
+
+                            $scope.Toggle(saving, false);
+
+                        }).error(function (data, status) {
+                            $scope.messages = data || "Request failed";
+                            $scope.status = status;
+                            $scope.Toggle(saving, false);
+                        });;
+                    });
+                }
+            }
+
+
+
+
+            if ('@ViewBag.KnowledgeBankId' != '') {
+                NetworkService.get('PraescioCommon/GetKnowledgeBankDetail?knowledgeBankId=@ViewBag.KnowledgeBankId').success(function (data) {
+
+                    $scope.Knowledge = data.KnowledgeBank;
+
+                }).error(function (data, status) { });;
+            }
+
+            $scope.UpdateKnowledge = function (visiblerole, saving) {
+                $scope.Toggle(saving, true);
+                $scope.Knowledge.VisibleToRole = visiblerole;
+
+                if (!$scope.KnowledgeForm.$valid) {
+                    $scope.submitted = true;
+                }
+                else {
+
+                    NetworkService.UploadFiles('@Url.Content("~/PraescioAdmin/SaveFile")', formdata).then(function (response) {
+                        $scope.Knowledge.PDFFileSrc = response.data.filelocation;
+
+                        var data = {};
+                        var data = '{"KnowledgeBank":' + JSON.stringify($scope.Knowledge) + '}';
+
+                        NetworkService.insert('PraescioCommon/UpdateKnowledge?knowledgeBankId=@ViewBag.KnowledgeBankId', data).success(function (data) {
+
+                            swal({
+                                title: "KnowledgeBank has been successfully saved!!!",
+                                text: "Press Ok to Continue.",
+                                type: "success",
+                                confirmButtonColor: "green",
+                                showCancelButton: false,
+                                closeOnConfirm: false,
+                                closeOnCancel: true
+                            },
+                                 function (isConfirm) {
+                                     if (isConfirm) {
+                                         window.location.href = '@Url.Content("~/Praescio/KnowledgeBankHistory")';
+                                     }
+                                 });
+
+                            $scope.Toggle(saving, false);
+
+                        }).error(function (data, status) {
+                            $scope.messages = data || "Request failed";
+                            $scope.status = status;
+                        });;
+                    });
+                }
+            }
+
+        });
+    </script>
+}
+

@@ -1,0 +1,639 @@
+﻿
+@{
+    ViewBag.Title = "School";
+}
+
+<div class="right_col" role="main" ng-controller="CheckStudentActivityCtrl">
+    <div class="">
+
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Dashboard</h3>
+            </div>
+            <div class="title_right">
+                <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <ol class="breadcrumb">
+                            <li><a href="@Url.Action("Dashboard", "PraescioAdmin")"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                            <li class="active">School Registration</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row" ng-show="@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.MeaningOfLesson)==@Convert.ToInt16(ViewBag.TypeOfQuestion)">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            Meaning Of Lesson
+                        </h2>
+
+                    </div>
+                    <div class="body">
+                        <div class="body table-responsive">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <th>Title</th>
+                                        <td>{{QuestionList.Title}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Summery/Meaning Of Lesson</th>
+                                        <td>{{QuestionList.CorrectAnswer}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.SynonymsOfLesson)==@Convert.ToInt16(ViewBag.TypeOfQuestion)">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            View Synonyms
+                        </h2>
+
+                    </div>
+                    <div class="body">
+                        <div class="body table-responsive">
+                            <table class="table">
+                                <tbody>
+                                    <tr ng-repeat="question in QuestionList">
+                                        <th>{{question.Title}}</th>
+                                        <th>{{question.CorrectAnswer}}</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.AntonymsOfLesson)==@Convert.ToInt16(ViewBag.TypeOfQuestion)">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            View Antonyms
+                        </h2>
+                    </div>
+                    <div class="body">
+                        <div class="body table-responsive">
+                            <table class="table">
+                                <tbody>
+                                    <tr ng-repeat="question in QuestionList">
+                                        <th>{{question.Title}}</th>
+                                        <th>{{question.CorrectAnswer}}</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.WriteReason)==@Convert.ToInt16(ViewBag.TypeOfQuestion)">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            Write A Reason
+                        </h2>
+                    </div>
+                    <div class="body">
+                        <div class="body table-responsive">
+                            <table class="table table-striped b-t b-light">
+                                <tbody>
+                                    <tr>
+                                        <th>Questions</th>
+                                        <th>Answer</th>
+                                        <th>Give Marks</th>
+                                    </tr>
+                                    <tr ng-repeat="question in QuestionList">
+                                        <td>{{question.UserAssessment.Question.Title}}</td>
+                                        <td>{{question.UserAssessment.Answer}}</td>
+                                        <td><input ng-model="question.TeacherMarks" type="text" name="name" class="form-control" style="width:180px" /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <a class="btn btn-success" ng-click="SaveAnswer(@Convert.ToInt16(ViewBag.TypeOfQuestion));" ng-disabled="savingRequest">
+                                Submit
+                                <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.FillInTheBlanks)==@Convert.ToInt16(ViewBag.TypeOfQuestion)">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            Fill In The Blanks
+                        </h2>
+                    </div>
+                    <div class="body">
+                        <div class="body table-responsive">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <th>Question</th>
+                                        <th>Answer</th>
+                                    </tr>
+                                    <tr ng-repeat="question in QuestionList">
+                                        <td>{{($index+1) + '.  '+ question.Title}}</td>
+                                        <td>{{question.CorrectAnswer}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.MatchTheFollowing)==@Convert.ToInt16(ViewBag.TypeOfQuestion)">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            Match The Following
+                        </h2>
+                    </div>
+                    <div class="body">
+                        <div class="body table-responsive">
+                            <table class="table" ng-repeat="question in QuestionList">
+                                <tbody>
+                                    <tr>
+                                        <th>Question No {{($index+1)}}</th>
+                                        <th></th>
+                                        <th>Answer</th>
+                                    </tr>
+                                    <tr ng-repeat="option in question.QuestionOption">
+                                        <td>{{($index+1) + '.  '+ option.Option}}</td>
+                                        <td>{{ option.MatchQuestion}}</td>
+                                        <td>{{option.MatchAnswer}}</td>
+                                    </tr>
+                                    <tr>
+                                        @*<td>1. kangaroo paw</td>
+                                            <td>Flower</td>*@
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.MCQ)==@Convert.ToInt16(ViewBag.TypeOfQuestion)">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            Multiple Choice Questions
+                        </h2>
+                    </div>
+                    <div class="body">
+                        <div class="body table-responsive">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <th>Question</th>
+                                        <th>Answer</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Which company manufacturers low and high power communication equipment like radius for the use of defence services and paramilitary organisations? </td>
+                                        <td>Bharat Electronics Limited (BEL)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><img src="assets/images/mcq.png"></td>
+                                        <td>1</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Identify the figure that completes the pattern.<br><img src="assets/images/fig.png"></td>
+                                        <td>2 <img src="assets/images/fig_ans2.png"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>3 pumps, working 8 hours a day, can empty a tank in 2 days. How many hours a day must 4 pumps work to empty the tank in 1 day? </td>
+                                        <td>C.11 </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.TrueFalse)==@Convert.ToInt16(ViewBag.TypeOfQuestion)">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            True / False Questions
+                        </h2>
+                    </div>
+                    <div class="body">
+                        <div class="body table-responsive">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <th>Question</th>
+                                        <th>Answer</th>
+                                    </tr>
+                                    <tr ng-repeat="question in QuestionList">
+                                        <td>{{question.Title}}</td>
+                                        <td>{{question.CorrectAnswer}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.OneSentenceAnswer)==@Convert.ToInt16(ViewBag.TypeOfQuestion)">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            Write Answer in One Sentence
+                        </h2>
+                    </div>
+                    <div class="body">
+                        <div class="body table-responsive">
+                            <table class="table table-striped b-t b-light">
+                                <tbody>
+                                    <tr>
+                                        <th>Questions</th>
+                                        <th>Answer</th>
+                                        <th>Give Marks</th>
+                                    </tr>
+                                    <tr ng-repeat="question in QuestionList">
+                                        <td>{{question.UserAssessment.Question.Title}}</td>
+                                        <td>{{question.UserAssessment.Answer}}</td>
+                                        <td><input ng-model="question.TeacherMarks" type="text" name="name" class="form-control" style="width:180px" /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <a class="btn btn-success" ng-click="SaveAnswer(@Convert.ToInt16(ViewBag.TypeOfQuestion));" ng-disabled="savingRequest">
+                                Submit
+                                <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.DescribeBriefly)==@Convert.ToInt16(ViewBag.TypeOfQuestion)">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            Describe Briefly
+                        </h2>
+                    </div>
+                    <div class="body">
+                        <div class="body table-responsive">
+                            <table class="table table-striped b-t b-light">
+                                <tbody>
+                                    <tr>
+                                        <th>Questions</th>
+                                        <th>Answer</th>
+                                        <th>Give Marks</th>
+                                    </tr>
+                                    <tr ng-repeat="question in QuestionList">
+                                        <td>{{question.UserAssessment.Question.Title}}</td>
+                                        <td>{{question.UserAssessment.Answer}}</td>
+                                        <td><input ng-model="question.TeacherMarks" type="text" name="name" class="form-control" style="width:180px" /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <a class="btn btn-success" ng-click="SaveAnswer(@Convert.ToInt16(ViewBag.TypeOfQuestion));" ng-disabled="savingRequest">
+                                Submit
+                                <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.DifferentiateBetween)==@Convert.ToInt16(ViewBag.TypeOfQuestion)">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            Differentiate Between
+                        </h2>
+                    </div>
+                    <div class="body">
+                        <div class="body table-responsive">
+                            <div>
+                                <div class="panel-body">
+                                    <table class="table table-striped b-t b-light">
+                                        <tbody>
+                                            <tr>
+                                                <th>Differentiate Between</th>
+                                                <th>Answer</th>
+                                                <th>Give Marks</th>
+                                            </tr>
+                                            <tr ng-repeat="question in QuestionList">
+                                                <td>{{$index+1}}. &nbsp;&nbsp;&nbsp;{{question.UserAssessment.Question.Title}}</td>
+                                                <td>
+                                                    <div style="opacity: 0.9;pointer-events: none;" data-ng-bind-html="trustAsHtml(question.UserAssessment.Answer)"></div>
+                                                </td>
+                                                <td><input ng-model="question.TeacherMarks" type="text" name="name" class="form-control" style="width:180px" /></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <a class="btn btn-success" ng-click="SaveAnswer(@Convert.ToInt16(ViewBag.TypeOfQuestion));" ng-disabled="savingRequest">
+                                        Submit
+                                        <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                                    </a>
+                                </div>
+                                <hr>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.Exercise)==@Convert.ToInt16(ViewBag.TypeOfQuestion)">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            Exercise - [other type of Question]
+                        </h2>
+                    </div>
+                    <div class="body">
+                        <div class="body table-responsive">
+
+                            <div class="panel-body">
+                                @*<table class="table table-striped b-t b-light">
+                                    <tbody>
+                                        <tr>
+                                            <th>Lesson Summary:</th>
+                                            <td>
+                                                Sylvia, who narrates the story, is a young girl living in a poor area of New York City. She and her friends are developing their strategies to cope with life as they know it. She has adopted the pose of a know-it-all who can figure out things for herself, and she tells herself that she resents and has no use for Miss Moore, the college-educated African American woman who frequently serves as a guide and unofficial teacher for the local children.
+                                                Miss Moore arranges a trip for Sylvia, Sugar, and six other children to go to the F. A. O. Schwarz toy store at Fifth Avenue and Fifty-seventh Street. Miss Moore knows that this will be a new experience for the children, who have been isolated in their neighborhood, and that they will encounter items they have never seen, items that are far beyond their economic means. She wants the youngsters to learn that there is much more to the world than the slum area they know, and particularly for them to realize that wealth is unfairly and unequally distributed.
+                                                The emphasis on the relative value of money begins for Sylvia when Miss Moore gives her a five-dollar bill to pay the taxi fare to the store. Sylvia is told to include a 10 percent tip for the driver and return the change to Miss Moore. Sylvia gives the cab driver the fare of eighty-five cents but decides that she needs money more than he does and keeps not only the tip but the remainder of the money.
+                                                At the toy store, the children feel uneasy and out of place. Looking through the window, they are stunned by the products offered and by their high prices. Ronald sees what he recognizes as a...
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table table-striped b-t b-light">
+                                    <tbody>
+                                        <tr>
+                                            <th>Question</th>
+                                            <th>Answer</th>
+
+                                        </tr>
+                                        <tr>
+                                            <td>1. How long has it been raining ?</td>
+                                            <td>Lorem Ipsum is simply dummy text of the printing and typesetting industry</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>2. What is trees?</td>
+                                            <td>Lorem Ipsum is simply dummy text of the printing and typesetting industry</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>3. Why was Pinocchio not go to school ?</td>
+                                            <td>Lorem Ipsum is simply dummy text of the printing and typesetting industry</td>
+
+                                        </tr>
+
+                                    </tbody>
+                                </table>*@
+                                <table class="table table-striped b-t b-light">
+                                    <tbody>
+                                        <tr>
+                                            <th>Questions</th>
+                                            <th>Answer</th>
+                                            <th>Give Marks</th>
+                                        </tr>
+                                        <tr ng-repeat="question in QuestionList">
+                                            <td>{{question.QuestionOption.Option}}</td>
+                                            <td>{{question.UserAssessment.Answer}}</td>
+                                            <td><input ng-model="question.TeacherMarks" type="text" name="name" class="form-control" style="width:180px" /></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <a class="btn btn-success" ng-click="SaveAnswer(@Convert.ToInt16(Praescio.BusinessEntities.Common.TypeOfQuestion.Exercise));" ng-disabled="savingRequest">
+                                    Submit
+                                    <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.WriteShortNote)==@Convert.ToInt16(ViewBag.TypeOfQuestion)">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            Write Short note
+                        </h2>
+                    </div>
+                    <div class="body">
+                        <div class="body table-responsive">
+                            <table class="table table-striped b-t b-light">
+                                <tbody>
+                                    <tr>
+                                        <th>Questions</th>
+                                        <th>Answer</th>
+                                        <th>Give Marks</th>
+                                    </tr>
+                                    <tr ng-repeat="question in QuestionList">
+                                        <td>{{question.UserAssessment.Question.Title}}</td>
+                                        <td>{{question.UserAssessment.Answer}}</td>
+                                        <td><input ng-model="question.TeacherMarks" type="text" name="name" class="form-control" style="width:180px" /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <a class="btn btn-success" ng-click="SaveAnswer(@Convert.ToInt16(Praescio.BusinessEntities.Common.TypeOfQuestion.WriteShortNote));" ng-disabled="savingRequest">
+                                Submit
+                                <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.TopicConcept)==@Convert.ToInt16(ViewBag.TypeOfQuestion)">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            Concept Of Topic
+                        </h2>
+
+                    </div>
+                    <div class="body">
+                        <div class="body table-responsive">
+
+                            <div class="panel-body">
+
+                                <table class="table table-striped b-t b-light">
+                                    <tbody>
+                                        <tr>
+                                            <th>Name Of Topic</th>
+                                            <td>The Living World</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Details:</th>
+                                            <td>
+                                                Sylvia, who narrates the story, is a young girl living in a poor area of New York City. She and her friends are developing their strategies to cope with life as they know it. She has adopted the pose of a know-it-all who can figure out things for herself, and she tells herself that she resents and has no use for Miss Moore, the college-educated African American woman who frequently serves as a guide and unofficial teacher for the local children.
+                                                Miss Moore arranges a trip for Sylvia, Sugar, and six other children to go to the F. A. O. Schwarz toy store at Fifth Avenue and Fifty-seventh Street. Miss Moore knows that this will be a new experience for the children, who have been isolated in their neighborhood, and that they will encounter items they have never seen, items that are far beyond their economic means. She wants the youngsters to learn that there is much more to the world than the slum area they know, and particularly for them to realize that wealth is unfairly and unequally distributed.
+                                                The emphasis on the relative value of money begins for Sylvia when Miss Moore gives her a five-dollar bill to pay the taxi fare to the store. Sylvia is told to include a 10 percent tip for the driver and return the change to Miss Moore. Sylvia gives the cab driver the fare of eighty-five cents but decides that she needs money more than he does and keeps not only the tip but the remainder of the money.
+                                                At the toy store, the children feel uneasy and out of place. Looking through the window, they are stunned by the products offered and by their high prices. Ronald sees what he recognizes as a...
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+    @*@System.Web.Optimization.Scripts.Render("~/Scripts/plugins/jquery-confirm/jquery-confirm.min.js")
+        @System.Web.Optimization.Scripts.Render("~/plugins/dataPicker")
+        @System.Web.Optimization.Scripts.Render("~/Scripts/plugins/datepicker-jquery-ui/jquery-ui.js")
+        @System.Web.Optimization.Scripts.Render("~/Scripts/plugins/FixedHeader/jquery.floatThead.js")
+        @System.Web.Optimization.Scripts.Render("~/Scripts/Neoquant.js")*@
+
+    <script type="text/javascript">
+        myApp.directive('ngFiles', ['$parse', function ($parse) {
+            function fn_link(scope, element, attrs) {
+                var onChange = $parse(attrs.ngFiles);
+                element.on('change', function (event) {
+                    onChange(scope, { $files: event.target.files });
+                });
+            };
+
+            return {
+                link: fn_link
+            }
+        }])
+        .directive('ngInitial', function () {
+            return {
+                restrict: 'A',
+                controller: [
+                  '$scope', '$element', '$attrs', '$parse', function ($scope, $element, $attrs, $parse) {
+                      var getter, setter, val;
+                      val = $attrs.ngInitial || $attrs.value;
+                      getter = $parse($attrs.ngModel);
+                      setter = getter.assign;
+                      setter($scope, val);
+                  }
+                ]
+            };
+        })
+        .directive('validFile', function () {
+            return {
+                require: 'ngModel',
+                link: function (scope, el, attrs, ngModel) {
+                    //change event is fired when file is selected
+                    el.bind('change', function () {
+                        scope.$apply(function () {
+                            ngModel.$setViewValue(el.val());
+                            ngModel.$render();
+                        });
+                    });
+                }
+            }
+        })
+
+        myApp.controller('CheckStudentActivityCtrl', function ($scope, $rootScope, $sce, NetworkService) {
+
+            $scope.trustAsHtml = function (string) {
+                return $sce.trustAsHtml(string);
+            };
+
+            var formdata = new FormData();
+            $scope.getTheFiles = function ($files) {
+                $scope.isDisplay = true;
+                if ($files.length != 0)
+                    $scope.FileUpload = [];
+                for (var i = 0; i < $files.length; i++) {
+                    $scope.FileUpload.push({ FileName: $files[i].name, ContentType: $files[i].type, Size: $files[i].size });
+                }
+                $scope.isDisplay = true;
+                angular.forEach($files, function (value, key) {
+                    formdata.append(0, value);
+                });
+
+            };
+
+            $scope.TitleName = 'Register School'
+            NetworkService.get('PraescioCommon/GetStudentActivity?assignmentid=@ViewBag.AssignmentId&questiontype=@ViewBag.TypeOfQuestion&userId=@ViewBag.UserId').success(function (data) {
+                console.log(data);
+                $scope.QuestionList = data;
+            });
+
+            $scope.SaveAnswer = function (questionType) {
+                $scope.savingRequest = true;
+
+                NetworkService.insert('InstitutionTeacher/StudentActivityCheck?questionType=' + questionType, $scope.QuestionList).success(function (data) {
+                    $scope.savingRequest = false;
+                    swal({
+                        title: "Answer has been successfully submitted!!!",
+                        text: "Press Ok to Continue.",
+                        type: "success",
+                        confirmButtonColor: "green",
+                        showCancelButton: false,
+                    });
+                }).error(function (data) {
+                    $scope.savingRequest = false;
+                    swal({
+                        title: data.Message,
+                        text: "Press Ok to Continue.",
+                        type: "error",
+                        confirmButtonColor: "red",
+                        showCancelButton: false,
+                    });
+                });
+            }
+
+        });
+    </script>
+}
+
+

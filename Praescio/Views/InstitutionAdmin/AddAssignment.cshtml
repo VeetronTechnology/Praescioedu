@@ -1,0 +1,126 @@
+﻿@{
+    ViewBag.Title = "Student";
+}
+
+<!-- page content -->
+<div class="right_col" role="main" ng-controller="AddAssignmentCtrl">
+    <div class="">
+
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Dashboard</h3>
+            </div>
+            <div class="title_right">
+                <div class="col-md-7 col-sm-7 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <ol class="breadcrumb">
+                            <li><a href="@Url.Action("Dashboard", "InstitutionAdmin")"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                            <li class="active">Add Assignment</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Add Assignment</small></h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <br />
+                        <form class="form-horizontal form-label-left">
+
+                            <div class="form-group">
+                                <label for="heard">Select Medium</label>
+                                <select id="Medium" name="Medium" class="input-sm form-control" ng-model="Assignment.MediumId" ng-options="option.Id as option.Name for option in MediumList" ng-change="" ng-required="true">
+                                    <option value="">-- Select Medium --</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="heard">Select Standard</label>
+                                <select class="input-sm form-control select2" ng-model="Assignment.StandardId" id="Standard" name="Standard"
+                                        data-placeholder="Select Standard" ng-required="true">
+                                    <option value=""></option>
+                                    <option ng-repeat="option in StandardList" value="{{option.Id}}">{{option.StandardName}}</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="SubjectName">Select Subject</label>
+                                <select class="input-sm form-control select2" id="SubjectName" name="SubjectName"
+                                        data-placeholder="Select team members" ng-required="true" ng-model="Assignment.SubjectId">
+                                    <option value=""></option>
+                                    <option ng-repeat="option in SubjectList" value="{{option.Id}}">{{option.SubjectName}}</option>
+                                </select>
+                            </div>
+
+                            <div class="ln_solid"></div>
+                            <div class="form-group">
+                                <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                                    <a href="reset" class="btn btn-primary">Reset</a>
+                                    <a href="lesson_index.html" class="btn btn-success" ng-click="AddLesson();">Submit</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+
+        myApp.controller('AddAssignmentCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+
+            $scope.Student = {};
+            $scope.TitleName = 'Register Student'
+
+            $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
+                               { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }]
+
+            $scope.SubjectList = [{ Id: 1, SubjectName: 'English' }, { Id: 2, SubjectName: 'Hindi' }, { Id: 3, SubjectName: 'Marathi' },
+                               { Id: 4, SubjectName: 'Science' }, { Id: 5, SubjectName: 'Mathematics' }];
+
+            $scope.VersionType = [{ Id: 1, Name: 'Paid' }, { Id: 2, Name: 'Trail' }];
+
+            NetworkService.get('Admin/GetBoardList').success(function (data) {
+                $scope.BoardList = data;
+            });
+
+            NetworkService.get('Admin/GetSchoolList').success(function (data) {
+                $scope.SchoolList = data;
+            });
+
+            NetworkService.get('Admin/GetState').success(function (data) {
+                $scope.StateList = data;
+            });
+
+            $scope.RegisterStudent = function () {
+                $scope.Student.IsIndividual = false;
+                var data = '{"account":' + JSON.stringify($scope.Student) + ',"subject":' + JSON.stringify($scope.Student.Subject) + ',"standard":' + JSON.stringify($scope.Student.Standard) + ',"isTeacher":' + false + '}';
+                console.log(data);
+                NetworkService.insert('Admin/RegisterStudent', data).success(function (data) {
+                    console.log('success');
+                });
+            }
+
+            $scope.AddLesson = function () {
+
+            }
+
+            $(".select2").select2();
+
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.20.0/select.js"></script>
+}

@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewBag.Title = "TrueFalseQuestions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="right_col" role="main" style="background:#48c9b0" ng-controller="TrueFalseCtrl">
+    <div class="cont">
+        <div class="table-agile-info">
+
+            <ol class="breadcrumb">
+                <li><a href="lesson_index.html">Lesson</a></li>
+                <li><a href="start_test.html">Start Test</a></li>
+                <li class="active">True or False Questions</li>
+            </ol>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    True / False Questions
+                    <span class="tools pull-right" style="font-size:12px;font-weight:600;">
+                        <a href="javascript:;">Active: Duration : ddd:hh:mm</a>
+                    </span>
+                </div>
+                <div>
+                    <table class="table table-striped b-t b-light">
+                        <tbody>
+                            <tr ng-repeat="question in QuestionList">
+                                <td>{{$index+1}}.&nbsp;&nbsp;&nbsp;  {{question.Question.Title}} </td>
+                                <td>
+                                    <select id="Version" name="Version" class="input-sm form-control" ng-model="question.AttemptAnswer" ng-options="option.Name as option.Name for option in OptionList" ng-change="" ng-required="true">
+                                        <option value="">-- Select Answer --</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td> <a href="#" class="btn btn-danger">Clear</a> 
+                                    <a class="btn btn-success" ng-click="SaveAnswer();" ng-disabled="savingRequest">
+                                        Submit
+                                        <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+@section Scripts{
+
+<script type="text/javascript">
+
+        myApp.controller('TrueFalseCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+
+            $scope.OptionList = [{ Id: 1, Name: 'TRUE' }, { Id: 2, Name: 'FALSE' }]
+
+            NetworkService.get('InstitutionStudent/GetAssignmentQuestion?assignmentid=@ViewBag.Assignmentid&typeOfQuestion=@ViewBag.TypeOfQuestion').success(function (data) {
+                console.log(data);
+                $scope.QuestionList = data;
+            });
+
+            $scope.SaveAnswer = function () {
+                $scope.savingRequest = true;
+
+                NetworkService.insert('InstitutionStudent/SaveAnswer', $scope.QuestionList).success(function (data) {
+                    $scope.savingRequest = false;
+                    console.log(data);
+                    swal({
+                        title: "Answer has been successfully submitted!!!",
+                        text: "Press Ok to Continue.",
+                        type: "success",
+                        confirmButtonColor: "green",
+                        showCancelButton: false,
+                    });
+                }).error(function (data) {
+                    $scope.savingRequest = false;
+                    swal({
+                        title: data.Message,
+                        text: "Press Ok to Continue.",
+                        type: "error",
+                        confirmButtonColor: "red",
+                        showCancelButton: false,
+                    });
+                });
+            }
+
+        });
+</script>
+}
+
+

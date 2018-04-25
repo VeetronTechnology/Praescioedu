@@ -1,0 +1,237 @@
+﻿@{
+    ViewBag.Title = "School";
+    var assignmentTitle = Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.SuperAdmin ? "Lesson" : "Assignment";
+}
+
+<div class="right_col" role="main" ng-controller="LoadXMLCtrl">
+    <div class="">
+
+        <div class="page-title">
+            <div class="title_left">
+                <a href="@Url.Action("Download", "PraescioCommon", new { filePath = @Praescio.Domain.AppCode.CommonCode.QuestionUploadFile, @class = "btn btn-primary uploadbtn" })" class="btn btn-primary uploadbtn">Download Excel Template</a>
+            </div>
+            <div class="title_right">
+                <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <ol class="breadcrumb">
+                            <li><a href="@Url.Action("Dashboard", "PraescioAdmin")"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                            <li class="active">School Registration</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Upload @assignmentTitle Question</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <!-- start form for validation -->
+                        <form id="SchoolForm" name="SchoolForm" data-parsley-validate>
+
+                            <div class="form-group">
+                                <label for="Version">Select @assignmentTitle</label>
+                                <select id="Assignment" name="Assignment" class="input-sm form-control" ng-model="Assignment.AssignmentId" ng-options="option.AssignmentId as option.Title for option in AssignmentList" ng-change="" ng-required="true">
+                                    <option value="">-- Select @assignmentTitle --</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="regno">Save XML Question</label>
+                                <input type="file" name="file" class="form-control" ng-files="getTheFiles($files)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                       onchange="angular.element(this).scope().loadFile(this.files)" />
+                            </div>
+
+                            <br />
+                            <span class="btn btn-primary">Reset</span>
+                            <span class="btn btn-primary" ng-click="SaveXML()">Submit</span>
+                        </form>
+                        <!-- end form for validations -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/JSConfig.js"></script>
+
+
+@section Scripts{
+
+    <script type="text/javascript">
+        myApp.directive('ngFiles', ['$parse', function ($parse) {
+            function fn_link(scope, element, attrs) {
+                var onChange = $parse(attrs.ngFiles);
+                element.on('change', function (event) {
+                    onChange(scope, { $files: event.target.files });
+                });
+            };
+
+            return {
+                link: fn_link
+            }
+        }])
+        .directive('ngInitial', function () {
+            return {
+                restrict: 'A',
+                controller: [
+                  '$scope', '$element', '$attrs', '$parse', function ($scope, $element, $attrs, $parse) {
+                      var getter, setter, val;
+                      val = $attrs.ngInitial || $attrs.value;
+                      getter = $parse($attrs.ngModel);
+                      setter = getter.assign;
+                      setter($scope, val);
+                  }
+                ]
+            };
+        })
+        .directive('validFile', function () {
+            return {
+                require: 'ngModel',
+                link: function (scope, el, attrs, ngModel) {
+                    //change event is fired when file is selected
+                    el.bind('change', function () {
+                        scope.$apply(function () {
+                            ngModel.$setViewValue(el.val());
+                            ngModel.$render();
+                        });
+                    });
+                }
+            }
+        })
+
+        myApp.controller('LoadXMLCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+
+            NetworkService.get('PraescioCommon/GetAssignmentListDropDown?AssignmentType=@ViewBag.AssignmentType').success(function (data) {
+                $scope.AssignmentList = data.dataContent;
+                console.log(data);
+            });
+
+            var formdata = new FormData();
+            $scope.getTheFiles = function ($files) {
+                $scope.isDisplay = true;
+                if ($files.length != 0)
+                    $scope.FileUpload = [];
+                for (var i = 0; i < $files.length; i++) {
+                    $scope.FileUpload.push({ FileName: $files[i].name, ContentType: $files[i].type, Size: $files[i].size });
+                }
+                $scope.isDisplay = true;
+                angular.forEach($files, function (value, key) {
+                    formdata.append(0, value);
+                });
+
+            };
+
+            $scope.selectedFile = null;
+            $scope.msg = "";
+
+
+            $scope.loadFile = function (files) {
+
+                $scope.$apply(function () {
+
+                    $scope.selectedFile = files[0];
+
+                })
+
+            }
+
+            $scope.SaveXML = function () {
+                var file = $scope.selectedFile;
+
+                if (file) {
+
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+
+                        var data = e.target.result;
+
+                        var workbook = XLSX.read(data, { type: 'binary' });
+
+                        var first_sheet_name = workbook.SheetNames[0];
+                        var secound_sheet_name = workbook.SheetNames[1];
+
+                        var sheet1 = XLSX.utils.sheet_to_json(workbook.Sheets[first_sheet_name]);
+                        var sheet2 = XLSX.utils.sheet_to_json(workbook.Sheets[secound_sheet_name]);
+
+                        var QuestionViewModel = [];
+
+                        NetworkService.UploadFiles('@Url.Content("~/PraescioAdmin/SaveFile")', formdata).then(function (response) {
+                            $scope.QuestionExcelLocation = response.data.filelocation;
+
+                            for (var i = 0; i < sheet1.length; i++) {
+                                var questiondata = $.grep(sheet2, function (element) { return element.QuestionId == sheet1[i].QuestionId; })
+                                sheet1[i].AssignmentId = $scope.Assignment.AssignmentId;
+                                sheet1[i].QuestionTypeId = QuestionType[sheet1[i].QuestionType];
+                                QuestionViewModel.push({ "Question": sheet1[i], "QuestionOption": questiondata });
+                            }
+
+                            console.log(QuestionViewModel);
+                            NetworkService.insert('PraescioCommon/SaveXMLQuestion?uploadFileLocation=' + $scope.QuestionExcelLocation, JSON.stringify(QuestionViewModel)).success(function (data) {
+
+                                if (data.isAlreadyExist == true) {
+                                    swal({
+                                        title: "Assignment have been already loaded, Do you want to override",
+                                        text: "You will not be able to recover this imaginary file!",
+                                        type: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonClass: "btn-danger",
+                                        confirmButtonText: "Yes, override it!",
+                                        cancelButtonText: "No, cancel plx!",
+                                        closeOnConfirm: false,
+                                        closeOnCancel: true
+                                    }, function (isConfirm) {
+                                        if (isConfirm) {
+                                            NetworkService.insert('PraescioCommon/SaveXMLQuestion?uploadFileLocation=' + $scope.QuestionExcelLocation + '&overrideFile=true', JSON.stringify(QuestionViewModel)).success(function (data) {
+                                                swal({
+                                                    title: "Assignment has been uploaded successfully!!!",
+                                                    text: "Press Ok to Continue.",
+                                                    type: "success",
+                                                    confirmButtonColor: "green",
+                                                    showCancelButton: false,
+                                                });
+                                            });
+                                            //swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                                        } else {
+                                            //swal("Cancelled", "Your imaginary file is safe :)", "error");
+                                        }
+                                    });
+                                } else {
+
+                                    swal({
+                                        title: "Assignment has been uploaded successfully!!!",
+                                        text: "Press Ok to Continue.",
+                                        type: "success",
+                                        confirmButtonColor: "green",
+                                        showCancelButton: false,
+                                    });
+                                }
+                            }).error(function (data, status) {
+                                $scope.messages = data || "Request failed";
+                                $scope.status = status;
+                                console.log(data);
+                                console.log(status);
+                            });;
+
+                            
+                        });
+                    }
+
+                    reader.onerror = function (ex) {
+
+                    }
+
+                    reader.readAsBinaryString(file);
+                }
+            }
+
+
+        });
+    </script>
+}

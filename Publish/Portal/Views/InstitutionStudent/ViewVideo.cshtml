@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewBag.Title = "ViewVideo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="right_col" role="main" style="background:#48c9b0">
+    <div class="cont">
+        <div class="table-agile-info">
+            <ol class="breadcrumb">
+                <li><a href="asgn_index.html">Lesson</a></li>
+                <li><a href="start_test.html">Start Test</a></li>
+                <li class="active">View Video</li>
+            </ol>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    View Video
+                    <span class="tools pull-right" style="font-size:12px;font-weight:600;">
+                        <a href="javascript:;">Active: Duration : ddd:hh:mm</a>
+                    </span>
+                </div>
+                <div>
+                    <table class="table table-striped b-t b-light">
+                        <tbody>
+                            <tr>
+                                <th>Title:</th>
+                                <td>The Living World</td>
+                            </tr>
+                            <tr>
+                                <th>Video</th>
+                                <td>
+                                    <iframe width="520" height="315"
+                                            src="https://www.youtube.com/embed/XGSy3_Czz8k"></iframe>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts{
+
+   <script type="text/javascript">
+
+        myApp.controller('SynonymsCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+
+            NetworkService.get('InstitutionStudent/GetAssignmentQuestion?assignmentid=@ViewBag.Assignmentid&typeOfQuestion=@ViewBag.TypeOfQuestion').success(function (data) {
+                $scope.Question = data;
+            });
+
+        });
+</script>
+}

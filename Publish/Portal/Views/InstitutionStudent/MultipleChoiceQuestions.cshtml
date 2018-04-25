@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "MultipleChoiceQuestions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="right_col" role="main" style="background:#48c9b0" ng-controller="MCQCtrl">
+    <div class="cont">
+
+        <div class="table-agile-info">
+            <ol class="breadcrumb">
+                <li><a href="lesson_index.html">Lesson</a></li>
+                <li><a href="start_test.html">Start Test</a></li>
+                <li class="active">Multiple Choice Questions</li>
+            </ol>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Multiple Choice Questions
+                    <span class="tools pull-right" style="font-size:12px;font-weight:600;">
+                        <a href="javascript:;">Active: Duration : ddd:hh:mm</a>
+                    </span>
+                </div>
+                <div ng-repeat="q in Question">
+
+                    <div class="panel-body">
+                        <form role="form">
+                            <label>
+                                {{$index +1 }}. {{q.Question.Title}}
+                            </label>
+                            <div ng-repeat="option in q.QuestionOption">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="radio" ng-value="option.Option" name='RadioOption' ng-model="q.MCQAnswer">
+                                        {{option.Category }}. {{option.Option}}
+                                    </label>
+                                </div>
+                            
+                            </div>
+                           
+                        </form>
+                    </div>
+                </div>
+                <div>
+                    <a href="#" class="btn btn-danger">Clear</a>
+                    <a class="btn btn-success" ng-click="SaveAnswer();" ng-disabled="savingRequest">
+                        Submit
+                        <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section Scripts{
+
+    <script type="text/javascript">
+
+        myApp.controller('MCQCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+
+            NetworkService.get('InstitutionStudent/GetAssignmentQuestion?assignmentid=@ViewBag.Assignmentid&typeOfQuestion=@ViewBag.TypeOfQuestion').success(function (data) {
+                console.log(data);
+                $scope.Question = data;
+            });
+
+            $scope.SaveAnswer = function () {
+                $scope.savingRequest = true;
+
+                NetworkService.insert('InstitutionStudent/SaveAnswer', $scope.Question).success(function (data) {
+                    $scope.savingRequest = false;
+                    console.log(data);
+                    swal({
+                        title: "Answer has been successfully submitted!!!",
+                        text: "Press Ok to Continue.",
+                        type: "success",
+                        confirmButtonColor: "green",
+                        showCancelButton: false,
+                    });
+                }).error(function (data) {
+                    $scope.savingRequest = false;
+                    swal({
+                        title: data.Message,
+                        text: "Press Ok to Continue.",
+                        type: "error",
+                        confirmButtonColor: "red",
+                        showCancelButton: false,
+                    });
+                });
+            }
+
+        });
+    </script>
+}

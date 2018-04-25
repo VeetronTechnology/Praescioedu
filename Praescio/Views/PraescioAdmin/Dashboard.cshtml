@@ -1,0 +1,147 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="right_col" role="main" ng-controller="AdminDashboardCtrl">
+    <div class="">
+        <!-- Small boxes (Stat box) -->
+        <div class="row clearfix">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <a href="@Url.Action("RegisterIndividualStudent", "PraescioAdmin")">
+                    <div class="info-box bg-aqua hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">playlist_add_check</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">Student<br />Registration</div>
+                            <div class="number count-to" data-from="0" data-to="125" data-speed="15" data-fresh-interval="20"></div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <a href="@Url.Action("RegisterIndividualTeacher", "PraescioAdmin")">
+                    <div class="info-box bg-green hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">account_box</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">TEACHER <br />REGISTRATION</div>
+                            <div class="number count-to" data-from="0" data-to="257" data-speed="1000" data-fresh-interval="20"></div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <a href="@Url.Action("RegisterSchool", "PraescioAdmin")">
+                    <div class="info-box bg-yellow hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">forum</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">SCHOOL <br />REGISTRATION</div>
+                            <div class="number count-to" data-from="0" data-to="243" data-speed="1000" data-fresh-interval="20"></div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <a href="@Url.Action("AddAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.PExtra)">
+                    <div class="info-box bg-red hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">assignment</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">P - EXTRA<br /> LESSONS</div>
+                            <div class="number count-to" data-from="0" data-to="1225" data-speed="1000" data-fresh-interval="20"></div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Activities</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <article class="media event" ng-repeat="activity in ActivityList">
+                            <a class="pull-left date">
+                                <p class="month">{{activity.Activities.CreatedOn| date:'MMM'}}</p>
+                                <p class="day">{{activity.Activities.CreatedOn| date:'dd'}}</p>
+                            </a>
+                            <div class="media-body">
+                                <a class="title" href="@Url.Content("~/" + "{{activity.Activities.URL}}")">{{activity.Activities.ActivityName}}</a>
+                                <p>{{activity.Activities.Query}}</p>
+                            </div>
+                        </article>
+                        @*<article class="media event">
+                            <a class="pull-left date">
+                                <p class="month">April</p>
+                                <p class="day">23</p>
+                            </a>
+                            <div class="media-body">
+                                <a class="title" href="#">Item Two Title</a>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            </div>
+                        </article>
+                        <article class="media event">
+                            <a class="pull-left date">
+                                <p class="month">April</p>
+                                <p class="day">23</p>
+                            </a>
+                            <div class="media-body">
+                                <a class="title" href="#">Item Two Title</a>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            </div>
+                        </article>
+                        <article class="media event">
+                            <a class="pull-left date">
+                                <p class="month">April</p>
+                                <p class="day">23</p>
+                            </a>
+                            <div class="media-body">
+                                <a class="title" href="#">Item Two Title</a>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            </div>
+                        </article>
+                        <article class="media event">
+                            <a class="pull-left date">
+                                <p class="month">April</p>
+                                <p class="day">23</p>
+                            </a>
+                            <div class="media-body">
+                                <a class="title" href="#">Item Three Title</a>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            </div>
+                        </article>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script type="text/javascript">
+            myApp.controller('AdminDashboardCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+                $scope.TitleName = 'Dashboard'
+
+                NetworkService.get('PraescioCommon/GetActivityList').success(function (data) {
+                    $scope.ActivityList = data;
+                    $scope.totalcount = data.TotalRecord;
+                });
+            });
+    </script>
+}
+

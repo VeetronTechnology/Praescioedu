@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewBag.Title = "PurchaseEDUPackage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="right_col" ng-controller="UserStandardCountCtrl">
+    <div class="">
+                <div class="page-title">
+            <div class="title_left">
+                <h3>Standards</h3>
+            </div>
+            <div class="title_right">
+                <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <ol class="breadcrumb">
+                            <li><a href="@Url.Action("Dashboard", "InstitutionAdmin")"><i class="fa fa-dashboard"></i> Home</a></li>
+                            <li><a href="@Url.Action("SchoolProfile", "InstitutionAdmin")">Profile</a></li>
+                            <li class="active">Purchase EDU Package</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+
+        
+        <div class="container-fluid">
+            <!-- Vertical Layout -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                Purchase EDU Package
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <form>
+                                <label for="Name">Name</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" id="password" class="form-control" placeholder="Enter First Name">
+                                    </div>
+                                </div>
+                                <label for="Mobile Number">Mobile Number</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" id="password" class="form-control" placeholder="Enter Mobile Number">
+                                    </div>
+                                </div>
+                                <label for="Mobile Number">Email</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" id="password" class="form-control" placeholder="Enter Email">
+                                    </div>
+                                </div>
+
+                                <br>
+                                <button type="button" class="btn btn-primary m-t-15 waves-effect">SUBMIT</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- #END# Vertical Layout -->
+
+        </div>
+        </div>
+    </div>

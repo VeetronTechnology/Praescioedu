@@ -1,0 +1,148 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="right_col" role="main" ng-controller="AdminDashboardCtrl">
+    <div class="">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3>150</h3>
+                        <p>New Orders</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-shopping-bag"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div><!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3>53<sup style="font-size: 20px">%</sup></h3>
+                        <p>Bounce Rate</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-bar-chart"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div><!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3>44</h3>
+                        <p>User Registrations</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-user-plus"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div><!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3>65</h3>
+                        <p>Unique Visitors</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-pie-chart"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div><!-- ./col -->
+        </div><!-- /.row -->
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Activities</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <article class="media event" ng-repeat="activity in ActivityList">
+                            <a class="pull-left date">
+                                <p class="month">{{activity.Activities.CreatedOn| date:'MMM'}}</p>
+                                <p class="day">{{activity.Activities.CreatedOn| date:'dd'}}</p>
+                            </a>
+                            <div class="media-body">
+                                <a class="title" href="#">{{activity.Activities.ActivityName}}</a>
+                                <p>{{activity.Activities.Query}}</p>
+                            </div>
+                        </article>
+                        @*<article class="media event">
+                                <a class="pull-left date">
+                                    <p class="month">April</p>
+                                    <p class="day">23</p>
+                                </a>
+                                <div class="media-body">
+                                    <a class="title" href="#">Item Two Title</a>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                </div>
+                            </article>
+                            <article class="media event">
+                                <a class="pull-left date">
+                                    <p class="month">April</p>
+                                    <p class="day">23</p>
+                                </a>
+                                <div class="media-body">
+                                    <a class="title" href="#">Item Two Title</a>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                </div>
+                            </article>
+                            <article class="media event">
+                                <a class="pull-left date">
+                                    <p class="month">April</p>
+                                    <p class="day">23</p>
+                                </a>
+                                <div class="media-body">
+                                    <a class="title" href="#">Item Two Title</a>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                </div>
+                            </article>
+                            <article class="media event">
+                                <a class="pull-left date">
+                                    <p class="month">April</p>
+                                    <p class="day">23</p>
+                                </a>
+                                <div class="media-body">
+                                    <a class="title" href="#">Item Three Title</a>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                </div>
+                            </article>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script type="text/javascript">
+            myApp.controller('AdminDashboardCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+                $scope.TitleName = 'Dashboard'
+
+                NetworkService.get('PraescioCommon/GetActivityList').success(function (data) {
+                    $scope.ActivityList = data;
+                    $scope.totalcount = data.TotalRecord;
+                });
+            });
+    </script>
+}
+
+
+
+

@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "AddTeacher";
+    Layout = "~/Views/Shared/_SchoolLayout.cshtml";
+}
+
+<h2>AddTeacher</h2>
+<section class="content">
+
+    <ol class="breadcrumb breadcrumb-bg-teal align-right">
+        <li><a href="@Url.Action("SchoolAdmin", "SchoolAdmin")"><i class="material-icons">home</i> Home</a></li>
+        <li><a href="@Url.Action("AddTeacher", "SchoolAdmin")"><i class="material-icons">person_add</i> Add Teacher</a></li>
+    </ol>
+
+    <div class="container-fluid">
+        <!-- Vertical Layout -->
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            Add Teacher
+                        </h2>
+                    </div>
+                    <div class="body">
+                        <form>
+                            <label for="First Name">First Name</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="password" class="form-control" placeholder="Enter First Name">
+                                </div>
+                            </div>
+                            <label for="Last Name">Last Name</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="password" class="form-control" placeholder="Enter Last Name">
+                                </div>
+                            </div>
+                            <label for="Mobile Number">Mobile Number</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="password" class="form-control" placeholder="Enter Mobile Number">
+                                </div>
+                            </div>
+                            <label for="Mobile Number">Email</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="password" class="form-control" placeholder="Enter Email">
+                                </div>
+                            </div>
+                            <label for="heard">Select Standard</label>
+                            <select id="heard" class="form-control" required>
+                                <option value="">Choose..</option>
+                                <option value="press">STD 1</option>
+                                <option value="net">STD 2</option>
+                                <option value="mouth">STD 3</option>
+                            </select>
+                            <label for="heard">Select Subject</label>
+                            <select id="heard" class="form-control" required>
+                                <option value="">Choose..</option>
+                                <option value="press">Marathi</option>
+                                <option value="mouth">English</option>
+                            </select>
+                           
+                            <button type="button" class="btn btn-primary m-t-15 waves-effect">Save</button>
+                        </form>
+                </div>
+            </div>
+        </div>
+        <!-- #END# Vertical Layout -->
+
+    </div>
+
+</section>

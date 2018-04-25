@@ -1,0 +1,329 @@
+﻿@{
+    ViewBag.Title = "Student";
+}
+
+<div class="right_col" role="main" ng-controller="StudentRegisterCtrl">
+    <div class="">
+
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Registration</h3>
+            </div>
+            <div class="title_right">
+                <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <ol class="breadcrumb">
+                            <li><a href="@Url.Action("Dashboard", "InstitutionAdmin")"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                            <li class="active">Student Registration</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Student Registration</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <!-- start form for validation -->
+                        <form id="StudentRegistration" name="StudentRegistration" data-parsley-validate>
+
+                            <div class="form-group">
+                                <label for="firstname">First Name</label>
+                                <input type="text" id="FirstName" ng-model="Student.FirstName" class="form-control alpha" name="FirstName" placeholder="Enter First Name" required />
+                                <p ng-show="StudentRegistration.FirstName.$invalid && (StudentRegistration.FirstName.$dirty || submitted ||StudentRegistration.FirstName.$touched )" class="text-danger">First Name is required.</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastname">Last Name</label>
+                                <input type="text" id="LastName" ng-model="Student.LastName" class="form-control alpha" name="LastName" data-parsley-trigger="change" placeholder="Last Name" required />
+                                <p ng-show="StudentRegistration.LastName.$invalid && (StudentRegistration.LastName.$dirty || submitted ||StudentRegistration.LastName.$touched )" class="text-danger">Last Name is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Gender</label>
+                                <p>
+                                    Male:
+                                    <input type="radio" class="flat" name="gender" id="genderM" value="Male" checked="" required /> Female:
+                                    <input type="radio" class="flat" name="gender" id="genderF" value="Female" />
+                                </p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="dob">Date Of Birth</label>
+                                <input type="text" id="DateOfBirth" ng-model="Student.DateOfBirth" class="form-control" name="DateOfBirth" data-parsley-trigger="change" placeholder="Enter DateOfBirth" required />
+                                <p ng-show="StudentRegistration.DateOfBirth.$invalid && (StudentRegistration.DateOfBirth.$dirty || submitted ||StudentRegistration.DateOfBirth.$touched )" class="text-danger">DateOfBirth is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="regno">Students Parent’s Mobile Number</label>
+                                <input type="text" id="regno" ng-model="Student.ParentMobileNo" maxlength="10" class="form-control number" name="regno" data-parsley-trigger="change" placeholder="Mobile Number" required />
+                                <p ng-show="StudentRegistration.regno.$invalid && (StudentRegistration.regno.$dirty || submitted ||StudentRegistration.regno.$touched )" class="text-danger">Mobile is required.</p>
+                            </div>
+
+                            @*<div class="form-group">
+                                    <label for="InstitutionName">Student School Name</label>
+                                    <input type="text" id="InstitutionName" ng-model="Student.InstitutionName" class="form-control" name="InstitutionName" data-parsley-trigger="change" placeholder="Institution Name" required />
+                                    <p ng-show="StudentRegistration.InstitutionName.$invalid && (StudentRegistration.InstitutionName.$dirty || submitted ||StudentRegistration.InstitutionName.$touched )" class="text-danger">Institution Name is required.</p>
+                                </div>*@
+
+                            @*<div class="form-group">
+                                    <label for="InstitutionAddress">School Address</label>
+                                    <textarea id="InstitutionAddress" required="required" ng-model="Student.InstitutionAddress" class="form-control" name="InstitutionAddress" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.." placeholder="Enter School Address"
+                                              data-parsley-validation-threshold="10"></textarea>
+                                    <p ng-show="StudentRegistration.InstitutionAddress.$invalid && (StudentRegistration.InstitutionAddress.$dirty || submitted ||StudentRegistration.InstitutionAddress.$touched )" class="text-danger">Institution Address is required.</p>
+                                </div>*@
+
+                            <div class="form-group">
+                                <label for="heard">Select Board</label>
+                                <select id="Board" name="Board" class="input-sm form-control" ng-model="Student.BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-change="" ng-required="true">
+                                    <option value="">-- Select Board --</option>
+                                </select>
+                                <p ng-show="StudentRegistration.Board.$invalid && (StudentRegistration.Board.$dirty || submitted ||StudentRegistration.Board.$touched )" class="text-danger">Board is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Standard">Select Standard</label>
+                                <select id="Standard" name="Standard" class="input-sm form-control" ng-model="Student.Standard" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="ChangeStandard(Student.Standard)" ng-required="true">
+                                    <option value="">-- Select Standard --</option>
+                                </select>
+                                <p ng-show="StudentRegistration.Standard.$invalid && (StudentRegistration.Standard.$dirty || submitted ||StudentRegistration.Standard.$touched )" class="text-danger">Standard is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="heard">Select Subject</label>
+                                <select class="input-sm form-control select2" multiple id="Subject" name="Subject"
+                                        data-placeholder="Select team members" ng-required="true" ng-model="Student.Subject">
+                                    <option value=""></option>
+                                    <option ng-repeat="option in SubjectList" value="{{option.Id}}">{{option.SubjectName}}</option>
+                                </select>
+                                @*<p ng-show="StudentRegistration.Subject.$invalid && (StudentRegistration.Subject.$dirty || submitted ||StudentRegistration.Subject.$touched )" class="text-danger">Subject is required.</p>*@
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <label for="schoolname">Mother's Name</label>
+                                <input type="text" id="MotherName" class="form-control" name="MotherName" ng-model="Student.MotherName" placeholder="Enter Mother's First Name" required />
+                                <p ng-show="StudentRegistration.MotherName.$invalid && (StudentRegistration.MotherName.$dirty || submitted ||StudentRegistration.MotherName.$touched )" class="text-danger">Mother Name is required.</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="schoolname">Father's Name</label>
+                                <input type="text" id="FatherName" class="form-control" name="FatherName" ng-model="Student.FatherName" placeholder="Enter Father's First Name" required />
+                                <p ng-show="StudentRegistration.FatherName.$invalid && (StudentRegistration.FatherName.$dirty || submitted ||StudentRegistration.FatherName.$touched )" class="text-danger">Father Name is required.</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Id</label>
+                                <input type="text" id="ParentEmail" class="form-control" name="ParentEmail" ng-model="Student.ParentEmail" placeholder="Enter Parent Email" required />
+                                <p ng-show="StudentRegistration.ParentEmail.$invalid && (StudentRegistration.ParentEmail.$dirty || submitted ||StudentRegistration.ParentEmail.$touched )" class="text-danger">Parent Email is required.</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="phoneno">Phone No.</label>
+                                <input type="text" id="ParentNo" class="form-control number" name="ParentNo" maxlength="10" ng-model="Student.ParentNo" placeholder="Enter Parent Mobile No" required />
+                                <p ng-show="StudentRegistration.ParentNo.$invalid && (StudentRegistration.ParentNo.$dirty || submitted ||StudentRegistration.ParentNo.$touched )" class="text-danger">Parent Mobile No is required.</p>
+                            </div>
+
+                            <br />
+
+
+                            @if (ViewBag.AccountId == 0)
+                            {
+                                <span class="btn btn-primary" ng-click="reset()">Reset</span>
+                                <span class="btn btn-primary" ng-click="RegisterStudent()" ng-disabled="savingRequest">
+                                    Submit
+                                    <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="btn btn-primary" ng-click="UpdateStudent()" ng-disabled="savingRequest">
+                                    Update
+                                    <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                                </span>
+                            }
+                        </form>
+                        <!-- end form for validations -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+
+        myApp.controller('StudentRegisterCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+
+            $scope.Student = {};
+            @*$scope.Student.ActivateOn = '@DateTime.Parse(DateTime.Now.ToString().Trim()).ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)';
+            $scope.Student.ActivateOn = '@DateTime.Parse(DateTime.Now.AddYears(1).ToString().Trim()).ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)';*@
+
+            $scope.TitleName = 'Register Student'
+
+            $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
+                               { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }]
+
+            $scope.SubjectList = [{ Id: 1, SubjectName: 'English' }, { Id: 2, SubjectName: 'Hindi' }, { Id: 3, SubjectName: 'Marathi' },
+                               { Id: 4, SubjectName: 'Science' }, { Id: 5, SubjectName: 'Mathematics' }];
+
+            @*$scope.VersionType = [{ Id: 1, Name: '@Praescio.Domain.AppCode.VersionType.FullVersion' }, { Id: 2, Name: '@Praescio.Domain.AppCode.VersionType.TrialVerion' }];*@
+
+            NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
+                $scope.BoardList = data;
+            });
+
+            NetworkService.get('PraescioAdmin/GetState').success(function (data) {
+                $scope.StateList = data;
+            });
+
+            $scope.ChangeStandard = function (id) {
+                NetworkService.get('PraescioCommon/GetSubject?standardid=' + id + '&mediumid=@Praescio.Models.Common.ACCOUNT.OrganizationAccount.MediumId').success(function (data) {
+                    $(".select2").select2().val('').trigger("chosen:updated");
+                    $scope.SubjectList = data;
+                });
+            }
+
+            $scope.reset = function () {
+
+                $scope.Student.LastName = '';
+                $scope.Student.FirstName = '';
+                $scope.Student.ParentMobileNo = '';
+                $scope.Student.BoardId = '';
+                $scope.Student.Standard = '';
+                $scope.Student.Subject = '';
+                $scope.Student.MotherName = '';
+                $scope.Student.FatherName = '';
+                $scope.Student.ParentEmail = '';
+                $scope.Student.ParentNo = '';
+
+
+            };
+
+            if ('@ViewBag.AccountId' > 0) {
+                NetworkService.get('PraescioCommon/GetUserRegisterationDetail?accountId=@ViewBag.AccountId').success(function (data) {
+                    $scope.Student = data.account;
+                    $scope.Student.Standard = data.account.StudentStandardId;
+
+                    NetworkService.get('PraescioCommon/GetPackage?userPackageRole=@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)').success(function (data) {
+                        $scope.PackageList = data;
+                        $scope.Student.SelectPackage = { "id": 1, "text": "INSTITUTION PACKAGE 1", "amount": 2000 };
+                    });
+
+
+                    $scope.Student.DateOfBirth = $filter('date')($scope.Student.DateOfBirth, "dd/MM/yyyy");
+                    $scope.Student.ActivateOn = $filter('date')($scope.Student.ActivateOn, "dd/MM/yyyy");
+                    $scope.Student.ExpiredOn = $filter('date')($scope.Student.ExpiredOn, "dd/MM/yyyy");
+                    $scope.Student.SelectPackage = { "id": 1, "text": "INSTITUTION PACKAGE 1", "amount": 2000 };
+
+
+                    setTimeout(function () {
+                        $scope.Student.Subject = data.subject;
+                        $('#Subject').val(data.subject).trigger('chosen:updated');
+                        $(".select2").select2();
+                    }, 2000);
+                });
+            }
+
+
+            $scope.RegisterStudent = function () {
+                $scope.Student.Gender = $("input[name='gender']:checked").val();
+
+                if (!$scope.StudentRegistration.$valid) {
+                    $scope.submitted = true;
+                }
+                else {
+
+                    $scope.savingRequest = true;
+                    $scope.Student.IsIndividual = false;
+                    $scope.Student.InstitutionAccountId = '@Praescio.Models.Common.ACCOUNT.InstitutionAccountId';
+                    $scope.Student.AccountTypeId = '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Student)';
+                    var data = '{"account":' + JSON.stringify($scope.Student) + ',"studentsubject":' + JSON.stringify($scope.Student.Subject) + ',"studentstandard":' + JSON.stringify($scope.Student.Standard) + ',"accounttypeid":' + '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Student)' + ',"isTeacher":' + false + '}';
+                    NetworkService.insert('PraescioAdmin/RegisterStudent', data).success(function (data) {
+                        $scope.savingRequest = false;
+
+                        swal({
+                            title: "Student has been successfully registered!!!",
+                            text: "Press Ok to Continue.",
+                            type: "success",
+                            confirmButtonColor: "green",
+                            showCancelButton: false,
+                        });
+                    }).error(function (data) {
+                        $scope.savingRequest = false;
+                        swal({
+                            title: data,
+                            text: "Press Ok to Continue.",
+                            type: "error",
+                            confirmButtonColor: "red",
+                            showCancelButton: false,
+                        });
+                    });
+                }
+            }
+
+            $scope.UpdateStudent = function () {
+                $scope.Student.Gender = $("input[name='gender']:checked").val();
+
+                if (!$scope.StudentRegistration.$valid) {
+                    $scope.submitted = true;
+                }
+                else {
+
+                    $scope.savingRequest = true;
+                    $scope.Student.IsIndividual = false;
+                    $scope.Student.AccountTypeId = '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Student)';
+                    var data = '{"account":' + JSON.stringify($scope.Student) + ',"studentsubject":' + JSON.stringify($scope.Student.Subject) + ',"studentstandard":' + JSON.stringify($scope.Student.Standard) + ',"accounttypeid":' + '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Student)' + ',"isTeacher":' + false + '}';
+                    NetworkService.insert('PraescioAdmin/UpdateStudent', data).success(function (data) {
+                        $scope.savingRequest = false;
+
+                        swal({
+                            title: "Student has been successfully registered!!!",
+                            text: "Press Ok to Continue.",
+                            type: "success",
+                            confirmButtonColor: "green",
+                            showCancelButton: false,
+                        });
+                    }).error(function (data) {
+                        $scope.savingRequest = false;
+                        swal({
+                            title: data,
+                            text: "Press Ok to Continue.",
+                            type: "error",
+                            confirmButtonColor: "red",
+                            showCancelButton: false,
+                        });
+                    });
+                }
+            }
+
+            $(".select2").select2();
+
+            var pickerDefault = new Pikaday(
+            {
+                field: document.getElementById('ActivateDate'),
+                format: 'DD/MM/YYYY',
+                minDate: new Date()
+            });
+
+            var datepicker = $.fn.datepicker.noConflict();
+            $.fn.bootstrapDP = datepicker;
+
+            $("#DateOfBirth").bootstrapDP({
+                endDate: new Date(),
+                //maxDate: 0,
+                format: "dd/mm/yyyy",
+                autoclose: true,
+                pickerPosition: "bottom-left"
+            }).change(function () {
+                console.log($(this).val());
+            });
+        });
+    </script>
+}

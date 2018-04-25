@@ -1,0 +1,48 @@
+﻿
+@{
+    ViewBag.Title = "UploadCreativity";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="right_col" role="main" style="background:#48c9b0">
+    <div class="cont">
+        <div class="table-agile-info">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Upload Creativity
+                </div>
+                <div class="panel-body">
+                    <div class="position-center">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label for="Title" class="col-lg-3 col-sm-3 control-label">Title:</label>
+                                <div class="col-lg-9">
+                                    <input type="text" class="form-control" id="Title" placeholder="Title">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Description" class="col-lg-3 col-sm-3 control-label">Description:</label>
+                                <div class="col-lg-9">
+                                    <textarea class="form-control"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Description" class="col-lg-3 col-sm-3 control-label">Upload File:</label>
+                                <div class="col-lg-9">
+                                    <input type="file">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-lg-offset-3 col-lg-9">
+                                    <button type="submit" class="btn btn-success">Clear</button>
+                                    <button type="submit" class="btn btn-danger">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

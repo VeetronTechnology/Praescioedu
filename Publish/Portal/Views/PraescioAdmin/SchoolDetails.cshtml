@@ -1,0 +1,152 @@
+﻿@{
+    ViewBag.Title = "School_details";
+}
+
+<!-- page content -->
+<div class="right_col" role="main" ng-controller="SchoolDetailCtrl" ng-cloak>
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>School Details</h3>
+            </div>
+            <div class="title_right">
+                <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <ol class="breadcrumb">
+                            <li><a href="@Url.Action("Dashboard", "PraescioAdmin")"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                            <li class="active">School Details</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>School Details</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <th>School Name</th>
+                                    <td>{{InstitutionDetail.Institution.InstitutionName}}</td>
+                                </tr>
+                                <tr>
+                                    <th>School Registration Number</th>
+                                    <td>{{InstitutionDetail.Institution.RegistrationNo}}</td>
+                                </tr>
+                                <tr>
+                                    <th>School Address</th>
+                                    <td>{{InstitutionDetail.Institution.Address}}</td>
+                                </tr>
+                                <tr>
+                                    <th>School Medium</th>
+                                    <td>{{InstitutionDetail.Institution.Medium.Name}}</td>
+                                </tr>
+                                <tr>
+                                    <th>School Address Proof</th>
+                                    <td><a ng-href='~/{{InstitutionDetail.Institution.AddressProofSrc}}'><i class="fa fa-file-pdf-o" style="font-size:48px;color:red"></i></a></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>School Management / Principal Details</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+
+
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <th>Designation</th>
+                                    <td>{{InstitutionDetail.PrincipalDetail.Designation}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Email id	</th>
+                                    <td>{{InstitutionDetail.PrincipalDetail.Email}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Phone Number</th>
+                                    <td>{{InstitutionDetail.PrincipalDetail.Designation}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Person Photo Id</th>
+                                    <td>
+                                        <img src="~/{{InstitutionDetail.PrincipalDetail.PersonPhotoSrc}}" style="width:8em; height:6em;" alt="Alternate Text" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Authority Letter</th>
+                                    <td><a ng-href='~/{{InstitutionDetail.PrincipalDetail.AuthorityLetterSrc}}'><i class="fa fa-file-pdf-o" style="font-size:48px;color:red"></i></a></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <input type="submit" value="Update" class="btn btn-primary">
+                    <input type="submit" value="Block" class="btn btn-danger" ng-click="Block();">
+                    @Html.ActionLink("List Of Student", "StudentList", "Praescio", new { institutionId = ViewBag.InstitutionId })
+                    @Html.ActionLink("List Of Teachers", "TeacherList", "Praescio", new { institutionId = ViewBag.InstitutionId })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /page content -->
+@section Scripts{
+
+    <script type="text/javascript">
+
+        myApp.controller('SchoolDetailCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+
+            $scope.Teacher = {};
+            $scope.TitleName = 'Register School'
+            NetworkService.get('PraescioAdmin/GetSchoolDetail?institutionId=@ViewBag.InstitutionId').success(function (data) {
+                $scope.InstitutionDetail = data;
+            });
+
+            $scope.Block = function () {
+                $.confirm({
+                    title: 'Confirm!',
+                    content: 'Are you sure, want to block this?',
+                    confirm: function () {
+                        NetworkService.update('PraescioAdmin/InstitutionActivation?institutionAccountId=' + $scope.InstitutionDetail.Institution.InstitutionAccountId + '&status=0').success(function (data) {
+                            $.alert("Institution has been deactivated successfully.");
+                        }).error(function (data) {
+                            console.log(data);
+                        });
+                    }
+                });
+            }
+
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            //$('#datatable').dataTable({
+            //    /* Disable initial sort */
+            //    "aaSorting": []
+            //});
+            //$("#datatable").dataTable().fnDestroy();
+        })
+    </script>
+}

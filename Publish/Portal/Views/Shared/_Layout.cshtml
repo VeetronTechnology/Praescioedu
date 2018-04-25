@@ -1,0 +1,471 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="ICON" href="~/Content/assets/build/images/school_icon.png" type="image/ico" />
+    <title>Praescio | Admin </title>
+    <!-- Bootstrap -->
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <link href="~/Content/assets/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="~/Content/assets/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="~/Content/assets/vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- bootstrap-daterangepicker -->
+    <link href="~/Content/assets/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="~/Content/assets/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+    <!-- Datatables -->
+    <link href="~/Content/assets/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/assets/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/assets/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/assets/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/assets/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="~/Content/assets/build/css/custom.min.css" rel="stylesheet">
+    <link href="~/Content/assets/build/css/style.css" rel="stylesheet">
+    <link href="~/Content/assets/build/css/toastr.css" rel="stylesheet" />
+    <link href="~/Content/assets/build/css/AdminLTE.css" rel="stylesheet">
+    <script src="//cdn.ckeditor.com/4.5.5/standard/ckeditor.js"></script>
+
+    <!--PICK A DAY-->
+    <script src="~/Content/pikaday/moment.min.js"></script>
+    <link href="~/Content/pikaday/pikaday.css" rel="stylesheet" />
+    <script src="~/Content/pikaday/pikaday.js"></script>
+
+    <!-- EXCEL TO LIST OBJECT DATA SAVING-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.1/xlsx.full.min.js"></script>
+    <script src="http://oss.sheetjs.com/js-xlsx/jszip.js"></script>
+
+    <style>
+        .required:after {
+            content: " *";
+            color: red;
+        }
+
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+            display: none !important;
+        }
+    </style>
+
+</head>
+<body class="nav-md" ng-app="PSM" ng-cloak>
+    <div class="container body">
+        <div class="main_container">
+            <div class="col-md-3 left_col">
+                <div class="left_col scroll-view">
+                    @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.SuperAdmin)
+                    {
+                        <div class="navbar nav_title" style="border: 0">
+                            <a href="index.html" class="site_title"><i class="fa fa-book"></i> <span>ADMIN PRAESCIO</span></a>
+                        </div>
+                    }
+                    else if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Admin)
+                    {
+                        <div class="navbar nav_title" style="border: 0;background:#F44336">
+                            <a href="index.html" class="site_title"><i class="fa fa-institution"></i> <span>School Teacher</span></a>
+                        </div>
+                        @*<div class="navbar nav_title" style="border: 0;background:url(../Content/assets/production/images/user-img-background.jpg)">
+                            <a href="index.html" class="site_title"><i class="fa fa-institution"></i> <span>Envantio High School</span></a>
+                        </div>*@
+                    }
+                    else if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student)
+                    {
+                        <div class="navbar nav_title" style="border: 0;background:#3c8dbc">
+                            <a href="index.html" class="site_title"><i class="fa fa-institution"></i> <span>STUDENT</span></a>
+                        </div>
+                    }
+                    else if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Teacher)
+                    {
+                        <div class="navbar nav_title" style="border: 0;background:#F44336">
+                            <a href="index.html" class="site_title"><i class="fa fa-institution"></i> <span>School Teacher</span></a>
+                        </div>
+                    }
+                  
+                    <div class="clearfix"></div>
+                    <!-- menu profile quick info -->
+                    @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.SuperAdmin || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Admin)
+                    {
+                        <div class="profile clearfix">
+                            <div class="profile_pic">
+                                <img src="~/Content/assets/production/images/img.jpg" alt="..." class="img-circle profile_img">
+                            </div>
+                            <div class="profile_info">
+                                <span>Welcome,</span>
+                                <h2>Veetron Technology</h2>
+                            </div>
+                        </div>
+                    }
+                    else if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student)
+                    {
+                        
+                    }
+
+                    <!-- /menu profile quick info -->
+                    <br />
+                    <!-- sidebar menu -->
+                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                        <div class="menu_section">
+                           
+                            <!-- Side Menu for Praescio Super Admin Layout -->
+
+                            @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.SuperAdmin)
+                            {
+                                @Html.Partial("_PraescioNavigation")
+                            }
+                            else if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Admin)
+                            {
+                                @Html.Partial("_InstitutionAdminNavigation")
+                            }
+                            else if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Teacher)
+                            {
+                                @Html.Partial("_InstitutionTeacherNavigation")
+                            }
+                            else if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student)
+                            {
+                                @Html.Partial("_InstitutionStudentNavigation")
+                            }
+                            else if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)
+                            {
+                                @Html.Partial("_IndividualTeacherNavigation")
+                            }
+                            else if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+                            {
+                                @Html.Partial("_IndividualStudentNavigation")
+                            }
+                        </div>
+                    </div>
+                    <!-- /sidebar menu -->
+                    <!-- /menu footer buttons -->
+                </div>
+            </div>
+            <!-- top navigation -->
+            <div class="top_nav">
+
+                @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.SuperAdmin)
+                {
+                    <div class="nav_menu">
+                        <nav>
+                            <div class="nav toggle">
+                                <a id="menu_toggle"><i class="fa fa-bars" style="color:#FFF;"></i></a>
+                            </div>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li class="">
+                                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        <img src="~/Content/assets/production/images/img.jpg" alt=""><span style="color:#FFF;">Veetron Technology</span>
+                                        <span class="fa fa-angle-down" style="color:#FFF;"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                        <li><a href="javascript:;"> Profile</a></li>
+                                        <li><a href="@Url.Action("Logoff","Account")"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                                    </ul>
+                                </li>
+                                <li role="presentation" class="dropdown">
+                                    <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa fa-envelope-o" style="color:#FFF;"></i>
+                                        <span class="badge bg-green">6</span>
+                                    </a>
+                                    <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                                        <li>
+                                            <a>
+                                                <span class="image"><img src="~/Content/assets/production/images/img.jpg" alt="Profile Image" /></span>
+                                                <span>
+                                                    <span>Veetron Technology</span>
+                                                    <span class="time">3 mins ago</span>
+                                                </span>
+                                                <span class="message">
+                                                    Film festivals used to be do-or-die moments for movie makers. They were where...
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a>
+                                                <span class="image"><img src="~/Content/assets/production/images/img.jpg" alt="Profile Image" /></span>
+                                                <span>
+                                                    <span>John Smith</span>
+                                                    <span class="time">3 mins ago</span>
+                                                </span>
+                                                <span class="message">
+                                                    Film festivals used to be do-or-die moments for movie makers. They were where...
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a>
+                                                <span class="image"><img src="~/Content/assets/production/images/img.jpg" alt="Profile Image" /></span>
+                                                <span>
+                                                    <span>John Smith</span>
+                                                    <span class="time">3 mins ago</span>
+                                                </span>
+                                                <span class="message">
+                                                    Film festivals used to be do-or-die moments for movie makers. They were where...
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a>
+                                                <span class="image"><img src="~/Content/assets/production/images/img.jpg" alt="Profile Image" /></span>
+                                                <span>
+                                                    <span>John Smith</span>
+                                                    <span class="time">3 mins ago</span>
+                                                </span>
+                                                <span class="message">
+                                                    Film festivals used to be do-or-die moments for movie makers. They were where...
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <div class="text-center">
+                                                <a>
+                                                    <strong>See All Alerts</strong>
+                                                    <i class="fa fa-angle-right"></i>
+                                                </a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                }
+                else if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Admin || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Teacher)
+                {
+                    <div class="nav_menu" style="background-color:#F44336">
+                        <nav>
+                            <div class="nav toggle">
+                                <a id="menu_toggle"><i class="fa fa-bars" style="color:#FFF;"></i></a>
+                            </div>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li class="">
+                                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        <img src="~/Content/assets/production/images/img.jpg" alt=""><span style="color:#FFF;">Envantio School</span>
+                                        <span class="fa fa-angle-down" style="color:#FFF;"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                        <li><a href="javascript:;"> Profile</a></li>
+                                        <li><a href="@Url.Action("Logoff","Account")"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                                    </ul>
+                                </li>
+                                <li role="presentation" class="dropdown">
+                                    <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa fa-envelope-o" style="color:#FFF;"></i>
+                                        <span class="badge bg-green">6</span>
+                                    </a>
+                                    <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                                        <li>
+                                            <a>
+                                                <span class="image"><img src="~/Content/assets/production/images/img.jpg" alt="Profile Image" /></span>
+                                                <span>
+                                                    <span>Veetron Technology</span>
+                                                    <span class="time">3 mins ago</span>
+                                                </span>
+                                                <span class="message">
+                                                    Film festivals used to be do-or-die moments for movie makers. They were where...
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a>
+                                                <span class="image"><img src="~/Content/assets/production/images/img.jpg" alt="Profile Image" /></span>
+                                                <span>
+                                                    <span>John Smith</span>
+                                                    <span class="time">3 mins ago</span>
+                                                </span>
+                                                <span class="message">
+                                                    Film festivals used to be do-or-die moments for movie makers. They were where...
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a>
+                                                <span class="image"><img src="~/Content/assets/production/images/img.jpg" alt="Profile Image" /></span>
+                                                <span>
+                                                    <span>John Smith</span>
+                                                    <span class="time">3 mins ago</span>
+                                                </span>
+                                                <span class="message">
+                                                    Film festivals used to be do-or-die moments for movie makers. They were where...
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a>
+                                                <span class="image"><img src="~/Content/assets/production/images/img.jpg" alt="Profile Image" /></span>
+                                                <span>
+                                                    <span>John Smith</span>
+                                                    <span class="time">3 mins ago</span>
+                                                </span>
+                                                <span class="message">
+                                                    Film festivals used to be do-or-die moments for movie makers. They were where...
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <div class="text-center">
+                                                <a>
+                                                    <strong>See All Alerts</strong>
+                                                    <i class="fa fa-angle-right"></i>
+                                                </a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                }
+                
+            </div>
+            <!-- /top navigation -->
+            <!-- page content -->
+            @RenderBody()
+            <!-- /page content -->
+            <!-- footer content -->
+            <footer>
+                <div class="pull-right">
+                    <strong>Copyright &copy; 2017 <a href="http://www.veetrontechnology.com/" target="_blank">Veetron Technology</a>.</strong> All rights reserved.
+                </div>
+                <div class="clearfix"></div>
+            </footer>
+            <!-- /footer content -->
+        </div>
+    </div>
+    <!-- jQuery -->
+    <script src="~/Content/assets/vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="~/Content/assets/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="~/Content/assets/vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="~/Content/assets/vendors/nprogress/nprogress.js"></script>
+    <!-- Chart.js -->
+    <script src="~/Content/assets/vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- jQuery Sparklines -->
+    <script src="~/Content/assets/vendors/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+    <!-- Flot -->
+    <script src="~/Content/assets/vendors/Flot/jquery.flot.js"></script>
+    <script src="~/Content/assets/vendors/Flot/jquery.flot.pie.js"></script>
+    <script src="~/Content/assets/vendors/Flot/jquery.flot.time.js"></script>
+    <script src="~/Content/assets/vendors/Flot/jquery.flot.stack.js"></script>
+    <script src="~/Content/assets/vendors/Flot/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="~/Content/assets/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+    <script src="~/Content/assets/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="~/Content/assets/vendors/flot.curvedlines/curvedLines.js"></script>
+    <!-- DateJS -->
+    <script src="~/Content/assets/vendors/DateJS/build/date.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="~/Content/assets/vendors/moment/min/moment.min.js"></script>
+    <script src="~/Content/assets/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+    <!-- iCheck -->
+    <script src="~/Content/assets/vendors/iCheck/icheck.min.js"></script>
+    <!-- Datatables -->
+    @System.Web.Optimization.Scripts.Render("~/Content/assets/vendors/datatables.net/js/jquery.dataTables.min.js")
+    @System.Web.Optimization.Scripts.Render("~/Content/assets/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js")
+    @System.Web.Optimization.Scripts.Render("~/Content/assets/vendors/datatables.net-buttons/js/dataTables.buttons.min.js")
+    @System.Web.Optimization.Scripts.Render("~/Content/assets/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js")
+    @System.Web.Optimization.Scripts.Render("~/Content/assets/vendors/datatables.net-buttons/js/buttons.flash.min.js")
+    @System.Web.Optimization.Scripts.Render("~/Content/assets/vendors/datatables.net-buttons/js/buttons.html5.min.js")
+    @System.Web.Optimization.Scripts.Render("~/Content/assets/vendors/datatables.net-buttons/js/buttons.print.min.js")
+    @System.Web.Optimization.Scripts.Render("~/Content/assets/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js")
+    @System.Web.Optimization.Scripts.Render("~/Content/assets/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js")
+    @System.Web.Optimization.Scripts.Render("~/Content/assets/vendors/datatables.net-responsive/js/dataTables.responsive.min.js")
+    @System.Web.Optimization.Scripts.Render("~/Content/assets/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js")
+    @System.Web.Optimization.Scripts.Render("~/Content/assets/vendors/datatables.net-scroller/js/dataTables.scroller.min.js")
+    @System.Web.Optimization.Scripts.Render("~/Content/assets/vendors/jszip/dist/jszip.min.js")
+    @System.Web.Optimization.Scripts.Render("~/Content/assets/vendors/pdfmake/build/pdfmake.min.js")
+    @System.Web.Optimization.Scripts.Render("~/Content/assets/vendors/pdfmake/build/vfs_fonts.js")
+
+    <!-- Custom Theme Scripts -->
+    @System.Web.Optimization.Scripts.Render("~/Content/assets/build/js/custom.min.js")
+
+    @System.Web.Optimization.Scripts.Render("~/Content/assets/vendors/select2/dist/js/select2.js")
+    @System.Web.Optimization.Styles.Render("~/Content/assets/vendors/select2/dist/css/select2.min.css")
+
+    <!--  ANGULARJS -->
+    @System.Web.Optimization.Scripts.Render("~/Scripts/AngularScript/angular.min.js")
+    @System.Web.Optimization.Scripts.Render("~/Scripts/dirPagination.js")
+    @System.Web.Optimization.Scripts.Render("~/Scripts/AngularScript/angular-ui-router.min.js")
+    @System.Web.Optimization.Scripts.Render("~/Scripts/AngularScript/AngularCustomService.js")
+
+    <!-- Sweet alert -->
+    @System.Web.Optimization.Scripts.Render("~/Content/plugin/sweetalert.min.js")
+    @System.Web.Optimization.Styles.Render("~/Content/plugin/sweetalert.css")
+
+    <!-- Confirm alert -->
+    @Styles.Render("~/Content/plugin/jquery-confirm/jquery-confirm.min.css")
+    @Scripts.Render("~/Content/plugin/jquery-confirm/jquery-confirm.min.js")
+
+
+    <script type="text/javascript">
+
+        var ApiBaseURL = '@Praescio.Models.Common.baseUrl';
+        var myApp = angular.module('PSM', ['sharedServices','angularUtils.directives.dirPagination'])
+
+        $.ajaxSetup({
+            headers: {
+                'Authorization': 'Authorization @Praescio.Models.Common.ACCOUNT.UserName:@Praescio.Models.Common.ACCOUNT.Password',
+                'DomainKey': '@Praescio.Models.Common.ACCOUNT.OrganizationAccount.DomainKey',
+                'UserIP': '@HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"].ToString()'
+            }
+        });
+
+        var config = {
+            headers: {
+                'Authorization': 'Authorization @Praescio.Models.Common.ACCOUNT.UserName:@Praescio.Models.Common.ACCOUNT.Password',
+                'DomainKey': '@Praescio.Models.Common.ACCOUNT.OrganizationAccount.DomainKey',
+                'UserIP': '@HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"].ToString()'
+            }
+        };
+        myApp.constant('config', config);
+
+        myApp.constant('ApiURL', '@Praescio.Models.Common.baseUrl');
+        @*myApp.controller('MenuController', ['$scope', '$rootScope', 'NetworkService', function ($scope, $rootScope, NetworkService) {
+
+            NetworkService.get('CommonAPI/BindFilter?userid=@user.UserID&userprofile=@UserProfile')
+              .then(function (response) {
+                  $scope.BindFilter = response.data;
+              })
+                .catch(function (response) {
+                    console.log(response);
+                })
+
+            $rootScope.$on("RefereshMenuFilter", function () {
+                $scope.parentmethod();
+            });
+            $scope.parentmethod = function () {
+                NetworkService.get('CommonAPI/BindFilter?userid=@user.UserID&userprofile=@UserProfile')
+              .then(function (response) {
+                  $scope.BindFilter = response.data;
+              }).catch(function (response) {
+                  console.log(response);
+              })
+            }
+        }]);*@
+    </script>
+
+    <script src="~/Scripts/jquery-1.11.1.min.js"></script>
+    <script src="~/Scripts/Neoquant.js"></script>
+
+    <script>
+        var jQuery123 = $.noConflict(true);
+        jQuery123(function () {
+            jQuery123('.number').NumericOnly();
+            jQuery123('.alphanumeric').AlphaOnly();
+
+        });
+    </script>
+
+
+    @RenderSection("Scripts", false)
+
+</body>
+</html>

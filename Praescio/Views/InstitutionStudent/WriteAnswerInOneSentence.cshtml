@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "WriteAnswerInOneSentence";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="right_col" role="main" style="background:#48c9b0" ng-controller="OneSentenceAnswerCtrl">
+    <div class="cont">
+
+        <div class="table-agile-info">
+            <ol class="breadcrumb">
+                <li><a href="lesson_index.html">Lesson</a></li>
+                <li><a href="start_test.html">Start Test</a></li>
+                <li class="active">Write answer in One Sentence</li>
+            </ol>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Write answer in One Sentence
+                    <span class="tools pull-right" style="font-size:12px;font-weight:600;">
+                        <a href="javascript:;">Active: Duration : ddd:hh:mm</a>
+                    </span>
+                </div>
+                <div class="panel-body">
+
+                    <form role="form">
+                        <div ng-repeat="question in QuestionList">
+                            <div class="form-group">
+                                <label>{{$index+1}}.&nbsp;&nbsp;&nbsp;  {{question.Question.Title}} </label>
+                            </div>
+                            <div class="form-group">
+                                <label>Answer:</label>
+                                <input type="text" class="form-control" id="answer" ng-model="question.AttemptAnswer" placeholder="Write Answer">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-danger">Clear</button>
+                        <a class="btn btn-success" ng-click="SaveAnswer();" ng-disabled="savingRequest">
+                            Submit
+                            <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                        </a>
+                    </form>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+@section Scripts{
+
+    <script type="text/javascript">
+
+        myApp.controller('OneSentenceAnswerCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+
+            NetworkService.get('InstitutionStudent/GetAssignmentQuestion?assignmentid=@ViewBag.Assignmentid&typeOfQuestion=@ViewBag.TypeOfQuestion').success(function (data) {
+                $scope.QuestionList = data;
+            });
+
+            $scope.SaveAnswer = function () {
+                $scope.savingRequest = true;
+
+                NetworkService.insert('InstitutionStudent/SaveAnswer', $scope.QuestionList).success(function (data) {
+                    $scope.savingRequest = false;
+                    swal({
+                        title: "Answer has been successfully submitted!!!",
+                        text: "Press Ok to Continue.",
+                        type: "success",
+                        confirmButtonColor: "green",
+                        showCancelButton: false,
+                        closeOnConfirm: false,
+                        closeOnCancel: true
+                    },
+                      function (isConfirm) {
+                          if (isConfirm) {
+                              var assignment = '@ViewBag.Assignmentid';
+                              window.location.href = '@Url.Content("~/Praescio/AssignmentQuestion?assignmentId=")' + assignment;
+                          }
+                      });
+                }).error(function (data) {
+                    $scope.savingRequest = false;
+                    swal({
+                        title: data.Message,
+                        text: "Press Ok to Continue.",
+                        type: "error",
+                        confirmButtonColor: "red",
+                        showCancelButton: false,
+                    });
+                });
+            }
+
+        });
+    </script>
+}

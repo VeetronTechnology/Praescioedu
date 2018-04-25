@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewBag.Title = "CheckMatchTheFollowing";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="right_col" role="main">
+    <div class="cont">
+        <ol class="breadcrumb breadcrumb-bg-teal align-right">
+            <li><a href="@Url.Action("Dashboard", "InstitutionTeacher")"><i class="material-icons">home</i> Home</a></li>
+            <li><a href="test_history.html">Check Assignment</a></li>
+            <li>Match The Following</li>
+        </ol>
+
+        <div class="container-fluid">
+            <!-- Vertical Layout -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                Match The Following
+                            </h2>
+                            <ul class="header-dropdown m-r--5">
+                                Active: Duration : ddd:hh:mm
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <div class="body table-responsive">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <th>Question</th>
+                                            <th>Options</th>
+                                            <th>Student's Answer</th>
+                                            <th>Correct Answer</th>
+                                            <th> Marks Obtained</th>
+
+                                        </tr>
+                                        <tr>
+                                            <td>1. kangaroo paw</td>
+                                            <td>Animal</td>
+                                            <td>Flower</td>
+                                            <td>Flower</td>
+                                            <td>10</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2. Lion</td>
+                                            <td>Flower</td>
+                                            <td>Animal</td>
+                                            <td>Animal</td>
+                                            <td>10</td>
+                                        </tr>
+                                        <tr>
+                                            <td>3. Oak</td>
+                                            <td>Tree</td>
+                                            <td>Tree</td>
+                                            <td>Tree</td>
+                                            <td>10</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Total Marks</b></td>
+                                            <td colspan="3">30/30</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- #END# Vertical Layout -->
+
+        </div>
+    </div>
+</div>
+

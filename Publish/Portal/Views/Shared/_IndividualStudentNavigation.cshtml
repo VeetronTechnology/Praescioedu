@@ -1,0 +1,157 @@
+﻿<ul class="nav side-menu">
+    <li>
+        <a href="index.html"><i class="fa fa-dashboard"></i> Dashboard</a>
+    </li>
+    @*<li>
+        <a><i class="fa fa-edit"></i> Registration <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+            <li>
+                <a title="Register School" href="@Url.Action("RegisterSchool", "Admin")"><i title="Register School"></i> <span class="nav-label"> School</span></a>
+            </li>
+            <li>
+                <a title="Register Teacher" href="@Url.Action("RegisterTeacher", "Admin")"><i title="Register Teacher"></i> <span class="nav-label"> Teacher</span></a>
+            </li>
+            <li>
+                <a title="Register Student" href="@Url.Action("RegisterStudent", "Admin")"><i title="Register Student"></i> <span class="nav-label"> Student</span></a>
+            </li>
+        </ul>
+    </li>*@
+    <li>
+        <a title="School List" href="@Url.Action("SchoolList", "Admin")"><i title="School List" class="fa fa-university"></i> <span class="nav-label"> School List</span></a>
+    </li>
+    <li>
+        <a><i class="fa fa-user"></i> Teacher List <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+            <li>
+                <a title="Trail List" href="@Url.Action("TeacherList", "Admin",new { version="TrailVersion"})"><i title="Trail Version" class="fa fa-university"></i> <span class="nav-label"> Trail Version</span></a>
+            </li>
+            <li>
+                <a title="Full Version" href="@Url.Action("TeacherList", "Admin",new { version="FullVersion"})"><i title="Full Version" class="fa fa-university"></i> <span class="nav-label"> Full Version</span></a>
+            </li>
+        </ul>
+    </li>
+    @*<li>
+        <a><i class="fa fa-user"></i> Students List <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+            <li><a href="student_list_trail_version.html">Trail Version</a></li>
+            <li><a href="student_list.html">Full Version</a></li>
+        </ul>
+    </li>*@
+    <li>
+        <a><i class="fa fa-file-text"></i> Lessons <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+            <li><a href="add_lesson.html"> Add Lessons</a>
+            <li><a href="view_lessons.html">View Lessons</a></li>
+        </ul>
+    </li>
+    <li>
+        <a><i class="fa fa-file-word-o"></i>Synonyms <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+            <li><a href="@Url.Action("AddSynonyms", "Praescio")"> Add Synonyms</a>
+            <li><a href="@Url.Action("ViewSynonyms", "Praescio",new { categoryTypeId=Convert.ToInt16(Praescio.BusinessEntities.Common.CategoryType.Synonyms)})">View Synonyms</a></li>
+        </ul>
+    </li>
+    <li>
+        <a><i class="fa fa-file-word-o"></i>Antonyms <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+            <li><a href="@Url.Action("AddAntonym", "Praescio")"> Add Antonyms</a>
+            <li><a href="@Url.Action("ViewAntonym", "Praescio",new { categoryTypeId=Convert.ToInt16(Praescio.BusinessEntities.Common.CategoryType.Antonyms)})">View Antonyms</a></li>
+        </ul>
+    </li>
+    <li>
+        <a><i class="fa fa-question"></i> Add Questions <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+            <li>
+                <a href="#">Write A Reason<span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="add_question.html"> Add Questions</a></li>
+                    <li><a href="view_question.html"> View Questions</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">Fill In The Blanks<span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="add_fill_in_the_blanks.html">Add Fill In The Blanks</a></li>
+                    <li><a href="view_blanks.html">View Fill In The Blanks</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">Match The Following<span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="add_match_the_following.html">Add Matches</a></li>
+                    <li><a href="view_match_the_following.html">View Matches</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">True/False Questions<span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="add_true_false.html">Add True/False Questions</a></li>
+                    <li><a href="view_true_false.html">View True/False Questions</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">One Sentenced Answers<span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="add_answer_in_one_sentence.html">Add Question</a></li>
+                    <li><a href="view_answer_in_one_sentence.html">View Question</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">MCQ's<span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="add_mcq.html">Add Question</a></li>
+                    <li><a href="view_mcq.html">View Question</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">Descibe Briefly<span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="add_describe_question.html">Add Question</a></li>
+                    <li><a href="view_describe_question.html">View Question</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">Differentiate Between<span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="add_differentiate_between.html">Add Question</a></li>
+                    <li><a href="view_differentiate_between.html">View Question</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">Write Short Note On<span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="add_short_note.html">Add Note</a></li>
+                    <li><a href="view_short_note.html">View Note</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">Topic Concept<span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="add_topic_concept.html">Add Topic Concept</a></li>
+                    <li><a href="view_topic_concept.html">View Topic Concept</a></li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a><i class="fa fa-file-word-o"></i>Edu Study <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+            <li><a href="course_completion_status.html"> Course Completion Status</a>
+            <li><a href="overall_progress.html">Overall Progress</a></li>
+            <li><a href="handwritting_dev.html">Handwriting Development</a></li>
+            <li><a href="pronounciation_dev.html">Pronunciation Development</a></li>
+            <li><a href="teacher_assignment_index.html">Teachers Assignment</a></li>
+            <li><a href="school_notice.html">School Notice</a></li>
+            <li><a href="school_info.html">School Information</a></li>
+        </ul>
+    </li>
+    <li>
+        <a href="#"><i class="fa fa-plus"></i>Knowledge Bank<span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+            <li><a href="@Url.Action("AddKnowledgeBank", "Praescio")">Add Knowledge Bank</a></li>
+            <li><a href="@Url.Action("ViewKnowledgeBank", "Praescio")">View Knowledge Bank</a></li>
+            <li><a href="@Url.Action("KnowledgeBankHistory", "Praescio")">Knowledge Bank History</a></li>
+        </ul>
+    </li>
+
+</ul>

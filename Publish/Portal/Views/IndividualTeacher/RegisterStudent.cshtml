@@ -1,0 +1,193 @@
+﻿@{
+    ViewBag.Title = "Student";
+}
+
+<div class="right_col" role="main" ng-controller="StudentRegisterCtrl">
+    <div class="">
+
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Dashboard</h3>
+            </div>
+            <div class="title_right">
+                <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <ol class="breadcrumb">
+                            <li><a href="index.html"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                            <li class="active">Student Registration</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-6 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Student Registration</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <!-- start form for validation -->
+                        <form id="demo-form" data-parsley-validate>
+
+                            <div class="form-group">
+                                <label for="UserName">UserName</label>
+                                <input type="text" id="UserName" ng-model="Student.UserName" class="form-control" name="UserName" placeholder="UserName" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Password">Password</label>
+                                <input type="password" id="Password" ng-model="Student.Password" class="form-control" name="fullname" placeholder="First Name" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="firstname">First Name</label>
+                                <input type="text" id="FirstName" ng-model="Student.FirstName" class="form-control" name="FirstName" placeholder="First Name" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="lastname">Last Name</label>
+                                <input type="text" id="FirstName" ng-model="Student.LastName" class="form-control" name="LastName" data-parsley-trigger="change" placeholder="Last Name" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="regno">Students Parent’s Mobile Number</label>
+                                <input type="text" id="regno" ng-model="Student.ParentMobileNo" class="form-control" name="regno" data-parsley-trigger="change" placeholder="Mobile Number" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="schoolname">Student School Name</label>
+                                <input type="text" id="InstitutionName" ng-model="Student.InstitutionName" class="form-control" name="InstitutionName" data-parsley-trigger="change" placeholder="Institution Name" required />
+                                @*<select id="School" name="School" class="input-sm form-control" ng-model="Student.SchoolId" ng-options="option.Id as option.SchoolName for option in SchoolList" ng-change="" ng-required="true">
+                                        <option value="">-- Select School --</option>
+                                    </select>*@
+                            </div>
+
+                            <div class="form-group">
+                                <label for="address">School Address</label>
+                                <textarea id="address" required="required" ng-model="Student.InstitutionAddress" class="form-control" name="message" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.." placeholder="Enter School Address"
+                                          data-parsley-validation-threshold="10"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Version">Select Version</label>
+                                <select id="Version" name="Version" class="input-sm form-control" ng-model="Student.VersionType" ng-options="option.Name as option.Name for option in VersionType" ng-change="" ng-required="true">
+                                    <option value="">-- Select Version --</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="heard">Select Board</label>
+                                <select id="Board" name="Board" class="input-sm form-control" ng-model="Student.BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-change="" ng-required="true">
+                                    <option value="">-- Select Board --</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="heard">Select Subject</label>
+                                <select class="input-sm form-control select2" multiple="" id="SubjectName" name="SubjectName"
+                                        data-placeholder="Select team members" ng-required="true" ng-model="Student.Subject">
+                                    <option value=""></option>
+                                    <option ng-repeat="option in SubjectList" value="{{option.Id}}">{{option.SubjectName}}</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="heard">Select Standard</label>
+                                <select class="input-sm form-control select2" multiple="" ng-model="Student.Standard" id="Standard" name="Standard"
+                                        data-placeholder="Select Standard" ng-required="true">
+                                    <option value=""></option>
+                                    <option ng-repeat="option in StandardList" value="{{option.Id}}">{{option.StandardName}}</option>
+                                </select>
+                            </div>
+
+                            <br />
+                            <span class="btn btn-primary">Reset</span>
+                            <span class="btn btn-primary" ng-click="RegisterStudent();">Submit</span>
+                        </form>
+                        <!-- end form for validations -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Parents Name</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <!-- start form for validation -->
+                        <form id="demo-form" data-parsley-validate>
+                            <div class="form-group">
+                                <label for="schoolname">Mother's Name</label>
+                                <input type="text" id="schoolname" class="form-control" name="schoolname" placeholder="Enter Mother's First Name" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="schoolname">Father's Name</label>
+                                <input type="text" id="schoolname" class="form-control" name="schoolname" placeholder="Enter Father's First Name" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Id</label>
+                                <input type="text" id="schoolname" class="form-control" name="schoolname" placeholder="Enter Father's First Name" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="phoneno">Phone No.</label>
+                                <input type="text" id="schoolname" class="form-control" name="schoolname" placeholder="Enter Father's First Name" required />
+                            </div>
+                            <br />
+                            <span class="btn btn-primary">Reset</span>
+                            <span class="btn btn-primary" ng-click="RegisterStudent();">Submit</span>
+                        </form>
+                        <!-- end form for validations -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+
+        myApp.controller('StudentRegisterCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+
+            $scope.Student = {};
+            $scope.TitleName = 'Register Student'
+
+            $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
+                               { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }]
+
+            $scope.SubjectList = [{ Id: 1, SubjectName: 'English' }, { Id: 2, SubjectName: 'Hindi' }, { Id: 3, SubjectName: 'Marathi' },
+                               { Id: 4, SubjectName: 'Science' }, { Id: 5, SubjectName: 'Mathematics' }];
+
+            $scope.VersionType = [{ Id: 1, Name: 'Paid' }, { Id: 2, Name: 'Trail' }];
+
+            NetworkService.get('Admin/GetBoardList').success(function (data) {
+                $scope.BoardList = data;
+            });
+
+            NetworkService.get('Admin/GetSchoolList').success(function (data) {
+                $scope.SchoolList = data;
+            });
+
+            NetworkService.get('Admin/GetState').success(function (data) {
+                $scope.StateList = data;
+            });
+
+            $scope.RegisterStudent = function () {
+                $scope.Student.IsIndividual = true;
+                var data = '{"account":' + JSON.stringify($scope.Student) + ',"subject":' + JSON.stringify($scope.Student.Subject) + ',"standard":' + JSON.stringify($scope.Student.Standard) + ',"isTeacher":' + false + '}';
+                console.log(data);
+                NetworkService.insert('Admin/RegisterStudent', data).success(function (data) {
+                    console.log('success');
+                });
+            }
+
+            $(".select2").select2();
+
+        });
+    </script>
+}

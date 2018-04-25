@@ -1,0 +1,575 @@
+﻿@{
+    ViewBag.Title = "School";
+}
+
+
+
+<div class="right_col" role="main" ng-controller="SchoolRegisterCtrl">
+    <div class="">
+
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Registration</h3>
+            </div>
+            <div class="title_right">
+                <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <ol class="breadcrumb">
+                            <li><a href="@Url.Action("Dashboard", "PraescioAdmin")"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                            <li class="active">School Registration</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>School Registration</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <!-- start form for validation -->
+                        <form id="SchoolForm" name="SchoolForm" novalidate ng-submit="request.$valid" data-parsley-validate>
+                            <div class="form-group ">
+                                <label for="schoolname" class="required">School Name</label>
+                                <input type="text" id="fullname" ng-model="Institution.InstitutionName" class="form-control required alpha" name="fullname" placeholder="School Name" required />
+                                <p ng-show="SchoolForm.fullname.$invalid && (SchoolForm.fullname.$dirty || submitted ||SchoolForm.fullname.$touched )" class="text-danger">School Name is required.</p>
+                            </div>
+
+                            <div class="form-group ">
+                                <label for="DomainKey" class="required">School Domain Key</label>
+                                <input type="text" id="DomainKey" ng-model="Institution.DomainKey" preventspace="true" ng-minlength="3" ng-maxlength="3" maxlength="3" class="form-control required alpha" name="DomainKey" placeholder="Domain Key" required />
+                                <p ng-show="SchoolForm.DomainKey.$invalid && (SchoolForm.DomainKey.$dirty || submitted ||SchoolForm.DomainKey.$touched )" class="text-danger">min 3 char is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="SchoolRegNo" class="required">School Registration Number</label>
+                                <input type="text" id="SchoolRegNo" ng-model="Institution.RegistrationNo" class="form-control alphanumeric" name="SchoolRegNo" data-parsley-trigger="change" placeholder="School Registration Number" required />
+                                <p ng-show="SchoolForm.SchoolRegNo.$invalid && (SchoolForm.SchoolRegNo.$dirty || submitted ||SchoolForm.SchoolRegNo.$touched )" class="text-danger">School Reg No is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="MobileNo" class="required">Mobile No</label>
+                                <input type="text" id="MobileNo" ng-model="Institution.MobileNo" class="form-control number" name="MobileNo" maxlength="10" data-parsley-trigger="change" placeholder="Enter Mobile No" required />
+                                <p ng-show="SchoolForm.MobileNo.$invalid && (SchoolForm.MobileNo.$dirty || submitted ||SchoolForm.MobileNo.$touched )" class="text-danger">Mobile is required.</p>
+
+                            </div>
+
+                            <div class="form-group">
+                                <label for="LandlineNo">Landline No</label>
+                                <input type="text" id="LandlineNo" ng-model="Institution.LandlineNo" class="form-control number" name="LandlineNo" maxlength="10" data-parsley-trigger="change" placeholder="Enter Landline No" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email" class="required">Email id</label>
+                                <input type="email" id="SchoolEmail" ng-model="Institution.Email" class="form-control validateEmail" name="SchoolEmail" data-parsley-trigger="change" placeholder="Enter Email Id" required />
+                                <p ng-show="SchoolForm.SchoolEmail.$invalid && (SchoolForm.SchoolEmail.$dirty || submitted ||SchoolForm.SchoolEmail.$touched )" class="text-danger">Enter valid Email ID.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <textarea id="address" ng-model="Institution.Address" required="required" class="form-control" name="Address" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.." placeholder="Enter Address"
+                                          data-parsley-validation-threshold="10"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="heard" class="required">Select Board</label>
+                                <select id="Board" name="Board" ng-change="ChangeBoard(Institution.BoardId)" class="input-sm form-control" ng-model="Institution.BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-required="true">
+                                    <option value="">-- Select Board --</option>
+                                </select>
+                                <p ng-show="SchoolForm.Board.$invalid && (SchoolForm.Board.$dirty || submitted ||SchoolForm.Board.$touched )" class="text-danger">Board is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="heard" class="required">Select Medium</label>
+                                <select id="Medium" name="Medium" class="input-sm form-control" ng-disabled="Institution.BoardId>1" ng-model="Institution.MediumId" ng-options="option.Id as option.Name for option in MediumList" ng-change="" ng-required="true">
+                                    <option value="">-- Select Medium --</option>
+                                </select>
+                                <p ng-show="SchoolForm.Medium.$invalid && (SchoolForm.Medium.$dirty || submitted ||SchoolForm.Medium.$touched )" class="text-danger">Medium is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="heard" class="required">Select State</label>
+                                <select id="State" name="State" class="input-sm form-control" ng-model="Institution.StateId" ng-options="option.Id as option.StateName for option in StateList" ng-change="" ng-required="true">
+                                    <option value="">-- Select State --</option>
+                                </select>
+                                <p ng-show="SchoolForm.State.$invalid && (SchoolForm.State.$dirty || submitted ||SchoolForm.State.$touched )" class="text-danger">State is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="City" class="required">Enter City</label>
+                                <input type="text" id="City" ng-model="Institution.City" class="form-control alpha" preventspace="true" maxlength="30" name="City" data-parsley-trigger="change" placeholder="Enter City" required />
+                                <p ng-show="SchoolForm.City.$invalid && (SchoolForm.City.$dirty || submitted ||SchoolForm.City.$touched )" class="text-danger">City is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="pincode" class="required">Enter Pin Code</label>
+                                <input type="text" id="Pincode" ng-model="Institution.Pincode" class="form-control number" ng-minlength="6" maxlength="6" name="Pincode" data-parsley-trigger="change" placeholder="Enter Pin Code" required />
+                                <p ng-show="SchoolForm.Pincode.$invalid && (SchoolForm.Pincode.$dirty || submitted ||SchoolForm.Pincode.$touched )" class="text-danger">Pincode is required.</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="SchoolAddressProof" class="required">School Address Proof</label>
+                                <input id="SchoolAddressProof" ng-model="file" valid-file name="file" ng-required="@ViewBag.InstitutionId<1" type="file" ng-files="getTheFiles($files)" accept="application/pdf" onselect="Call()" />
+                                <p ng-show="SchoolForm.file.$invalid  && (SchoolForm.file.$dirty || submitted)" class="text-danger">School Address is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Version" class="required">Select Activate Date</label>
+                                <input type="text" id="ActivateDate" name="ActivateDate" ng-model="Institution.ActivateOn" ng-change="ChangeExpiredDate()" class="form-control" data-space="false">
+                                <p ng-show="SchoolForm.ActivateDate.$invalid && (SchoolForm.ActivateDate.$dirty || submitted ||SchoolForm.ActivateDate.$touched )" class="text-danger">ActivateDate is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Version" class="required">Select Expired Date</label>
+                                <input type="text" id="ExpiredDate" readonly name="ExpiredDate" ng-model="Institution.ExpiredOn" class="form-control" data-space="false">
+                                <p ng-show="SchoolForm.ExpiredDate.$invalid && (SchoolForm.ExpiredDate.$dirty || submitted ||SchoolForm.ExpiredDate.$touched )" class="text-danger">ExpiredDate is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="AmountPaid" class="required">Amount Paid</label>
+                                <input type="text" id="AmountPaid" name="AmountPaid" ng-model="Institution.AmountPaid" class="form-control number" data-space="false">
+                                <p ng-show="SchoolForm.AmountPaid.$invalid && (SchoolForm.AmountPaid.$dirty || submitted ||SchoolForm.AmountPaid.$touched )" class="text-danger">Amount Paid is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="NoOfTeacher" class="required">No Of Teacher Allowed</label>
+                                <input type="text" id="NoOfTeacher" name="NoOfTeacher" ng-model="Institution.NoOfTeacher" class="form-control number" data-space="false">
+                                <p ng-show="SchoolForm.NoOfTeacher.$invalid && (SchoolForm.NoOfTeacher.$dirty || submitted ||SchoolForm.NoOfTeacher.$touched )" class="text-danger">No Of Teacher allowed is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="NoOfStudent" class="required">No Of Student Allowed</label>
+                                <input type="text" id="NoOfStudent" name="NoOfStudent" ng-model="Institution.NoOfStudent" class="form-control number" data-space="false">
+                                <p ng-show="SchoolForm.NoOfStudent.$invalid && (SchoolForm.NoOfStudent.$dirty || submitted ||SchoolForm.NoOfStudent.$touched )" class="text-danger">No Of Student allowed is required.</p>
+                            </div>
+
+                            <br />
+
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">Principal</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="PrincipalName" class="required">Principal Name</label>
+                                <input type="text" id="PrincipalName" class="form-control" name="PrincipalName" ng-model="Principal.Name" placeholder="Enter Principal Name" required />
+                                <p ng-show="SchoolForm.PrincipalName.$invalid && (SchoolForm.PrincipalName.$dirty || submitted ||SchoolForm.PrincipalName.$touched )" class="text-danger">Principal Name is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="designation" class="required">Designation</label>
+                                <input type="text" id="Designation" class="form-control" name="Designation" ng-model="Principal.Designation" placeholder="Enter Designation" required />
+                                <p ng-show="SchoolForm.Designation.$invalid && (SchoolForm.Designation.$dirty || submitted ||SchoolForm.Designation.$touched )" class="text-danger">Designation is required.</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="MobileNo" class="required">Mobile No</label>
+                                <input type="text" id="MobileNo" ng-model="Principal.MobileNo" class="form-control number" name="MobileNo" maxlength="10" data-parsley-trigger="change" placeholder="Enter Mobile No" required />
+                                <p ng-show="SchoolForm.MobileNo.$invalid && (SchoolForm.MobileNo.$dirty || submitted ||SchoolForm.MobileNo.$touched )" class="text-danger">Mobile is required.</p>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="required">Email id</label>
+                                <input type="email" id="PrincipalEmail" class="form-control validateEmail" name="PrincipalEmail" ng-model="Principal.Email" data-parsley-trigger="change" placeholder="Enter Email Id" required />
+                                <p ng-show="SchoolForm.PrincipalEmail.$invalid && (SchoolForm.PrincipalEmail.$dirty || submitted ||SchoolForm.PrincipalEmail.$touched )" class="text-danger">Email is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Gender</label>
+                                <p>
+                                    Male:
+                                    <input type="radio" class="flat" name="gender" id="genderM" value="Male" checked="" required /> Female:
+                                    <input type="radio" class="flat" name="gender" id="genderF" value="Female" />
+                                </p>
+                            </div>
+
+
+                            <div class="form-group" style="margin-bottom:15px !important">
+                                <div class="col-md-3" style="padding:0px !important">
+                                    <label for="PersonPhotoSrc">Person photo Id</label>
+                                    <input type="file" id="PersonPhotoSrc" name="PersonPhotoSrc" accept="application/pdf" multiple ng-files="getPersonFile($files)" data-parsley-trigger="change" placeholder="Enter Pin Code" />
+                                </div>
+                                <div class="col-md-9">
+                                    <img src="~/{{UpdateContent.PrincipalDetail.PersonPhotoSrc}}" ng-show="UpdateContent" style="width:8em; height:6em;" alt="Alternate Text" />
+                                </div>
+                                <br />
+                                <br />
+                            </div>
+
+                            <div class="form-group" style="margin-bottom:25px !important">
+                                <div class="col-md-12" style="padding:0px !important">
+                                    <div class="col-md-3" style="padding:0px !important">
+                                        <label for="AuthorityLetterSrc">Authority Letter</label>
+                                        <input type="file" id="AuthorityLetterSrc" name="AuthorityLetterSrc" accept="application/pdf" multiple ng-files="getAuthorityLetter($files)" data-parsley-trigger="change" placeholder="Enter Pin Code" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <a target="_blank" ng-href='~/{{UpdateContent.PrincipalDetail.AuthorityLetterSrc}}' ng-show="UpdateContent"><i class="fa fa-file-pdf-o" style="font-size:48px;color:red"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <br />
+
+                            <div style="margin-top:20px;">
+                                <span class="btn btn-primary" ng-click="reset()">Reset</span>
+                                @if (ViewBag.InstitutionId == null || ViewBag.InstitutionId==0)
+                                {
+                                    <span class="btn btn-primary" ng-click="RegisterSchool()" ng-disabled="savingRequest">
+                                        Submit
+                                        <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="btn btn-primary" ng-click="UpdateSchool()" ng-disabled="savingRequest">
+                                        Update
+                                        <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                                    </span>
+                                }
+                            </div>
+                        </form>
+                        <!-- end form for validations -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+            $(":file[id='SchoolAddressProof'],:file[id='AuthorityLetterSrc']").change(function () {
+                fileName = $(this).val().toLowerCase();
+                if (fileName.indexOf('.pdf') == fileName.length - 4) {
+                }
+                else {
+                    $.alert('Only pdf file can be selected.');
+                    $(this).val('');
+                }
+            });
+        })
+    </script>
+    <script type="text/javascript">
+
+
+        myApp.directive('ngFiles', ['$parse', function ($parse) {
+            function fn_link(scope, element, attrs) {
+                var onChange = $parse(attrs.ngFiles);
+                element.on('change', function (event) {
+                    onChange(scope, { $files: event.target.files });
+                });
+            };
+
+            return {
+                link: fn_link
+            }
+        }])
+        .directive('ngInitial', function () {
+            return {
+                restrict: 'A',
+                controller: [
+                  '$scope', '$element', '$attrs', '$parse', function ($scope, $element, $attrs, $parse) {
+                      var getter, setter, val;
+                      val = $attrs.ngInitial || $attrs.value;
+                      getter = $parse($attrs.ngModel);
+                      setter = getter.assign;
+                      setter($scope, val);
+                  }
+                ]
+            };
+        })
+        .directive('validFile', function () {
+            return {
+                require: 'ngModel',
+                link: function (scope, el, attrs, ngModel) {
+                    //change event is fired when file is selected
+                    el.bind('change', function () {
+                        scope.$apply(function () {
+                            ngModel.$setViewValue(el.val());
+                            ngModel.$render();
+                        });
+                    });
+                }
+            }
+        })
+
+        myApp.controller('SchoolRegisterCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+            var formdata = new FormData();
+            var formdata2 = new FormData();
+            var formdata3 = new FormData();
+
+            $scope.Institution = {};
+            $scope.Institution.ActivateOn = '@DateTime.Parse(DateTime.Now.ToString().Trim()).ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)';
+            $scope.Institution.ExpiredOn = '@DateTime.Parse(DateTime.Now.AddYears(1).ToString().Trim()).ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)';
+
+            $scope.reset = function () {
+
+                $scope.Institution = {};
+                $scope.Principal = {};
+
+            };
+
+            $scope.getTheFiles = function ($files) {
+                $scope.isDisplay = true;
+                if ($files.length != 0)
+                    $scope.FileUpload = [];
+                for (var i = 0; i < $files.length; i++) {
+                    $scope.FileUpload.push({ FileName: $files[i].name, ContentType: $files[i].type, Size: $files[i].size });
+                }
+                $scope.isDisplay = true;
+                angular.forEach($files, function (value, key) {
+                    formdata.append(0, value);
+                });
+
+            };
+
+            $scope.getPersonFile = function ($files) {
+                if ($files.length != 0)
+                    $scope.FileUpload = [];
+                for (var i = 0; i < $files.length; i++) {
+                    $scope.FileUpload.push({ FileName: $files[i].name, ContentType: $files[i].type, Size: $files[i].size });
+                }
+
+                angular.forEach($files, function (value, key) {
+                    formdata2.append(0, value);
+                });
+
+            };
+            $scope.getAuthorityLetter = function ($files) {
+                if ($files.length != 0)
+                    $scope.FileUpload = [];
+                for (var i = 0; i < $files.length; i++) {
+                    $scope.FileUpload.push({ FileName: $files[i].name, ContentType: $files[i].type, Size: $files[i].size });
+                }
+
+                angular.forEach($files, function (value, key) {
+                    formdata3.append(0, value);
+                });
+
+            };
+
+            $scope.TitleName = 'Register School'
+
+            NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
+                $scope.BoardList = data;
+            });
+
+            NetworkService.get('PraescioAdmin/GetState').success(function (data) {
+                $scope.StateList = data;
+            });
+
+            NetworkService.get('PraescioAdmin/GetMedium').success(function (data) {
+                $scope.MediumList = data;
+            });
+
+            @*NetworkService.get('PraescioCommon/userPackageRole?packageType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Admin)').success(function (data) {
+                $scope.PackageList = data;
+                console.log(data);
+            });*@
+
+            if ('@ViewBag.InstitutionId' > 0) {
+                NetworkService.get('PraescioAdmin/GetRegisterationSchoolDetail?institutionId=@ViewBag.InstitutionId').success(function (data) {
+                    $scope.UpdateContent = data;
+                    console.log(data);
+                    $scope.Institution = data.Institution;
+                    $scope.Institution.ActivateOn = $filter('date')($scope.Institution.ActivateOn, "dd/MM/yyyy");
+                    $scope.Institution.ExpiredOn = $filter('date')($scope.Institution.ExpiredOn, "dd/MM/yyyy");
+                    $scope.Principal = data.PrincipalDetail;
+                });
+            }
+
+            $scope.ChangeExpiredDate = function () {
+                var d = new Date(ConvertDateFormat($scope.Institution.ActivateOn));
+
+                var addDays = $scope.Institution.VersionType == '@Praescio.BusinessEntities.Common.VersionType.Trial' ? 7 : 365;
+
+
+                var year = d.getFullYear();
+                var month = d.getMonth();
+                var day = d.getDate();
+
+                var date = new Date(year, month, day);
+                var newdate = new Date(date);
+
+                newdate.setDate(newdate.getDate() + addDays);
+                $scope.Institution.ExpiredOn = newdate;
+
+                $scope.Institution.ExpiredOn = $filter('date')($scope.Institution.ExpiredOn, "dd/MM/yyyy");
+            }
+
+            $scope.ChangeBoard = function (boardname) {
+                if (boardname > 1) {
+                    $scope.Institution.MediumId = 1;
+                }
+            }
+
+
+            $scope.RegisterSchool = function () {
+
+                $scope.Principal.Gender = $("input[name='gender']:checked").val();
+
+                var ActivateOn = $scope.Institution.ActivateOn;
+                var ExpiredOn = $scope.Institution.ExpiredOn;
+                $scope.Institution.ActivateOn = ConvertDateFormat($scope.Institution.ActivateOn);
+                $scope.Institution.ExpiredOn = ConvertDateFormat($scope.Institution.ExpiredOn);
+
+                if (!$scope.SchoolForm.$valid) {
+                    $scope.submitted = true;
+                }
+                else {
+
+                    $scope.savingRequest = true;
+                    NetworkService.UploadFiles('@Url.Content("~/PraescioAdmin/SaveFile")', formdata).then(function (response) {
+                        $scope.Institution.AddressProofSrc = response.data.filelocation;
+
+                        NetworkService.UploadFiles('@Url.Content("~/PraescioAdmin/SaveFile")', formdata2).then(function (response) {
+                            $scope.Principal.PersonPhotoSrc = response.data.filelocation;
+                        });
+
+                        NetworkService.UploadFiles('@Url.Content("~/PraescioAdmin/SaveFile")', formdata3).then(function (response) {
+                            $scope.Principal.AuthorityLetterSrc = response.data.filelocation;
+
+                            var data = {};
+                            var data = '{"Institution":' + JSON.stringify($scope.Institution) + ',"PrincipalDetail":' + JSON.stringify($scope.Principal) + '}';
+                            console.log(data);
+                            console.log($scope.Principal);
+
+                            NetworkService.insert('PraescioAdmin/RegisterSchool', data).success(function (data) {
+
+                                $scope.Institution.ActivateOn = ActivateOn;
+                                $scope.Institution.ExpiredOn = ExpiredOn;
+
+                                $scope.savingRequest = false;
+
+                                swal({
+                                    title: "School has been successfully registered!!!",
+                                    text: "Press Ok to Continue.",
+                                    type: "success",
+                                    confirmButtonColor: "green",
+                                    showCancelButton: false,
+
+                                });
+                            }).error(function (data, status) {
+                                $scope.Institution.ActivateOn = ActivateOn;
+                                $scope.Institution.ExpiredOn = ExpiredOn;
+                                $scope.savingRequest = false;
+                                swal({
+                                    title: data.Message,
+                                    text: "Press Ok to Continue.",
+                                    type: "error",
+                                    confirmButtonColor: "red",
+                                    showCancelButton: false,
+                                });
+                            });
+                        });
+
+
+
+
+                    });
+                }
+            }
+
+            $scope.UpdateSchool = function () {
+                $scope.Principal.Gender = $("input[name='gender']:checked").val();
+
+                var ActivateOn = $scope.Institution.ActivateOn;
+                var ExpiredOn = $scope.Institution.ExpiredOn;
+                $scope.Institution.ActivateOn = ConvertDateFormat($scope.Institution.ActivateOn);
+                $scope.Institution.ExpiredOn = ConvertDateFormat($scope.Institution.ExpiredOn);
+
+                if (!$scope.SchoolForm.$valid) {
+                    $scope.submitted = true;
+                }
+                else {
+
+                    $scope.savingRequest = true;
+                    NetworkService.UploadFiles('@Url.Content("~/PraescioAdmin/SaveFile")', formdata).then(function (response) {
+                        $scope.Institution.AddressProofSrc = response.data.filelocation;
+
+                        NetworkService.UploadFiles('@Url.Content("~/PraescioAdmin/SaveFile")', formdata2).then(function (response) {
+                            $scope.Principal.PersonPhotoSrc = response.data.filelocation;
+                        });
+
+                        NetworkService.UploadFiles('@Url.Content("~/PraescioAdmin/SaveFile")', formdata3).then(function (response) {
+                            $scope.Principal.AuthorityLetterSrc = response.data.filelocation;
+
+                            var data = {};
+                            var data = '{"Institution":' + JSON.stringify($scope.Institution) + ',"PrincipalDetail":' + JSON.stringify($scope.Principal) + '}';
+                            console.log(data);
+                            console.log($scope.Principal);
+
+                            NetworkService.insert('PraescioAdmin/UpdateSchool', data).success(function (data) {
+
+                                $scope.Institution.ActivateOn = ActivateOn;
+                                $scope.Institution.ExpiredOn = ExpiredOn;
+
+                                $scope.savingRequest = false;
+
+                                swal({
+                                    title: "School has been successfully updated!!!",
+                                    text: "Press Ok to Continue.",
+                                    type: "success",
+                                    confirmButtonColor: "green",
+                                    showCancelButton: false,
+
+                                });
+
+                                swal({
+                                    title: "School has been successfully updated!!!",
+                                    text: "Press Ok to Continue.",
+                                    type: "success",
+                                    confirmButtonColor: "green",
+                                    showCancelButton: false,
+                                    closeOnConfirm: false,
+                                    closeOnCancel: true
+                                },
+                                  function (isConfirm) {
+                                      if (isConfirm) {
+                                          var assignment = '@ViewBag.Assignmentid';
+                                          window.location.href = '@Url.Content("~/PraescioAdmin/SchoolList")';
+                                      }
+                                  });
+
+                            }).error(function (data, status) {
+                                $scope.Institution.ActivateOn = ActivateOn;
+                                $scope.Institution.ExpiredOn = ExpiredOn;
+                                $scope.savingRequest = false;
+                                swal({
+                                    title: data.Message,
+                                    text: "Press Ok to Continue.",
+                                    type: "error",
+                                    confirmButtonColor: "red",
+                                    showCancelButton: false,
+                                });
+                            });
+                        });
+
+
+
+
+                    });
+                }
+            }
+
+            FormatDate();
+            function FormatDate() {
+
+                var pickerDefault = new Pikaday(
+                {
+                    field: document.getElementById('ActivateDate'),
+                    format: 'DD/MM/YYYY',
+                    minDate: new Date()
+                });
+            }
+        });
+    </script>
+
+
+}
+
+

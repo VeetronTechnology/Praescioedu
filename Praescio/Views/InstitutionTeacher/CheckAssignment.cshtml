@@ -1,0 +1,195 @@
+﻿@{
+    ViewBag.Title = "CheckAssignment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="right_col" role="main" ng-controller="CheckAssignmentCtrl">
+    <div class="cont">
+        <ol class="breadcrumb breadcrumb-bg-teal align-right">
+            <li><a href="@Url.Action("Dashboard", "InstitutionTeacher")"><i class="material-icons">home</i> Home</a></li>
+            <li>Check Assignment</li>
+        </ol>
+
+        <div class="container-fluid">
+
+            <div class="body">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            Check Assignment
+                        </h2>
+                    </div>
+                    <div class="body">
+                        <form name="SearchStudent">
+
+                            <div class="form-group">
+                                <label for="heard" class="required">Select Board</label>
+                                <select id="Board" name="Board" class="input-sm form-control" ng-model="Boardid" ng-options="option.Id as option.BoardName for option in BoardList" ng-required="true">
+                                    <option value="">-- Select Board --</option>
+                                </select>
+                                <p ng-show="SearchStudent.Board.$invalid && (SearchStudent.Board.$dirty || submitted ||SearchStudent.Board.$touched )" class="text-danger">Board is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <div>
+                                    <label for="Standard">Select Standard</label>
+                                    <select id="Standard" name="Standard" class="input-sm form-control" ng-model="StandardId" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="" ng-required="true">
+                                        <option value="">-- Select Standard --</option>
+                                    </select>
+                                </div>
+                                <p ng-show="SearchStudent.Standard.$invalid && (SearchStudent.Standard.$dirty || submitted ||SearchStudent.Standard.$touched )" class="text-danger">Standard is required.</p>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div>
+                                    <label for="SubjectName">Select Subject</label>
+                                    <select id="Subject" name="Subject" class="input-sm form-control" ng-model="SubjectId" ng-options="option.Id as option.SubjectName for option in SubjectList" ng-change="" ng-required="true">
+                                        <option value="">-- Select Subject --</option>
+                                    </select>
+                                </div>
+                                <p ng-show="SearchStudent.Subject.$invalid && (SearchStudent.Subject.$dirty || submitted ||SearchStudent.Subject.$touched )" class="text-danger">Subject is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <div>
+                                    <label for="Version">Select Assignment</label>
+                                    <select id="Assignment" name="Assignment" class="input-sm form-control" ng-model="AssignmentId" ng-options="option.AssignmentId as option.Title for option in AssignmentList" ng-change="" ng-required="true">
+                                        <option value="">-- Select AssignmentList --</option>
+                                    </select>
+                                </div>
+                                <p ng-show="SearchStudent.Subject.$invalid && (SearchStudent.Subject.$dirty || submitted ||SearchStudent.Subject.$touched )" class="text-danger">Subject is required.</p>
+                            </div>
+                        </form>
+                        <br />
+                        <a class="btn btn-success" ng-click="GetStudentByAssignment();" ng-disabled="savingRequest">
+                            Ok
+                            <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                        </a>
+                    </div>
+                    <div id="panel">
+                        <table class="table table-striped table-bordered" width="100%" ng-if="StudentList.length<1">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone No.</th>
+                                    <th>Registration Date</th>
+                                    <th>Expiry Date</th>
+                                    <th>Status</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td style="height: 40px; text-align: center">
+                                    There are no records available.
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+
+                        <table id="datatable1" class="table table-striped table-bordered" ng-if="StudentList.length>0">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone No.</th>
+                                    <th>Registration Date</th>
+                                    <th>Expiry Date</th>
+                                    <th>Status</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr dir-paginate="student in StudentList |itemsPerPage:10|filter:searchText" total-items="totalcount">
+                                    <td>{{student.FirstName}}</td>
+                                    <td>{{student.Email}}</td>
+                                    <td>{{student.MobileNo}}</td>
+                                    <td>{{student.CreatedOn| date:'dd MMM yyyy'}}</td>
+                                    <td>{{student.ExpiredOn}}</td>
+                                    <td>{{student.IsActive==true?'Active':'DeActive'}}</td>
+                                    <td><a href="@Url.Action("TestHistory", "InstitutionTeacher")?StandardId={{StandardId}}&subjectId={{SubjectId}}&AssignmentId={{AssignmentId}}&userId={{student.AccountId}}">Check Answer</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <dir-pagination-controls max-size="10"
+                                                 direction-links="true"
+                                                 on-page-change="onPageChange(newPageNumber)"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        myApp.controller('CheckAssignmentCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+            $scope.itemPerPage = 10;
+
+            NetworkService.get('PraescioCommon/GetAssignmentList?assignmentType=@ViewBag.AssignmentType').success(function (data) {
+                $scope.AssignmentList = data.dataContent;
+            });
+
+            NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
+                $scope.BoardList = data;
+
+                if ('@Praescio.Models.Common.ACCOUNT.AccountTypeId' == '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)') {
+                    $scope.Boardid = parseInt('@Praescio.Models.Common.ACCOUNT.BoardId');
+                }
+            });
+
+            $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
+                            { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }]
+
+            $scope.SubjectList = [{ Id: 1, SubjectName: 'English' }, { Id: 2, SubjectName: 'Marathi' },
+                               { Id: 3, SubjectName: 'Science' }, { Id: 4, SubjectName: 'Mathematics' }];
+
+
+            $scope.GetStudentByAssignment = function () {
+
+                $scope.savingRequest = true;
+
+                NetworkService.get('InstitutionTeacher/GetStudentByAssignment?boardid=' + $scope.Boardid + '&standardId=' + $scope.StandardId + '&subjectId=' + $scope.SubjectId + '&assignmentId=' + $scope.AssignmentId, $scope.Question).success(function (data) {
+                    $scope.StudentList = data.studentList;
+                    $scope.totalcount = data.TotalRecord;
+
+                    $scope.savingRequest = false;
+
+                }).error(function (data) {
+                    $scope.savingRequest = false;
+                    swal({
+                        title: data.Message,
+                        text: "Press Ok to Continue.",
+                        type: "error",
+                        confirmButtonColor: "red",
+                        showCancelButton: false,
+                    });
+                });
+            }
+
+            $scope.onPageChange = function (pageno) {
+                var url = '&pageNo=' + pageno + '&itemPerPage=' + $scope.itemPerPage;
+
+                NetworkService.get('InstitutionTeacher/GetStudentByAssignment?standardId=' + $scope.StandardId + '&subjectId=' + $scope.SubjectId + '&assignmentId=' + $scope.AssignmentId + url, $scope.Question).success(function (data) {
+                    $scope.StudentList = data.studentList;
+                    $scope.totalcount = data.TotalRecord;
+                });
+            }
+
+        });
+    </script>
+}
+
+

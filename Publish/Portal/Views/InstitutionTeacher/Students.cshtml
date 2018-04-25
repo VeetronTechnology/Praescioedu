@@ -1,0 +1,187 @@
+﻿
+@{
+    ViewBag.Title = "Students";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="right_col" role="main" ng-controller="StudentCtrl">
+    <div class="cont">
+        <ol class="breadcrumb breadcrumb-bg-teal align-right">
+            <li><a href="@Url.Action("Dashboard", "InstitutionTeacher")"><i class="material-icons">home</i> Home</a></li>
+            <li><i class="material-icons">remove_red_eye</i> View Student</li>
+        </ol>
+        <div class="container-fluid">
+
+            <!-- Basic Examples -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                View Student
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <form name="StudentListForm">
+                                <div class="form-group">
+                                    <label for="Board">Select Standard</label>
+                                    <select id="Standard" name="Standard" class="input-sm form-control" ng-model="StandardId" ng-options="option.Id as option.Text for option in StandardList" ng-change="BindSubject()" ng-required="true">
+                                        <option value="">-- Select Standard --</option>
+                                    </select>
+                                    <p ng-show="StudentListForm.Standard.$invalid && (StudentListForm.Standard.$dirty || submitted ||StudentListForm.Standard.$touched )" class="text-danger">Standard is required</p>
+                                    @*<p ng-show="(TeacherRegistration.Standard.$invalid && submitted)" class="text-danger">Standard is required.</p>*@
+                                </div>
+
+                                @*<label for="heard">Select Standard</label>
+                                <select id="heard" class="form-control" required>
+                                    <option value="">Choose..</option>
+                                    <option value="press">class 1</option>
+                                    <option value="net">class 2</option>
+                                    <option value="mouth">class 3</option>
+                                </select>*@
+
+                                <div class="form-group">
+                                    <div>
+                                        <label for="SubjectName">Select Subject</label>
+                                        <select id="Subject" name="Subject" class="input-sm form-control" ng-model="SubjectId" ng-options="option.Id as option.Text for option in SubjectList" ng-required="true">
+                                            <option value="">-- Select Subject --</option>
+                                        </select>
+                                    </div>
+                                    <p ng-show="StudentListForm.Subject.length > 3 || (StudentListForm.Subject.$invalid && submitted)" class="text-danger">Subject is required.</p>
+                                </div>
+
+                                @*<label for="heard">Select Medium</label>
+                                <select id="heard" class="form-control" required>
+                                    <option value="">Choose..</option>
+                                    <option value="press">Marathi</option>
+                                    <option value="mouth">English</option>
+                                </select>*@
+                                <br><br>
+                                @*<a href="#" class="btn btn-info waves-effect" id="flip">Submit</a>*@
+                                <span class="btn btn-primary" ng-click="GetStudent()" ng-disabled="savingRequest">
+                                    Submit
+                                    <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                                </span>
+                            </form>
+                            <div id="panel">
+
+                                <table class="table table-bordered table-striped table-hover js-basic-example dataTable" id="myTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Phone No.</th>
+                                            <th>Gender</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Phone No.</th>
+                                            <th>Gender</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <tr>
+                                            <td><a href="student_details.html">Shreyash Joshi</a></td>
+                                            <td>shreyashjoshi@gmail.com</td>
+                                            <td>9824567125</td>
+                                            <td>Male</td>
+                                            <td>Active</td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="student_details.html">Shreyash Joshi</a></td>
+                                            <td>shreyashjoshi@gmail.com</td>
+                                            <td>9824567125</td>
+                                            <td>Male</td>
+                                            <td>Active</td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="student_details.html">Shreyash Joshi</a></td>
+                                            <td>shreyashjoshi@gmail.com</td>
+                                            <td>9824567125</td>
+                                            <td>Male</td>
+                                            <td>Active</td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="student_details.html">Shreyash Joshi</a></td>
+                                            <td>shreyashjoshi@gmail.com</td>
+                                            <td>9824567125</td>
+                                            <td>Male</td>
+                                            <td>Active</td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="student_details.html">Shreyash Joshi</a></td>
+                                            <td>shreyashjoshi@gmail.com</td>
+                                            <td>9824567125</td>
+                                            <td>Male</td>
+                                            <td>Active</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+    </div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        myApp.controller('StudentCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+            $scope.itemPerPage = 10;
+
+            NetworkService.get('InstitutionTeacher/GetTeacherStandard').success(function (data) {
+                $scope.StandardList = data;
+            });
+
+            $scope.BindSubject = function () {
+                NetworkService.get('InstitutionTeacher/GetTeacherSubject?standardid='+$scope.StandardId).success(function (data) {
+                    $scope.SubjectList = data;
+                });
+            }
+            
+            $scope.GetStudent = function () {
+
+                $scope.savingRequest = true;
+
+                NetworkService.get('InstitutionTeacher/GetStudent?standardId=' + $scope.StandardId + '&subjectId=' + $scope.SubjectId).success(function (data) {
+                    $scope.StudentList = data.studentList;
+                    $scope.totalcount = data.TotalRecord;
+
+                    $scope.savingRequest = false;
+
+                }).error(function (data) {
+                    $scope.savingRequest = false;
+                    swal({
+                        title: data.Message,
+                        text: "Press Ok to Continue.",
+                        type: "error",
+                        confirmButtonColor: "red",
+                        showCancelButton: false,
+                    });
+                });
+            }
+
+            $scope.onPageChange = function (pageno) {
+                var url = '&pageNo=' + pageno + '&itemPerPage=' + $scope.itemPerPage;
+
+                NetworkService.get('InstitutionTeacher/GetStudent?standardId=' + $scope.StandardId + '&subjectId=' + $scope.SubjectId + url, $scope.Question).success(function (data) {
+                    $scope.StudentList = data.studentList;
+                    $scope.totalcount = data.TotalRecord;
+                });
+            }
+
+        });
+    </script>
+}
+
+

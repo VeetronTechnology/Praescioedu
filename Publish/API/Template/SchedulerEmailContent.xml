@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Content>
+  <EmailTemplate>
+    <CommonTemplate>
+      <p>
+        Dear Sir/Madam,<br/><br/>The following request(s) is/are pending for your action.
+      </p><br/>
+
+      <table style="border:1px solid black;border-collapse:collapse;">
+        $$TableHeader$$
+        $$TableBody$$
+      </table>
+      <br /><br /><br />
+      AOPM CFT URL : <a href="http://vminaopmprdapp2:8091/">http://vminaopmprdapp2:8091/</a>  <br /><br />Regards<br />
+      AOPM CFT Support<br /><br />
+
+      <table>
+        <tr>
+          <td>
+            **** This is an auto-generated email, please do not reply. In case of any queries, please contact "IT-PMO@axisbank.com" ****<br /><br />
+          </td>
+        </tr>
+      </table><br /><br /><br />
+    </CommonTemplate>
+
+    <RequestDue subject="AOPM CFT Notification : Requests due for commencement in the next 5 working days">
+      <tr style="height:40px;font-weight:300;">
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Request Number</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Project Name</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Milestone Task Name</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Sub Task Name</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Initiator</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Approver</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Team Member</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">View Member</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">General Staus(Planned)</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Ageing</th>
+      </tr>
+
+    </RequestDue>
+
+    <DelayStatus subject="AOPM CFT Notification : Delay Staus">
+      <tr style="height:40px;font-weight:300;">
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Request Number</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Project Name</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Milestone Task Name</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Sub Task Name</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Initiator</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Approver</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Team Member</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">View Member</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">
+          General Staus<br/>(Planned / In Progress / Not<br/>Started / Not Completed )
+        </th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">
+          Delay Status<br/>(In %)
+        </th>
+      </tr>
+    </DelayStatus>
+
+    <Ageing subject="AOPM CFT Notification : Ageing Notification">
+      <tr style="height:40px;font-weight:300;">
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Request Number</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Project Name</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Milestone Task Name</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Sub Task Name</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Planned Start Date</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Planned End Date</th>
+        <!--<th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Actual End Date</th>-->
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Initiator</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Approver</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Team Member</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">View Member</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Pending Since In Days</th>
+      </tr>
+    </Ageing>
+
+    <General subject="Request ID : txtRequest (txtrequesttitle) is pending for your action">
+      <tr style="height:40px;font-weight:300;font-family:tahoma;">
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">
+          Request Number/ <br/>SID
+        </th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Project Name</th>
+        <th style="border:1px solid black;border-collapse:collapse;background-color:#FCE5E1;padding:6px;">Workflow Status</th>
+      </tr>
+    </General>
+
+  </EmailTemplate>
+</Content>

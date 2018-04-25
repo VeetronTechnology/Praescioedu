@@ -3,3 +3,12 @@
 ################################################################################
 
 /packages
+/Praescio/bin
+/Praescio/obj
+/Praescio.API/bin
+/Praescio.API/obj
+/Praescio.BusinessEntities/bin
+/Praescio.BusinessEntities/obj
+/Praescio.Domain/bin
+/Praescio.Domain/obj
+/Praescio/Upload/RequestUpload

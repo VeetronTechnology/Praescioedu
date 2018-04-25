@@ -1,0 +1,115 @@
+﻿
+@{
+    ViewBag.Title = "FillInTheBlanks";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .inputBox{
+        width:100px;
+        margin:0 15px;
+    }
+</style>
+<div class="right_col" role="main" style="background:#48c9b0" ng-controller="FTBCtrl">
+    <div class="cont">
+        <div class="table-agile-info">
+
+            <ol class="breadcrumb">
+                <li><a href="lesson_index.html">Lesson</a></li>
+                <li><a href="start_test.html">Start Test</a></li>
+                <li class="active">Fill In The Blanks</li>
+            </ol>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Fill In The Blanks
+                    <span class="tools pull-right" style="font-size:12px;font-weight:600;">
+                        <a href="javascript:;">Active: Duration : ddd:hh:mm {{ACT}}</a>
+                    </span>
+                </div>
+                <div>
+                    <table class="table table-striped b-t b-light">
+                        <tbody>
+                            <tr ng-repeat="question in QuestionList">
+                                <td><div data-ng-bind-html="trustAsHtml($index+1+'.&nbsp;&nbsp;&nbsp;' + question.Question.Title)"></div></td>
+                            </tr>
+                            <tr>
+                                <td> <a href="#" class="btn btn-danger">Clear</a>
+                                    <a class="btn btn-success" ng-click="SaveAnswer();" ng-disabled="savingRequest">
+                                        Submit
+                                        <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+@section Scripts{
+  <script type="text/javascript">
+
+      myApp.controller('FTBCtrl', function ($scope, $rootScope, $sce, NetworkService) {
+
+          $scope.trustAsHtml = function (string) {
+              return $sce.trustAsHtml(string);
+          };
+
+            NetworkService.get('InstitutionStudent/GetAssignmentQuestion?assignmentid=@ViewBag.Assignmentid&typeOfQuestion=@ViewBag.TypeOfQuestion').success(function (data) {
+
+                $scope.QuestionList = data;
+
+                $.each(data, function (i, e) {
+                    console.log($scope.QuestionList[i].Question);
+                    $scope.QuestionList[i].Question.Title = $scope.QuestionList[i].Question.Title.replace(/#textbox/g, " <input type='text' data-answer='" + $scope.QuestionList[i].Question.QuestionId + "' > ");
+                })
+            });
+
+          $scope.SaveAnswer = function () {
+              $scope.savingRequest = true;
+
+              $.each($scope.QuestionList, function (i, e) {
+                  $scope.QuestionList[i].StudentAnswer = [];
+                  if ($('input[data-answer="' + $scope.QuestionList[i].Question.QuestionId + '"]').length > 1) {
+
+                      $.each($('input[data-answer="' + $scope.QuestionList[i].Question.QuestionId + '"]'), function (j, e) {
+                          $scope.QuestionList[i].StudentAnswer.push($(this).val());
+                      });
+                  }
+                  else {
+                      $scope.QuestionList[i].StudentAnswer.push($('input[data-answer="' + $scope.QuestionList[i].Question.QuestionId + '"]').val());
+                  }
+              })
+
+              NetworkService.insert('InstitutionStudent/SaveAnswer', $scope.QuestionList).success(function (data) {
+                  $scope.savingRequest = false;
+                  console.log(data);
+                  swal({
+                      title: "Answer has been successfully submitted!!!",
+                      text: "Press Ok to Continue.",
+                      type: "success",
+                      confirmButtonColor: "green",
+                      showCancelButton: false,
+                  });
+              }).error(function (data) {
+                  $scope.savingRequest = false;
+                  swal({
+                      title: data.Message,
+                      text: "Press Ok to Continue.",
+                      type: "error",
+                      confirmButtonColor: "red",
+                      showCancelButton: false,
+                  });
+              });
+          }
+
+        });
+</script>
+}
+
+

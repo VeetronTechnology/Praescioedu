@@ -1,0 +1,142 @@
+﻿
+@{
+    ViewBag.Title = "AddVideo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var assignmentTitle = Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.SuperAdmin ? "Lesson" : "Assignment";
+}
+
+<div class="right_col" role="main">
+    <div class="cont">
+        <ol class="breadcrumb breadcrumb-bg-teal align-right">
+            <li><a href="index.html"><i class="material-icons">home</i> Home</a></li>
+            <li><a href="add_question.html"> Add Questions</a></li>
+            <li>Add Video</li>
+        </ol>
+
+        <div class="container-fluid">
+            <!-- Vertical Layout -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                Add Video
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <form>
+                                <label for="Title">Title:</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" placeholder="Title">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Version">Select @assignmentTitle</label>
+                                    <select id="Assignment" name="Assignment" class="input-sm form-control" ng-model="Assignment.AssignmentId" ng-options="option.AssignmentId as option.Title for option in AssignmentList" ng-change="" ng-required="true">
+                                        <option value="">-- Select @assignmentTitle --</option>
+                                    </select>
+                                </div>
+                                <label for="Add Video">Add Video:</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="file">
+                                    </div>
+                                </div>
+
+                                <br>
+                                <button type="button" class="btn btn-primary waves-effect">SUBMIT</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                Add Video
+                            </h2>
+                        </div>
+                        <div class="body table-responsive">
+
+                            <table class="table table-bordered table-striped table-hover js-basic-example dataTable" id="myTable">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Video</th>
+                                        <th>Action </th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Video</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <tr>
+                                        <td>Demo</td>
+                                        <td><img src="assets/production/images/video.png"></td>
+                                        <td><a href="view_video.html" class="font-bold col-cyan">View</a> | <a href="edit Video.html" class="font-bold col-teal">Edit</a> | <a href="" class="font-bold col-red">Delete</a> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Demo</td>
+                                        <td><img src="assets/production/images/video.png"></td>
+                                        <td><a href="view_video.html" class="font-bold col-cyan">View</a> | <a href="edit Video.html" class="font-bold col-teal">Edit</a> | <a href="" class="font-bold col-red">Delete</a> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Demo</td>
+                                        <td><img src="assets/production/images/video.png"></td>
+                                        <td><a href="view_video.html" class="font-bold col-cyan">View</a> | <a href="edit Video.html" class="font-bold col-teal">Edit</a> | <a href="" class="font-bold col-red">Delete</a> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Demo</td>
+                                        <td><img src="assets/production/images/video.png"></td>
+                                        <td><a href="view_video.html" class="font-bold col-cyan">View</a> | <a href="edit Video.html" class="font-bold col-teal">Edit</a> | <a href="" class="font-bold col-red">Delete</a> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Demo</td>
+                                        <td><img src="assets/production/images/video.png"></td>
+                                        <td><a href="view_video.html" class="font-bold col-cyan">View</a> | <a href="edit Video.html" class="font-bold col-teal">Edit</a> | <a href="" class="font-bold col-red">Delete</a> </td>
+                                    </tr>
+                                      
+                                   
+                                    <tr>
+                                        <td>Demo</td>
+                                        <td><img src="assets/production/images/video.png"></td>
+                                        <td><a href="view_video.html" class="font-bold col-cyan">View</a> | <a href="edit Video.html" class="font-bold col-teal">Edit</a> | <a href="" class="font-bold col-red">Delete</a> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Demo</td>
+                                        <td><img src="assets/production/images/video.png"></td>
+                                        <td><a href="view_video.html" class="font-bold col-cyan">View</a> | <a href="edit Video.html" class="font-bold col-teal">Edit</a> | <a href="" class="font-bold col-red">Delete</a> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Demo</td>
+                                        <td><img src="assets/production/images/video.png"></td>
+                                        <td><a href="view_video.html" class="font-bold col-cyan">View</a> | <a href="edit Video.html" class="font-bold col-teal">Edit</a> | <a href="" class="font-bold col-red">Delete</a> </td>
+                                    </tr>
+                                  
+                                   
+
+                                </tbody>
+                            </table>
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- #END# Vertical Layout -->
+
+        </div>
+
+    </div>
+</div>
+

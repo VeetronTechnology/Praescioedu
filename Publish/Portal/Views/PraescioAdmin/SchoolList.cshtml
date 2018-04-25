@@ -1,0 +1,96 @@
+﻿
+@{
+    ViewBag.Title = "SchoolList";
+}
+
+<!-- page content -->
+<div class="right_col" role="main" ng-controller="SchoolListCtrl">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>School List</h3>
+            </div>
+            <div class="title_right">
+                <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <ol class="breadcrumb">
+                            <li><a href="@Url.Action("Dashboard", "PraescioAdmin")"<i class="fa fa-dashboard"></i> Dashboard</a></li>
+                            <li class="active">School's List</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>List of School</h2>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+
+                        <table id="datatable1" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>School Name</th>
+                                    <th>Email</th>
+                                    <th>Phone No.</th>
+                                    <th>Registration Date</th>
+                                    <th>Expiry Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr dir-paginate="school in SchoolList |itemsPerPage:10|filter:searchText" total-items="totalcount">
+                                    <td><a ng-href="@Url.Content("~/PraescioAdmin/SchoolDetails?institutionId="){{school.InstitutionAccountId}}">{{school.InstitutionName}}</a></td>
+                                    <td>{{school.Email}}</td>
+                                    <td>{{school.MobileNo}}</td>
+                                    <td>{{school.CreatedOn | date:"dd MMM, yyyy"}}</td>
+                                    <td>{{school.ExpiredDate}}</td>
+                                    <td>{{school.IsActive==1?'Active':'InActive'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <dir-pagination-controls max-size="10"
+                                                 direction-links="true"
+                                                 on-page-change="onPageChange(newPageNumber)"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /page content -->
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        myApp.controller('SchoolListCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+            $scope.itemPerPage = 10;
+
+            $scope.Teacher = {};
+            $scope.TitleName = 'School List'
+            NetworkService.get('PraescioAdmin/GetInstitutionList').success(function (data) {
+                $scope.SchoolList = data.contentData;
+                $scope.totalcount = data.totalRecord;
+            });
+
+            $scope.onPageChange = function (pageno) {
+                var url = '&pageNo=' + pageno + '&itemPerPage=' + $scope.itemPerPage;
+
+                NetworkService.get('PraescioAdmin/GetInstitutionList?' + url).success(function (data) {
+                    $scope.SchoolList = data.contentData;
+                    $scope.totalcount = data.totalRecord;
+                });
+            }
+
+
+        });
+    </script>
+}

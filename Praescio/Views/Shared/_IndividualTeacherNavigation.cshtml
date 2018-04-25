@@ -1,0 +1,91 @@
+﻿<ul class="nav side-menu">
+    <li>
+        <a href="@Url.Action("Dashboard", "InstitutionTeacher")"><i class="fa fa-dashboard"></i> Dashboard</a>
+    </li>
+    <li>
+        <a href="@Url.Action("TeacherProfile", "InstitutionTeacher")?teacherAccountId=@Praescio.Models.Common.ACCOUNT.AccountId&isindividual=true"><i class="fa fa-user"></i> Profile</a>
+    </li>
+    @*<li>
+        <a href="@Url.Action("SchoolProfile", "InstitutionAdmin")"><i class="fa fa-building"></i>School Profile</a>
+    </li>*@
+    <li>
+        <a onclick="return IsStudentRegisterAllowed()" href="@Url.Action("AddStudent", "IndividualTeacher")"><i class="fa fa-graduation-cap"></i>Add Students</a>
+    </li>
+
+    <li>
+            <a href="@Url.Action("RegisterStudentHistory", "IndividualTeacher")"><i class="fa fa-building"></i>Registered Students History</a>
+    </li>
+
+    <li>
+        <a><i class="fa fa-file-text"></i> Assignment <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+            <li>
+                <a title="Trail List" href="@Url.Action("AddAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.IndividualAssignment)"><i title="Add Assignment" class="fa fa-university"></i> <span class="nav-label"> Add Assignment</span></a>
+            </li>
+            <li>
+                <a title="Trail List" href="@Url.Action("UploadAssignmentQuestion", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.IndividualAssignment)"><i title="Add Lessons" class="fa fa-university"></i> <span class="nav-label"> Upload Assignment Qts</span></a>
+            </li>
+            <li>
+                <a title="Full Version" href="@Url.Action("ViewAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.IndividualAssignment)"><i title="View Lessons" class="fa fa-university"></i> <span class="nav-label"> View Assignment</span></a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a><i class="fa fa-file-text"></i> Handwriting<span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+            <li>
+                <a title="Trail List" href="@Url.Action("AddHandwritingAssigment", "Praescio")"><i title="Add Assignment" class="fa fa-university"></i> <span class="nav-label"> Add Assignment</span></a>
+            </li>
+            <li>
+                <a title="Full Version" href="@Url.Action("ViewHandwritingAssigment", "Praescio")"><i title="View Lessons" class="fa fa-university"></i> <span class="nav-label"> View Assignment</span></a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a><i class="fa fa-file-text"></i> Pronunciation<span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+            <li>
+                <a title="Trail List" href="@Url.Action("AddPronunciationAssignment", "Praescio")"><i title="Add Assignment" class="fa fa-university"></i> <span class="nav-label"> Add Assignment</span></a>
+            </li>
+            <li>
+                <a title="Full Version" href="@Url.Action("ViewPronunciationAssignment", "Praescio")"><i title="View Lessons" class="fa fa-university"></i> <span class="nav-label"> View Assignment</span></a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="@Url.Action("CheckAssignment", "InstitutionTeacher")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.PraescioLesson)"><i class="fa fa-check"></i>Check Assignment</a>
+    </li>
+    <li>
+        <a href="@Url.Action("UpgradePackage", "IndividualTeacher")"><i class="fa fa-money"></i> Upgrade Package</a>
+    </li>	
+    <li>
+        <a href="#"><i class="fa fa-plus"></i>Knowledge Bank<span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+            <li><a href="@Url.Action("AddKnowledgeBank", "Praescio")">Add Knowledge Bank</a></li>
+            <li><a href="@Url.Action("ViewKnowledgeBank", "Praescio")">View Knowledge Bank</a></li>
+            <li><a href="@Url.Action("KnowledgeBankHistory", "Praescio")">Knowledge Bank History</a></li>
+        </ul>
+    </li>
+    @*<li>
+        <a href="@Url.Action("SchoolNotice", "InstitutionTeacher")"><i class="fa fa-sticky-note"></i>School Notice</a>
+    </li>*@
+    <li>
+        <a href="@Url.Action("Help", "Praescio")"><i class="fa fa-circle"></i>Help</a>
+    </li>
+
+</ul>
+
+<script src="~/Scripts/jquery-1.11.1.min.js"></script>
+<script>
+    function IsStudentRegisterAllowed() {
+        var isAllowed = '@Praescio.Models.Common.ACCOUNT.StudentRegisterAllowed' == 'True';
+        alert('@Praescio.Models.Common.ACCOUNT.StudentRegisterAllowed');
+        if (isAllowed) {
+            return isAllowed
+        }
+        else {
+            $.alert('You dont have access to created Student');
+            return isAllowed
+        }
+    }
+</script>

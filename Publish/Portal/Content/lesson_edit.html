@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Praescio | Admin </title>
+
+    <!-- Bootstrap -->
+    <link href="assets/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="assets/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="assets/vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- bootstrap-daterangepicker -->
+    <link href="assets/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+	 <!-- iCheck -->
+    <link href="assets/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+    <!-- Datatables -->
+    <link href="assets/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+    
+
+    <!-- Custom Theme Style -->
+    <link href="assets/build/css/custom.min.css" rel="stylesheet">
+	<link href="assets/build/css/AdminLTE.css" rel="stylesheet">
+	  <script src="//cdn.ckeditor.com/4.5.5/standard/ckeditor.js"></script>
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+              <a href="index.html" class="site_title"><i class="fa fa-book"></i> <span>ADMIN PRAESCIO</span></a>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <!-- menu profile quick info -->
+            <div class="profile clearfix">
+              <div class="profile_pic">
+                <img src="assets/production/images/img.jpg" alt="..." class="img-circle profile_img">
+              </div>
+              <div class="profile_info">
+                <span>Welcome,</span>
+                <h2>Veetron Technology</h2>
+              </div>
+            </div>
+            <!-- /menu profile quick info -->
+
+            <br />
+
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <h3>General</h3>
+                <ul class="nav side-menu">
+                  <li><a href="index.html"><i class="fa fa-dashboard"></i> Dashboard</a>                   
+                  </li>
+                  <li><a><i class="fa fa-edit"></i> Registration <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="select_board.html">School</a></li>
+                      <li><a href="#">Teacher<span class="fa fa-chevron-down"></span></a>
+					  <ul class="nav child_menu">
+                      <li><a href="teacher_register.html">Full Version</a></li>
+                      <li><a href="trail_teacher_register.html">Trail Version</a></li>                      
+                     </ul>
+					  </li>
+                     <li><a href="#">Student<span class="fa fa-chevron-down"></span></a>
+					  <ul class="nav child_menu">
+                      <li><a href="student_register.html">Full Version</a></li>
+                      <li><a href="trail_student_register.html">Trail Version</a></li>                      
+                     </ul>
+					  </li>                        
+                    </ul>
+                  </li>
+                  <li><a href="school_list.html"><i class="fa fa-university"></i> School List</a>                   
+                  </li>
+                  <li><a><i class="fa fa-user"></i> Teacher List <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="teacher_list_trail_version.html">Trail Version</a></li>
+                      <li><a href="teacher_list.html">Full Version</a></li>
+                    </ul>
+                  </li>
+				  <li><a><i class="fa fa-user"></i> Students List <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="student_list_trail_version.html">Trail Version</a></li>
+                      <li><a href="student_list.html">Full Version</a></li>
+                    </ul>
+                  </li>
+				   <li><a><i class="fa fa-file-text"></i> Lessons <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="add_lesson.html"> Add Lessons</a>  
+                      <li><a href="view_lessons.html">View Lessons</a></li>
+                    </ul>
+                  </li>                                    
+                  </li>				  
+				    <li><a><i class="fa fa-file-word-o"></i>Synonyms <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                       <li><a href="add_synonyms.html"> Add Synonyms</a>   
+                      <li><a href="view_synonyms.html">View Synonyms</a></li>
+                    </ul>
+                  </li>                                    
+                  </li>				                    
+                  </li>
+				    <li><a><i class="fa fa-file-word-o"></i>Antonyms <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                       <li><a href="add_antonyms.html"> Add Antonyms</a>   
+                      <li><a href="view_antonyms.html">View Antonyms</a></li>
+                    </ul>
+                  </li>                                    
+                  </li>	
+                   <li><a><i class="fa fa-question"></i> Add Questions <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">                      
+                      <li><a href="#">Write A Reason<span class="fa fa-chevron-down"></span></a>
+					  <ul class="nav child_menu">
+                     <li><a href="add_question.html"> Add Questions</a></li>
+                     <li><a href="view_question.html"> View Questions</a></li>                     
+                     </ul>
+					  </li>
+                     <li><a href="#">Fill In The Blanks<span class="fa fa-chevron-down"></span></a>
+					  <ul class="nav child_menu">
+                      <li><a href="add_fill_in_the_blanks.html">Add Fill In The Blanks</a></li>
+                      <li><a href="view_blanks.html">View Fill In The Blanks</a></li>                      
+                     </ul>
+					  </li>                    
+                      <li><a href="#">Match The Following<span class="fa fa-chevron-down"></span></a>
+					  <ul class="nav child_menu">
+                      <li><a href="add_match_the_following.html">Add Matches</a></li>
+                      <li><a href="view_match_the_following.html">View Matches</a></li>                      
+                     </ul>
+					  </li> 
+                       <li><a href="#">True/False Questions<span class="fa fa-chevron-down"></span></a>
+					  <ul class="nav child_menu">
+                      <li><a href="add_true_false.html">Add True/False Questions</a></li>
+                      <li><a href="view_true_false.html">View True/False Questions</a></li>                      
+                     </ul>
+					  </li>
+                     <li><a href="#">One Sentenced Answers<span class="fa fa-chevron-down"></span></a>
+					  <ul class="nav child_menu">
+                      <li><a href="add_answer_in_one_sentence.html">Add Question</a></li>
+                      <li><a href="view_answer_in_one_sentence.html">View Question</a></li>                      
+                     </ul>
+					  </li>
+					 <li><a href="#">MCQ's<span class="fa fa-chevron-down"></span></a>
+					  <ul class="nav child_menu">
+                      <li><a href="add_mcq.html">Add Question</a></li>
+                      <li><a href="view_mcq.html">View Question</a></li>                      
+                     </ul>
+					  </li>
+                    <li><a href="#">Descibe Briefly<span class="fa fa-chevron-down"></span></a>
+					  <ul class="nav child_menu">
+                      <li><a href="add_describe_question.html">Add Question</a></li>
+                      <li><a href="view_describe_question.html">View Question</a></li>                      
+                     </ul>
+					  </li>
+                     <li><a href="#">Differentiate Between<span class="fa fa-chevron-down"></span></a>
+					  <ul class="nav child_menu">
+                      <li><a href="add_differentiate_between.html">Add Question</a></li>
+                      <li><a href="view_differentiate_between.html">View Question</a></li>                      
+                     </ul>
+					  </li>	
+                     <li><a href="#">Write Short Note On<span class="fa fa-chevron-down"></span></a>
+					  <ul class="nav child_menu">
+                      <li><a href="add_short_note.html">Add Note</a></li>
+                      <li><a href="view_short_note.html">View Note</a></li>                      
+                     </ul>
+					  </li>
+                     <li><a href="#">Topic Concept<span class="fa fa-chevron-down"></span></a>
+					  <ul class="nav child_menu">
+                      <li><a href="add_topic_concept.html">Add Topic Concept</a></li>
+                      <li><a href="view_topic_concept.html">View Topic Concept</a></li>                      
+                     </ul>
+					  </li>                      				  
+                    </ul>
+                   </li>
+                     <li><a><i class="fa fa-file-word-o"></i>Edu Study <span class="fa fa-chevron-down"></span></a>
+                       <ul class="nav child_menu">
+                       <li><a href="course_completion_status.html"> Course Completion Status</a>   
+                      <li><a href="overall_progress.html">Overall Progress</a></li>
+					  <li><a href="handwritting_dev.html">Handwriting Development</a></li>
+					  <li><a href="pronounciation_dev.html">Pronunciation Development</a></li>
+					  <li><a href="teacher_assignment_index.html">Teachers Assignment</a></li>
+					  <li><a href="school_notice.html">School Notice</a></li>
+					  <li><a href="school_info.html">School Information</a></li>
+                    </ul>
+                  </li>                                    
+                  </li>						  
+				  <li><a href="#"><i class="fa fa-plus"></i>Knowledge Bank<span class="fa fa-chevron-down"></span></a>
+					  <ul class="nav child_menu">
+                      <li><a href="add_knowledge_bank.html">Add Knowledge Bank</a></li>
+                      <li><a href="view_knowledge_bank.html">View Knowledge Bank</a></li>
+                      <li><a href="knowledge_bank_histoty.html">Knowledge Bank History</a></li>                      
+                     </ul>
+				 </li>                     
+                 
+                 
+                </ul>
+              </div>
+
+            </div>
+            <!-- /sidebar menu -->          
+            <!-- /menu footer buttons -->
+          </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav">
+          <div class="nav_menu">
+            <nav>
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars" style="color:#FFF;"></i></a>
+              </div>
+
+              <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <img src="assets/production/images/img.jpg" alt=""><span style="color:#FFF;">Veetron Technology</span>
+                    <span class=" fa fa-angle-down" style="color:#FFF;"></span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-usermenu pull-right">
+                    <li><a href="javascript:;"> Profile</a></li>                    
+                    <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                  </ul>
+                </li>
+
+                <li role="presentation" class="dropdown">
+                  <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-envelope-o" style="color:#FFF;"></i>
+                    <span class="badge bg-green">6</span>
+                  </a>
+                  <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                    <li>
+                      <a>
+                        <span class="image"><img src="assets/production/images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>Veetron Technology</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a>
+                        <span class="image"><img src="assets/production/images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a>
+                        <span class="image"><img src="assets/production/images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a>
+                        <span class="image"><img src="assets/production/images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <div class="text-center">
+                        <a>
+                          <strong>See All Alerts</strong>
+                          <i class="fa fa-angle-right"></i>
+                        </a>
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <!-- /top navigation -->
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+		  
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Dashboard</h3>
+              </div>
+
+              <div class="title_right">
+                <div class="col-md-7 col-sm-7 col-xs-12 form-group pull-right top_search">
+                  <div class="input-group">
+                     <ol class="breadcrumb">
+            <li><a href="index.html"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+			 <li><a href="view_lessons.html"><i class="fa fa-list"></i> View Lessons</a></li>
+			<li class="active">Edit Lesson</li>
+          </ol>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+			<div class="row">
+              <div class="col-md-12 col-xs-12">              
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Edit Lesson</h2>                   
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <!-- start form for validation -->
+                    <form id="demo-form" data-parsley-validate>
+					<div class="form-group">
+                        <label for="Name of Lesson">Name Of File</label>
+                      <input type="text" id="lesson" name="lesson"  value="File1" />
+                        </div>
+					 <div class="form-group">
+                        <label for="Upload File">Upload File</label>
+                      <input type="file" id="file" name="file" />
+                        </div>
+                      </div>
+					
+					
+                          <br/>
+						   <span class="btn btn-primary">Reset</span>
+                          <a href="lesson_index.html"><span class="btn btn-primary">Submit</span></a>
+
+                    </form>
+                    <!-- end form for validations -->
+
+                  </div>
+                </div>
+              </div>
+
+              
+            </div>
+			</div>
+		</div>
+      <!-- footer content -->
+        <footer>
+          <div class="pull-right">
+             <strong>Copyright &copy; 2017 <a href="http://www.veetrontechnology.com/" target="_blank">Veetron Technology</a>.</strong> All rights reserved.
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+      </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="assets/vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="assets/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="assets/vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="assets/vendors/nprogress/nprogress.js"></script>
+    <!-- Chart.js -->
+    <script src="assets/vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- jQuery Sparklines -->
+    <script src="assets/vendors/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+    <!-- Flot -->
+    <script src="assets/vendors/Flot/jquery.flot.js"></script>
+    <script src="assets/vendors/Flot/jquery.flot.pie.js"></script>
+    <script src="assets/vendors/Flot/jquery.flot.time.js"></script>
+    <script src="assets/vendors/Flot/jquery.flot.stack.js"></script>
+    <script src="assets/vendors/Flot/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="assets/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+    <script src="assets/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="assets/vendors/flot.curvedlines/curvedLines.js"></script>
+    <!-- DateJS -->
+    <script src="assets/vendors/DateJS/build/date.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="assets/vendors/moment/min/moment.min.js"></script>
+    <script src="assets/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+	
+	<!-- iCheck -->
+    <script src="assets/vendors/iCheck/icheck.min.js"></script>
+    <!-- Datatables -->
+    <script src="assets/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="assets/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="assets/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="assets/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="assets/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="assets/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="assets/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="assets/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="assets/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="assets/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="assets/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="assets/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+    <script src="assets/vendors/jszip/dist/jszip.min.js"></script>
+    <script src="assets/vendors/pdfmake/build/pdfmake.min.js"></script>
+    <script src="assets/vendors/pdfmake/build/vfs_fonts.js"></script>
+    
+    <!-- Custom Theme Scripts -->
+    <script src="assets/build/js/custom.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,218 @@
+﻿
+@{
+    ViewBag.Title = "AddHandwritingAssigment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="right_col" role="main" ng-controller="HandwritingAssigmentCtrl">
+    <div class="cont">
+        <ol class="breadcrumb breadcrumb-bg-teal align-right">
+            <li><a href="index.html"><i class="material-icons">home</i> Home</a></li>
+            <li>Assignment</li>
+        </ol>
+
+        <div class="container-fluid">
+            <!-- Vertical Layout -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                Add Handwritting Assignment
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <form>
+
+                                <div class="form-group">
+                                    <label for="Title">Name</label>
+                                    <input type="text" id="Title" ng-model="Assignment.Title" class="form-control" name="Title" placeholder="Title" required />
+                                    <p ng-show="AssignmentForm.Title.$invalid && (AssignmentForm.Title.$dirty || submitted ||AssignmentForm.Title.$touched )" class="text-danger">Title is required.</p>
+                                </div>
+
+                                <div class="form-group">
+                                    <div>
+                                        <label for="heard">Select Standard</label>
+                                        <select id="Standard" name="Standard" class="input-sm form-control" ng-model="Assignment.StandardId" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="" ng-required="true">
+                                            <option value="">-- Select Standard --</option>
+                                        </select>
+                                    </div>
+                                    <p ng-show="AssignmentForm.Standard.$invalid && (AssignmentForm.Standard.$dirty || submitted ||AssignmentForm.Standard.$touched )" class="text-danger">Standard is required.</p>
+                                </div>
+
+                                <div class="form-group">
+                                    <div>
+                                        <label for="heard">Select Subject</label>
+                                        <select id="Subject" name="Subject" class="input-sm form-control" ng-model="Assignment.SubjectId" ng-options="option.Id as option.SubjectName for option in SubjectList" ng-change="" ng-required="true">
+                                            <option value="">-- Select Subject --</option>
+                                        </select>
+                                    </div>
+                                    <p ng-show="AssignmentForm.Standard.$invalid && (AssignmentForm.Standard.$dirty || submitted ||AssignmentForm.Standard.$touched )" class="text-danger">Subject is required.</p>
+                                </div>
+
+                                <br />
+                                <label for="Name Of Assignment">Name Of Assignment</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" placeholder="Enter Name">
+                                    </div>
+                                </div>
+                                <label for="First Name">Upload File</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="file">
+                                    </div>(* Only PDf file)
+                                </div>
+                                <a href="#" class="btn btn-success waves-effect">RESET</a>
+                                <a href="#" class="btn btn-info waves-effect">SUBMIT</a>
+                                @*<a href="handwritting.html" class="btn btn-primary waves-effect">VIEW ASSIGNMENT</a>*@
+
+                                <br>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- #END# Vertical Layout -->
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        myApp.directive('ngFiles', ['$parse', function ($parse) {
+            function fn_link(scope, element, attrs) {
+                var onChange = $parse(attrs.ngFiles);
+                element.on('change', function (event) {
+                    onChange(scope, { $files: event.target.files });
+                });
+            };
+
+            return {
+                link: fn_link
+            }
+        }])
+        .directive('ngInitial', function () {
+            return {
+                restrict: 'A',
+                controller: [
+                  '$scope', '$element', '$attrs', '$parse', function ($scope, $element, $attrs, $parse) {
+                      var getter, setter, val;
+                      val = $attrs.ngInitial || $attrs.value;
+                      getter = $parse($attrs.ngModel);
+                      setter = getter.assign;
+                      setter($scope, val);
+                  }
+                ]
+            };
+        })
+        .directive('validFile', function () {
+            return {
+                require: 'ngModel',
+                link: function (scope, el, attrs, ngModel) {
+                    //change event is fired when file is selected
+                    el.bind('change', function () {
+                        scope.$apply(function () {
+                            ngModel.$setViewValue(el.val());
+                            ngModel.$render();
+                        });
+                    });
+                }
+            }
+        })
+
+
+        myApp.controller('HandwritingAssigmentCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+            $scope.Assignment = {};
+
+            var formdata = new FormData();
+            $scope.getTheFiles = function ($files) {
+                $scope.isDisplay = true;
+                if ($files.length != 0)
+                    $scope.FileUpload = [];
+                for (var i = 0; i < $files.length; i++) {
+                    $scope.FileUpload.push({ FileName: $files[i].name, ContentType: $files[i].type, Size: $files[i].size });
+                }
+                $scope.isDisplay = true;
+                angular.forEach($files, function (value, key) {
+                    formdata.append(0, value);
+                });
+
+            };
+
+            $scope.Student = {};
+            $scope.TitleName = 'Register Student'
+
+            $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
+                               { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }]
+
+            $scope.SubjectList = [{ Id: 1, SubjectName: 'English' }, { Id: 2, SubjectName: 'Hindi' }, { Id: 3, SubjectName: 'Marathi' },
+                               { Id: 4, SubjectName: 'Science' }, { Id: 5, SubjectName: 'Mathematics' }];
+
+            $scope.VersionType = [{ Id: 1, Name: 'Paid' }, { Id: 2, Name: 'Trail' }];
+
+            NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
+                $scope.BoardList = data;
+            });
+
+            NetworkService.get('PraescioAdmin/GetSchoolList').success(function (data) {
+                $scope.SchoolList = data;
+            });
+
+            NetworkService.get('PraescioAdmin/GetAssignmentTeacherList?institutionId=@Praescio.Models.Common.ACCOUNT.OrganizationAccount.InstitutionAccountId').success(function (data) {
+                console.log(data);
+                $scope.TeacherList = data;
+            });
+
+            NetworkService.get('PraescioAdmin/GetMedium').success(function (data) {
+                $scope.MediumList = data;
+            });
+
+            NetworkService.get('PraescioAdmin/GetState').success(function (data) {
+                $scope.StateList = data;
+            });
+
+            $scope.RegisterStudent = function () {
+                var data = '{"account":' + JSON.stringify($scope.Student) + ',"subject":' + JSON.stringify($scope.Student.Subject) + ',"standard":' + JSON.stringify($scope.Student.Standard) + ',"isTeacher":' + true + '}';
+                console.log(data);
+                NetworkService.insert('PraescioAdmin/RegisterStudent', data).success(function (data) {
+                    console.log('success');
+                });
+            }
+
+            $scope.AddAssignment = function () {
+                $scope.savingRequest = true;
+
+                NetworkService.UploadFiles('@Url.Content("~/PraescioCommon/SaveFile")', formdata).then(function (response) {
+                    $scope.Assignment.UploadFileSrc = response.data.filelocation;
+
+                    $scope.Assignment.AccountId = '@Praescio.Models.Common.ACCOUNT.AccountId';
+                    $scope.Assignment.CreatedRole = '@Praescio.Models.Common.ACCOUNT.AccountTypeId';
+                    $scope.Assignment.CreatedBy = $scope.Assignment.AccountId;
+                    $scope.Assignment.isQuestionAdded = false;
+
+                    var data = '{"Assignment":' + JSON.stringify($scope.Assignment) + ',"AssignmentTeacher":' + JSON.stringify($scope.Assignment.AssignmentTeacher) + '}';
+                    NetworkService.insert('PraescioCommon/AddAssignment', data).success(function (data) {
+                        $scope.savingRequest = false;
+
+                        swal({
+                            title: "Assignment has been successfully created!!!",
+                            text: "Press Ok to Continue.",
+                            type: "success",
+                            confirmButtonColor: "green",
+                            showCancelButton: false,
+
+                        });
+                    });
+                });
+            }
+
+            $(".select2").select2();
+
+        });
+    </script>
+}

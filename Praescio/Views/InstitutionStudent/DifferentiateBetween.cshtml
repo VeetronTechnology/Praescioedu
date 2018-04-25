@@ -1,0 +1,114 @@
+﻿@{
+    ViewBag.Title = "DifferentiateBetween";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="right_col" role="main" style="background:#48c9b0" ng-controller="DifferentiateBetweenCtrl">
+    <div class="cont">
+
+        <div class="table-agile-info">
+            <ol class="breadcrumb">
+                <li><a href="lesson_index.html">Lesson</a></li>
+                <li><a href="start_test.html">Start Test</a></li>
+                <li class="active">Differentiate Between</li>
+            </ol>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Differentiate Between
+                    <span class="tools pull-right" style="font-size:12px;font-weight:600;">
+                        <a href="javascript:;">Active: Duration : ddd:hh:mm</a>
+                    </span>
+                </div>
+                <div ng-repeat="question in QuestionList">
+                    <div class="panel-body">
+                        <div class="col-lg-12">
+                            {{$index+1}}. {{question.Question.Title}} <a href="#" ng-click="AddRow(question.Question.QuestionId)">Add</a>
+                        </div>
+                        <hr />
+                        <div class="col-lg-12">
+                            <table width="100%" id="{{question.Question.QuestionId}}Table">
+                                <tr>
+                                    <td><textarea id="{{question.Question.QuestionId}}1a" style="width:95%" placeholder="Point 1" class="form-control" onkeyup="ChangeValue(this.id)"></textarea></td>
+                                    <td><textarea id="{{question.Question.QuestionId}}1b" style="width:95%" placeholder="Point 1" class="form-control" onkeyup="ChangeValue(this.id)"></textarea></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-danger">Clear</button>
+                <a class="btn btn-success" ng-click="SaveAnswer();" ng-disabled="savingRequest">
+                    Submit
+                    <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                </a>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        function ChangeValue(id) {
+            $('#' + id).html($('#' + id).val())
+            return;
+        }
+    </script>
+
+    <script type="text/javascript">
+
+        myApp.controller('DifferentiateBetweenCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+
+            NetworkService.get('InstitutionStudent/GetAssignmentQuestion?assignmentid=@ViewBag.Assignmentid&typeOfQuestion=@ViewBag.TypeOfQuestion').success(function (data) {
+                $scope.QuestionList = data;
+            });
+
+            $scope.AddRow = function (id) {
+                var length = $('#' + id + 'Table tr').length + 1;
+                $('#' + id + 'Table').append('<tr><td><textarea id="' + id + length + 'a" style="width:95%" placeholder="Point ' + length + '" class="form-control" onkeyup="ChangeValue(this.id)"></textarea></td><td><textarea id="' + id + length + 'b" style="width:95%" placeholder="Point ' + length + '" class="form-control" onkeyup="ChangeValue(this.id)"></textarea></td></tr>');
+            }
+
+            $scope.SaveAnswer = function () {
+                $scope.savingRequest = true;
+
+                for (var i = 0; i < $scope.QuestionList.length; i++) {
+                    $scope.QuestionList[i].AttemptAnswer = $('#' + $scope.QuestionList[i].Question.QuestionId + 'Table').parent().html();
+                }
+
+                NetworkService.insert('InstitutionStudent/SaveAnswer', $scope.QuestionList).success(function (data) {
+                    $scope.savingRequest = false;
+                    swal({
+                        title: "Answer has been successfully submitted!!!",
+                        text: "Press Ok to Continue.",
+                        type: "success",
+                        confirmButtonColor: "green",
+                        showCancelButton: false,
+                        closeOnConfirm: false,
+                        closeOnCancel: true
+                    },
+                      function (isConfirm) {
+                          if (isConfirm) {
+                              var assignment = '@ViewBag.Assignmentid';
+                              window.location.href = '@Url.Content("~/Praescio/AssignmentQuestion?assignmentId=")' + assignment;
+                          }
+                      });
+
+                }).error(function (data) {
+                    $scope.savingRequest = false;
+                    swal({
+                        title: data.Message,
+                        text: "Press Ok to Continue.",
+                        type: "error",
+                        confirmButtonColor: "red",
+                        showCancelButton: false,
+                    });
+                });
+            }
+
+        });
+    </script>
+}
+
+

@@ -1,0 +1,84 @@
+﻿<ul class="nav side-menu">
+   
+    <li>
+        <a href="@Url.Action("Dashboard", "InstitutionAdmin")"><i class="fa fa-dashboard"></i> Dashboard</a>
+    </li>
+    <li>
+        <a href="@Url.Action("SchoolProfile", "InstitutionAdmin")"><i class="fa fa-user"></i> Profile</a>
+    </li>
+    <li>
+        <a href="@Url.Action("Standards", "InstitutionAdmin")"><i class="fa fa-graduation-cap"></i> Standards</a>
+    </li>
+    <li>
+        <a><i class="fa fa-edit"></i> Registration <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+            <li>
+                <a title="Register Teacher" href="@Url.Action("RegisterTeacher", "InstitutionAdmin")"><i title="Register Teacher"></i> <span class="nav-label"> Teacher</span></a>
+            </li>
+            <li>
+                <a title="Register Student" href="@Url.Action("RegisterStudent", "InstitutionAdmin")"><i title="Register Student"></i> <span class="nav-label"> Student</span></a>
+            </li>
+        </ul>
+    </li>
+
+    <li>
+        <a title="Teacher List" href="@Url.Action("TeacherList", "Praescio", new { isIndividual = false, version = "", institutionId = Praescio.Models.Common.ACCOUNT.InstitutionAccountId })"><i title="Teacher List" class="fa fa-university"></i> <span class="nav-label"> Teacher List</span></a>
+    </li>
+
+    <li>
+        <a title="Student List" href="@Url.Action("StudentList", "Praescio", new { isIndividual = false, version = "", institutionId =Praescio.Models.Common.ACCOUNT.InstitutionAccountId})"><i title="Student List" class="fa fa-university"></i> <span class="nav-label"> Student List</span></a>
+    </li>
+
+    
+    <li>
+        <a><i class="fa fa-file-text"></i> Assigment <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+            <li>
+                <a title="Trail List" href="@Url.Action("AddAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.InstitutionAssignment)"><i title="Add Assignment" class="fa fa-university"></i> <span class="nav-label"> Add Assignment</span></a>
+            </li>
+            <li>
+                <a title="Trail List" href="@Url.Action("UploadAssignmentQuestion", "Praescio")"><i title="Add Lessons" class="fa fa-university"></i> <span class="nav-label"> Upload Assignment Qts</span></a>
+            </li>
+            <li>
+                <a title="Full Version" href="@Url.Action("ViewAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.InstitutionAssignment)"><i title="View Lessons" class="fa fa-university"></i> <span class="nav-label"> View Assignment</span></a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a><i class="fa fa-file-word-o"></i>Synonyms <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+            <li><a href="@Url.Action("AddSynonyms", "Praescio")"> Add Synonyms</a>
+            <li><a href="@Url.Action("ViewSynonyms", "Praescio",new { categoryTypeId=Convert.ToInt16(Praescio.BusinessEntities.Common.CategoryType.Synonyms)})">View Synonyms</a></li>
+        </ul>
+    </li>
+    <li>
+        <a><i class="fa fa-file-word-o"></i>Antonyms <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+            <li><a href="@Url.Action("AddAntonym", "Praescio")"> Add Antonyms</a>
+            <li><a href="@Url.Action("ViewAntonym", "Praescio",new { categoryTypeId=Convert.ToInt16(Praescio.BusinessEntities.Common.CategoryType.Antonyms)})">View Antonyms</a></li>
+        </ul>
+    </li>
+  
+    <li>
+        <a><i class="fa fa-file-word-o"></i>Edu Study <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+            <li><a href="@Url.Action("CourseCompletionStatus", "PraescioAdmin")"> Course Completion Status</a>
+            <li><a href="@Url.Action("OverallProgress", "PraescioAdmin")">Overall Progress</a></li>
+            <li><a href="@Url.Action("HandwritingDevelopment", "PraescioAdmin")">Handwriting Development</a></li>
+            <li><a href="@Url.Action("PronunciationDevelopment", "PraescioAdmin")">Pronunciation Development</a></li>
+            <li><a href="@Url.Action("TeachersAssignment", "PraescioAdmin")">Teachers Assignment</a></li>
+            <li><a href="@Url.Action("SchoolNotice", "PraescioAdmin")">School Notice</a></li>
+            <li><a href="@Url.Action("SchoolInformation", "PraescioAdmin")">School Information</a></li>
+        </ul>
+    </li>
+    <li>
+        <a href="#"><i class="fa fa-plus"></i>Knowledge Bank<span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+            <li><a href="@Url.Action("AddKnowledgeBank", "Praescio")">Add Knowledge Bank</a></li>
+            <li><a href="@Url.Action("ViewKnowledgeBank", "Praescio")">View Knowledge Bank</a></li>
+            <li><a href="@Url.Action("KnowledgeBankHistory", "Praescio")">Knowledge Bank History</a></li>
+        </ul>
+    </li>
+
+
+</ul>

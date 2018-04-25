@@ -1,0 +1,111 @@
+﻿
+@{
+    ViewBag.Title = "DescribeBrieflyHistory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="right_col" role="main" style="background:#48c9b0" ng-controller="DescribeBrieflyCheckCtrl">
+    <div class="cont">
+        <div class="table-agile-info">
+            <ol class="breadcrumb">
+                <li><a href="lesson_history.html">Lesson</a></li>
+                <li><a href="test_history.html">Test History</a></li>
+                <li class="active">Describe Briefly</li>
+            </ol>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Describe Briefly
+                    <span class="tools pull-right" style="font-size:12px;font-weight:600;">
+                        <a href="javascript:;">Total: Duration : ddd:hh:mm</a>
+                    </span>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped b-t b-light">
+                        <tbody>
+                            <tr>
+                                <th>Answer</th>
+                                <th>Correct Answer</th>
+                                <th>Result</th>
+                                <th>Marks Obtained</th>
+
+                            </tr>
+                            <tr ng-repeat="act in Acitivity.studentActivity">
+                                <td>{{$index+1}}. {{act.Question.Title}}</td>
+                                <td>{{act.Question.CorrectAnswer}}</td>
+                                <td>
+                                    <i ng-if="act.UserAssessment.MarkScored==1" class="fa fa-check text-success text-active"></i>
+                                    <i ng-if="act.UserAssessment.MarkScored==0" class="fa fa-times text-danger text-active"></i>
+                                </td>
+                                <td>{{act.UserAssessment.MarkScored}}</td>
+                            </tr>
+
+                            <tr>
+                                <td><b>Total Marks  {{Acitivity.MarksScored}}/{{Acitivity.totalMarks}}</b> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    @*<table class="table table-striped b-t b-light">
+                        <tbody>
+                            <tr>
+                                <th>Write reason for</th>
+                                <th>Answer</th>
+                                <th>Marks Obtained</th>
+
+                            </tr>
+                            <tr>
+                                <td>What are stages in butterfly life cycle ?</td>
+                                <td><div id="div2" data-toggle="modal" data-target="#myModal">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</div></td>
+                                <td>10</td>
+                            </tr>
+                            <tr>
+                                <td>What is The Solar system ?</td>
+                                <td><div id="div2" data-toggle="modal" data-target="#myModal">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</div></td>
+                                <td>10</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>Total Marks</b>
+                                </td>
+                                <td>
+                                    20
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>*@
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Student's Answer</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        myApp.controller('DescribeBrieflyCheckCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+            $scope.Student = {};
+
+            NetworkService.get('PraescioCommon/GetStudentActivityMarks?assignmentid=@ViewBag.AssignmentId&QuestionType=@Convert.ToInt16(Praescio.BusinessEntities.Common.TypeOfQuestion.DescribeBriefly)').success(function (data) {
+                $scope.Acitivity = data;
+            });
+        });
+    </script>
+}

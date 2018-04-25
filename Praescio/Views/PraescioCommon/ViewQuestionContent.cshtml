@@ -1,0 +1,170 @@
+﻿@{
+    ViewBag.Title = "TeacherListFullVersion";
+    var ContentString = ViewBag.CategoryTypeId == (int)Praescio.BusinessEntities.Common.CategoryType.Synonyms ? "Synonyms" : "Antonyms";
+}
+
+<!-- page content -->
+<div class="right_col" role="main" ng-controller="ViewContentCtrl">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Dashboard</h3>
+            </div>
+            <div class="title_right">
+                <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <ol class="breadcrumb">
+                            <li><a href="@Url.Action("index", "Home")"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                            <li class="active">View @ContentString</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>List of @ContentString</h2>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <a ng-click="ShowHide()" href="#" class="btn btn-primary uploadbtn">Edit</a>
+
+                        <table id="datatable2" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th ng-show="IsVisible"></th>
+                                    <th>Word</th>
+                                    @if (ContentString == "Antonyms")
+                                    {
+                                    <th>Antonyms</th>}
+
+                                    else
+                                    {
+                                    <th>Synonyms</th>}
+                                     
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr dir-paginate="content in ContentList |itemsPerPage:10|filter:searchText" total-items="totalcount">
+                                    <td ng-show="IsVisible"><input type="checkbox" ng-model="content.Checked" style="cursor:pointer;" /></td>
+                                    <td>{{content.ContentOption}}</td>
+                                    <td>{{content.ContentAnswer}}</td>
+                                    <td>{{content.CreatedAccount.FirstName}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <dir-pagination-controls max-size="10"
+                                                 direction-links="true"
+                                                 on-page-change="onPageChange(newPageNumber)"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+
+                        <div class="form-group" ng-show="IsVisible">
+                            <label for="Version">Select Type</label>
+                            <select id="Assignment" name="Assignment" class="input-sm form-control" ng-model="AssignmentTypeId" ng-options="option.AssignmentTypeId as option.AssignmentTypeName for option in AssignmentTypeList" ng-change="GetAssignmentByType(AssignmentTypeId)" ng-required="true">
+                                <option value="">-- Select Type--</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" ng-show="IsVisible">
+                            <label for="Version">Select Assignment</label>
+                            <select id="Assignment" name="Assignment" class="input-sm form-control" ng-model="AssignmentId" ng-options="option.AssignmentId as option.Title for option in AssignmentList" ng-change="" ng-required="true">
+                                <option value="">-- Select Assignment --</option>
+                            </select>
+                        </div>
+
+                        <span class="btn btn-primary" ng-show="IsVisible" ng-click="SaveQuestion()" ng-disabled="savingRequest">
+                            Save
+                            <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                        </span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        myApp.controller('ViewContentCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+            $scope.totalcount = 0;
+
+            $scope.Teacher = {};
+            $scope.TitleName = 'List of Content'
+
+            NetworkService.get('PraescioCommon/GetQuestionContent?CategoryTypeId=@ViewBag.CategoryTypeId').success(function (data) {
+                $scope.ContentList = data.contentData;
+                $scope.totalcount = data.totalRecord;
+            });
+
+            NetworkService.get('PraescioCommon/GetAssignmentList').success(function (data) {
+                $scope.AssignmentList = data.dataContent;
+                console.log(data);
+            });
+
+            NetworkService.get('PraescioCommon/GetAssignmentTypeList').success(function (data) {
+                $scope.AssignmentTypeList = data;
+            });
+
+            $scope.GetAssignmentByType = function (AssignmentTypeId) {
+                NetworkService.get('PraescioCommon/GetAssignmentList?AssignmentType=' + AssignmentTypeId).success(function (data) {
+                    $scope.AssignmentList = data.dataContent;
+                    console.log(data);
+                });
+            }
+
+            $scope.ShowHide = function () {
+                $scope.IsVisible = $scope.IsVisible ? false : true;
+            }
+
+            $scope.SaveQuestion = function () {
+                $scope.savingRequest = true;
+
+                var Contentdata = jQuery.map($scope.ContentList, function (item, index) {
+                   return {ContentId:item.ContentId,CategoryTypeId:item.CategoryTypeId,ContentOption: item.ContentOption, ContentAnswer: item.ContentAnswer, Checked: item.Checked };
+                });
+
+               NetworkService.insert('PraescioCommon/SaveQuestionContentToAssignment?CategoryTypeId=@ViewBag.CategoryTypeId&AssignmentId=' + $scope.AssignmentId, Contentdata).success(function (data) {
+                   swal({
+                       title: "@ContentString has been successfully added!!!",
+                       text: "Press Ok to Continue.",
+                       type: "success",
+                       confirmButtonColor: "green",
+                       showCancelButton: false,
+                   });
+
+                   $scope.savingRequest = false;
+               }).error(function (data, status) {
+                   $scope.savingRequest = false;
+                   swal({
+                       title: data.Message,
+                       text: "Press Ok to Continue.",
+                       type: "error",
+                       confirmButtonColor: "red",
+                       showCancelButton: false,
+                   });
+               });
+            }
+
+            $scope.onPageChange = function (pageno) {
+                var url = '&pageNo=' + pageno + '&itemPerPage=' + $scope.itemsPerPage;
+
+                NetworkService.get('PraescioCommon/GetQuestionContent?CategoryTypeId=@ViewBag.CategoryTypeId' + url).success(function (data) {
+
+                    $scope.ContentList = data.contentData;
+                    $scope.totalcount = data.totalRecord;
+                });
+            }
+
+
+        });
+    </script>
+}

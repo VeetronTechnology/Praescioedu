@@ -1,0 +1,310 @@
+﻿@{
+    ViewBag.Title = "School_details";
+}
+
+<!-- page content -->
+<div class="right_col" role="main" ng-controller="SchoolDetailCtrl" ng-cloak>
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>School Details</h3>
+            </div>
+            <div class="title_right">
+                <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <ol class="breadcrumb">
+                            <li><a href="@Url.Action("Dashboard", "PraescioAdmin")"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                            <li class="active">School Details</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>School Details</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <table class="table table-striped">
+                            <tbody>                       
+                              
+
+                                <tr>
+                                    <th>School Name</th>
+                                    <td>{{InstitutionDetail.Institution.InstitutionName}}</td>
+                                </tr>
+                                <tr>
+                                    <th>School Registration Number</th>
+                                    <td>{{InstitutionDetail.Institution.RegistrationNo}}</td>
+                                </tr>
+                                <tr>
+                                    <th>School Address</th>
+                                    <td>{{InstitutionDetail.Institution.Address}}</td>
+                                </tr>
+                                <tr>
+                                    <th>School Domain Key</th>
+                                    <td>{{InstitutionDetail.Institution.DomainKey}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Mobile Number</th>
+                                    <td>{{InstitutionDetail.Institution.MobileNo}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Landline Number</th>
+                                    <td>{{InstitutionDetail.Institution.LandlineNo}}</td>
+                                </tr>                               
+                              
+                                <tr>
+                                    <th>School email id</th>
+                                    <td>{{InstitutionDetail.Institution.Email}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Board</th>
+                                    <td>{{InstitutionDetail.Institution.Board.BoardName}}</td>
+                                </tr>
+                                <tr>
+                                    <th>State</th>
+                                    <td>{{InstitutionDetail.Institution.State.StateName}}</td>
+                                </tr>
+                                <tr>
+                                    <th>City</th>
+                                    <td>{{InstitutionDetail.Institution.City}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Pincode</th>
+                                    <td>{{InstitutionDetail.Institution.Pincode}}</td>
+                                </tr>
+
+
+                                <tr>
+                                    <th>School Medium</th>
+                                    <td>{{InstitutionDetail.Institution.Medium.Name}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Amount Paid</th>
+                                    <td>{{InstitutionDetail.Institution.AmountPaid}} INR</td>
+                                </tr>
+                                <tr>
+                                    <th>Total Count Of Allowed Students</th>
+                                    <td>{{InstitutionDetail.Institution.NoOfStudent}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Total Count Of Allowed Teachers</th>
+                                    <td>{{InstitutionDetail.Institution.NoOfTeacher}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Registered Student's Count</th>
+                                    <td>{{InstitutionDetail.RegisteredStudent}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Registered Teacher's Count</th>
+                                    <td>{{InstitutionDetail.RegisteredTeacher}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Pending Student</th>
+                                    <td>{{InstitutionDetail.PendingStudent}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Pending Teacher</th>
+                                    <td>{{InstitutionDetail.PendingTeacher}}</td>
+                                </tr>
+
+                                <tr>
+                                    <th>School Address Proof</th>
+                                    <td><a target="_blank" ng-href='~/{{InstitutionDetail.Institution.AddressProofSrc}}'><i class="fa fa-file-pdf-o" style="font-size:48px;color:red"></i></a></td>
+                                </tr>
+
+                                <tr> 
+                                
+                                    <th>Activation Date</th>
+                                    <td>{{InstitutionDetail.Institution.ActivateOn| date:"dd MMM, yyyy"}}</td>
+                                </tr>
+
+
+                                <tr>
+                                    <th>Expiry Date</th>
+                                    <td>{{InstitutionDetail.Institution.ExpiredOn| date:"dd MMM, yyyy"}}</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>School Management / Principal Details</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+
+
+                        <table class="table table-striped">
+                            <tbody>
+                                
+                                <tr>
+                                    <th>Principal Name</th>
+                                    <td>{{InstitutionDetail.PrincipalDetail.Name}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Designation</th>
+                                    <td>{{InstitutionDetail.PrincipalDetail.Designation}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Gender</th>
+                                    <td>{{InstitutionDetail.PrincipalDetail.Gender}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Email id	</th>
+                                    <td>{{InstitutionDetail.PrincipalDetail.Email}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Phone Number</th>
+                                    <td>{{InstitutionDetail.PrincipalDetail.Designation}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Person Photo Id</th>
+                                    <td><a target="_blank" ng-href='~/{{InstitutionDetail.PrincipalDetail.PersonPhotoSrc}}'><i class="fa fa-file-pdf-o" style="font-size:48px;color:red"></i></a></td>
+                                  
+                                </tr>
+                                <tr>
+                                    <th>Authority Letter</th>
+                                    <td><a target="_blank" ng-href='~/{{InstitutionDetail.PrincipalDetail.AuthorityLetterSrc}}'><i class="fa fa-file-pdf-o" style="font-size:48px;color:red"></i></a></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <a class="btn btn-success" href="@Url.Action("RegisterSchool","PraescioAdmin")?institutionId=@ViewBag.InstitutionId">Update</a>
+                    <a href="#BlockModal" data-toggle="modal" class="btn btn-danger" ng-if="InstitutionDetail.Institution.IsActive">Block</a>
+                    <a href="#BlockModal" data-toggle="modal" class="btn btn-danger" ng-if="!InstitutionDetail.Institution.IsActive">UnBlock</a>
+                    <a class="btn btn-info" href="@Url.Action("StudentList","Praescio")?isIndividual=false&institutionId=@ViewBag.InstitutionId">List Of Student</a>
+                    <a class="btn btn-info" href="@Url.Action("TeacherList","Praescio")?isIndividual=false&institutionId=@ViewBag.InstitutionId">List Of Teachers</a>
+                </div>
+
+            </div>
+
+            <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="BlockModal" class="modal fade blockmodal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                            <h4 class="modal-title">Enter a Password to <font ng-if="InstitutionDetail.Institution.IsActive">Block</font><font ng-if="!InstitutionDetail.Institution.IsActive">UnBlock</font></h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <form role="form" name="BlockPasswordForm">
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Password</label>
+                                    <input type="password" class="form-control" id="BlockPassword" name="BlockPassword" ng-model="BlockPassword" placeholder="Block Password" ng-required="true">
+                                    <p ng-show="BlockPasswordForm.BlockPassword.$invalid && (BlockPasswordForm.BlockPassword.$dirty || submitted ||BlockPasswordForm.BlockPassword.$touched )" class="text-danger"><font ng-if="!IsBlocked">Block</font><font ng-if="IsBlocked">UnBlock</font> Password is required</p>
+                                </div>
+                                <span class="btn btn-primary" ng-click="ToggleBlockUser()" ng-disabled="postingBlockPassword">
+                                    Submit
+                                    <i class="fa fa-spinner fa-spin" ng-show="postingBlockPassword"></i>
+                                </span>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /page content -->
+@section Scripts{
+
+    <script type="text/javascript">
+
+        myApp.controller('SchoolDetailCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+
+            $scope.Teacher = {};
+            $scope.TitleName = 'Register School'
+            NetworkService.get('PraescioAdmin/GetSchoolDetail?institutionId=@ViewBag.InstitutionId').success(function (data) {
+                $scope.InstitutionDetail = data;
+            });
+
+            $scope.Block = function () {
+                $.confirm({
+                    title: 'Confirm!',
+                    content: 'Are you sure, want to block this?',
+                    confirm: function () {
+                        NetworkService.update('PraescioAdmin/InstitutionActivation?institutionAccountId=' + $scope.InstitutionDetail.Institution.InstitutionAccountId + '&status=0').success(function (data) {
+                            $.alert("Institution has been deactivated successfully.");
+                        }).error(function (data) {
+                            console.log(data);
+                        });
+                    }
+                });
+            }
+
+            $scope.ToggleBlockUser = function () {
+                $scope.postingBlockPassword = true;
+                if (!$scope.BlockPasswordForm.$valid) {
+                    $scope.postingBlockPassword = false;
+                    $scope.submitted = true;
+                }
+                else {
+                    var Encodedblockpwd = escape($scope.BlockPassword);
+                    NetworkService.insert('PraescioCommon/ToggleBlockInstitution?status=' + !$scope.InstitutionDetail.Institution.IsActive + '&institutionid=' +@ViewBag.InstitutionId +'&blockpassword=' + Encodedblockpwd).success(function (data) {
+                        $scope.BlockPassword = '';
+                        var str = !$scope.InstitutionDetail.Institution.IsActive == true ? "Unblocked" : "Blocked";
+                        if (data.isSuccess == true) {
+
+                            NetworkService.get('PraescioAdmin/GetSchoolDetail?institutionId=@ViewBag.InstitutionId').success(function (data) {
+                                $scope.InstitutionDetail = data;
+                            });
+
+                            swal({
+                                title: "School has been " + str + " successfully!!!",
+                                text: "Press Ok to Continue.",
+                                type: "success",
+                                confirmButtonColor: "green",
+                                showCancelButton: false,
+                            });
+                            $('.blockmodal').modal('toggle');
+                        }
+                        else if (data.isSuccess == false) {
+                            swal({
+                                title: data.message,
+                                text: "Press Ok to Continue.",
+                                type: "error",
+                                confirmButtonColor: "red",
+                                showCancelButton: false,
+                            });
+                        };
+                        $scope.postingBlockPassword = false;
+
+                    }).error(function (data) {
+                        $scope.postingBlockPassword = false;
+                        swal({
+                            title: data,
+                            text: "Press Ok to Continue.",
+                            type: "error",
+                            confirmButtonColor: "red",
+                            showCancelButton: false,
+                        });
+                    });
+                }
+            }
+
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+        })
+    </script>
+}

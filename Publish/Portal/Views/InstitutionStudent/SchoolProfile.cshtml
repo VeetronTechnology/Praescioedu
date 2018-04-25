@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewBag.Title = "SchoolProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="right_col" role="main" style="background:#48c9b0">
+    <div class="cont">
+
+
+        <div class="table-agile-info">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    School Profile
+                </div>
+                <div>
+                    <table class="table" ui-jq="footable" ui-options='{
+        "paging": {
+          "enabled": true
+        },
+        "filtering": {
+          "enabled": true
+        },
+        "sorting": {
+          "enabled": true
+        }}'>
+                        <tbody>
+                            <tr data-expanded="true">
+                                <th>School Name</th>
+                                <td>Trident</td>
+                            </tr>
+                            <tr data-expanded="true">
+                                <th>School Registration Number</th>
+                                <td>SCH00021</td>
+                            </tr>
+                            <tr data-expanded="true">
+                                <th>School Address</th>
+                                <td>Baner Pune</td>
+                            </tr>
+                            <tr data-expanded="true">
+                                <th>School Medium</th>
+                                <td>English</td>
+                            </tr>
+                            <!--<tr data-expanded="true">
+                          <th>School Address Proof</th>
+                          <td><img src="assets/images/pdf.png"></td>
+                        </tr> -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    School Management / Principal Details
+                </div>
+                <div>
+                    <table class="table" ui-jq="footable" ui-options='{
+        "paging": {
+          "enabled": true
+        },
+        "filtering": {
+          "enabled": true
+        },
+        "sorting": {
+          "enabled": true
+        }}'>
+                        <tbody>
+                            <tr data-expanded="true">
+                                <th>Designation</th>
+                                <td>Principal</td>
+                            </tr>
+
+                            <tr data-expanded="true">
+                                <th>Person Photo Id</th>
+                                <td><img src="assets/images/img.jpg"></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+</div>
+    </div>
+

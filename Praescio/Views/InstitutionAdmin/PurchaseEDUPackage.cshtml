@@ -1,0 +1,119 @@
+﻿
+@{
+    ViewBag.Title = "PurchaseEDUPackage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="right_col" ng-controller="PurchaseEDUPackageCtrl">
+    <div class="">
+                <div class="page-title">
+            <div class="title_left">
+                <h3>Standards</h3>
+            </div>
+            <div class="title_right">
+                <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <ol class="breadcrumb">
+                            <li><a href="@Url.Action("Dashboard", "InstitutionAdmin")"><i class="fa fa-dashboard"></i> Home</a></li>
+                            <li><a href="@Url.Action("SchoolProfile", "InstitutionAdmin")">Profile</a></li>
+                            <li class="active">Purchase EDU Package</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+
+        
+        <div class="container-fluid">
+            <!-- Vertical Layout -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                Purchase EDU Package
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <form name="Package">
+                                <label for="Name">Name</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" id="Name" ng-model="Package.Name" class="form-control" placeholder="Enter First Name">
+                                    </div>
+                                </div>
+                                <label for="Mobile Number">Mobile Number</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" id="MobileNo" ng-model="Package.MobileNo"class="form-control" placeholder="Enter Mobile Number">
+                                    </div>
+                                </div>
+                                <label for="Email">Email</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="email" id="Email" ng-model="Package.Email"class="form-control" placeholder="Enter Email">
+                                    </div>
+                                </div>
+
+                                <label for="Message">Message</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" id="Query" ng-model="Package.Query" class="form-control" placeholder="Enter Message">
+                                    </div>
+                                    @*<div class="form-line">
+                                        <textarea id="Query" ng-model="Package.Query" required="required" class="form-control" name="Query" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.." placeholder="Enter Query" data-parsley-validation-threshold="10"></textarea>
+                                    </div>*@
+                                </div>
+
+                                <br>
+                                <span class="btn btn-primary m-t-15 waves-effect" ng-click="SavePackageRequest()" ng-disabled="savingRequest">
+                                    Submit
+                                    <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                                </span>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- #END# Vertical Layout -->
+
+        </div>
+        </div>
+    </div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+        myApp.controller('PurchaseEDUPackageCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+
+            $scope.SavePackageRequest = function () {
+                $scope.savingRequest = true;
+
+                NetworkService.insert('InstitutionAdmin/RequestPackage',$scope.Package).success(function (data) {
+                    $scope.savingRequest = false;
+
+                    swal({
+                        title: "Package Request has been successfully registered!!!",
+                        text: "Press Ok to Continue.",
+                        type: "success",
+                        confirmButtonColor: "green",
+                        showCancelButton: false,
+                    });
+                }).error(function (data) {
+                    $scope.savingRequest = false;
+                    swal({
+                        title: data,
+                        text: "Press Ok to Continue.",
+                        type: "error",
+                        confirmButtonColor: "red",
+                        showCancelButton: false,
+                    });
+                });
+            }
+           
+        });
+    </script>
+}

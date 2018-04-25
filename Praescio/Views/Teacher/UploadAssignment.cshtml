@@ -1,0 +1,101 @@
+﻿
+@{
+    ViewBag.Title = "Upload Assignment";
+}
+
+<!-- page content -->
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                    Upload Assingment
+                </h2>
+            </div>
+            <div class="body">
+                <form>
+                    <label for="heard">Select Standard</label>
+                    <select id="heard" class="form-control" required="">
+                        <option value="">Choose..</option>
+                        <option value="press">STD 1</option>
+                        <option value="net">STD 2</option>
+                        <option value="mouth">STD 3</option>
+                    </select>
+                    <label for="heard">Select Subject</label>
+                    <select id="heard" class="form-control" required="">
+                        <option value="">Choose..</option>
+                        <option value="press">Marathi</option>
+                        <option value="mouth">English</option>
+                    </select>
+                    <label for="Title">Title</label>
+                    <div class="form-group">
+                        <div class="form-line">
+                            <input type="text" class="form-control" placeholder="Enter Title">
+                        </div>
+                    </div>
+                    <label for="Description">Description</label>
+                    <div class="form-group">
+                        <div class="form-line">
+                            <textarea name="description" cols="5" rows="1" class="form-control no-resize" required=""></textarea>
+                        </div>
+                    </div>
+                    <label for="First Name">Upload File</label>
+                    <div class="form-group">
+                        <div class="form-line">
+                            <input type="file">
+                        </div>
+                    </div>
+
+                    <br>
+                    <button type="button" class="btn btn-primary waves-effect">SUBMIT</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- footer content -->
+@section Scripts{
+
+    <script type="text/javascript">
+
+
+    myApp.controller('TeacherRegisterCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+
+        $scope.Teacher = {};
+            $scope.TitleName = 'Register School'
+
+            $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
+                               { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }]
+
+            $scope.SubjectList = [{ Id: 1, SubjectName: 'English' }, { Id: 2, SubjectName: 'Hindi' }, { Id: 3, SubjectName: 'Marathi' },
+                               { Id: 4, SubjectName: 'Science' }, { Id: 5, SubjectName: 'Mathematics' }];
+
+
+            NetworkService.get('Admin/GetBoardList').success(function (data) {
+                $scope.BoardList = data;
+            });
+
+            NetworkService.get('Admin/GetSchoolList').success(function (data) {
+                $scope.SchoolList = data;
+            });
+
+            NetworkService.get('Admin/GetState').success(function (data) {
+                $scope.StateList = data;
+            });
+
+            $scope.RegisterTeacher = function () {
+                var data = '{"teacher":' + JSON.stringify($scope.Teacher) + ',"subject":' + JSON.stringify($scope.Teacher.Subject) + ',"standard":' + JSON.stringify($scope.Teacher.Standard) + '}';
+                console.log(data);
+                NetworkService.insert('Admin/RegisterTeacher', data).success(function (data) {
+                    console.log('success');
+                });
+            }
+
+            $(".select2").select2();
+
+        });
+    </script>
+}

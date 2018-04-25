@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit http://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_PublishTargetUrl>D:\ALI\PraescioNew\Praescio 5 Jan\Publish\API</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="bin/EntityFramework.dll">
+      <publishTime>01/14/2018 18:31:46</publishTime>
+    </File>
+    <File Include="bin/EntityFramework.SqlServer.dll">
+      <publishTime>01/14/2018 18:30:51</publishTime>
+    </File>
+    <File Include="bin/Microsoft.AspNet.Identity.Core.dll">
+      <publishTime>01/14/2018 18:31:06</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Owin.dll">
+      <publishTime>01/14/2018 18:31:40</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Owin.Security.Cookies.dll">
+      <publishTime>01/14/2018 18:31:40</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Owin.Security.dll">
+      <publishTime>01/14/2018 18:31:39</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Owin.Security.OAuth.dll">
+      <publishTime>01/14/2018 18:31:41</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Web.Infrastructure.dll">
+      <publishTime>01/14/2018 18:31:42</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.dll">
+      <publishTime>01/14/2018 18:32:39</publishTime>
+    </File>
+    <File Include="bin/Owin.dll">
+      <publishTime>01/14/2018 18:32:40</publishTime>
+    </File>
+    <File Include="bin/Praescio.API.dll">
+      <publishTime>02/11/2018 00:24:39</publishTime>
+    </File>
+    <File Include="bin/Praescio.BusinessEntities.dll">
+      <publishTime>02/11/2018 00:24:36</publishTime>
+    </File>
+    <File Include="bin/Praescio.Domain.dll">
+      <publishTime>02/11/2018 00:24:36</publishTime>
+    </File>
+    <File Include="bin/Swashbuckle.Core.dll">
+      <publishTime>01/14/2018 18:33:26</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.Formatting.dll">
+      <publishTime>01/14/2018 18:31:19</publishTime>
+    </File>
+    <File Include="bin/System.Web.Cors.dll">
+      <publishTime>01/14/2018 18:31:04</publishTime>
+    </File>
+    <File Include="bin/System.Web.Helpers.dll">
+      <publishTime>01/14/2018 18:31:33</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.Cors.dll">
+      <publishTime>01/14/2018 18:31:27</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.dll">
+      <publishTime>01/14/2018 18:31:35</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.WebHost.dll">
+      <publishTime>01/14/2018 18:31:31</publishTime>
+    </File>
+    <File Include="bin/System.Web.Optimization.dll">
+      <publishTime>01/14/2018 18:31:17</publishTime>
+    </File>
+    <File Include="bin/System.Web.Razor.dll">
+      <publishTime>01/14/2018 18:31:13</publishTime>
+    </File>
+    <File Include="bin/System.Web.WebPages.Deployment.dll">
+      <publishTime>01/14/2018 18:31:35</publishTime>
+    </File>
+    <File Include="bin/System.Web.WebPages.dll">
+      <publishTime>01/14/2018 18:31:37</publishTime>
+    </File>
+    <File Include="bin/System.Web.WebPages.Razor.dll">
+      <publishTime>01/14/2018 18:31:35</publishTime>
+    </File>
+    <File Include="bin/WebActivatorEx.dll">
+      <publishTime>01/14/2018 18:33:02</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.eot">
+      <publishTime>01/14/2018 18:44:54</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.svg">
+      <publishTime>01/14/2018 18:44:55</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.ttf">
+      <publishTime>01/14/2018 18:44:55</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.woff">
+      <publishTime>01/14/2018 18:44:56</publishTime>
+    </File>
+    <File Include="Global.asax">
+      <publishTime>01/14/2018 18:44:53</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>01/14/2018 18:44:52</publishTime>
+    </File>
+    <File Include="Scripts/bootstrap.js">
+      <publishTime>01/14/2018 18:44:55</publishTime>
+    </File>
+    <File Include="Scripts/bootstrap.min.js">
+      <publishTime>01/14/2018 18:44:56</publishTime>
+    </File>
+    <File Include="Scripts/jquery-1.10.2.js">
+      <publishTime>01/14/2018 18:44:59</publishTime>
+    </File>
+    <File Include="Scripts/jquery-1.10.2.min.js">
+      <publishTime>01/14/2018 18:44:57</publishTime>
+    </File>
+    <File Include="Scripts/jquery-1.10.2.min.map">
+      <publishTime>01/14/2018 18:44:58</publishTime>
+    </File>
+    <File Include="Scripts/jquery.validate.js">
+      <publishTime>01/14/2018 18:44:58</publishTime>
+    </File>
+    <File Include="Scripts/jquery.validate.min.js">
+      <publishTime>01/14/2018 18:44:58</publishTime>
+    </File>
+    <File Include="Scripts/jquery.validate.unobtrusive.js">
+      <publishTime>01/14/2018 18:44:55</publishTime>
+    </File>
+    <File Include="Scripts/jquery.validate.unobtrusive.min.js">
+      <publishTime>01/14/2018 18:44:56</publishTime>
+    </File>
+    <File Include="Template/EmailContent.xml">
+      <publishTime>01/14/2018 18:44:56</publishTime>
+    </File>
+    <File Include="Template/MailExceptionBody.txt">
+      <publishTime>01/14/2018 18:44:57</publishTime>
+    </File>
+    <File Include="Template/SchedulerEmailContent.xml">
+      <publishTime>01/14/2018 18:44:57</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>02/11/2018 00:24:42</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,19 @@
+﻿<table width="100%" height="100%" bgcolor="" cellspacing="0" cellpadding="0" border="0">
+<tr>
+<td>
+
+<table style="border-collapse: collapse">
+<tr><td colspan="2" style="text-align:center;background-color:#c81b5d;height:50px;font-family:'Segoe UI'"><b>AOPM Error</b></td></tr>
+<tr><td valign="top" style="border:1px solid #FEBEC6;padding:6px;font-family:tahoma;width:200px;background-color:#FAE5D3"><b>   LoggerName :             </b></td> <td style="border:1px solid #F8F9F9;padding:6px;font-family:tahoma;">txtLoggerName</td></tr>
+<tr><td valign="top" style="border:1px solid #FEBEC6;padding:6px;font-family:tahoma;width:200px;background-color:#FAE5D3"><b>   Exception Message :      </b></td> <td style="border:1px solid #F8F9F9;padding:6px;font-family:tahoma;">txtExceptionMessage</td></tr>
+<tr><td valign="top" style="border:1px solid #FEBEC6;padding:6px;font-family:tahoma;width:200px;background-color:#FAE5D3"><b>   IP Address :             </b></td> <td style="border:1px solid #F8F9F9;padding:6px;font-family:tahoma;">txtIPAddress</td></tr>
+<tr><td valign="top" style="border:1px solid #FEBEC6;padding:6px;font-family:tahoma;width:200px;background-color:#FAE5D3"><b>   URL :                    </b></td> <td style="border:1px solid #F8F9F9;padding:6px;font-family:tahoma;">txtURL</td></tr>
+<tr><td valign="top" style="border:1px solid #FEBEC6;padding:6px;font-family:tahoma;width:200px;background-color:#FAE5D3"><b>   Controller Name :        </b></td> <td style="border:1px solid #F8F9F9;padding:6px;font-family:tahoma;">txtControllerName</td></tr>
+<tr><td valign="top" style="border:1px solid #FEBEC6;padding:6px;font-family:tahoma;width:200px;background-color:#FAE5D3"><b>   Action Name :            </b></td> <td style="border:1px solid #F8F9F9;padding:6px;font-family:tahoma;">txtActionName</td></tr>
+<tr><td valign="top" style="border:1px solid #FEBEC6;padding:6px;font-family:tahoma;width:200px;background-color:#FAE5D3"><b>   Created Date :           </b></td> <td style="border:1px solid #F8F9F9;padding:6px;font-family:tahoma;">txtCreatedDate</td></tr>
+<tr><td valign="top" style="border:1px solid #FEBEC6;padding:6px;font-family:tahoma;width:200px;background-color:#FAE5D3"><b>   Exception Stack Trace :  </b></td> <td style="border:1px solid #F8F9F9;padding:6px;font-family:tahoma;">txtExceptionStrace</td></tr>
+</table>
+
+</td>
+</tr>
+</table>

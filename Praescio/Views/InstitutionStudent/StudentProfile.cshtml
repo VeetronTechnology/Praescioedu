@@ -1,0 +1,297 @@
+﻿@{
+    ViewBag.Title = "StudentProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="right_col" role="main" style="background:#48c9b0" ng-controller="StudentProfileCtrl">
+    <div class="cont">
+
+
+        <div class="table-agile-info">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Student Profile
+                </div>
+                <div>
+                    <table class="table" ui-jq="footable" ui-options='{
+        "paging": {
+          "enabled": true
+        },
+        "filtering": {
+          "enabled": true
+        },
+        "sorting": {
+          "enabled": true
+        }}'>
+                        <tbody>
+                            <tr data-expanded="true">
+                                <th>First Name</th>
+                                <td>{{Student.FirstName}}</td>
+                            </tr>
+                            <tr data-expanded="true">
+                                <th>Last Name</th>
+                                <td>{{Student.LastName}}</td>
+                            </tr>
+                            <tr data-expanded="true">
+                                <th>Email Id</th>
+                                <td>{{Student.Email}}</td>
+                            </tr>
+                            <tr data-expanded="true">
+                                <th>Password</th>
+                                <td>*********  <a href="#myModal" data-toggle="modal" class="btn btn-success">Change Password</a></td>
+                            </tr>
+                            <tr data-expanded="true">
+                                <th>Gender</th>
+                                <td>{{Student.Gender}}</td>
+                            </tr>
+                            <tr data-expanded="true">
+                                <th>Date Of Birth</th>
+                                <td>{{Student.DateOfBirth |date :  "dd MMM yyyy"}}</td>
+                            </tr>
+                            <tr data-expanded="true">
+                                <th>Amount Paid</th>
+                                <td>{{Student.AmountPaid}}</td>
+                            </tr>
+                            <tr data-expanded="true">
+                                <th>Father Name</th>
+                                <td>{{Student.FatherName}}</td>
+                            </tr>
+                            <tr data-expanded="true">
+                                <th>Mother Name</th>
+                                <td>{{Student.MotherName}}</td>
+                            </tr>
+                            <tr data-expanded="true">
+                                <th>Parent Email</th>
+                                <td>{{Student.ParentEmail}}</td>
+                            </tr>
+                            <tr data-expanded="true">
+                                <th>Parent No</th>
+                                <td>{{Student.ParentNo}}</td>
+                            </tr>
+                            <tr data-expanded="true">
+                                <th>Activation Start Date</th>
+                                <td>{{Student.ActivateOn |date :  "dd MMM yyyy"}}</td>
+                            </tr>
+                            <tr data-expanded="true" ng-if="Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)">
+                                <th>Activation End Date</th>
+                                <td>{{Student.ExpiredOn |date :  "dd MMM yyyy"}}</td>
+                            </tr>
+                            <tr data-expanded="true" ng-if="Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)">
+                                <th>Student Address</th>
+                                <td>{{Student.Address}}</td>
+                            </tr>
+
+                            <tr data-expanded="true">
+                                <th>Students School Name</th>
+                                <td>{{Student.OrganizationAccount.InstitutionName}}</td>
+                            </tr>
+                            <tr data-expanded="true" ng-if="Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Student)">
+                                <th>School Address</th>
+                                <td>{{Student.OrganizationAccount.Address}}</td>
+                            </tr>
+                            <tr data-expanded="true" ng-if="Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Student)">
+                                <th>Board</th>
+                                <td>{{Student.OrganizationAccount.Board.BoardName}}</td>
+                            </tr>
+                            <tr data-expanded="true" ng-if="Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)">
+                                <th>Board</th>
+                                <td>{{Student.Board.BoardName}}</td>
+                            </tr>
+                            <tr data-expanded="true" ng-if="Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Student)">
+                                <th>Medium</th>
+                                <td>{{Student.OrganizationAccount.Medium.Name}}</td>
+                            </tr>
+                            <tr data-expanded="true" ng-if="Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)">
+                                <th>Medium</th>
+                                <td>{{Student.Medium.Name}}</td>
+                            </tr>
+                            <tr data-expanded="true">
+                                <th>Standard</th>
+                                <td>{{Student.Standard.StandardName}}</td>
+                            </tr>
+                            <tr data-expanded="true">
+                                <th>Current Package</th>
+                                <td>Yearly</td>
+                            </tr>
+                            <tr data-expanded="true">
+                                <th>Date Of Registration</th>
+                                <td>{{Student.CreatedOn |date :  "dd MMM yyyy"}}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    @if (@ViewBag.IsIndividual == false)
+                    {
+                        <a class="btn btn-success" href="@Url.Content("~/InstitutionAdmin/RegisterStudent")?accountid={{Student.AccountId}}">Update</a>
+                    }
+                    else
+                    {
+                        <a ng-if="ViewBag.IsIndividual==True" class="btn btn-success" href="@Url.Content("~/PraescioAdmin/RegisterIndividualStudent")?accountid={{Student.AccountId}}">Update</a>
+                       
+                    }
+                    <a href="#BlockModal" data-toggle="modal" class="btn btn-danger" ng-if="!IsBlocked">Block</a>
+                    <a href="#BlockModal" data-toggle="modal" class="btn btn-danger" ng-if="IsBlocked">UnBlock</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                    <h4 class="modal-title">Change Password</h4>
+                </div>
+                <div class="modal-body">
+
+                    <form role="form" name="ChangePasswordForm">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Old Password</label>
+                            <input type="password" class="form-control" id="OldPassword" name="OldPassword" ng-model="OldPassword" placeholder="Old Password" ng-required="true">
+                            <p ng-show="ChangePasswordForm.OldPassword.$invalid && (ChangePasswordForm.OldPassword.$dirty || submitted ||ChangePasswordForm.OldPassword.$touched )" class="text-danger">Old Password is required</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">New Password</label>
+                            <input type="password" class="form-control" id="NewPassword" name="NewPassword" ng-model="NewPassword" placeholder=" new password" ng-required="true">
+                            <p ng-show="ChangePasswordForm.NewPassword.$invalid && (ChangePasswordForm.NewPassword.$dirty || submitted ||ChangePasswordForm.NewPassword.$touched )" class="text-danger">New Password is required</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Confirm Password</label>
+                            <input type="password" class="form-control" id="ConfirmPassword" name="ConfirmPassword" placeholder="Confirm Password" ng-required="true">
+                            <p ng-show="ChangePasswordForm.ConfirmPassword.$invalid && (ChangePasswordForm.ConfirmPassword.$dirty || submitted ||ChangePasswordForm.ConfirmPassword.$touched )" class="text-danger">Confirm Password is required</p>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" ng-click="ChangePassword()">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="BlockModal" class="modal fade blockmodal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                    <h4 class="modal-title">Enter a Password to <font ng-if="!IsBlocked">Block</font><font ng-if="IsBlocked">UnBlock</font></h4>
+                </div>
+                <div class="modal-body">
+
+                    <form role="form" name="BlockPasswordForm">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="password" class="form-control" id="BlockPassword" name="BlockPassword" ng-model="BlockPassword" placeholder="Block Password" ng-required="true">
+                            <p ng-show="BlockPasswordForm.BlockPassword.$invalid && (BlockPasswordForm.BlockPassword.$dirty || submitted ||BlockPasswordForm.BlockPassword.$touched )" class="text-danger"><font ng-if="!IsBlocked">Block</font><font ng-if="IsBlocked">UnBlock</font> Password is required</p>
+                        </div>
+                        <span class="btn btn-primary" ng-click="ToggleBlockUser()" ng-disabled="postingBlockPassword">
+                            Submit
+                            <i class="fa fa-spinner fa-spin" ng-show="postingBlockPassword"></i>
+                        </span>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        myApp.controller('StudentProfileCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+            $scope.itemPerPage = 10;
+
+            $scope.LoadUser = function () {
+                NetworkService.get('PraescioCommon/GetStudentProfile?userid=@ViewBag.StudentAccountId').success(function (data) {
+                    $scope.Student = data.UserDetail;
+                    $scope.MappedStandard = data.TeacherStandard;
+                    $scope.IsBlocked = !$scope.Student.IsActive;
+                });
+            }
+            $scope.LoadUser();
+
+            $scope.ChangePassword = function () {
+                if (!$scope.ChangePasswordForm.$valid) {
+                    $scope.submitted = true;
+                }
+                else {
+                    NetworkService.insert('PraescioCommon/ChangePassword?oldpassword=' + $scope.OldPassword + '&NewPassword=' + $scope.NewPassword).success(function (data) {
+
+
+                        swal({
+                            title: "Password has been changed successfully!!!",
+                            text: "Press Ok to Continue.",
+                            type: "success",
+                            confirmButtonColor: "green",
+                            showCancelButton: false,
+                        });
+                    }).error(function (data) {
+                        $scope.savingRequest = false;
+                        swal({
+                            title: data,
+                            text: "Press Ok to Continue.",
+                            type: "error",
+                            confirmButtonColor: "red",
+                            showCancelButton: false,
+                        });
+                    });
+                }
+            }
+
+            $scope.ToggleBlockUser = function () {
+                $scope.postingBlockPassword = true;
+                if (!$scope.BlockPasswordForm.$valid) {
+                    $scope.postingBlockPassword = false;
+                    $scope.submitted = true;
+                }
+                else {
+                    var Encodedblockpwd = escape($scope.BlockPassword);
+                    NetworkService.insert('PraescioCommon/ToggleBlockUser?status=' + $scope.IsBlocked + '&userid=' +@ViewBag.StudentAccountId +'&blockpassword=' + Encodedblockpwd).success(function (data) {
+                        $scope.BlockPassword = '';
+                        var str = $scope.IsBlocked == true ? "Unblocked" : "Blocked";
+                        if (data.isSuccess == true) {
+
+                            swal({
+                                title: "User has been " + str + " successfully!!!",
+                                text: "Press Ok to Continue.",
+                                type: "success",
+                                confirmButtonColor: "green",
+                                showCancelButton: false,
+                            });
+                            $('.blockmodal').modal('toggle');
+                        }
+                        else if (data.isSuccess == false) {
+                            swal({
+                                title: data.message,
+                                text: "Press Ok to Continue.",
+                                type: "error",
+                                confirmButtonColor: "red",
+                                showCancelButton: false,
+                            });
+                        };
+                        $scope.postingBlockPassword = false;
+                        $scope.LoadUser();
+
+                    }).error(function (data) {
+                        $scope.postingBlockPassword = false;
+                        swal({
+                            title: data,
+                            text: "Press Ok to Continue.",
+                            type: "error",
+                            confirmButtonColor: "red",
+                            showCancelButton: false,
+                        });
+                    });
+                }
+            }
+
+        });
+    </script>
+}
+

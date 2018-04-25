@@ -1,0 +1,139 @@
+﻿@{
+    ViewBag.Title = "Students";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="right_col" role="main" ng-controller="StudentCtrl">
+    <div class="cont">
+        <ol class="breadcrumb breadcrumb-bg-teal align-right">
+            <li><a href="@Url.Action("Dashboard", "InstitutionTeacher")"><i class="material-icons">home</i> Home</a></li>
+            <li><i class="material-icons">remove_red_eye</i> View Student</li>
+        </ol>
+        <div class="container-fluid">
+
+            <!-- Basic Examples -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                View Student
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <form name="StudentListForm">
+                                <div class="form-group">
+                                    <label for="Board">Select Standard</label>
+                                    <select id="Standard" name="Standard" class="input-sm form-control" ng-model="StandardId" ng-options="option.Id as option.Text for option in StandardList" ng-change="BindSubject()" ng-required="true">
+                                        <option value="">-- Select Standard --</option>
+                                    </select>
+                                    <p ng-show="StudentListForm.Standard.$invalid && (StudentListForm.Standard.$dirty || submitted ||StudentListForm.Standard.$touched )" class="text-danger">Standard is required</p>
+                                    @*<p ng-show="(TeacherRegistration.Standard.$invalid && submitted)" class="text-danger">Standard is required.</p>*@
+                                </div>
+
+                                <div class="form-group">
+                                    <div>
+                                        <label for="SubjectName">Select Subject</label>
+                                        <select id="Subject" name="Subject" class="input-sm form-control" ng-model="SubjectId" ng-options="option.Id as option.Text for option in SubjectList" ng-required="true">
+                                            <option value="">-- Select Subject --</option>
+                                        </select>
+                                    </div>
+                                    <p ng-show="StudentListForm.Subject.length > 3 || (StudentListForm.Subject.$invalid && submitted)" class="text-danger">Subject is required.</p>
+                                </div>
+
+                                <br><br>
+                                @*<a href="#" class="btn btn-info waves-effect" id="flip">Submit</a>*@
+                                <span class="btn btn-primary" ng-click="GetStudent()" ng-disabled="savingRequest">
+                                    Submit
+                                    <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                                </span>
+                            </form>
+                            <div id="panel">
+
+                                <table class="table table-bordered table-striped table-hover js-basic-example dataTable" id="myTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Phone No.</th>
+                                            <th>Gender</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr dir-paginate="student in StudentList |itemsPerPage:10|filter:searchText" total-items="totalcount">
+                                            <td><a href="@Url.Action("StudentProfile", "InstitutionStudent")?StudentAccountId={{student.UserAccount.AccountId}}">{{student.UserAccount.FirstName}}</a></td>
+                                            <td>{{student.UserAccount.Email}}</td>
+                                            <td>{{student.UserAccount.MobileNo}}</td>
+                                            <td>{{student.UserAccount.CreatedOn| date:'dd MMM yyyy'}}</td>
+                                            <td>{{student.UserAccount.ExpiredOn}}</td>
+                                            <td>{{student.UserAccount.IsActive==true?'Active':'DeActive'}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <dir-pagination-controls max-size="10"
+                                                         direction-links="true"
+                                                         on-page-change="onPageChange(newPageNumber)"
+                                                         boundary-links="true">
+                                </dir-pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        myApp.controller('StudentCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+            $scope.itemPerPage = 10;
+
+            NetworkService.get('InstitutionTeacher/GetTeacherStandard').success(function (data) {
+                $scope.StandardList = data;
+            });
+
+            $scope.BindSubject = function () {
+                NetworkService.get('InstitutionTeacher/GetTeacherSubject?standardid=' + $scope.StandardId).success(function (data) {
+                    $scope.SubjectList = data;
+                });
+            }
+
+            $scope.GetStudent = function () {
+                $scope.savingRequest = true;
+
+                NetworkService.get('InstitutionTeacher/GetStudent?standardId=' + $scope.StandardId + '&subjectId=' + $scope.SubjectId).success(function (data) {
+                    $scope.StudentList = data.studentList;
+                    $scope.totalcount = data.TotalRecord;
+                    console.log($scope.StudentList);
+                    $scope.savingRequest = false;
+
+                }).error(function (data) {
+                    $scope.savingRequest = false;
+                    swal({
+                        title: data.Message,
+                        text: "Press Ok to Continue.",
+                        type: "error",
+                        confirmButtonColor: "red",
+                        showCancelButton: false,
+                    });
+                });
+            }
+
+            $scope.onPageChange = function (pageno) {
+                var url = '&pageNo=' + pageno + '&itemPerPage=' + $scope.itemPerPage;
+
+                NetworkService.get('InstitutionTeacher/GetStudent?standardId=' + $scope.StandardId + '&subjectId=' + $scope.SubjectId + url, $scope.Question).success(function (data) {
+                    $scope.StudentList = data.studentList;
+                    $scope.totalcount = data.TotalRecord;
+                });
+            }
+
+        });
+    </script>
+}
+
+

@@ -1,0 +1,210 @@
+﻿@{
+    ViewBag.Title = "TeacherProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="right_col" role="main" ng-controller="TeacherProfileCtrl">
+    <div class="cont">
+        <ol class="breadcrumb breadcrumb-bg-teal align-right">
+            <li><a href="@Url.Action("Dashboard", "InstitutionTeacher")"><i class="material-icons">home</i> Home</a></li>
+            <li><i class="material-icons">library_books</i> Teacher Profile</li>
+        </ol>
+
+        <div class="container-fluid">
+            <!-- Media Alignment -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>Teacher's Profile</h2>
+                        </div>
+                        <div class="body">
+                            <div class="bs-example" data-example-id="media-alignment">
+                                <div class="body table-responsive">
+                                    <table class="table table-striped">
+                                        <tbody>
+                                            <tr>
+                                                <th>Teacher Id</th>
+                                                <td>TCR1001</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Teacher Name</th>
+                                                <td>{{Teacher.FirstName + ' ' + Teacher.LastName}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>School Name</th>
+                                                <td>{{Teacher.OrganizationAccount.InstitutionName}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Teacher Standard & Subjects </th>
+                                                <td>
+                                                    <div ng-repeat="standard in MappedStandard">
+                                                        <div ng-repeat="subject in standard.SubjectName"><b>STD {{standard.StandardName}} </b>: {{subject}}<br /></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Student Register Permission.</th>
+                                                <td>{{Teacher.StudentRegisterAllowed==true?'Enable':'Disable'}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Gender</th>
+                                                <td>{{Teacher.Gender}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Version Type</th>
+                                                <td>{{Teacher.VersionType}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Contact No.</th>
+                                                <td>{{Teacher.MobileNo}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Date of Birth</th>
+                                                <td>{{Teacher.DateOfBirth | date:"dd MMM, yyyy"}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Email Id</th>
+                                                <td>{{Teacher.Email}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Address</th>
+                                                <td>{{Teacher.Address}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>City</th>
+                                                <td>{{Teacher.City}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>State</th>
+                                                <td>{{Teacher.State.StateName}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pin Code</th>
+                                                <td>{{Teacher.PinCode}}</td>
+                                            </tr>
+
+                                            <tr ng-if="Teacher.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)">
+                                                <th>Start Date</th>
+                                                <td>{{Teacher.ActivateOn | date:"dd MMM, yyyy"}}</td>
+                                            </tr>
+                                            <tr ng-if="Teacher.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)">
+                                                <th>End Date</th>
+                                                <td>{{Teacher.ExpiredOn | date:"dd MMM, yyyy"}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    @if (@ViewBag.IsIndividual == false)
+                                    {
+                                        <a ng-if="ViewBag.Isindividual==False" class="btn btn-success" href="@Url.Content("~/InstitutionAdmin/RegisterTeacher")?accountid={{Teacher.AccountId}}">Update</a>
+                                    }
+                                    else
+                                    {
+                                        <a ng-if="ViewBag.Isindividual==True" class="btn btn-success" href="@Url.Content("~/PraescioAdmin/RegisterIndividualTeacher")?accountid={{Teacher.AccountId}}">Update</a>
+                                    }
+
+                                    <a href="#BlockModal" data-toggle="modal" class="btn btn-danger" ng-if="!IsBlocked">Block</a>
+                                    <a href="#BlockModal" data-toggle="modal" class="btn btn-danger" ng-if="IsBlocked">UnBlock</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="BlockModal" class="modal fade blockmodal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                    <h4 class="modal-title">Enter a Password to <font ng-if="!IsBlocked">Block</font><font ng-if="IsBlocked">UnBlock</font></h4>
+                </div>
+                <div class="modal-body">
+
+                    <form role="form" name="BlockPasswordForm">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="password" class="form-control" id="BlockPassword" name="BlockPassword" ng-model="BlockPassword" placeholder="Block Password" ng-required="true">
+                            <p ng-show="BlockPasswordForm.BlockPassword.$invalid && (BlockPasswordForm.BlockPassword.$dirty || submitted ||BlockPasswordForm.BlockPassword.$touched )" class="text-danger"><font ng-if="!IsBlocked">Block</font><font ng-if="IsBlocked">UnBlock</font> Password is required</p>
+                        </div>
+                        <span class="btn btn-primary" ng-click="ToggleBlockUser()" ng-disabled="postingBlockPassword">
+                            Submit
+                            <i class="fa fa-spinner fa-spin" ng-show="postingBlockPassword"></i>
+                        </span>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        myApp.controller('TeacherProfileCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+            $scope.itemPerPage = 10;
+
+            $scope.LoadUser = function () {
+                NetworkService.get('PraescioCommon/GetTeacherProfile?userid=@ViewBag.TeacherAccountId').success(function (data) {
+                    $scope.Teacher = data.UserDetail;
+                    $scope.MappedStandard = data.TeacherStandard;
+                    $scope.IsBlocked = !$scope.Teacher.IsActive;
+                });
+            }
+            $scope.LoadUser();
+
+            $scope.ToggleBlockUser = function () {
+                $scope.postingBlockPassword = true;
+                if (!$scope.BlockPasswordForm.$valid) {
+                    $scope.postingBlockPassword = false;
+                    $scope.submitted = true;
+                }
+                else {
+                    var Encodedblockpwd = escape($scope.BlockPassword);
+                    NetworkService.insert('PraescioCommon/ToggleBlockUser?status=' + $scope.IsBlocked + '&userid=' +@ViewBag.TeacherAccountId +'&blockpassword=' + Encodedblockpwd).success(function (data) {
+                        $scope.BlockPassword = '';
+                        var str = $scope.IsBlocked == true ? "Unblocked" : "Blocked";
+                        if (data.isSuccess == true) {
+
+                            swal({
+                                title: "User has been " + str + " successfully!!!",
+                                text: "Press Ok to Continue.",
+                                type: "success",
+                                confirmButtonColor: "green",
+                                showCancelButton: false,
+                            });
+                            $('.blockmodal').modal('toggle');
+                        }
+                        else if (data.isSuccess == false) {
+                            swal({
+                                title: data.message,
+                                text: "Press Ok to Continue.",
+                                type: "error",
+                                confirmButtonColor: "red",
+                                showCancelButton: false,
+                            });
+                        };
+                        $scope.postingBlockPassword = false;
+                        $scope.LoadUser();
+
+                    }).error(function (data) {
+                        $scope.postingBlockPassword = false;
+                        swal({
+                            title: data,
+                            text: "Press Ok to Continue.",
+                            type: "error",
+                            confirmButtonColor: "red",
+                            showCancelButton: false,
+                        });
+                    });
+                }
+            }
+        });
+    </script>
+}
+
+

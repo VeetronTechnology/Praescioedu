@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewBag.Title = "TrueFalseQuestionsHistory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="right_col" role="main" style="background:#48c9b0" ng-controller="TrueFalseCheckCtrl">
+    <div class="cont">
+
+        <div class="table-agile-info">
+
+            <ol class="breadcrumb">
+                <li><a href="lesson_history.html">Lesson</a></li>
+                <li><a href="test_history.html">Test History</a></li>
+                <li class="active">True or False Questions</li>
+            </ol>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    True / False Questions
+                    <span class="tools pull-right" style="font-size:12px;font-weight:600;">
+                        <a href="javascript:;">Total: Duration : ddd:hh:mm</a>
+                    </span>
+                </div>
+                <div>
+                    <table class="table table-striped b-t b-light">
+                        <tbody>
+                            <tr>
+                                <th>Answer</th>
+                                <th>Correct Answer</th>
+                                <th>Result</th>
+                                <th>Marks Obtained</th>
+
+                            </tr>
+                            <tr ng-repeat="act in Acitivity.studentActivity">
+                                <td>{{$index+1}}. {{act.Question.Title}}</td>
+                                <td>{{act.Question.CorrectAnswer}}</td>
+                                <td>
+                                    <i ng-if="act.UserAssessment.MarkScored==1" class="fa fa-check text-success text-active"></i>
+                                    <i ng-if="act.UserAssessment.MarkScored==0" class="fa fa-times text-danger text-active"></i>
+                                </td>
+                                <td>{{act.UserAssessment.MarkScored}}</td>
+                            </tr>
+
+                            <tr>
+                                <td><b>Total Marks  {{Acitivity.MarksScored}}/{{Acitivity.totalMarks}}</b> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                @*<div>
+                    <table class="table table-striped b-t b-light">
+                        <tbody>
+                            <tr>
+                                <th>Answer</th>
+                                <th>Result</th>
+                                <th>Marks Obtained</th>
+                            </tr>
+                            <tr>
+                                <td>1.Ishan forgot to count himself - <b> True</b></td>
+                                <td><i class="fa fa-check text-success text-active"></i></td>
+                                <td>01</td>
+                            </tr>
+                            <tr>
+                                <td>2.Didi solve the problem. - <b> True</b></td>
+                                <td><i class="fa fa-check text-success text-active"></i></td>
+                                <td>01</td>
+                            </tr>
+                            <tr>
+                                <td>3.Maharashtra is The Capital of India - <b> True</b></td>
+                                <td><i class="fa fa-check text-success text-active"></i></td>
+                                <td>01</td>
+                            </tr>
+                            <tr>
+                                <td><b>Total Marks</b></td>
+                                <td>03</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>*@
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        myApp.controller('TrueFalseCheckCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+            $scope.Student = {};
+
+            NetworkService.get('PraescioCommon/GetStudentActivityMarks?assignmentid=@ViewBag.AssignmentId&QuestionType=@Convert.ToInt16(Praescio.BusinessEntities.Common.TypeOfQuestion.TrueFalse)').success(function (data) {
+                $scope.Acitivity = data;
+            });
+        });
+    </script>
+}

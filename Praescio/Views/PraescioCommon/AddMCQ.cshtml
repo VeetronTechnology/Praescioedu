@@ -1,0 +1,317 @@
+﻿@{
+    ViewBag.Title = "School";
+    var assignmentTitle = Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.SuperAdmin ? "Lesson" : "Assignment";
+    assignmentTitle = (int)Praescio.BusinessEntities.Common.AssignmentType.PExtra == ViewBag.AssignmentType ? "P Extra" : assignmentTitle;
+
+}
+
+<style>
+    .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
+        padding: 0px 15px 15px 0px !important;
+    }
+</style>
+
+<div class="right_col" role="main" ng-controller="ADDMCQ">
+    <div class="">
+
+        <div class="page-title">
+            <div class="title_left">
+                <a href="@Url.Action("Download", "PraescioCommon", new { filePath = @Praescio.Domain.AppCode.CommonCode.QuestionUploadFile, @class = "btn btn-primary uploadbtn" })" class="btn btn-primary uploadbtn">Download Excel Template</a>
+            </div>
+            <div class="title_right">
+                <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <ol class="breadcrumb">
+                            <li><a href="@Url.Action("Dashboard", "PraescioAdmin")"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                            <li class="active">Add MCQ</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Upload @assignmentTitle Question</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <!-- start form for validation -->
+                        <form id="SchoolForm" name="SchoolForm" data-parsley-validate>
+
+                            <div class="form-group">
+                                <label for="Version">Select @assignmentTitle Type</label>
+                                <select id="Assignment" name="Assignment" class="input-sm form-control" ng-model="AssignmentTypeId" ng-options="option.AssignmentTypeId as option.AssignmentTypeName for option in AssignmentTypeList" ng-change="GetAssignmentByType(AssignmentTypeId)" ng-required="true">
+                                    <option value="">-- Select @assignmentTitle Type--</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Version">Select @assignmentTitle</label>
+                                <select id="Assignment" name="Assignment" class="input-sm form-control" ng-model="AssignmentId" ng-options="option.AssignmentId as option.Title for option in AssignmentList" ng-change="" ng-required="true">
+                                    <option value="">-- Select @assignmentTitle --</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-12 col-xs-12">
+                                <span class="btn btn-primary uploadbtn" ng-click="addstandard()">Add MCQ</span>
+                                <span class="btn btn-primary uploadbtn" ng-click="removeStandard()" ng-if="MCQ.length>1">Remove MCQ</span>
+                            </div>
+
+                            <div ng-repeat="option in MCQ" ng-show="AssignmentId>0" class="col-md-12 col-xs-12 panel-group" style="padding:0px !important">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+
+                                        <div class="col-md-12 col-xs-12">
+                                            Question - {{$index+1}}
+                                            <br />
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="col-md-12 col-xs-12">
+                                            <div class="col-md-4 col-xs-4">
+                                                <textarea id="QuestionText" ng-model="option.Question" required="required" class="form-control" name="QuestionText" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.." placeholder="Enter Address"
+                                                          data-parsley-validation-threshold="10"></textarea>
+                                                <br />
+                                            </div>
+                                            <div class="col-md-4 col-xs-4">
+                                                <input id="QuestionImg" ng-model="file" valid-file name="file" required type="file" ng-files="getTheFiles($files,option,'MCQQuestionImageSrc')" onselect="Call()" />
+                                                <br />
+                                                <img src="~/{{option.MCQQuestionImageSrc}}" ng-show="option.MCQQuestionImageSrc" style="width:8em; height:6em;" alt="Alternate Text" />
+                                            </div>
+                                            <div class="col-md-4 col-xs-4">
+                                                <div class="form-group">
+                                                    <label for="heard" class="required">Select Answer</label>
+                                                    <select id="State" name="State" class="input-sm form-control" ng-model="option.MCQAnswer" ng-options="option.id as option.text for option in MCQAnswerList" ng-change="" ng-required="true">
+                                                        <option value="">-- Select Answer --</option>
+                                                    </select>
+                                                    <p ng-show="SchoolForm.State.$invalid && (SchoolForm.State.$dirty || submitted ||SchoolForm.State.$touched )" class="text-danger">State is required.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 col-xs-12">
+                                            <div class="col-md-3 col-xs-3">
+                                                <input type="text" name="text1" class="form-control alpha" placeholder="Option 1" ng-model="option.MCQText1" value="" />
+                                                <br />
+                                            </div>
+                                            <div class="col-md-3 col-xs-3">
+                                                <input id="Image1" ng-model="file" valid-file name="file" required type="file" ng-files="getTheFiles($files,option,'MCQImage1Src')" onselect="Call()" />
+                                                <br />
+                                                <img src="~/{{option.MCQImage1Src}}" ng-show="option.MCQImage1Src" style="width:8em; height:6em;" alt="Alternate Text" />
+                                            </div>
+                                            <div class="col-md-3 col-xs-3">
+                                                <input type="text" name="text2" class="form-control alpha" placeholder="Option 2" ng-model="option.MCQText2" value="" />
+                                                <br />
+                                            </div>
+                                            <div class="col-md-3 col-xs-3">
+                                                <input id="SchoolAddressProof" ng-model="file" valid-file name="file" required type="file" ng-files="getTheFiles($files,option,'MCQImage2Src')" onselect="Call()" />
+                                                <br />
+                                                <img src="~/{{option.MCQImage2Src}}" ng-show="option.MCQImage2Src" style="width:8em; height:6em;" alt="Alternate Text" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 col-xs-12">
+                                            <div class="col-md-3 col-xs-3">
+                                                <input type="text" name="text1" class="form-control alpha" placeholder="Option 1" ng-model="option.MCQText3" value="" />
+                                                <br />
+                                            </div>
+                                            <div class="col-md-3 col-xs-3">
+                                                <input id="Image1" ng-model="file" valid-file name="file" required type="file" ng-files="getTheFiles($files,option,'MCQImage3Src')" onselect="Call()" />
+                                                <br />
+                                                <img src="~/{{option.MCQImage3Src}}" ng-show="option.MCQImage3Src" style="width:8em; height:6em;" alt="Alternate Text" />
+                                            </div>
+                                            <div class="col-md-3 col-xs-3">
+                                                <input type="text" name="text2" class="form-control alpha" placeholder="Option 2" ng-model="option.MCQText4" value="" />
+                                                <br />
+                                            </div>
+                                            <div class="col-md-3 col-xs-3">
+                                                <input id="SchoolAddressProof" ng-model="file" valid-file name="file" required type="file" ng-files="getTheFiles($files,option,'MCQImage4Src')" accept="application/pdf" onselect="Call()" />
+                                                <br />
+                                                <img src="~/{{option.MCQImage4Src}}" ng-show="option.MCQImage4Src" style="width:8em; height:6em;" alt="Alternate Text" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <br />
+                            <span class="btn btn-primary">Reset</span>
+                            <span class="btn btn-primary" ng-click="SaveFile()" ng-disabled="savingRequest">
+                                Save
+                                <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                            </span>
+                        </form>
+                        <!-- end form for validations -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/JSConfig.js"></script>
+
+
+@section Scripts{
+
+    <script type="text/javascript">
+        myApp.directive('ngFiles', ['$parse', function ($parse) {
+            function fn_link(scope, element, attrs) {
+                var onChange = $parse(attrs.ngFiles);
+                element.on('change', function (event) {
+                    onChange(scope, { $files: event.target.files });
+                });
+            };
+
+            return {
+                link: fn_link
+            }
+        }])
+        .directive('ngInitial', function () {
+            return {
+                restrict: 'A',
+                controller: [
+                  '$scope', '$element', '$attrs', '$parse', function ($scope, $element, $attrs, $parse) {
+                      var getter, setter, val;
+                      val = $attrs.ngInitial || $attrs.value;
+                      getter = $parse($attrs.ngModel);
+                      setter = getter.assign;
+                      setter($scope, val);
+                  }
+                ]
+            };
+        })
+        .directive('validFile', function () {
+            return {
+                require: 'ngModel',
+                link: function (scope, el, attrs, ngModel) {
+                    //change event is fired when file is selected
+                    el.bind('change', function () {
+                        scope.$apply(function () {
+                            ngModel.$setViewValue(el.val());
+                            ngModel.$render();
+                        });
+                    });
+                }
+            }
+        })
+
+        myApp.controller('ADDMCQ', function ($scope, $rootScope, $filter, NetworkService) {
+
+            $scope.MCQAnswerList = [{ "id": 'A', "text": 'A' }, { "id": 'B', "text": 'B' }, { "id": 'C', "text": 'C' }, { "id": 'D', "text": 'D' }];
+
+           
+
+            NetworkService.get('PraescioCommon/GetAssignmentTypeList').success(function (data) {
+                $scope.AssignmentTypeList = data;
+            });
+
+            $scope.GetAssignmentByType = function (AssignmentTypeId) {
+                NetworkService.get('PraescioCommon/GetAssignmentList?AssignmentType=' + AssignmentTypeId).success(function (data) {
+                    $scope.AssignmentList = data.dataContent;
+                    console.log(data);
+                });
+            }
+
+            var formdata = new FormData();
+            $scope.getTheFiles = function ($files, option, src) {
+                //option.File1 = keyname;
+                angular.forEach($files, function (value, key) {
+                    formdata.append(option, value);
+                });
+
+                NetworkService.UploadFiles('@Url.Content("~/PraescioCommon/SaveFile")', formdata).then(function (response) {
+
+                    if (src == 'MCQImage1Src')
+                        option.MCQImage1Src = response.data.filelocation;
+                    else if (src == 'MCQImage2Src')
+                        option.MCQImage2Src = response.data.filelocation;
+                    else if (src == 'MCQImage3Src')
+                        option.MCQImage3Src = response.data.filelocation;
+                    else if (src == 'MCQImage4Src')
+                        option.MCQImage4Src = response.data.filelocation;
+                    else if (src == 'MCQQuestionImageSrc')
+                        option.MCQQuestionImageSrc = response.data.filelocation;
+                });
+            };
+
+            $scope.MCQ = [
+                {
+                    "Question": null,
+                    "MCQQuestionImageSrc": null,
+                    "MCQText1": null,
+                    "MCQText2": null,
+                    "MCQText3": null,
+                    "MCQText4": null,
+                    "MCQImage1Src": null,
+                    "MCQImage2Src": null,
+                    "MCQImage3Src": null,
+                    "MCQImage4Src": null
+                }
+            ];
+
+            $scope.SaveFile = function () {
+                $scope.savingRequest = true;
+
+                NetworkService.insert('PraescioCommon/SaveMCQ?assignmentId=' + $scope.AssignmentId, $scope.MCQ).then(function (response) {
+                    $scope.Principal = response.data.filelocation;
+                    $scope.savingRequest = false;
+
+                    swal({
+                        title: "MCQ has been successfully saved!!!",
+                        text: "Press Ok to Continue.",
+                        type: "success",
+                        confirmButtonColor: "green",
+                        showCancelButton: false,
+
+                    });
+                }).error(function (data, status) {
+                    $scope.savingRequest = false;
+                    swal({
+                        title: data.Message,
+                        text: "Press Ok to Continue.",
+                        type: "error",
+                        confirmButtonColor: "red",
+                        showCancelButton: false,
+                    });
+                });
+            }
+
+            $scope.addstandard = function () {
+                $scope.MCQ.push({
+                    "Question": null,
+                    "MCQQuestionImageSrc": null,
+                    "MCQText1": null,
+                    "MCQText2": null,
+                    "MCQText3": null,
+                    "MCQText4": null,
+                    "MCQImage1Src": null,
+                    "MCQImage2Src": null,
+                    "MCQImage3Src": null,
+                    "MCQImage4Src": null
+                })
+            }
+
+            $scope.removeStandard = function () {
+                $scope.MCQ.pop({
+                    "Question": null,
+                    "MCQQuestionImageSrc": null,
+                    "MCQText1": null,
+                    "MCQText2": null,
+                    "MCQText3": null,
+                    "MCQText4": null,
+                    "MCQImage1Src": null,
+                    "MCQImage2Src": null,
+                    "MCQImage3Src": null,
+                    "MCQImage4Src": null
+                })
+            }
+
+
+        });
+
+    </script>
+}

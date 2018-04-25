@@ -1,0 +1,172 @@
+﻿
+@{
+    ViewBag.Title = "SchoolProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="right_col" role="main" ng-controller="SchoolProfileCtrl">
+    <div class="cont">
+
+        <ol class="breadcrumb breadcrumb-bg-teal align-right">
+            <li><a href="@Url.Action("Dashboard", "InstitutionAdmin")"><i class="material-icons">home</i> Home</a></li>
+            <li><a href="@Url.Action("SchoolProfile", "InstitutionAdmin")"><i class="material-icons">library_books</i> School Profile</a></li>
+        </ol>
+
+        <div class="container-fluid">
+            <!-- Media Alignment -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <div class="media">
+                                <div class="media-left">
+                                    <a href="javascript:void(0);">
+                                        <img class="media-object" src="~/Content/assets/build/images/school_icon.png" width="64" height="64">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h1>{{SchoolProfile.Institution.InstitutionName}}</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="body">
+                            <div class="bs-example" data-example-id="media-alignment">
+                                <div class="body table-responsive">
+                                    <table class="table table-striped">
+                                        <tbody>
+                                            <tr>
+                                                <th>School Name</th>
+                                                <td>{{SchoolProfile.Institution.InstitutionName}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>School Registration Number</th>
+                                                <td>{{SchoolProfile.Institution.RegistrationNo}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>State</th>
+                                                <td>{{SchoolProfile.Institution.State.StateName}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>City</th>
+                                                <td>{{SchoolProfile.Institution.City}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pin Code</th>
+                                                <td>{{SchoolProfile.Institution.Pincode}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Address Proof</th>
+                                                <td><a target="_blank" ng-href='~/{{SchoolProfile.Institution.AddressProofSrc}}'><i class="fa fa-file-pdf-o" style="font-size:48px;color:red"></i></a></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Amount Paid</th>
+                                                <td>{{SchoolProfile.Institution.AmountPaid}} INR</td>
+                                            </tr>
+                                       
+                                            <tr>
+                                                <th>Activation Date</th>
+                                                <td>{{SchoolProfile.Institution.ActivateOn| date :  "dd MMM yyyy"}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Expiry Date</th>
+                                                <td>{{SchoolProfile.Institution.ExpiredOn | date :  "dd MMM yyyy"}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Mode Of Payment</th>
+                                                <td>Cash</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Total Count Of Allowed Students</th>
+                                                <td>{{SchoolProfile.Institution.NoOfStudent}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Total Count Of Allowed Teachers</th>
+                                                <td>{{SchoolProfile.Institution.NoOfTeacher}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Registered Student's Count</th>
+                                                <td>{{SchoolProfile.Package.RegisteredStudent}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Registered Teacher's Count</th>
+                                                <td>{{SchoolProfile.Package.RegisteredTeacher}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pending Student</th>
+                                                <td>{{SchoolProfile.Package.PendingStudent}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pending Teacher</th>
+                                                <td>{{SchoolProfile.Package.PendingTeacher}}</td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                      <div class="x_title">
+                        <h2>School Management / Principal Details</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                                    <table class="table table-striped">
+                                        <tbody>
+
+                                            <tr>
+                                                <th>Principal Name</th>
+                                                <td>{{SchoolProfile.Package.PrincipalDetail.Name}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Designation</th>
+                                                <td>{{SchoolProfile.Package.PrincipalDetail.Designation}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Gender</th>
+                                                <td>{{SchoolProfile.Package.PrincipalDetail.Gender}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Email id	</th>
+                                                <td>{{SchoolProfile.Package.PrincipalDetail.Email}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Phone Number</th>
+                                                <td>{{SchoolProfile.Package.PrincipalDetail.Designation}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Person Photo Id</th>
+                                                <td><a target="_blank" ng-href='~/{{SchoolProfile.Package.PrincipalDetail.PersonPhotoSrc}}'><i class="fa fa-file-pdf-o" style="font-size:48px;color:red"></i></a></td>
+
+                                            </tr>
+                                            <tr>
+                                                <th>Authority Letter</th>
+                                                <td><a target="_blank" ng-href='~/{{SchoolProfile.Package.PrincipalDetail.AuthorityLetterSrc}}'><i class="fa fa-file-pdf-o" style="font-size:48px;color:red"></i></a></td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+
+                                    <a href="@Url.Action("RegisterSchool", "PraescioAdmin")?institutionId={{SchoolProfile.Institution.InstitutionAccountId}}" class="btn btn-info waves-effect">Update</a>
+                                    <a href="@Url.Action("PurchaseEDUPackage", "InstitutionAdmin")" class="btn btn-success waves-effect">Purchase EDU Package</a>
+                                    <a href="@Url.Action("ViewEDUPackage", "InstitutionAdmin")" class="btn btn-warning waves-effect">View EDU Package</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- footer content -->
+@section Scripts{
+
+    <script type="text/javascript">
+        myApp.controller('SchoolProfileCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+
+            NetworkService.get('InstitutionAdmin/SchoolProfile').success(function (data) {
+                $scope.SchoolProfile = data;
+                console.log($scope.SchoolProfile);
+            });
+        });
+    </script>
+}

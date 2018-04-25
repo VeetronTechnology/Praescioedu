@@ -1,0 +1,118 @@
+﻿
+@{
+    ViewBag.Title = "CheckTopicConcept";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="right_col" role="main" ng-controller="TopicConceptCtrl">
+    <div class="cont">
+        <ol class="breadcrumb breadcrumb-bg-teal align-right">
+            <li><a href="@Url.Action("Dashboard", "InstitutionTeacher")"><i class="material-icons">home</i> Home</a></li>
+            <li><a href="#">Check Assignment</a></li>
+            <li>Concept Of Topic </li>
+        </ol>
+
+        <div class="container-fluid">
+            <!-- Vertical Layout -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                Concept Of Topic
+                            </h2>
+                            <ul class="header-dropdown m-r--5">
+                                Active: Duration : ddd:hh:mm
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <div class="body table-responsive">
+
+                                <div class="panel-body">
+
+                                    <table class="table table-striped b-t b-light">
+                                        <tbody>
+                                            <tr>
+                                                <th>Name Of Topic</th>
+                                                <td>The Living World</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Details:</th>
+                                                <td>
+                                                    Sylvia, who narrates the story, is a young girl living in a poor area of New York City. She and her friends are developing their strategies to cope with life as they know it. She has adopted the pose of a know-it-all who can figure out things for herself, and she tells herself that she resents and has no use for Miss Moore, the college-educated African American woman who frequently serves as a guide and unofficial teacher for the local children.
+                                                    Miss Moore arranges a trip for Sylvia, Sugar, and six other children to go to the F. A. O. Schwarz toy store at Fifth Avenue and Fifty-seventh Street. Miss Moore knows that this will be a new experience for the children, who have been isolated in their neighborhood, and that they will encounter items they have never seen, items that are far beyond their economic means. She wants the youngsters to learn that there is much more to the world than the slum area they know, and particularly for them to realize that wealth is unfairly and unequally distributed.
+                                                    The emphasis on the relative value of money begins for Sylvia when Miss Moore gives her a five-dollar bill to pay the taxi fare to the store. Sylvia is told to include a 10 percent tip for the driver and return the change to Miss Moore. Sylvia gives the cab driver the fare of eighty-five cents but decides that she needs money more than he does and keeps not only the tip but the remainder of the money.
+                                                    At the toy store, the children feel uneasy and out of place. Looking through the window, they are stunned by the products offered and by their high prices. Ronald sees what he recognizes as a...
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- #END# Vertical Layout -->
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        myApp.controller('TopicConceptCtrl', function ($scope, $rootScope, $sce, NetworkService) {
+
+            $scope.trustAsHtml = function (string) {
+                return $sce.trustAsHtml(string);
+            };
+
+            var formdata = new FormData();
+            $scope.getTheFiles = function ($files) {
+                $scope.isDisplay = true;
+                if ($files.length != 0)
+                    $scope.FileUpload = [];
+                for (var i = 0; i < $files.length; i++) {
+                    $scope.FileUpload.push({ FileName: $files[i].name, ContentType: $files[i].type, Size: $files[i].size });
+                }
+                $scope.isDisplay = true;
+                angular.forEach($files, function (value, key) {
+                    formdata.append(0, value);
+                });
+
+            };
+
+            $scope.TitleName = 'Register School'
+            NetworkService.get('PraescioCommon/GetStudentActivity?assignmentid=@ViewBag.AssignmentId&questiontype=@ViewBag.TypeOfQuestion&userId=@ViewBag.UserId').success(function (data) {
+                console.log(data);
+                $scope.QuestionList = data;
+            });
+
+            $scope.SaveAnswer = function (questionType) {
+                $scope.savingRequest = true;
+
+                NetworkService.insert('InstitutionTeacher/StudentActivityCheck?questionType=' + questionType, $scope.QuestionList).success(function (data) {
+                    $scope.savingRequest = false;
+                    swal({
+                        title: "Answer has been successfully submitted!!!",
+                        text: "Press Ok to Continue.",
+                        type: "success",
+                        confirmButtonColor: "green",
+                        showCancelButton: false,
+                    });
+                }).error(function (data) {
+                    $scope.savingRequest = false;
+                    swal({
+                        title: data.Message,
+                        text: "Press Ok to Continue.",
+                        type: "error",
+                        confirmButtonColor: "red",
+                        showCancelButton: false,
+                    });
+                });
+            }
+
+        });
+    </script>
+}

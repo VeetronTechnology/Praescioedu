@@ -1,0 +1,70 @@
+﻿
+@{
+    ViewBag.Title = "SchoolNotice";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="right_col" role="main">
+    <div class="cont">
+
+        <ol class="breadcrumb breadcrumb-bg-teal align-right">
+            <li><a href="@Url.Action("Dashboard", "InstitutionTeacher")"><i class="material-icons">home</i> Home</a></li>
+            <li>Notice</li>
+        </ol>
+
+        <div class="container-fluid">
+            <!-- Vertical Layout -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                Notice
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <form>
+                                <label for="heard">Send To</label>
+                                <select id="heard" class="form-control" required>
+                                    <option value="">Choose..</option>
+                                    <option value="Teachers">Teachers</option>
+                                    <option value="Students">Students</option>
+                                </select>
+                                <label for="heard">Select Standard</label>
+                                <select id="heard" class="form-control" required>
+                                    <option value="">Choose..</option>
+                                    <option value="5th STD">5th STD</option>
+                                    <option value="6th STD">6th STD</option>
+                                    <option value="7th STD">7th STD</option>
+                                    <option value="8th STD">8th STD</option>
+                                    <option value="9th STD">9th STD</option>
+                                    <option value="10th STD">10th STD</option>
+                                </select>
+                                <br />
+                                <label for="Title">Title</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" placeholder="Enter Title">
+                                    </div>
+                                </div>
+                                <label for="First Name">Upload File</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="file">
+                                    </div>
+                                </div>
+
+                                <br>
+                                <button type="button" class="btn btn-primary waves-effect">SUBMIT</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- #END# Vertical Layout -->
+
+        </div>
+        </div>
+</div>
+

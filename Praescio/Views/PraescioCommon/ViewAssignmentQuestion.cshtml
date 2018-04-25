@@ -1,0 +1,565 @@
+﻿@{
+    ViewBag.Title = "ViewAssignmentQuestion";
+}
+
+<style>
+    @@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+    .green {
+        position: absolute;
+        left: 255px;
+        top: 28px;
+        color: #37c704;
+        font-size: 32px;
+    }
+
+    .orange {
+        position: absolute;
+        left: 255px;
+        top: 28px;
+        color: #ffe207;
+        font-size: 32px;
+    }
+
+    body {
+        padding: 0 2em;
+        font-size: 1.3em;
+        font-family: 'Roboto', 'sans-serif';
+        color: white;
+        background: black;
+        input-placeholder: red;
+    }
+
+    h1 {
+        color: papayawhip;
+    }
+
+
+    /* List styling */
+    .featureList, .featureList ul {
+        margin-top: 0;
+        padding-left: 2em;
+        list-style-type: none;
+    }
+
+        .featureList li:before {
+            position: absolute;
+            margin-left: 7em;
+            margin-top: -0.5em;
+            font-weight: bold;
+        }
+
+        .featureList li.tick:before {
+            position: absolute;
+            margin-left: 7em;
+            margin-top: -0.5em;
+            content: "\2713";
+            color: black;
+            font-size: 14px;
+        }
+
+        .featureList li.cross:before {
+            content: "\2717";
+            color: crimson;
+        }
+
+    .tick1 {
+        position: absolute;
+        left: 255px;
+        top: 28px;
+        color: #0e2905;
+        font-size: 32px;
+    }
+</style>
+<!-- page content -->
+<div class="right_col" role="main" ng-controller="AssignmentQuestionCtrl">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Dashboard</h3>
+            </div>
+            <div class="title_right">
+                <div class="col-md-8 col-sm-8 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <ol class="breadcrumb">
+                            <li><a href="@Url.Action("dashboard", "PraescioAdmin" )"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                            <li><a href="#"><i class="fa fa-list"></i> View Lessons</a></li>
+                            <li class="active">List Of Lessons</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>List Of Lessons </h2>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                    @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+                    {
+                        <a class="btn btn-success" style="float:left" ng-click="ChangedAssignmentStatus();" ng-if="QuestionAssessmentDetail.StatusId==@Convert.ToInt16(@Praescio.BusinessEntities.Common.AssignmentStatus.CompletedByStudent)" ng-disabled="savingRequest">
+                            Send to Teacher
+                            <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                        </a>
+                      }
+                        <div class="body">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <font style="color:#575252"><b>{{Assignment.Title}}</b></font>
+                                    <div id="AssignmentPDF"></div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="position:relative;">
+                                    <div class="info-box-2 bg-red">
+                                        <div class="icon">
+                                            <i class="material-icons">description</i>
+                                        </div>
+                                        <div class="content" id="MOL">
+                                            <ul class="featureList">
+                                                <li class="green">&#10004;</li>
+                                            </ul>
+
+                                            @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+                                            {
+                                                <a ng-click="IsSubmitted($event,@Convert.ToInt16(Praescio.BusinessEntities.Common.TypeOfQuestion.MeaningOfLesson))" href="@Url.Action("meaningoflesson", "InstitutionStudent" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.MeaningOfLesson) })"><div class="text">MEANING OF LESSON</div></a>
+                                            }
+                                            else
+                                            {
+                                                <a href="@Url.Action("viewquestionlist", "Praescio" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.MeaningOfLesson) })"><div class="text">MEANING OF LESSON</div></a>
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="position:relative;">
+                                    <div class="info-box-2 bg-indigo">
+                                        <div class="icon">
+                                            <i class="material-icons">drag_handle</i>
+                                        </div>
+                                        <div class="content" id="SynonymsOfLesson">
+                                            <ul class="featureList">
+                                                <li class="green">&#10004;</li>
+                                            </ul>
+                                            @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+                                            {
+                                                <a ng-click="IsSubmitted($event,@Convert.ToInt16(Praescio.BusinessEntities.Common.TypeOfQuestion.SynonymsOfLesson))" href="@Url.Action("synonyms", "InstitutionStudent" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.SynonymsOfLesson) })"><div class="text">SYNONYMS IN LESSON</div></a>
+                                            }
+                                            else
+                                            {
+                                                <a href="@Url.Action("viewquestionlist", "Praescio" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.SynonymsOfLesson) })"><div class="text">SYNONYMS IN LESSON</div></a>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="position:relative;">
+                                    <div class="info-box-2 bg-purple">
+                                        <div class="icon">
+                                            <i class="material-icons">close</i>
+                                        </div>
+                                        <div class="content" id="AntonymsOfLesson">
+                                            <ul class="featureList">
+                                                <li class="green">&#10004;</li>
+                                            </ul>
+                                            @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+                                            {
+                                                <a ng-click="IsSubmitted($event,@Convert.ToInt16(Praescio.BusinessEntities.Common.TypeOfQuestion.AntonymsOfLesson))" href="@Url.Action("antonyms", "InstitutionStudent" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.AntonymsOfLesson) })"><div class="text">ANTONYMS IN LESSON</div></a>
+                                            }
+                                            else
+                                            {
+                                                <a href="@Url.Action("viewquestionlist", "Praescio" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.AntonymsOfLesson) })"><div class="text">ANTONYMS IN LESSON</div></a>
+                                            }
+                                            <div class="number count-to" data-from="0" data-to="117" data-speed="1000" data-fresh-interval="20"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="position:relative;">
+                                    <div class="info-box-2 bg-purple">
+                                        <div class="icon">
+                                            <i class="material-icons">close</i>
+                                        </div>
+                                        <div class="content" id="WriteReason">
+                                            <ul class="featureList" ng-if="isQuestionContain('WriteReason',@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.WriteReason));">
+                                                <li class="tick1">&#10004;</li>
+                                            </ul>
+                                            @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+                                            {
+                                                <a ng-click="IsSubmitted($event,@Convert.ToInt16(Praescio.BusinessEntities.Common.TypeOfQuestion.WriteReason))" href="@Url.Action("writereason", "InstitutionStudent" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.WriteReason) })"><div class="text">WRITE REASON &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div></a>
+                                            }
+                                            else
+                                            {
+                                                <a href="@Url.Action("viewquestionlist", "Praescio" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.WriteReason) })"><div class="text">WRITE REASON &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div></a>
+                                            }
+                                            <div class="number count-to" data-from="0" data-to="117" data-speed="1000" data-fresh-interval="20"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- #END# Counter Examples -->
+                                <!-- Hover Zoom Effect -->
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="position:relative;">
+                                        <div class="info-box-2 bg-pink hover-zoom-effect">
+                                            <div class="icon">
+                                                <i class="material-icons">text_format</i>
+                                            </div>
+                                            <div class="content" id="FillInTheBlanks">
+                                                <ul class="featureList" ng-if="isQuestionContain('FillInTheBlanks',@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.FillInTheBlanks));">
+                                                    <li class="tick1">&#10004;</li>
+                                                </ul>
+                                                @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+                                                {
+                                                    <a ng-click="IsSubmitted($event,@Convert.ToInt16(Praescio.BusinessEntities.Common.TypeOfQuestion.FillInTheBlanks))" href="@Url.Action("fillintheblanks", "InstitutionStudent" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.FillInTheBlanks) })"><div class="text">FILL IN THE BLANKS</div></a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("viewquestionlist", "Praescio" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.FillInTheBlanks) })"><div class="text">FILL IN THE BLANKS</div></a>
+                                                }
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="position:relative;">
+                                        <div class="info-box-2 bg-blue hover-zoom-effect">
+                                            <div class="icon">
+                                                <i class="material-icons">check</i>
+                                            </div>
+                                            <div class="content" id="MatchTheFollowing">
+                                                <ul class="featureList" ng-if="isQuestionContain('MatchTheFollowing',@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.MatchTheFollowing));">
+                                                    <li class="tick1">&#10004;</li>
+                                                </ul>
+                                                @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+                                                {
+                                                    <a ng-click="IsSubmitted($event,@Convert.ToInt16(Praescio.BusinessEntities.Common.TypeOfQuestion.MatchTheFollowing))" href="@Url.Action("matchthefollowing", "InstitutionStudent" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.MatchTheFollowing) })"><div class="text">MATCH THE FOLLOWING</div></a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("viewquestionlist", "Praescio" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.MatchTheFollowing) })"><div class="text">MATCH THE FOLLOWING</div></a>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="position:relative;">
+                                        <div class="info-box-2 bg-light-blue hover-zoom-effect">
+                                            <div class="icon">
+                                                <i class="material-icons">done_all</i>
+                                            </div>
+                                            <div class="content" id="MCQ">
+                                                <ul class="featureList" ng-if="isQuestionContain('MCQ',@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.MCQ));">
+                                                    <li class="tick1">&#10004;</li>
+                                                </ul>
+                                                @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+                                                {
+                                                    <a ng-click="IsSubmitted($event,@Convert.ToInt16(Praescio.BusinessEntities.Common.TypeOfQuestion.MCQ))" href="@Url.Action("multiplechoicequestions", "InstitutionStudent" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.MCQ) })"><div class="text">MULTIPLE CHOICE QUESTIONS</div></a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("viewquestionlist", "Praescio" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.MCQ) })"><div class="text">MULTIPLE CHOICE QUESTIONS</div></a>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="position:relative;">
+                                        <div class="info-box-2 bg-cyan hover-zoom-effect">
+                                            <div class="icon">
+                                                <i class="material-icons">playlist_add_check</i>
+                                            </div>
+                                            <div class="content" id="TrueFalse">
+                                                <ul class="featureList" ng-if="isQuestionContain('TrueFalse',@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.TrueFalse));">
+                                                    <li class="tick1">&#10004;</li>
+                                                </ul>
+                                                @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+                                                {
+                                                    <a ng-click="IsSubmitted($event,@Convert.ToInt16(Praescio.BusinessEntities.Common.TypeOfQuestion.TrueFalse))" href="@Url.Action("truefalsequestions", "InstitutionStudent" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.TrueFalse) })"><div class="text">TRUE/FALSE QUESTIONS</div></a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("viewquestionlist", "Praescio" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.TrueFalse) })"><div class="text">TRUE/FALSE QUESTIONS</div></a>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- #END# Hover Zoom Effect -->
+                                <!-- Hover Expand Effect -->
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="position:relative;">
+                                        <div class="info-box-2 bg-teal hover-zoom-effect">
+                                            <div class="icon">
+                                                <i class="material-icons">question_answer</i>
+                                            </div>
+                                            <div class="content" id="OneSentenceAnswer">
+                                                <ul class="featureList" ng-if="isQuestionContain('OneSentenceAnswer',@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.OneSentenceAnswer));">
+                                                    <li class="tick1">&#10004;</li>
+                                                </ul>
+                                                @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+                                                {
+                                                    <a ng-click="IsSubmitted($event,@Convert.ToInt16(Praescio.BusinessEntities.Common.TypeOfQuestion.OneSentenceAnswer))" href="@Url.Action("writeanswerinonesentence", "InstitutionStudent" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.OneSentenceAnswer) })"><div class="text">WRITE ANSWER IN ONE SENTENCE</div></a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("viewquestionlist", "Praescio" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.OneSentenceAnswer) })"><div class="text">WRITE ANSWER IN ONE SENTENCE</div></a>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="position:relative;">
+                                        <div class="info-box-2 bg-green hover-zoom-effect">
+                                            <div class="icon">
+                                                <i class="material-icons">assignment</i>
+                                            </div>
+                                            <div class="content" id="DescribeBriefly">
+                                                <ul class="featureList" ng-if="isQuestionContain('DescribeBriefly',@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.DescribeBriefly));">
+                                                    <li class="tick1">&#10004;</li>
+                                                </ul>
+                                                @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+                                                {
+                                                    <a ng-click="IsSubmitted($event,@Convert.ToInt16(Praescio.BusinessEntities.Common.TypeOfQuestion.DescribeBriefly))" href="@Url.Action("describebriefly", "InstitutionStudent" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.DescribeBriefly) })"><div class="text">DESCRIBE BRIEFLY</div></a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("viewquestionlist", "Praescio" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.DescribeBriefly) })"><div class="text">DESCRIBE BRIEFLY</div></a>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="position:relative;">
+                                        <div class="info-box-2 bg-light-green hover-zoom-effect">
+                                            <div class="icon">
+                                                <i class="material-icons">brightness_medium</i>
+                                            </div>
+                                            <div class="content" id="DifferentiateBetween">
+                                                <ul class="featureList" ng-if="isQuestionContain('DifferentiateBetween',@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.DifferentiateBetween));">
+                                                    <li class="tick1">&#10004;</li>
+                                                </ul>
+                                                @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+                                                {
+                                                    <a ng-click="IsSubmitted($event,@Convert.ToInt16(Praescio.BusinessEntities.Common.TypeOfQuestion.DifferentiateBetween))" href="@Url.Action("differentiatebetween", "InstitutionStudent" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.DifferentiateBetween) })"><div class="text">DIFFERENTIATE BETWEEN</div></a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("viewquestionlist", "Praescio" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.DifferentiateBetween) })"><div class="text">DIFFERENTIATE BETWEEN</div></a>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="position:relative;">
+                                        <div class="info-box-2 bg-lime hover-zoom-effect">
+                                            <div class="icon">
+                                                <i class="material-icons">live_help</i>
+                                            </div>
+                                            <div class="content" id="Exercise">
+                                                <ul class="featureList" ng-if="isQuestionContain('Exercise',@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.Exercise));">
+                                                    <li class="tick1">&#10004;</li>
+                                                </ul>
+                                                @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+                                                {
+                                                    <a ng-click="IsSubmitted($event,@Convert.ToInt16(Praescio.BusinessEntities.Common.TypeOfQuestion.Exercise))" href="@Url.Action("exercise", "InstitutionStudent" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.Exercise) })"><div class="text">EXERCISE [other type of Question]</div></a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("viewquestionlist", "Praescio" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.Exercise) })"><div class="text">EXERCISE [other type of Question]</div></a>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="position:relative;">
+                                        <div class="info-box-2 bg-red">
+                                            <div class="icon">
+                                                <i class="material-icons">create</i>
+                                            </div>
+                                            <div class="content" id="WriteShortNote">
+                                                <ul class="featureList" ng-if="isQuestionContain('WriteShortNote',@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.WriteShortNote));">
+                                                    <li class="tick1">&#10004;</li>
+                                                </ul>
+                                                @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+                                                {
+                                                    <a ng-click="IsSubmitted($event,@Convert.ToInt16(Praescio.BusinessEntities.Common.TypeOfQuestion.WriteShortNote))" href="@Url.Action("writeshortnote", "InstitutionStudent" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.WriteShortNote) })"><div class="text">WRITE SHORT NOTE ON</div></a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("viewquestionlist", "Praescio" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.WriteShortNote) })"><div class="text">WRITE SHORT NOTE ON</div></a>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" style="position:relative;">
+                                        <div class="info-box-2 bg-indigo">
+                                            <div class="icon">
+                                                <i class="material-icons">insert_comment</i>
+                                            </div>
+                                            <div class="content" id="TopicConcept">
+                                                <ul class="featureList" ng-if="isQuestionContain('TopicConcept',@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.TopicConcept));">
+                                                    <li class="tick1">&#10004;</li>
+                                                </ul>
+                                                @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+                                                {
+                                                    <a ng-click="IsSubmitted($event,@Convert.ToInt16(Praescio.BusinessEntities.Common.TypeOfQuestion.TopicConcept))" href="@Url.Action("conceptofanytopicoflesson", "InstitutionStudent" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.TopicConcept) })"><div class="text">CONCEPT OF ANY TOPIC OF LESSON</div></a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("viewquestionlist", "Praescio" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.TopicConcept) })"><div class="text">CONCEPT OF ANY TOPIC OF LESSON</div></a>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="info-box-2 bg-yellow">
+                                            <div class="icon">
+                                                <i class="material-icons">video_call</i>
+                                            </div>
+                                            <div class="content" id="Video">
+                                                <ul class="featureList" ng-if="isQuestionContain('Video',@Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.SynonymsOfLesson));">
+                                                    @*<li class="tick1">&#10004;</li>*@
+                                                </ul>
+                                                @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+                                                {
+                                                    <a href="@Url.Action("viewvideo", "InstitutionStudent" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.SynonymsOfLesson) })"><div class="text">VIDEO</div></a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("ViewVideo", "Praescio" ,new {assignmentid=ViewBag.assignmentid, typeofquestion=Convert.ToInt16(@Praescio.BusinessEntities.Common.TypeOfQuestion.SynonymsOfLesson) })"><div class="text">VIDEO</div></a>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @section Scripts{
+
+        <script type="text/javascript">
+            myApp.controller('AssignmentQuestionCtrl', function ($scope, $rootScope, $filter, NetworkService, $timeout) {
+                var formdata = new FormData();
+                $scope.getTheFiles = function ($files) {
+                    $scope.isDisplay = true;
+                    if ($files.length != 0)
+                        $scope.FileUpload = [];
+                    for (var i = 0; i < $files.length; i++) {
+                        $scope.FileUpload.push({ FileName: $files[i].name, ContentType: $files[i].type, Size: $files[i].size });
+                    }
+                    $scope.isDisplay = true;
+                    angular.forEach($files, function (value, key) {
+                        formdata.append(0, value);
+                    });
+
+                };
+
+                $scope.TitleName = 'Register School'
+
+                NetworkService.get('PraescioCommon/GetQuestionByAssignmentId?assignmentid=@ViewBag.assignmentid').success(function (data) {
+                    $scope.Assignment = data.Assignment;
+                    $scope.QuestionList = data.Question;
+                    $scope.QuestionAssessment = data.QuestionAssessmentDetail;
+                    $scope.QuestionAssessmentDetail = data.UserAssessmentDetail;
+
+                    $('#AssignmentPDF').append('<embed id="pdfFile" type="application/pdf" src="@Url.Content("~/")' + data.Assignment.UploadFileSrc + '" height="500px" width="80%" internalinstanceid="37" title=""><br><br><br>')
+                });
+
+                $scope.isQuestionContain = function (id, questionType) {
+                    var result = false;
+
+                    $.each($scope.QuestionList, function (i, e) {
+                        if ($scope.QuestionList[i].QuestionTypeId == questionType) {
+                            result = true;
+                        }
+                    })
+
+                    var qts = 0;
+                    var assessment = 0;
+                    $.each($scope.QuestionAssessment, function (i, e) {
+
+                        if ($scope.QuestionAssessment[i].Question.QuestionTypeId == questionType) {
+                            qts = qts + 1;
+                            if ($scope.QuestionAssessment[i].UserAssessment != null) {
+                                assessment = assessment + 1;
+                            }
+                        }
+                    });
+
+                    if (qts == assessment) {
+                        $('#' + id).find('li').removeClass('tick1').addClass('green');
+                    }
+                    else {
+                        $('#' + id).find('li').removeClass('tick1').addClass('orange');
+                    }
+
+                    return result;
+                }
+
+                $scope.IsSubmitted = function ($event, questiontype) {
+
+                    NetworkService.get('PraescioCommon/IsExamStarted?assignmentid=@ViewBag.assignmentid').success(function (data) {
+                        console.log(data);
+                        if (data == false) {
+
+                            swal({
+                                title: "Your Start Time will be started on OK",
+                                //text: "You will not be able to recover this imaginary file!",
+                                type: "warning",
+                                showCancelButton: true,
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "Yes!",
+                                cancelButtonText: "No, cancel plx!",
+                                closeOnConfirm: true,
+                                closeOnCancel: true
+                            }, function (isConfirm) {
+                                if (isConfirm) {
+                                    NetworkService.insert('PraescioCommon/LogExamStartDate?assignmentid=@ViewBag.assignmentid', null).success(function (data) {
+
+                                    });
+                                    //swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                                } else {
+                                    $event.preventDefault();
+                                }
+                            });
+                        }
+                    });
+
+
+                    var prevent = false;
+                    $.each($scope.QuestionList, function (i, e) {
+                        if ($scope.QuestionList[i].IsUserSubmitted == true && $scope.QuestionList[i].QuestionTypeId == questiontype) {
+                            prevent = true;
+                        }
+                    })
+
+                    if (prevent) {
+                        alert('Already submitted!!!');
+                        $event.preventDefault();
+                    }
+                }
+
+                $scope.ChangedAssignmentStatus = function () {
+
+                    NetworkService.insert('PraescioCommon/ChangedAssignmentStatus?assignmentid=@ViewBag.assignmentid&assignmentstatusid=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentStatus.SubmittedByTeacher)', null).success(function (data) {
+                        swal({
+                            title: "Your assignment has been Successfully send to teacher !!!",
+                            text: "Press Ok to Continue.",
+                            type: "success",
+                            confirmButtonColor: "green",
+                            showCancelButton: false,
+
+                        });
+                    });
+                }
+
+
+            });
+        </script>
+    }
+
+
