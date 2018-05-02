@@ -22,4 +22,20 @@ namespace Praescio.Domain.Models
         public string errorMessage { get; set; }
 
     }
+
+    public class ChangePasswordViewModel
+    {
+        public int AccountId { get; set; }
+        public string Username { get; set; }
+
+        [Required(ErrorMessage = "Current PAssword is required.")]
+        public string PasswordCurrent { get; set; }
+
+        [Required(ErrorMessage = "Password is required.")]
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Confirm Password is required.")]
+        [CompareAttribute("Password", ErrorMessage = "Password doesn't match.")]
+        public string PasswordConfirm { get; set; }
+    }
 }

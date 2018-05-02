@@ -93,7 +93,7 @@
 
                             <div class="form-group">
                                 <label for="heard" class="required">Select State</label>
-                                <select id="State" name="State" class="input-sm form-control" ng-model="Institution.StateId" ng-options="option.Id as option.StateName for option in StateList" ng-change="" ng-required="true">
+                                <select id="State" name="State" class="input-sm form-control" ng-model="Institution.StateId" ng-options="option.Id as option.StateName for option in StateList" ng-change="ChangeState(Institution.StateId)" ng-required="true">
                                     <option value="">-- Select State --</option>
                                 </select>
                                 <p ng-show="SchoolForm.State.$invalid && (SchoolForm.State.$dirty || submitted ||SchoolForm.State.$touched )" class="text-danger">State is required.</p>
@@ -101,7 +101,10 @@
 
                             <div class="form-group">
                                 <label for="City" class="required">Enter City</label>
-                                <input type="text" id="City" ng-model="Institution.City" class="form-control alpha" preventspace="true" maxlength="30" name="City" data-parsley-trigger="change" placeholder="Enter City" required />
+                                @*<input type="text" id="City" ng-model="Institution.City" class="form-control alpha" preventspace="true" maxlength="30" name="City" data-parsley-trigger="change" placeholder="Enter City" required />*@
+                                <select id="City" name="City" class="input-sm form-control" ng-model="Institution.City" ng-options="option.city_name as option.city_name for option in CityList" ng-required="true">
+                                    <option value="">-- Select State --</option>
+                                </select>
                                 <p ng-show="SchoolForm.City.$invalid && (SchoolForm.City.$dirty || submitted ||SchoolForm.City.$touched )" class="text-danger">City is required.</p>
                             </div>
 
@@ -407,6 +410,14 @@
                 }
             }
 
+            $scope.ChangeState = function (id) {
+                console.log('ChangeState', id)
+                if (id != '' && id > 0) {
+                    NetworkService.get('PraescioAdmin/GetCityList?StateId='+id).success(function (data) {
+                        $scope.CityList = data;
+                    });
+                }
+            }
 
             $scope.RegisterSchool = function () {
 

@@ -1,13 +1,39 @@
 ﻿@{
     ViewBag.Title = "CheckAssignment";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    string assignmentTypeTitle = "Assignment";
+    if(ViewBag.AssignmentType == 1)
+    {
+        assignmentTypeTitle = "Lesson";
+    } else if (ViewBag.AssignmentType == 6)
+    {
+        assignmentTypeTitle = "P-Extra";
+    }
 }
 
+<style>
+    #pnl-ats {
+        padding: 10px 20px;
+    }
+    #pnl-ats label {
+        padding: 0;
+        color: #fff !important;
+    }
+    #pnl-ats .info-box .content .text {
+        color: #fff !important;
+    }
+    #pnl-ats label.active .content .text {
+        color: #555 !important; font-weight: bold !important;
+    }
+    input[name="assignmentType"] {
+        display: none;
+    }
+</style>
 <div class="right_col" role="main" ng-controller="CheckAssignmentCtrl">
     <div class="cont">
-        <ol class="breadcrumb breadcrumb-bg-teal align-right">
+        <ol class="breadcrumb align-right">
             <li><a href="@Url.Action("Dashboard", "InstitutionTeacher")"><i class="material-icons">home</i> Home</a></li>
-            <li>Check Assignment</li>
+            <li>Check @assignmentTypeTitle</li>
         </ol>
 
         <div class="container-fluid">
@@ -16,15 +42,55 @@
                 <div class="card">
                     <div class="header">
                         <h2>
-                            Check Assignment
+                            Check @assignmentTypeTitle
                         </h2>
                     </div>
+
+                    <div class="row" id="pnl-ats">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <label class="radio-inline info-box bg-pink hover-expand-effect active">
+                                <input type="radio" ng-model="assignmentType" ng-change="ChangeAssignmentType(1)" name="assignmentType" id="assignmentType1" value="1"> 
+                                <span class="icon">
+                                    <i class="material-icons">assignment</i>
+                                </span>
+                                <span class="content">
+                                    <span class="text">ASSIGNMENT</span>
+                                    <span class="number count-to" data-from="0" data-to="125" data-speed="15" data-fresh-interval="20"></span>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <label class="radio-inline info-box bg-aqua hover-expand-effect">
+                                <input type="radio" ng-model="assignmentType" ng-change="ChangeAssignmentType(2)" name="assignmentType" id="assignmentType2" value="2">
+                                <span class="icon">
+                                    <i class="material-icons">border_color</i>
+                                </span>
+                                <span class="content">
+                                    <span class="text">HANDWRITING ASSIGNMENT</span>
+                                    <span class="number count-to" data-from="0" data-to="125" data-speed="15" data-fresh-interval="20"></span>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <label class="radio-inline info-box bg-green hover-expand-effect">
+                                <input type="radio" ng-model="assignmentType" ng-change="ChangeAssignmentType(3)" name="assignmentType" id="assignmentType3" value="3">
+                                <span class="icon">
+                                    <i class="material-icons">assignment</i>
+                                </span>
+                                <span class="content">
+                                    <span class="text">PRONUNCIATION ASSIGNMENT</span>
+                                    <span class="number count-to" data-from="0" data-to="125" data-speed="15" data-fresh-interval="20"></span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
                     <div class="body">
                         <form name="SearchStudent">
 
                             <div class="form-group">
                                 <label for="heard" class="required">Select Board</label>
-                                <select id="Board" name="Board" class="input-sm form-control" ng-model="Boardid" ng-options="option.Id as option.BoardName for option in BoardList" ng-required="true">
+                                <select id="Board" name="Board" class="input-sm form-control" ng-model="Boardid" ng-options="option.Id as option.BoardName for option in BoardList" ng-change="ChangeBoard(Boardid)" ng-required="true">
                                     <option value="">-- Select Board --</option>
                                 </select>
                                 <p ng-show="SearchStudent.Board.$invalid && (SearchStudent.Board.$dirty || submitted ||SearchStudent.Board.$touched )" class="text-danger">Board is required.</p>
@@ -32,8 +98,18 @@
 
                             <div class="form-group">
                                 <div>
+                                    <label for="heard">Select Medium</label>
+                                    <select id="Medium" name="Medium" class="input-sm form-control" ng-model="MediumId" ng-disabled="BoardId>1" ng-options="option.Id as option.Name for option in MediumList" ng-change="ChangeMedium(MediumId)" ng-required="true">
+                                        <option value="">-- Select Medium --</option>
+                                    </select>
+                                </div>
+                                <p ng-show="SearchStudent.Medium.$invalid && (SearchStudent.Medium.$dirty || submitted ||SearchStudent.Medium.$touched )" class="text-danger">Medium is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <div>
                                     <label for="Standard">Select Standard</label>
-                                    <select id="Standard" name="Standard" class="input-sm form-control" ng-model="StandardId" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="" ng-required="true">
+                                    <select id="Standard" name="Standard" class="input-sm form-control" ng-model="StandardId" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="ChangeStandard(StandardId)" ng-required="true">
                                         <option value="">-- Select Standard --</option>
                                     </select>
                                 </div>
@@ -44,7 +120,7 @@
                             <div class="form-group">
                                 <div>
                                     <label for="SubjectName">Select Subject</label>
-                                    <select id="Subject" name="Subject" class="input-sm form-control" ng-model="SubjectId" ng-options="option.Id as option.SubjectName for option in SubjectList" ng-change="" ng-required="true">
+                                    <select id="Subject" name="Subject" class="input-sm form-control" ng-model="SubjectId" ng-options="option.Id as option.SubjectName for option in SubjectList" ng-change="ChangeLessons()" ng-required="true">
                                         <option value="">-- Select Subject --</option>
                                     </select>
                                 </div>
@@ -53,12 +129,12 @@
 
                             <div class="form-group">
                                 <div>
-                                    <label for="Version">Select Assignment</label>
+                                    <label for="Version">Select @assignmentTypeTitle</label>
                                     <select id="Assignment" name="Assignment" class="input-sm form-control" ng-model="AssignmentId" ng-options="option.AssignmentId as option.Title for option in AssignmentList" ng-change="" ng-required="true">
-                                        <option value="">-- Select AssignmentList --</option>
+                                        <option value="">-- Select @assignmentTypeTitle List --</option>
                                     </select>
                                 </div>
-                                <p ng-show="SearchStudent.Subject.$invalid && (SearchStudent.Subject.$dirty || submitted ||SearchStudent.Subject.$touched )" class="text-danger">Subject is required.</p>
+                                <p ng-show="SearchStudent.Subject.$invalid && (SearchStudent.Subject.$dirty || submitted ||SearchStudent.Subject.$touched )" class="text-danger">@assignmentTypeTitle is required.</p>
                             </div>
                         </form>
                         <br />
@@ -134,13 +210,39 @@
 @section Scripts{
 
     <script type="text/javascript">
+        $(document).ready(function () {
+            $('input[name="assignmentType"]').on('change', function (e) {
+                $('#pnl-ats label').removeClass('active');
+                if ($(this).is(':checked')) {
+                    $(this).closest('label').addClass('active');
+                }
+            })
+        });
 
         myApp.controller('CheckAssignmentCtrl', function ($scope, $rootScope, $filter, NetworkService) {
             $scope.itemPerPage = 10;
+            $scope.Assignment = {};
+            $scope.AssignmentListAll = [];
+            $scope.assignmentType = 1;
+            $scope.MediumId = 1;
 
             NetworkService.get('PraescioCommon/GetAssignmentList?assignmentType=@ViewBag.AssignmentType').success(function (data) {
-                $scope.AssignmentList = data.dataContent;
+                $scope.AssignmentListAll = data.dataContent;
             });
+
+            $scope.ChangeAssignmentType = function (id) {
+                NetworkService.get('PraescioCommon/GetAssignmentList?assignmentType='+id).success(function (data) {
+                    $scope.AssignmentListAll = data.dataContent;
+                });
+            }
+            
+            NetworkService.get('PraescioAdmin/GetMedium').success(function (data) {
+                $scope.MediumList = data;
+            });
+
+            $scope.ChangeMedium = function (id) {
+                
+            }
 
             NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
                 $scope.BoardList = data;
@@ -155,6 +257,43 @@
 
             $scope.SubjectList = [{ Id: 1, SubjectName: 'English' }, { Id: 2, SubjectName: 'Marathi' },
                                { Id: 3, SubjectName: 'Science' }, { Id: 4, SubjectName: 'Mathematics' }];
+
+            $scope.ChangeBoard = function (boardname) {
+                //if (boardname > 1) {
+                //    $scope.Student.MediumId = 1;
+                //}
+            }
+
+            $scope.ChangeStandard = function (id) {
+                $scope.AssignmentList = [];
+                $scope.SubjectList = [];
+                NetworkService.get('PraescioCommon/GetSubject?standardid=' + id + '&mediumid=' + $scope.MediumId).success(function (data) {
+                    $scope.SubjectList = data;
+                });
+            }
+
+            $scope.ChangeSubject = function (id) {
+                //$scope.ChangeAssignmentList();
+            }
+
+            $scope.ChangeLessons = function () {
+                $scope.ChangeAssignmentList();
+            }
+
+            $scope.ChangeAssignmentList = function () {
+                console.log('$scope.AssignmentListAll', $scope.AssignmentListAll)
+                console.log('$scope.AssignmentList', $scope.AssignmentList, $scope.assignmentType)
+                $scope.AssignmentList = $scope.AssignmentListAll.filter(m => m.SubjectId == $scope.SubjectId && m.StandardId == $scope.StandardId && m.AssignmentTypeId == $scope.assignmentType);
+                console.log('$scope.AssignmentList', $scope.AssignmentList)
+            }
+
+            $scope.ChangeAssignment = function (id) {
+                NetworkService.get('PraescioCommon/GetAssignmentDetail?assignmentid='+id).success(function (data) {
+                    $scope.Student = data.Student;
+                    $scope.ChangeStandard(data.Student.StandardId);
+
+                });
+            }
 
 
             $scope.GetStudentByAssignment = function () {

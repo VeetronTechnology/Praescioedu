@@ -8,8 +8,6 @@
     var AssignmentType = ViewBag.AssignmentType;
 }
 
-<h2>ViewAssignment</h2>
-
 <!-- page content -->
 <div class="right_col" role="main" ng-controller="ViewAssignmentCtrl">
     <div class="">
@@ -50,7 +48,8 @@
                                         <div class="col-md-9 col-sm-9 col-xs-9">
                                             <a ng-click="ShowHide()" href="#" class="btn btn-primary uploadbtn">Publish</a>
 
-                                            <a class="btn btn-primary uploadbtn" title="Trail List" href="@Url.Action("AddAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.Handwriting)"><i title="Add Assignment"></i> <span class="nav-label"> Add New @assignmentTitle</span></a>
+                                            @*<a class="btn btn-primary uploadbtn" title="Trail List" href="@Url.Action("AddAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.Handwriting)"><i title="Add Assignment"></i> <span class="nav-label"> Add New @assignmentTitle</span></a>*@
+                                            <a class="btn btn-primary uploadbtn" title="Trail List" href="@Url.Action("AddAssignment", "Praescio")?assignmentType=@ViewBag.AssignmentType"><i title="Add @assignmentTitle"></i> <span class="nav-label"> Add New @assignmentTitle</span></a>
                                         </div>
 
                                         <div class="col-md-3 col-sm-3 col-xs-3">
@@ -83,10 +82,11 @@
                             <thead>
                                 <tr role="row">
                                     <th width="80px" ng-show="IsVisible"></th>
-                                    <th class="sorting_desc" tabindex="0" aria-controls="myTable" rowspan="1" colspan="1" style="width: 57px;" aria-label="Standard: activate to sort column ascending" aria-sort="descending">Standard</th>
+                                    @*  <th class="sorting_desc" tabindex="0" aria-controls="myTable" rowspan="1" colspan="1" style="width: 57px;" aria-label="Standard: activate to sort column ascending" aria-sort="descending">Standard</th>*@
                                     <th class="sorting" tabindex="0" aria-controls="myTable" rowspan="1" colspan="1" style="width: 47px;" aria-label="Subject: activate to sort column ascending">Subject</th>
                                     <th class="sorting" tabindex="0" aria-controls="myTable" rowspan="1" colspan="1" style="width: 46px;" aria-label="Title: activate to sort column ascending">Title</th>
                                     <th class="sorting" tabindex="0" aria-controls="myTable" rowspan="1" colspan="1" style="width: 137px;" aria-label="Description: activate to sort column ascending">Description</th>
+                                    <th class="sorting" tabindex="0" aria-controls="myTable" rowspan="1" colspan="1" style="width: 95px;" aria-label="Teacher Name: activate to sort column ascending">Teacher Name</th>
                                     <th class="sorting" tabindex="0" aria-controls="myTable" rowspan="1" colspan="1" style="width: 95px;" aria-label="View Questions: activate to sort column ascending">Published Date</th>
                                     <th class="sorting" tabindex="0" aria-controls="myTable" rowspan="1" colspan="1" style="width: 95px;" aria-label="View Questions: activate to sort column ascending">View Questions</th>
                                     @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.SuperAdmin) || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Admin
@@ -100,11 +100,12 @@
                             <tbody>
                                 <tr role="row" class="odd" dir-paginate="assignment in AssignmentList |itemsPerPage:10|filter:searchText" total-items="totalcount">
                                     <td ng-show="IsVisible"><input type="checkbox" ng-model="assignment.IsPublished" style="cursor:pointer;" /></td>
-                                    <td class="sorting_1">{{assignment.Standard.StandardName}}</td>
-                                    <td>{{assignment.Medium.Name}}</td>
+                                    @*<td class="sorting_1">{{assignment.Standard.StandardName}}</td>*@
+                                    <td>{{assignment.Subject.SubjectName}}</td>
                                     <td>{{assignment.Title}}</td>
                                     <td data-toggle="modal" data-target="#defaultModal" class="pointer">{{assignment.Description}}</td>
-                                    <td data-toggle="modal" data-target="#defaultModal" class="pointer">{{assignment.PublishedDate | date:"dd MMM, yyyy"}}</td>
+                                    <td>{{assignment.Standard.TeacherName}}</td>
+                                    <td data-toggle="modal" data-target="#defaultModal" class="pointer">{{assignment.CreatedOn | date:"dd MMM, yyyy"}}</td>
                                     <td><a ng-href="@Url.Content("~/Praescio/AssignmentQuestion?assignmentId="){{assignment.AssignmentId}}"><span class="badge bg-teal">View Questions</span></a></td>
                                     @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.SuperAdmin) || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Admin
 || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Teacher || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)
@@ -118,6 +119,26 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <div ng-show="IsVisible">
+                            <div class="form-group">
+                                <div>
+                                    <label for="heard">Select Standard</label>
+                                    <select id="Standard" name="Standard" class="input-sm form-control" ng-model="Assignment.StandardId" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="ChangeStandard(Assignment.StandardId)" ng-required="true">
+                                        <option value="">-- Select Standard --</option>
+                                    </select>
+                                </div>
+                                <p ng-show="AssignmentForm.Standard.$invalid && (AssignmentForm.Standard.$dirty || submitted ||AssignmentForm.Standard.$touched )" class="text-danger">Standard is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <div>
+                                    <label for="heard">Select Subject</label>
+                                    <select id="Subject" name="Subject" class="input-sm form-control" ng-model="Assignment.SubjectId" ng-options="option.Id as option.SubjectName for option in SubjectList" ng-change="ChangeSubject(Assignment.SubjectId)" ng-required="true">
+                                        <option value="">-- Select Subject --</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         <dir-pagination-controls max-size="10"
                                                  direction-links="true"
                                                  on-page-change="onPageChange(newPageNumber)"
@@ -144,6 +165,8 @@
         myApp.controller('ViewAssignmentCtrl', function ($scope, $rootScope, $filter, NetworkService) {
             $scope.itemPerPage = 10;
             $scope.SearchText = "";
+            $scope.Assignment = {};
+            $scope.AssignmentListAll = [];
 
             $scope.ShowHide = function () {
                 $scope.IsVisible = $scope.IsVisible ? false : true;
@@ -164,6 +187,15 @@
                 NetworkService.get('PraescioCommon/GetAssignmentList?' + url).success(function (data) {
                     $scope.AssignmentList = data.dataContent;
                     $scope.totalcount = data.totalRecord;
+                });
+            }
+            $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
+                { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }]
+
+            $scope.ChangeStandard = function (id) {
+                NetworkService.get('PraescioCommon/GetSubject?standardid=' + id ).success(function (data) {
+                    $scope.SubjectList = data;
+                    console.log(data);
                 });
             }
 

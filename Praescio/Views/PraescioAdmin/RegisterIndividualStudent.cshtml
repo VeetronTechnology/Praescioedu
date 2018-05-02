@@ -1,7 +1,12 @@
 ﻿@{
     ViewBag.Title = "Student";
 }
-
+<style>
+    .disabledInput {
+        cursor: not-allowed;
+        pointer-events: none
+    }
+</style>
 <div class="right_col" role="main" ng-controller="StudentRegisterCtrl">
     <div class="">
 
@@ -38,20 +43,35 @@
                                     <p ng-show="StudentRegistration.UserName.$invalid && (StudentRegistration.UserName.$dirty || submitted ||StudentRegistration.UserName.$touched )" class="text-danger">User Name is required.</p>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="Password" class="required">Password</label>
-                                    <input type="password" id="Password" ng-model="Student.Password" class="form-control" name="Password" readonly onfocus="this.removeAttribute('readonly');" placeholder="Enter Password" required />
-                                    <p ng-show="StudentRegistration.Password.$invalid && (StudentRegistration.Password.$dirty || submitted ||StudentRegistration.Password.$touched )" class="text-danger">Password is required.</p>
-                                </div>*@
+        <div class="form-group">
+            <label for="Password" class="required">Password</label>
+            <input type="password" id="Password" ng-model="Student.Password" class="form-control" name="Password" readonly onfocus="this.removeAttribute('readonly');" placeholder="Enter Password" required />
+            <p ng-show="StudentRegistration.Password.$invalid && (StudentRegistration.Password.$dirty || submitted ||StudentRegistration.Password.$touched )" class="text-danger">Password is required.</p>
+        </div>*@
 
                             <div class="form-group">
                                 <label for="firstname" class="required">First Name</label>
-                                <input type="text" id="FirstName" ng-model="Student.FirstName" class="form-control alpha" name="FirstName" placeholder="Enter First Name" required />
+                                 @if (ViewBag.AccountId == 0)
+                                {
+                                <input type="text" ng-hide="savingRequest" id="FirstName" ng-model="Student.FirstName" class="form-control alpha" name="FirstName" placeholder="Enter First Name" required />
+                                }
+                                else
+                                {
+                                   <input type="text" ng-hide="savingRequest" id="FirstName" readonly ng-model="Student.FirstName" class="form-control alpha" name="FirstName" placeholder="Enter First Name" required />    
+                                }
+                                
                                 <p ng-show="StudentRegistration.FirstName.$invalid && (StudentRegistration.FirstName.$dirty || submitted ||StudentRegistration.FirstName.$touched )" class="text-danger">First Name is required.</p>
                             </div>
                             <div class="form-group">
                                 <label for="lastname" class="required">Last Name</label>
-                                <input type="text" id="LastName" ng-model="Student.LastName" class="form-control alpha" name="LastName" data-parsley-trigger="change" placeholder="Last Name" required />
+                                @if (ViewBag.AccountId == 0)
+                                {
+                                <input type="text" ng-hide="savingRequest" id="LastName" ng-model="Student.LastName" class="form-control alpha" name="LastName" data-parsley-trigger="change" placeholder="Last Name" required />
+                                }
+                                else
+                                {
+                                    <input type="text" ng-hide="savingRequest" id="LastName" readonly ng-model="Student.LastName" class="form-control alpha" name="LastName" data-parsley-trigger="change" placeholder="Last Name" required />
+                                }
                                 <p ng-show="StudentRegistration.LastName.$invalid && (StudentRegistration.LastName.$dirty || submitted ||StudentRegistration.LastName.$touched )" class="text-danger">Last Name is required.</p>
                             </div>
 
@@ -59,14 +79,35 @@
                                 <label>Gender</label>
                                 <p>
                                     Male:
-                                    <input type="radio" class="flat" name="gender" id="genderM" value="Male" checked="" required /> Female:
-                                    <input type="radio" class="flat" name="gender" id="genderF" value="Female" />
+                                    @if (ViewBag.AccountId == 0)
+                                    {
+                                        <span ng-hide="savingRequest">
+                                            <input type="radio" class="flat" name="gender" id="genderM" ng-model="Student.Gender" ng-value="Male" /> Female:
+                                            <input type="radio" class="flat" name="gender" id="genderF" ng-model="Student.Gender" ng-value="Female"  />
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span ng-hide="savingRequest">
+                                            <input type="radio" class="flat" name="gender" id="genderM" ng-model="Student.Gender" ng-value="Male" style="cursor: not-allowed; pointer-events: none;"/> Female:
+                                            <input type="radio" class="flat" name="gender" id="genderF" ng-model="Student.Gender" ng-value="Female"  style="cursor: not-allowed; pointer-events: none;"/>
+                                        </span>
+                                    }
+                                    
                                 </p>
                             </div>
 
                             <div class="form-group">
                                 <label for="dob">Date Of Birth</label>
-                                <input type="text" id="DateOfBirth" ng-model="Student.DateOfBirth"  class="form-control" name="DateOfBirth" data-parsley-trigger="change" placeholder="Enter DateOfBirth" required />
+                                @if (ViewBag.AccountId == 0)
+                                {
+                                    <input type="text" ng-hide="savingRequest" id="DateOfBirth"  ng-model="Student.DateOfBirth" class="form-control" name="DateOfBirth" data-parsley-trigger="change" placeholder="Enter DateOfBirth" required />
+                                }
+                                else
+                                {
+                                    <input type="text" ng-hide="savingRequest" id="DateOfBirth" readonly ng-model="Student.DateOfBirth" class="form-control" name="DateOfBirth" data-parsley-trigger="change" placeholder="Enter DateOfBirth" required />
+                                }
+                                
                                 <p ng-show="StudentRegistration.DateOfBirth.$invalid && (StudentRegistration.DateOfBirth.$dirty || submitted ||StudentRegistration.DateOfBirth.$touched )" class="text-danger">DateOfBirth is required.</p>
                             </div>
 
@@ -92,78 +133,158 @@
 
                             <div class="form-group">
                                 <label for="Version">Select Version</label>
-                                <select id="Version" name="Version" ng-change="ChangeExpiredDate()" class="input-sm form-control" ng-model="Student.VersionType" ng-options="option.Name as option.Name for option in VersionType" ng-change="" ng-required="true">
-                                    <option value="">-- Select Version --</option>
-                                </select>
+                                @if (ViewBag.AccountId == 0)
+                                {
+                                    <select id="Version" ng-hide="savingRequest" name="Version" ng-change="ChangeExpiredDate()" class="input-sm form-control"  ng-model="Student.VersionType" ng-options="option.Name as option.Name for option in VersionType" ng-change="" ng-required="true">
+                                        <option value="">-- Select Version --</option>
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select id="Version" ng-hide="savingRequest" name="Version" ng-change="ChangeExpiredDate()" class="disabledInput input-sm form-control" readonly ng-model="Student.VersionType" ng-options="option.Name as option.Name for option in VersionType" ng-change="" ng-required="true">
+                                        <option value="">-- Select Version --</option>
+                                    </select>
+                                    
+                                }
                                 <p ng-show="StudentRegistration.Version.$invalid && (StudentRegistration.Version.$dirty || submitted ||StudentRegistration.Version.$touched )" class="text-danger">Version is required.</p>
                             </div>
 
                             <div class="form-group" ng-if="Student.VersionType=='@Praescio.Domain.AppCode.VersionType.Paid'">
                                 <label for="Package">Select Package</label>
-                                
-                                <select id="Package" name="Package" class="form-control " ng-model="Student.PackageId" ng-options="option.id as option.text for option in PackageList" ng-change="PackageChange();">
-                                    <option value="">Select Package</option>
-                                </select>
-
-
+                                @if (ViewBag.AccountId == 0)
+                                {
+                                    <select id="Package" ng-hide="savingRequest" name="Package" class="form-control " ng-model="Student.PackageId" ng-options="option.id as option.text for option in PackageList" ng-change="PackageChange();">
+                                        <option value="">Select Package</option>
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select id="Package" ng-hide="savingRequest" name="Package" class="form-control disabledInput" readonly ng-model="Student.PackageId" ng-options="option.id as option.text for option in PackageList" ng-change="PackageChange();">
+                                        <option value="">Select Package</option>
+                                    </select>                                    
+                                }
                                 <p ng-show="StudentRegistration.Package.$invalid && (StudentRegistration.Package.$dirty || submitted ||StudentRegistration.Package.$touched )" class="text-danger">Package is required.</p>
                             </div>
 
                             <div class="form-group" ng-if="Student.VersionType=='@Praescio.Domain.AppCode.VersionType.Paid'">
                                 <label for="AmountPaid">Amount Paid</label>
-                                <input type="text" id="AmountPaid" name="AmountPaid" ng-model="Student.AmountPaid" class="form-control" data-space="false">
+                                @if (ViewBag.AccountId == 0)
+                                {
+                                    <input type="text" ng-hide="savingRequest" id="AmountPaid" name="AmountPaid"  ng-model="Student.AmountPaid" class="form-control" data-space="false">                                   
+                                }
+                                else
+                                {
+                                    <input type="text" ng-hide="savingRequest" id="AmountPaid" name="AmountPaid" readonly ng-model="Student.AmountPaid" class="form-control" data-space="false">                                   
+                                }
+                                
                                 <p ng-show="StudentRegistration.AmountPaid.$invalid && (StudentRegistration.AmountPaid.$dirty || submitted ||StudentRegistration.AmountPaid.$touched )" class="text-danger">Amount Paid is required.</p>
                             </div>
 
                             <div class="form-group">
                                 <label for="heard">Select Board</label>
-                                <select id="Board" name="Board" class="input-sm form-control" ng-change="ChangeBoard(Student.BoardId)" ng-model="Student.BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-required="true">
-                                    <option value="">-- Select Board --</option>
-                                </select>
+                                 @if (ViewBag.AccountId == 0)
+                                {
+                                    <select id="Board" ng-hide="savingRequest" name="Board" class="input-sm form-control" ng-change="ChangeBoard(Student.BoardId)" ng-model="Student.BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-required="true">
+                                        <option value="">-- Select Board --</option>
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select id="Board" ng-hide="savingRequest" name="Board" class="input-sm form-control disabledInput" ng-change="ChangeBoard(Student.BoardId)" readonly ng-model="Student.BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-required="true">
+                                        <option value="">-- Select Board --</option>
+                                    </select>
+                                }
                                 <p ng-show="StudentRegistration.Board.$invalid && (StudentRegistration.Board.$dirty || submitted ||StudentRegistration.Board.$touched )" class="text-danger">Board is required.</p>
                             </div>
 
                             <div class="form-group">
                                 <label for="SubjectName">Select Medium</label>
-                                <select id="Medium" name="Medium" class="input-sm form-control" ng-disabled="Student.BoardId>1" ng-model="Student.MediumId" ng-options="option.Id as option.MediumName for option in MediumList" ng-required="true">
-                                    <option value="">-- Select Medium --</option>
-                                </select>
+                                @if (ViewBag.AccountId == 0)
+                                {
+                                    <select id="Medium" ng-hide="savingRequest" name="Medium" class="input-sm form-control" ng-disabled="Student.BoardId>1"  ng-model="Student.MediumId" ng-options="option.Id as option.MediumName for option in MediumList" ng-required="true">
+                                        <option value="">-- Select Medium --</option>
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select id="Medium" ng-hide="savingRequest" name="Medium" class="input-sm form-control disabledInput" ng-disabled="Student.BoardId>1" readonly ng-model="Student.MediumId" ng-options="option.Id as option.MediumName for option in MediumList" ng-required="true">
+                                        <option value="">-- Select Medium --</option>
+                                    </select>
+                                }
+
                             </div>
 
                             <div class="form-group">
                                 <label for="Standard">Select Standard</label>
-                                <select id="Standard" name="Standard" class="input-sm form-control" ng-model="Student.Standard" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="ChangeStandard(Student.Standard)" ng-required="true">
-                                    <option value="">-- Select Standard --</option>
-                                </select>
+                                @if (ViewBag.AccountId == 0)
+                                {
+                                    <select id="Standard" ng-hide="savingRequest" name="Standard" class="input-sm form-control" ng-model="Student.Standard" ng-options="option.Id as option.StandardName for option in StandardList"  ng-required="true">
+                                        <option value="">-- Select Standard --</option>
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select id="Standard" ng-hide="savingRequest" name="Standard" class="input-sm form-control disabledInput" readonly ng-model="Student.Standard" ng-options="option.Id as option.StandardName for option in StandardList" ng-required="true">
+                                        <option value="">-- Select Standard --</option>
+                                    </select>
+                                }
                                 <p ng-show="StudentRegistration.Standard.$invalid && (StudentRegistration.Standard.$dirty || submitted ||StudentRegistration.Standard.$touched )" class="text-danger">Standard is required.</p>
                             </div>
 
-                         
+                            <!--
 
-                            <div class="form-group">
-                                <label for="SubjectName">Select Subject</label>
-                                <select class="input-sm form-control select2" multiple="" id="Subject" name="Subject"
-                                        data-placeholder="Select Subject" ng-required="true" ng-model="Student.Subject">
-                                    <option value=""></option>
-                                    <option ng-repeat="option in SubjectList" value="{{option.Id}}">{{option.SubjectName}}</option>
-                                </select>
-                            </div>
+
+    <div class="form-group">
+        <label for="SubjectName">Select Subject</label>
+        <select class="input-sm form-control select2" multiple="" id="Subject" name="Subject"
+                data-placeholder="Select Subject" ng-required="true" ng-model="Student.Subject">
+            <option value=""></option>
+            <option ng-repeat="option in SubjectList" value="{{option.Id}}">{{option.SubjectName}}</option>
+        </select>
+    </div>
+
+
+     -->
 
 
 
                             <div class="form-group">
                                 <label for="schoolname">Mother's Name </label>
-                                <input type="text" id="MotherName" class="form-control" name="MotherName" ng-model="Student.MotherName" placeholder="Enter Mother's First Name" required />
+                                @if (ViewBag.AccountId == 0)
+                                {
+                                    <input type="text" ng-hide="savingRequest" id="MotherName" class="form-control" name="MotherName"  ng-model="Student.MotherName" placeholder="Enter Mother's First Name" required />
+                                }
+                                else
+                                {
+                                    <input type="text" ng-hide="savingRequest" id="MotherName" class="form-control" name="MotherName" readonly ng-model="Student.MotherName" placeholder="Enter Mother's First Name" required />
+                                }
+                                
                                 <p ng-show="StudentRegistration.MotherName.$invalid && (StudentRegistration.MotherName.$dirty || submitted ||StudentRegistration.MotherName.$touched )" class="text-danger">Mother Name is required.</p>
                             </div>
                             <div class="form-group">
                                 <label for="schoolname">Father's Name</label>
-                                <input type="text" id="FatherName" class="form-control" name="FatherName" ng-model="Student.FatherName" placeholder="Enter Father's First Name" required />
+                                @if (ViewBag.AccountId == 0)
+                                {
+                                    <input type="text" ng-hide="savingRequest" id="FatherName" class="form-control" name="FatherName"  ng-model="Student.FatherName" placeholder="Enter Father's First Name" required />
+                                }
+                                else
+                                {
+                                    <input type="text" ng-hide="savingRequest" id="FatherName" class="form-control" name="FatherName" readonly ng-model="Student.FatherName" placeholder="Enter Father's First Name" required />
+                                }
+                                
                                 <p ng-show="StudentRegistration.FatherName.$invalid && (StudentRegistration.FatherName.$dirty || submitted ||StudentRegistration.FatherName.$touched )" class="text-danger">Father Name is required.</p>
                             </div>
                             <div class="form-group">
                                 <label for="email" class="required">Parent Email Id</label>
-                                <input type="email" id="ParentEmail" class="form-control validateEmail" name="ParentEmail" ng-model="Student.ParentEmail" data-parsley-trigger="change" placeholder="Enter Parent Email" required />
+                                @if (ViewBag.AccountId == 0)
+                                {
+                                    <input type="email" ng-hide="savingRequest" id="ParentEmail" class="form-control validateEmail" name="ParentEmail"  ng-model="Student.ParentEmail" data-parsley-trigger="change" placeholder="Enter Parent Email" required />
+                                }
+                                else
+                                {
+                                    <input type="email" ng-hide="savingRequest" id="ParentEmail" class="form-control validateEmail" name="ParentEmail" readonly ng-model="Student.ParentEmail" data-parsley-trigger="change" placeholder="Enter Parent Email" required />
+                                }
+                                
                                 <p ng-show="StudentRegistration.ParentEmail.$invalid && (StudentRegistration.ParentEmail.$dirty || submitted ||StudentRegistration.ParentEmail.$touched )" class="text-danger">Parent Email is required.</p>
 
 
@@ -177,7 +298,16 @@
                             <div class="form-group">
 
                                 <label for="Version">Select Activate Date</label>
-                                <input type="text" id="ActivateDate" name="ActivateDate" ng-model="Student.ActivateOn" ng-change="ChangeExpiredDate()" class="form-control" data-space="false">
+                                @if (ViewBag.AccountId == 0)
+                                {
+                                    <input type="text"  ng-hide="savingRequest" id="ActivateDate" name="ActivateDate"  ng-model="Student.ActivateOn" ng-change="ChangeExpiredDate()" class="form-control" data-space="false">
+                                }
+                                else
+                                {
+                                    <input type="text" ng-hide="savingRequest" readonly id="ActivateDate" name="ActivateDate" ng-model="Student.ActivateOn" ng-change="ChangeExpiredDate()" class="form-control disabledInput" data-space="false">
+                                       
+                                }
+                                
                             </div>
 
                             <div class="form-group">
@@ -267,8 +397,9 @@
 
 
                     setTimeout(function () {
-                        $scope.Student.Subject = data.subject;
-                        $('#Subject').val(data.subject).trigger('chosen:updated');
+                        //$scope.Student.Subject = data.subject;
+                        //$('#Subject').val(data.subject).trigger('chosen:updated');
+                        $scope.Student.Subject = [];
                         $(".select2").select2();
                     }, 2000);
                 });
@@ -285,16 +416,16 @@
                 $scope.Student.AmountPaid = Parentobj[0].amount;
             }
 
-            $scope.ChangeStandard = function (id) {
+            @*$scope.ChangeStandard = function (id) {
                 NetworkService.get('PraescioCommon/GetSubject?standardid=' + id + '&mediumid=' + $scope.Student.MediumId).success(function (data) {
                     $(".select2").select2().val('').trigger("chosen:updated");
                     $scope.SubjectList = data;
                 });
-            }
+            }*@
 
             $scope.reset = function () {
                 $scope.Student = {};
-                $('#Subject').val('').trigger('chosen:updated');
+                //$('#Subject').val('').trigger('chosen:updated');
                 $(".select2").select2();
             };
 
@@ -319,6 +450,7 @@
             }
 
             $scope.RegisterStudent = function () {
+                $scope.Student.Subject = [];
 
                 $scope.Student.Gender = $("input[name='gender']:checked").val();
 
@@ -383,7 +515,10 @@
                     $scope.Student.IsIndividual = true;
                     $scope.Student.InstitutionAccountId = '@Praescio.Models.Common.ACCOUNT.InstitutionAccountId';
                     $scope.Student.AccountTypeId = '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)';
-                    var data = '{"account":' + JSON.stringify($scope.Student) + ',"studentsubject":' + JSON.stringify($scope.Student.Subject) + ',"studentstandard":' + JSON.stringify($scope.Student.Standard) + ',"accounttypeid":' + '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)' + ',"isTeacher":' + false + '}';
+                    var data = '{"account":' + JSON.stringify($scope.Student) + ',"studentsubject":'
+                        + JSON.stringify($scope.Student.Subject) + ',"studentstandard":' + JSON.stringify($scope.Student.Standard)
+                        + ',"accounttypeid":' + '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)'
+                        + ',"isTeacher":' + false + '}';
                     console.log(data);
                     NetworkService.insert('PraescioAdmin/UpdateStudent', data).success(function (data) {
                         $scope.savingRequest = false;
@@ -416,6 +551,10 @@
 
             $(".select2").select2();
 
+            var date = new Date();
+            date.setDate(date.getDate());
+            date.setFullYear(date.getFullYear() - 10);
+
             var pickerDefault = new Pikaday(
             {
                 field: document.getElementById('ActivateDate'),
@@ -426,16 +565,22 @@
             var datepicker = $.fn.datepicker.noConflict();
             $.fn.bootstrapDP = datepicker;
 
+            if (! $("#DateOfBirth").prop('readonly')) {
+                $("#DateOfBirth").bootstrapDP({
+                    endDate: date,
+                    format: "dd/mm/yyyy",
+                    autoclose: true,
+                    pickerPosition: "bottom-left"
+                }).change(function () {
 
-            $("#DateOfBirth").bootstrapDP({
-                endDate: new Date(),
-                //maxDate: 0,
-                format: "dd/mm/yyyy",
-                autoclose: true,
-                pickerPosition: "bottom-left"
-            }).change(function () {
-                console.log($(this).val());
-            });
+                    var age = CalcAge(ConvertDateFormat($(this).val()), '#DateOfBirth');
+                    if (age < 10) {
+                        $("#DateOfBirth").val('');
+                        $.alert('Age is less than 10.');
+                    }
+                });
+            }
+            
 
         });
     </script>

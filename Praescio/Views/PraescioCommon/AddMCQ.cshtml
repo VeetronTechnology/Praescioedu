@@ -34,7 +34,14 @@
             <div class="col-md-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Upload @assignmentTitle Question</h2>
+                        @if(assignmentTitle.ToLower() == "lesson")
+                        {
+                            <h2>Upload Multiple Choice Question</h2>
+                        }
+                        else
+                        {
+                            <h2>Upload @assignmentTitle Question</h2>
+                        }
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
@@ -42,6 +49,44 @@
                         <form id="SchoolForm" name="SchoolForm" data-parsley-validate>
 
                             <div class="form-group">
+                                <label for="heard" class="required">Select Board</label>
+                                <select id="Board" name="Board" ng-change="ChangeBoard(Assignment.BoardId)" class="input-sm form-control" ng-model="Assignment.BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-required="true">
+                                    <option value="">-- Select Board --</option>
+                                </select>
+                                <p ng-show="AssignmentForm.Board.$invalid && (AssignmentForm.Board.$dirty || submitted ||AssignmentForm.Board.$touched )" class="text-danger">Board is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <div>
+                                    <label for="heard">Select Medium</label>
+                                    <select id="Medium" name="Medium" class="input-sm form-control" ng-model="Assignment.MediumId" ng-disabled="Assignment.BoardId>1" ng-options="option.Id as option.Name for option in MediumList" ng-change="ChangeMedium(Assignment.MediumId)" ng-required="true">
+                                        <option value="">-- Select Medium --</option>
+                                    </select>
+                                </div>
+                                <p ng-show="AssignmentForm.Medium.$invalid && (AssignmentForm.Medium.$dirty || submitted ||AssignmentForm.Medium.$touched )" class="text-danger">Medium is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <div>
+                                    <label for="heard">Select Standard</label>
+                                    <select id="Standard" name="Standard" class="input-sm form-control" ng-model="Assignment.StandardId" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="ChangeStandard(Assignment.StandardId)" ng-required="true">
+                                        <option value="">-- Select Standard --</option>
+                                    </select>
+                                </div>
+                                <p ng-show="AssignmentForm.Standard.$invalid && (AssignmentForm.Standard.$dirty || submitted ||AssignmentForm.Standard.$touched )" class="text-danger">Standard is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <div>
+                                    <label for="heard">Select Subject</label>
+                                    <select id="Subject" name="Subject" class="input-sm form-control" ng-model="Assignment.SubjectId" ng-options="option.Id as option.SubjectName for option in SubjectList" ng-change="ChangeSubject(Assignment.SubjectId)" ng-required="true">
+                                        <option value="">-- Select Subject --</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
                                 <label for="Version">Select @assignmentTitle Type</label>
                                 <select id="Assignment" name="Assignment" class="input-sm form-control" ng-model="AssignmentTypeId" ng-options="option.AssignmentTypeId as option.AssignmentTypeName for option in AssignmentTypeList" ng-change="GetAssignmentByType(AssignmentTypeId)" ng-required="true">
                                     <option value="">-- Select @assignmentTitle Type--</option>
@@ -72,12 +117,13 @@
                                     <div class="panel-body">
                                         <div class="col-md-12 col-xs-12">
                                             <div class="col-md-4 col-xs-4">
-                                                <textarea id="QuestionText" ng-model="option.Question" required="required" class="form-control" name="QuestionText" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.." placeholder="Enter Address"
+                                                <textarea id="QuestionText" ng-model="option.Question" required="required" class="form-control" name="QuestionText" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.." placeholder="Enter Question"
                                                           data-parsley-validation-threshold="10"></textarea>
                                                 <br />
                                             </div>
                                             <div class="col-md-4 col-xs-4">
                                                 <input id="QuestionImg" ng-model="file" valid-file name="file" required type="file" ng-files="getTheFiles($files,option,'MCQQuestionImageSrc')" onselect="Call()" />
+                                                <span>(*Choose only PDF and Image)</span>
                                                 <br />
                                                 <img src="~/{{option.MCQQuestionImageSrc}}" ng-show="option.MCQQuestionImageSrc" style="width:8em; height:6em;" alt="Alternate Text" />
                                             </div>
@@ -98,6 +144,7 @@
                                             </div>
                                             <div class="col-md-3 col-xs-3">
                                                 <input id="Image1" ng-model="file" valid-file name="file" required type="file" ng-files="getTheFiles($files,option,'MCQImage1Src')" onselect="Call()" />
+                                                <span>(*Choose only PDF and Image)</span>
                                                 <br />
                                                 <img src="~/{{option.MCQImage1Src}}" ng-show="option.MCQImage1Src" style="width:8em; height:6em;" alt="Alternate Text" />
                                             </div>
@@ -107,6 +154,7 @@
                                             </div>
                                             <div class="col-md-3 col-xs-3">
                                                 <input id="SchoolAddressProof" ng-model="file" valid-file name="file" required type="file" ng-files="getTheFiles($files,option,'MCQImage2Src')" onselect="Call()" />
+                                                <span>(*Choose only PDF and Image)</span>
                                                 <br />
                                                 <img src="~/{{option.MCQImage2Src}}" ng-show="option.MCQImage2Src" style="width:8em; height:6em;" alt="Alternate Text" />
                                             </div>
@@ -119,6 +167,7 @@
                                             </div>
                                             <div class="col-md-3 col-xs-3">
                                                 <input id="Image1" ng-model="file" valid-file name="file" required type="file" ng-files="getTheFiles($files,option,'MCQImage3Src')" onselect="Call()" />
+                                                <span>(*Choose only PDF and Image)</span>
                                                 <br />
                                                 <img src="~/{{option.MCQImage3Src}}" ng-show="option.MCQImage3Src" style="width:8em; height:6em;" alt="Alternate Text" />
                                             </div>
@@ -128,6 +177,7 @@
                                             </div>
                                             <div class="col-md-3 col-xs-3">
                                                 <input id="SchoolAddressProof" ng-model="file" valid-file name="file" required type="file" ng-files="getTheFiles($files,option,'MCQImage4Src')" accept="application/pdf" onselect="Call()" />
+                                                <span>(*Choose only PDF and Image)</span>
                                                 <br />
                                                 <img src="~/{{option.MCQImage4Src}}" ng-show="option.MCQImage4Src" style="width:8em; height:6em;" alt="Alternate Text" />
                                             </div>
@@ -201,6 +251,10 @@
 
         myApp.controller('ADDMCQ', function ($scope, $rootScope, $filter, NetworkService) {
 
+             $scope.Assignment = {};
+            $scope.AssignmentListAll = [];
+            
+
             $scope.MCQAnswerList = [{ "id": 'A', "text": 'A' }, { "id": 'B', "text": 'B' }, { "id": 'C', "text": 'C' }, { "id": 'D', "text": 'D' }];
 
            
@@ -213,6 +267,63 @@
                 NetworkService.get('PraescioCommon/GetAssignmentList?AssignmentType=' + AssignmentTypeId).success(function (data) {
                     $scope.AssignmentList = data.dataContent;
                     console.log(data);
+                });
+            }
+
+            $scope.selectedFile = null;
+            $scope.msg = "";
+
+            $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
+            { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }]
+
+            NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
+                $scope.BoardList = data;
+            });
+
+
+            NetworkService.get('PraescioAdmin/GetMedium').success(function (data) {
+                $scope.MediumList = data;
+
+            });
+            $scope.ChangeBoard = function (boardname) {
+                if (boardname > 1) {
+                    $scope.Assignment.MediumId = 1;
+                }
+            }
+
+            $scope.ChangeStandard = function (id) {
+                NetworkService.get('PraescioCommon/GetSubject?standardid=' + id + '&mediumid=' + $scope.Assignment.MediumId).success(function (data) {
+                    $scope.SubjectList = data;
+                });
+            }
+            NetworkService.get('PraescioCommon/GetAssignmentTypeList').success(function (data) {
+                $scope.AssignmentTypeList = data;
+            });
+
+            $scope.GetAssignmentByType = function (AssignmentTypeId) {
+                NetworkService.get('PraescioCommon/GetAssignmentList?AssignmentType=' + AssignmentTypeId).success(function (data) {
+                    $scope.AssignmentListAll = data.dataContent;
+                    console.log(data.dataContent);
+                    $scope.ChangeAssignmentList();
+                });
+            }
+
+            $scope.ChangeSubject = function (id) {
+                $scope.ChangeAssignmentList();
+            }
+
+            $scope.ChangeAssignmentList = function () {
+                console.log('$scope.Assignment', $scope.Assignment, $scope.Assignment.SubjectId)
+                console.log('$scope.AssignmentList', $scope.AssignmentListAll)
+                $scope.AssignmentList = $scope.AssignmentListAll.filter(m => m.SubjectId == $scope.Assignment.SubjectId);
+                console.log('$scope.AssignmentList', $scope.AssignmentList)
+            }
+
+            $scope.ChangeAssignment = function (id) {
+                NetworkService.get('PraescioCommon/GetAssignmentDetail?assignmentid=' + id).success(function (data) {
+                    $scope.Assignment = data.Assignment;
+                    $scope.ChangeStandard(data.Assignment.StandardId);
+
                 });
             }
 

@@ -1,7 +1,5 @@
 ﻿@{
     ViewBag.Title = "Student List";
-    var institutionid = ViewBag.InstitutionId;
-    var isIndividual = institutionid > 1 ? false :true;
 }
 
 <style>
@@ -45,7 +43,7 @@
                 <div class="x_panel">
                     <div class="x_title">
                         <h2>List of Student</h2>
-
+                        <h5 class="pull-right"> <b>Instutiation Name: &nbsp;&nbsp;&nbsp; {{InstitutionDetail.Institution.InstitutionName}}</b></h5>
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
@@ -63,7 +61,10 @@
 
                         </div>
                         <div class="col-sm-6">
-                            <label style="float:right;padding-right:53px;white-space:nowrap;">Search:&nbsp;&nbsp;&nbsp;&nbsp;<input type="search" style="display:inline !important" class="form-control input-sm" placeholder=""></label>
+                            <label style="float:right;padding-right:53px;white-space:nowrap;">Search:&nbsp;&nbsp;&nbsp;&nbsp;
+                            @*<input type="search" style="display:inline !important" class="form-control input-sm" placeholder="">*@
+                                <input type="text" class="form-control" ng-model="SearchText" ng-keyup="SearchText.length>3 ||SearchText.length==0?LoadContent():'';" style="width:150px;float:right;" placeholder="Search" name="Search" value="" />
+                            </label>
                         </div>
 
                         <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
@@ -105,18 +106,20 @@
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Phone No.</th>
+                                    <th>Student Activation Start</th>
                                     <th>Registration Date</th>
-                                    <th>Expiry Date</th>
+                                    <!--<th>Expiry Date</th>-->
                                     <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr dir-paginate="student in StudentList |itemsPerPage:10|filter:searchText" total-items="totalcount">
-                                    <td><a href="@Url.Action("StudentProfile", "InstitutionStudent")?StudentAccountId={{student.AccountId}}&isIndividual=@Convert.ToString(ViewBag.IsIndividual)">{{student.FirstName}}</a></td>
+                                    <td><a href="@Url.Action("StudentProfile", "InstitutionStudent")?StudentAccountId={{student.AccountId}}&isIndividual=@Convert.ToString(ViewBag.IsIndividual)">{{((student.FirstName ? student.FirstName : '') + ' ' + (student.FatherName ? student.FatherName : '') + ' ' + (student.LastName ? student.LastName : '')).replace('  ', ' ')}}</a></td>
                                     <td>{{student.Email}}</td>
-                                    <td>{{student.MobileNo}}</td>
+                                    <td>{{student.ParentNo}}</td>
+                                    <td>{{student.ActivateOn| date:'dd MMM yyyy'}}</td>
                                     <td>{{student.CreatedOn| date:'dd MMM yyyy'}}</td>
-                                    <td>{{student.ExpiredOn| date:'dd MMM yyyy'}}</td>
+                                    <!-- <td>{{student.ExpiredOn| date:'dd MMM yyyy'}}</td> -->
                                     <td>{{student.IsActive==true?'Active':'DeActive'}}</td>
                                 </tr>
                             </tbody>
@@ -139,14 +142,19 @@
 
         myApp.controller('StudentListCtrl', function ($scope, $rootScope, $filter, NetworkService) {
             $scope.itemPerPage = 10;
+            $scope.SearchText = "";
 
             $scope.Teacher = {};
-            $scope.TitleName = 'List of Student'
+            $scope.TitleName = 'List of Student';
 
-            NetworkService.get('PraescioCommon/GetStudentList?isIndividual=@ViewBag.IsIndividual&version=@ViewBag.Version&institutionId=@ViewBag.InstitutionId').success(function (data) {
-                $scope.StudentList = data.AccountDetail;
-                $scope.totalcount = data.TotalRecord;
-            });
+            $scope.LoadContent = function () {
+                var url = '&pageNo=' + 1 + '&itemPerPage=' + $scope.itemPerPage;
+                NetworkService.get('PraescioCommon/GetStudentList?isIndividual=@ViewBag.IsIndividual&version=@ViewBag.Version&institutionId=@ViewBag.InstitutionId&searchText=' + $scope.SearchText + url).success(function (data) {
+                    $scope.StudentList = data.AccountDetail;
+                    $scope.totalcount = data.TotalRecord;
+                });
+            }
+            $scope.LoadContent();
 
             $scope.onPageChange = function (pageno) {
                 var url = '&pageNo=' + pageno + '&itemPerPage=' + $scope.itemPerPage;
@@ -156,7 +164,9 @@
                     $scope.totalcount = data.TotalRecord;
                 });
             }
-
+            NetworkService.get('PraescioAdmin/GetSchoolDetail?institutionId=@ViewBag.InstitutionId').success(function (data) {
+                $scope.InstitutionDetail = data;
+            });
 
             //CREATE BULK TEACHER USING EXCEL
             $scope.selectedFile = null;
@@ -195,9 +205,9 @@
                             return sheet1;
                         });
 
-                        var data = '{"Account":' + JSON.stringify(sheet1) + ',"institutionId":@institutionid' + '}';
+                        var data = '{"Account":' + JSON.stringify(sheet1) + ',"institutionId":@ViewBag.InstitutionId' + '}';
 
-                        NetworkService.insert('PraescioCommon/UploadBulkStudent?isIndividual=@isIndividual', data).success(function (data) {
+                        NetworkService.insert('PraescioCommon/UploadBulkStudent?isIndividual=@ViewBag.IsIndividual', data).success(function (data) {
                             $scope.savinguploaduser = false;
                             $('.modal').modal('toggle');
                             swal({

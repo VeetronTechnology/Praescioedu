@@ -180,5 +180,61 @@ namespace Praescio.API.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
             }
         }
+        
+        [Route("ChangePassword")]
+        [HttpPost]
+        public HttpResponseMessage ChangePassword(ChangePasswordViewModel model)
+        {
+            AccountViewModel response = new AccountViewModel();
+
+            try
+            {
+                if (model.AccountId > 0)
+                {
+                    PraescioContext db = new PraescioContext();
+
+                    var account = db.Account.Where(x => x.UserName == model.Username && x.Password == model.PasswordCurrent && x.AccountId == model.AccountId).FirstOrDefault();
+
+                    if (account != null && (account.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent || account.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher) && account.ExpiredOn < DateTime.Now)
+                    {
+                        response.Account = null;
+                        response.hasError = true;
+                        response.errorMessage = "Your Account has been expired!!!";
+
+                        return Request.CreateResponse(HttpStatusCode.BadRequest, response);
+                    }
+                    else if (account != null)
+                    {
+                        account.Password = model.Password;
+                        db.Entry(account).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                        response.Account = account;
+                        response.hasError = false;
+
+                        return Request.CreateResponse(HttpStatusCode.OK, response);
+                    }
+                    else
+                    {
+                        response.Account = null;
+                        response.hasError = true;
+                        response.errorMessage = "No record found!!!";
+
+                        return Request.CreateResponse(HttpStatusCode.BadRequest, response);
+                    }
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "no record found");
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Account = null;
+                response.hasError = true;
+                response.errorMessage = ex.Message + "---" + ex.StackTrace;
+
+                return Request.CreateResponse(HttpStatusCode.OK, response);
+            }
+        }
     }
 }

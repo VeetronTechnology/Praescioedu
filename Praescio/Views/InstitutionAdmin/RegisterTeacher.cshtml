@@ -40,12 +40,12 @@
 
                             <div class="form-group">
                                 <label for="firstname">First Name</label>
-                                <input type="text" id="firstname" ng-model="Teacher.FirstName" class="form-control" name="firstname" placeholder="Enter First Name" required />
+                                <input disabled="disabled" type="text" id="firstname" ng-model="Teacher.FirstName" class="form-control" name="firstname" placeholder="Enter First Name" required />
                                 <p ng-show="TeacherRegistration.firstname.$invalid && (TeacherRegistration.firstname.$dirty || submitted ||TeacherRegistration.firstname.$touched )" class="text-danger">First Name is required.</p>
                             </div>
                             <div class="form-group">
                                 <label for="lastname">Last Name</label>
-                                <input type="text" id="lastname" ng-model="Teacher.LastName" class="form-control" name="lastname" data-parsley-trigger="change" placeholder=" Enter Last Name" required />
+                                <input type="text" disabled="disabled" id="lastname" ng-model="Teacher.LastName" class="form-control" name="lastname" data-parsley-trigger="change" placeholder=" Enter Last Name" required />
                                 <p ng-show="TeacherRegistration.lastname.$invalid && (TeacherRegistration.lastname.$dirty || submitted ||TeacherRegistration.lastname.$touched )" class="text-danger">Last Name is required.</p>
                             </div>
 
@@ -53,14 +53,14 @@
                                 <label>Gender</label>
                                 <p>
                                     Male:
-                                    <input type="radio" class="flat" name="gender" id="genderM" value="Male" checked="" required /> Female:
-                                    <input type="radio" class="flat" name="gender" id="genderF" value="Female" />
+                                    <input type="radio" disabled="disabled" class="flat" name="gender" id="genderM" ng-model="Teacher.Gender" ng-value="Male" checked="" required /> Female:
+                                    <input type="radio" disabled="disabled" class="flat" name="gender" id="genderF"  ng-model="Teacher.Gender" ng-value="Female" />
                                 </p>
                             </div>
 
                             <div class="form-group">
                                 <label for="dob">Date Of Birth</label>
-                                <input type="text" id="DateOfBirth" ng-model="Teacher.DateOfBirth" class="form-control" name="DateOfBirth" data-parsley-trigger="change" placeholder="Enter DateOfBirth" required />
+                                <input type="text" disabled="disabled" id="DateOfBirth" ng-model="Teacher.DateOfBirth" class="form-control" name="DateOfBirth" data-parsley-trigger="change" placeholder="Enter DateOfBirth" required />
                                 <p ng-show="TeacherRegistration.DateOfBirth.$invalid && (TeacherRegistration.DateOfBirth.$dirty || submitted ||TeacherRegistration.DateOfBirth.$touched )" class="text-danger">DateOfBirth is required.</p>
                             </div>
 

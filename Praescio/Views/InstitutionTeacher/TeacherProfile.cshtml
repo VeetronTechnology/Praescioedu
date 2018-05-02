@@ -43,18 +43,18 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr>
+                                            @*<tr>
                                                 <th>Student Register Permission.</th>
                                                 <td>{{Teacher.StudentRegisterAllowed==true?'Enable':'Disable'}}</td>
-                                            </tr>
+                                            </tr>*@
                                             <tr>
                                                 <th>Gender</th>
                                                 <td>{{Teacher.Gender}}</td>
                                             </tr>
-                                            <tr>
+                                            @*<tr>
                                                 <th>Version Type</th>
                                                 <td>{{Teacher.VersionType}}</td>
-                                            </tr>
+                                            </tr>*@
                                             <tr>
                                                 <th>Contact No.</th>
                                                 <td>{{Teacher.MobileNo}}</td>
@@ -68,21 +68,34 @@
                                                 <td>{{Teacher.Email}}</td>
                                             </tr>
                                             <tr>
+                                                <th>Package Name</th>
+                                                <td>{{Teacher.PackageId}}</td>
+                                            </tr>
+                                            <tr>
                                                 <th>Address</th>
                                                 <td>{{Teacher.Address}}</td>
                                             </tr>
                                             <tr>
-                                                <th>City</th>
-                                                <td>{{Teacher.City}}</td>
+                                                <th>Amount Paid</th>
+                                                <td>{{Teacher.AmountPaid}}</td>
                                             </tr>
-                                            <tr>
-                                                <th>State</th>
-                                                <td>{{Teacher.State.StateName}}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Pin Code</th>
-                                                <td>{{Teacher.PinCode}}</td>
-                                            </tr>
+                                            <!--
+
+            <tr>
+                <th>City</th>
+                <td>{{Teacher.City}}</td>
+            </tr>
+            <tr>
+                <th>State</th>
+                <td>{{Teacher.State.StateName}}</td>
+            </tr>
+            <tr>
+                <th>Pin Code</th>
+                <td>{{Teacher.PinCode}}</td>
+            </tr>
+
+            -->
+
 
                                             <tr ng-if="Teacher.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)">
                                                 <th>Start Date</th>
@@ -96,15 +109,15 @@
                                     </table>
                                     @if (@ViewBag.IsIndividual == false)
                                     {
-                                        <a ng-if="ViewBag.Isindividual==False" class="btn btn-success" href="@Url.Content("~/InstitutionAdmin/RegisterTeacher")?accountid={{Teacher.AccountId}}">Update</a>
+                                        @*<a ng-if="ViewBag.Isindividual==False" class="btn btn-success" href="@Url.Content("~/InstitutionAdmin/RegisterTeacher")?accountid={{Teacher.AccountId}}">Update</a>*@
                                     }
                                     else
                                     {
                                         <a ng-if="ViewBag.Isindividual==True" class="btn btn-success" href="@Url.Content("~/PraescioAdmin/RegisterIndividualTeacher")?accountid={{Teacher.AccountId}}">Update</a>
                                     }
 
-                                    <a href="#BlockModal" data-toggle="modal" class="btn btn-danger" ng-if="!IsBlocked">Block</a>
-                                    <a href="#BlockModal" data-toggle="modal" class="btn btn-danger" ng-if="IsBlocked">UnBlock</a>
+                                    @*<a href="#BlockModal" data-toggle="modal" class="btn btn-danger" ng-if="!IsBlocked">Block</a>
+                                    <a href="#BlockModal" data-toggle="modal" class="btn btn-danger" ng-if="IsBlocked">UnBlock</a>*@
                                 </div>
                             </div>
                         </div>
@@ -155,6 +168,13 @@
                     $scope.IsBlocked = !$scope.Teacher.IsActive;
                 });
             }
+
+            NetworkService.get('PraescioCommon/GetPackage?userPackageRole=@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)').success(function (data) {
+                $scope.PackageList = data;
+
+                console.log("package data==", data);
+            });
+
             $scope.LoadUser();
 
             $scope.ToggleBlockUser = function () {

@@ -25,10 +25,18 @@
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
-                    <div class="x_title">
-                        <h2>List of @ContentString</h2>
+                    <div class="row x_title">
+                        <div class="col-md-6">
+                            <h2>List of @ContentString</h2>
 
-                        <div class="clearfix"></div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label style="float:right;padding-right:53px;white-space:nowrap;">
+                                Search:
+                                <input  type="text" class="form-control" ng-model="SearchText" ng-keyup="SearchText.length>3 ||SearchText.length==0?LoadContent():'';" style="display:inline; width:150px;float:right;" placeholder="Search" name="Search" value="" />
+                            </label>
+                        </div>
                     </div>
                     <div class="x_content">
                         <a ng-click="ShowHide()" href="#" class="btn btn-primary uploadbtn">Edit</a>
@@ -64,20 +72,60 @@
                                                  boundary-links="true">
                         </dir-pagination-controls>
 
-                        <div class="form-group" ng-show="IsVisible">
-                            <label for="Version">Select Type</label>
-                            <select id="Assignment" name="Assignment" class="input-sm form-control" ng-model="AssignmentTypeId" ng-options="option.AssignmentTypeId as option.AssignmentTypeName for option in AssignmentTypeList" ng-change="GetAssignmentByType(AssignmentTypeId)" ng-required="true">
-                                <option value="">-- Select Type--</option>
-                            </select>
-                        </div>
+                        <div ng-show="IsVisible">
 
-                        <div class="form-group" ng-show="IsVisible">
-                            <label for="Version">Select Assignment</label>
-                            <select id="Assignment" name="Assignment" class="input-sm form-control" ng-model="AssignmentId" ng-options="option.AssignmentId as option.Title for option in AssignmentList" ng-change="" ng-required="true">
-                                <option value="">-- Select Assignment --</option>
-                            </select>
-                        </div>
+                            <div class="form-group" >
+                                <label for="heard" class="required">Select Board</label>
+                                <select id="Board" name="Board" ng-change="ChangeBoard(Assignment.BoardId)" class="input-sm form-control" ng-model="Assignment.BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-required="true">
+                                    <option value="">-- Select Board --</option>
+                                </select>
+                                <p ng-show="AssignmentForm.Board.$invalid && (AssignmentForm.Board.$dirty || submitted ||AssignmentForm.Board.$touched )" class="text-danger">Board is required.</p>
+                            </div>
 
+                            <div class="form-group" >
+                                <div>
+                                    <label for="heard">Select Medium</label>
+                                    <select id="Medium" name="Medium" class="input-sm form-control" ng-model="Assignment.MediumId" ng-disabled="Assignment.BoardId>1" ng-options="option.Id as option.Name for option in MediumList" ng-change="ChangeMedium(Assignment.MediumId)" ng-required="true">
+                                        <option value="">-- Select Medium --</option>
+                                    </select>
+                                </div>
+                                <p ng-show="AssignmentForm.Medium.$invalid && (AssignmentForm.Medium.$dirty || submitted ||AssignmentForm.Medium.$touched )" class="text-danger">Medium is required.</p>
+                            </div>
+
+                            <div class="form-group" >
+                                <div>
+                                    <label for="heard">Select Standard</label>
+                                    <select id="Standard" name="Standard" class="input-sm form-control" ng-model="Assignment.StandardId" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="ChangeStandard(Assignment.StandardId)" ng-required="true">
+                                        <option value="">-- Select Standard --</option>
+                                    </select>
+                                </div>
+                                <p ng-show="AssignmentForm.Standard.$invalid && (AssignmentForm.Standard.$dirty || submitted ||AssignmentForm.Standard.$touched )" class="text-danger">Standard is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <div>
+                                    <label for="heard">Select Subject</label>
+                                    <select id="Subject" name="Subject" class="input-sm form-control" ng-model="Assignment.SubjectId" ng-options="option.Id as option.SubjectName for option in SubjectList" ng-change="ChangeSubject(Assignment.SubjectId)" ng-required="true">
+                                        <option value="">-- Select Subject --</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group" >
+                                <label for="Version">Select Type</label>
+                                <select id="Assignment" name="Assignment" class="input-sm form-control" ng-model="AssignmentTypeId" ng-options="option.AssignmentTypeId as option.AssignmentTypeName for option in AssignmentTypeList" ng-change="GetAssignmentByType(AssignmentTypeId)" ng-required="true">
+                                    <option value="">-- Select Type--</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group" >
+                                <label for="Version">Select Assignment</label>
+                                <select id="Assignment" name="Assignment" class="input-sm form-control" ng-model="AssignmentId" ng-options="option.AssignmentId as option.Title for option in AssignmentList" ng-change="" ng-required="true">
+                                    <option value="">-- Select Assignment --</option>
+                                </select>
+                            </div>
+                        </div>
                         <span class="btn btn-primary" ng-show="IsVisible" ng-click="SaveQuestion()" ng-disabled="savingRequest">
                             Save
                             <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
@@ -96,19 +144,52 @@
 
         myApp.controller('ViewContentCtrl', function ($scope, $rootScope, $filter, NetworkService) {
             $scope.totalcount = 0;
+            $scope.SearchText = "";
+
+            $scope.itemsPerPage = 0;
+
+            $scope.Assignment = {};
+            $scope.AssignmentListAll = [];
 
             $scope.Teacher = {};
             $scope.TitleName = 'List of Content'
+
+             $scope.LoadContent = function () {
+                 NetworkService.get('PraescioCommon/GetQuestionContent?isIndividual=@ViewBag.IsIndividual&version=@ViewBag.Version&institutionId=@ViewBag.InstitutionId&searchText=' + $scope.SearchText).success(function (data) {
+                     $scope.ContentList = data;
+                    $scope.totalcount = data.TotalRecord;
+                });
+            };
 
             NetworkService.get('PraescioCommon/GetQuestionContent?CategoryTypeId=@ViewBag.CategoryTypeId').success(function (data) {
                 $scope.ContentList = data.contentData;
                 $scope.totalcount = data.totalRecord;
             });
 
-            NetworkService.get('PraescioCommon/GetAssignmentList').success(function (data) {
-                $scope.AssignmentList = data.dataContent;
-                console.log(data);
+             $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
+            { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }]
+
+            NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
+                $scope.BoardList = data;
             });
+
+
+            NetworkService.get('PraescioAdmin/GetMedium').success(function (data) {
+                $scope.MediumList = data;
+
+            });
+            $scope.ChangeBoard = function (boardname) {
+                if (boardname > 1) {
+                    $scope.Assignment.MediumId = 1;
+                }
+            }
+
+            $scope.ChangeStandard = function (id) {
+                NetworkService.get('PraescioCommon/GetSubject?standardid=' + id + '&mediumid=' + $scope.Assignment.MediumId).success(function (data) {
+                    $scope.SubjectList = data;
+                    console.log("subject ==", data);
+                });
+            }
 
             NetworkService.get('PraescioCommon/GetAssignmentTypeList').success(function (data) {
                 $scope.AssignmentTypeList = data;
@@ -116,10 +197,32 @@
 
             $scope.GetAssignmentByType = function (AssignmentTypeId) {
                 NetworkService.get('PraescioCommon/GetAssignmentList?AssignmentType=' + AssignmentTypeId).success(function (data) {
-                    $scope.AssignmentList = data.dataContent;
-                    console.log(data);
+                    $scope.AssignmentListAll = data.dataContent;
+                    console.log(data.dataContent);
+                    $scope.ChangeAssignmentList();
                 });
             }
+
+            $scope.ChangeSubject = function (id) {
+                $scope.ChangeAssignmentList();
+            }
+
+            $scope.ChangeAssignmentList = function () {
+                console.log('$scope.Assignment', $scope.Assignment, $scope.Assignment.SubjectId)
+                console.log('$scope.AssignmentList', $scope.AssignmentListAll)
+                $scope.AssignmentList = $scope.AssignmentListAll.filter(m => m.SubjectId == $scope.Assignment.SubjectId);
+                console.log('$scope.AssignmentList', $scope.AssignmentList)
+            }
+
+            $scope.ChangeAssignment = function (id) {
+                NetworkService.get('PraescioCommon/GetAssignmentDetail?assignmentid=' + id).success(function (data) {
+                    $scope.Assignment = data.Assignment;
+                    $scope.AssignmentId(data.Assignment.StandardId);
+
+                });
+            }
+           
+
 
             $scope.ShowHide = function () {
                 $scope.IsVisible = $scope.IsVisible ? false : true;
@@ -155,7 +258,7 @@
             }
 
             $scope.onPageChange = function (pageno) {
-                var url = '&pageNo=' + pageno + '&itemPerPage=' + $scope.itemsPerPage;
+                var url = '&pageNo=' + pageno + '&itemsPerPage=' + $scope.itemsPerPage;
 
                 NetworkService.get('PraescioCommon/GetQuestionContent?CategoryTypeId=@ViewBag.CategoryTypeId' + url).success(function (data) {
 

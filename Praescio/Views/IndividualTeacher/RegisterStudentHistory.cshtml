@@ -28,6 +28,20 @@
                         </div>
                         <div class="body">
                             <form name="SearchStudentForm">
+                                <div class="form-group">
+                                    <label for="heard">Select Board</label>
+                                    <select id="Board" name="Board" class="input-sm form-control" ng-model="BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-change="ChangeBoard(BoardId)" ng-required="true">
+                                        <option value="">-- Select Board --</option>
+                                    </select>
+                                    <p ng-show="SearchStudentForm.Board.$invalid && (SearchStudentForm.Board.$dirty || submitted ||SearchStudentForm.Board.$touched )" class="text-danger">Board is required.</p>
+                                </div>
+                                <div class="form-group">
+                                    <label for="SubjectName">Select Medium</label>
+                                    <select id="Medium" name="Medium" class="input-sm form-control" ng-model="MediumId" ng-disabled="BoardId>1" ng-options="option.Id as option.MediumName for option in MediumList" ng-change="ChangeMedium(MediumId)" ng-required="true">
+                                        <option value="">-- Select Medium --</option>
+                                    </select>
+                                    <p ng-show="SearchStudentForm.Medium.$invalid && (SearchStudentForm.Medium.$dirty || submitted ||SearchStudentForm.Medium.$touched )" class="text-danger">Medium is required.</p>
+                                </div>
 
                                 <div class="form-group">
                                     <label for="heard">Select Standard</label>
@@ -38,13 +52,6 @@
                                     </select>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="SubjectName">Select Medium</label>
-                                    <select id="Medium" name="Medium" class="input-sm form-control" ng-model="MediumId" ng-options="option.Id as option.MediumName for option in MediumList" ng-change="" ng-required="true">
-                                        <option value="">-- Select Medium --</option>
-                                    </select>
-                                    <p ng-show="SearchStudentForm.Medium.$invalid && (SearchStudentForm.Medium.$dirty || submitted ||SearchStudentForm.Medium.$touched )" class="text-danger">Medium is required.</p>
-                                </div>
 
                                 <br>
                                 <a class="btn btn-info waves-effect" id="flip" ng-click="SearchStudent()">Submit</a>
@@ -123,6 +130,8 @@
 
 
         myApp.controller('SearchStudentCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+            $scope.Student = {};
+            $scope.StudentListAll = [];
             $scope.itemPerPage = 10;
             $scope.TextSearch = "";
 
@@ -131,7 +140,14 @@
 
             $scope.MediumList = [{ Id: 1, MediumName: 'English' }, { Id: 2, MediumName: 'Marathi' }];
 
-
+            NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
+                $scope.BoardList = data;
+            });
+            $scope.ChangeBoard = function (boardname) {
+                if (boardname > 1) {
+                    $scope.MediumId = 1;
+                }
+            }
 
             $scope.SearchStudent = function () {
                 console.log($scope.TextSearch);

@@ -570,6 +570,25 @@ namespace Praescio.API.Controllers
 
 
         [HttpGet]
+        [Route("GetCityList")]
+        public HttpResponseMessage GetCityList(int StateId)
+        {
+
+            List<Mst_City> stateList = new List<Mst_City>();
+            using (PraescioContext db = new PraescioContext())
+            {
+
+                stateList = (from s in db.City
+                             where s.state_id == StateId
+                             select s).ToList();
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, stateList);
+
+
+        }
+
+
+        [HttpGet]
         [Route("GetAssignmentTeacherList")]
         public HttpResponseMessage GetAssignmentTeacherList(int institutionId)
         {

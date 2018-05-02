@@ -69,7 +69,9 @@
                                 <textarea id="Description" required="required" ng-model="Assignment.Description" class="form-control" name="Description" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.." placeholder="Enter Description"
                                           data-parsley-validation-threshold="10"></textarea>
                             </div>
-
+                            @if (ViewBag.AssignmentType == 3)
+    {
+                        <div ng-hide="hideBlock">
                             <div class="form-group">
                                 <label for="heard" class="required">Select Board</label>
                                 <select id="Board" name="Board" ng-change="ChangeBoard(Assignment.BoardId)" class="input-sm form-control" ng-model="Assignment.BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-required="true">
@@ -87,6 +89,30 @@
                                 </div>
                                 <p ng-show="AssignmentForm.Medium.$invalid && (AssignmentForm.Medium.$dirty || submitted ||AssignmentForm.Medium.$touched )" class="text-danger">Medium is required.</p>
                             </div>
+                        </div>
+}
+else
+{
+                        <div ng-hide="showBlock">
+                            <div class="form-group">
+                                <label for="heard" class="required">Select Board</label>
+                                <select id="Board" name="Board" ng-change="ChangeBoard(Assignment.BoardId)" class="input-sm form-control" ng-model="Assignment.BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-required="true">
+                                    <option value="">-- Select Board --</option>
+                                </select>
+                                <p ng-show="AssignmentForm.Board.$invalid && (AssignmentForm.Board.$dirty || submitted ||AssignmentForm.Board.$touched )" class="text-danger">Board is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <div>
+                                    <label for="heard">Select Medium</label>
+                                    <select id="Medium" name="Medium" class="input-sm form-control" ng-model="Assignment.MediumId" ng-disabled="Assignment.BoardId>1" ng-options="option.Id as option.Name for option in MediumList" ng-change="" ng-required="true">
+                                        <option value="">-- Select Medium --</option>
+                                    </select>
+                                </div>
+                                <p ng-show="AssignmentForm.Medium.$invalid && (AssignmentForm.Medium.$dirty || submitted ||AssignmentForm.Medium.$touched )" class="text-danger">Medium is required.</p>
+                            </div>
+                        </div>
+}
 
                             <div class="form-group">
                                 <div>
@@ -201,6 +227,8 @@
 
         myApp.controller('AddAssignmentCtrl', function ($scope, $rootScope, $filter, NetworkService) {
             $scope.Assignment = {};
+            $scope.hideBlock = true;
+            $scope.showBlock = false;
 
             var formdata = new FormData();
             $scope.getTheFiles = function ($files) {

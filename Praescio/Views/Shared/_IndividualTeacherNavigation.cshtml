@@ -9,7 +9,7 @@
         <a href="@Url.Action("SchoolProfile", "InstitutionAdmin")"><i class="fa fa-building"></i>School Profile</a>
     </li>*@
     <li>
-        <a onclick="return IsStudentRegisterAllowed()" href="@Url.Action("AddStudent", "IndividualTeacher")"><i class="fa fa-graduation-cap"></i>Add Students</a>
+        <a onclick="return IsStudentRegisterAllowed()" href="@Url.Action("RegisterIndividualStudent", "PraescioAdmin")"><i class="fa fa-graduation-cap"></i>Add Students</a>
     </li>
 
     <li>
@@ -79,7 +79,7 @@
 <script>
     function IsStudentRegisterAllowed() {
         var isAllowed = '@Praescio.Models.Common.ACCOUNT.StudentRegisterAllowed' == 'True';
-        alert('@Praescio.Models.Common.ACCOUNT.StudentRegisterAllowed');
+       // alert('@Praescio.Models.Common.ACCOUNT.StudentRegisterAllowed');
         if (isAllowed) {
             return isAllowed
         }

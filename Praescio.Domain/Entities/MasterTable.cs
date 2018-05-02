@@ -282,6 +282,14 @@ namespace Praescio.Domain.Entities
         public DateTime? ModifiedOn { get; set; }
         public bool IsActive { get; set; }
     }
+    
+    public class Mst_City
+    {
+        [Key]
+        public int city_id { get; set; }
+        public string city_name { get; set; }
+        public int state_id { get; set; }
+    }
 
     public class Mst_CategoryType
     {

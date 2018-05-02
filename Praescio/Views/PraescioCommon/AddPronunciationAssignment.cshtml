@@ -23,6 +23,11 @@
                         </div>
                         <div class="body">
                             <form>
+                                <div class="form-group">
+                                    <label for="Title">Title</label>
+                                    <input type="text" id="Title" ng-model="Assignment.Title" class="form-control" name="Title" placeholder="Title" required />
+                                    <p ng-show="AssignmentForm.Title.$invalid && (AssignmentForm.Title.$dirty || submitted ||AssignmentForm.Title.$touched )" class="text-danger">Title is required.</p>
+                                </div>
                                 <label for="heard">Select Standard</label>
                                 <select id="heard" class="form-control" required>
                                     <option value="">Choose..</option>

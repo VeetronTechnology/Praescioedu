@@ -62,9 +62,10 @@ namespace Praescio.Controllers
 
         [Route("UploadAssignmentQuestion")]
         [Route("UploadPExtraQuestion")]
-        public ActionResult UploadAssignmentQuestion(int assignmentType)
+        public ActionResult UploadAssignmentQuestion(int assignmentType, int assignmentid=0)
         {
             ViewBag.AssignmentType = assignmentType;
+            ViewBag.Assignmentid = assignmentid;
             return View();
         }
 

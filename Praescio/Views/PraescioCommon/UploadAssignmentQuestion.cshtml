@@ -33,12 +33,52 @@
                         <!-- start form for validation -->
                         <form id="SchoolForm" name="SchoolForm" data-parsley-validate>
 
+                            <!--Below New Add views-->
+
+
                             <div class="form-group">
-                                <label for="Version">Select @assignmentTitle</label>
-                                <select id="Assignment" name="Assignment" class="input-sm form-control" ng-model="Assignment.AssignmentId" ng-options="option.AssignmentId as option.Title for option in AssignmentList" ng-change="" ng-required="true">
-                                    <option value="">-- Select @assignmentTitle --</option>
+                                <label for="heard" class="required">Select Board</label>
+                                <select id="Board" name="Board" ng-change="ChangeBoard(Assignment.BoardId)" class="input-sm form-control" ng-model="Assignment.BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-required="true">
+                                    <option value="">-- Select Board --</option>
                                 </select>
+                                <p ng-show="AssignmentForm.Board.$invalid && (AssignmentForm.Board.$dirty || submitted ||AssignmentForm.Board.$touched )" class="text-danger">Board is required.</p>
                             </div>
+
+                            <div class="form-group">
+                                <div>
+                                    <label for="heard">Select Medium</label>
+                                    <select id="Medium" name="Medium" class="input-sm form-control" ng-model="Assignment.MediumId" ng-disabled="Assignment.BoardId>1" ng-options="option.Id as option.Name for option in MediumList" ng-change="ChangeMedium(Assignment.MediumId)" ng-required="true">
+                                        <option value="">-- Select Medium --</option>
+                                    </select>
+                                </div>
+                                <p ng-show="AssignmentForm.Medium.$invalid && (AssignmentForm.Medium.$dirty || submitted ||AssignmentForm.Medium.$touched )" class="text-danger">Medium is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <div>
+                                    <label for="heard">Select Standard</label>
+                                    <select id="Standard" name="Standard" class="input-sm form-control" ng-model="Assignment.StandardId" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="ChangeStandard(Assignment.StandardId)" ng-required="true">
+                                        <option value="">-- Select Standard --</option>
+                                    </select>
+                                </div>
+                                <p ng-show="AssignmentForm.Standard.$invalid && (AssignmentForm.Standard.$dirty || submitted ||AssignmentForm.Standard.$touched )" class="text-danger">Standard is required.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <div>
+                                    <label for="heard">Select Subject</label>
+                                    <select id="Subject" name="Subject" class="input-sm form-control" ng-model="Assignment.SubjectId" ng-options="option.Id as option.SubjectName for option in SubjectList" ng-change="ChangeSubject(Assignment.SubjectId)" ng-required="true">
+                                        <option value="">-- Select Subject --</option>
+                                    </select>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Version">Select @assignmentTitle</label>
+                                    <select id="Assignment" name="Assignment" class="input-sm form-control" ng-model="Assignment.AssignmentId" ng-options="option.AssignmentId as option.Title for option in AssignmentList" ng-change="ChangeAssignment(Assignment.AssignmentId)" ng-required="true">
+                                        <option value="">-- Select @assignmentTitle --</option>
+                                    </select>
+                                </div>
+                                <!--Above New Add views-->
 
                             <div class="form-group">
                                 <label for="regno">Save XML Question</label>
@@ -106,9 +146,10 @@
         })
 
         myApp.controller('LoadXMLCtrl', function ($scope, $rootScope, $filter, NetworkService) {
-
+            $scope.Assignment = {};
+            $scope.AssignmentListAll = [];
             NetworkService.get('PraescioCommon/GetAssignmentListDropDown?AssignmentType=@ViewBag.AssignmentType').success(function (data) {
-                $scope.AssignmentList = data.dataContent;
+                $scope.AssignmentListAll = data.dataContent;
                 console.log(data);
             });
 
@@ -130,6 +171,55 @@
             $scope.selectedFile = null;
             $scope.msg = "";
 
+            $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
+                               { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }]
+
+            $scope.VersionType = [{ Id: 1, Name: 'Paid' }, { Id: 2, Name: 'Trail' }];
+
+            NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
+                $scope.BoardList = data;
+            });
+
+
+            NetworkService.get('PraescioAdmin/GetAssignmentTeacherList?institutionId=@Praescio.Models.Common.ACCOUNT.OrganizationAccount.InstitutionAccountId').success(function (data) {
+                console.log(data);
+                $scope.TeacherList = data;
+            });
+
+            NetworkService.get('PraescioAdmin/GetMedium').success(function (data) {
+                $scope.MediumList = data;
+            });
+
+            $scope.ChangeBoard = function (boardname) {
+                if (boardname > 1) {
+                    $scope.Assignment.MediumId = 1;
+                }
+            }
+
+            $scope.ChangeStandard = function (id) {
+                NetworkService.get('PraescioCommon/GetSubject?standardid=' + id + '&mediumid=' + $scope.Assignment.MediumId).success(function (data) {
+                    $scope.SubjectList = data;
+                });
+            }
+
+            $scope.ChangeSubject = function (id) {
+                $scope.ChangeAssignmentList();
+            }
+
+            $scope.ChangeAssignmentList = function (id) {
+                console.log('$scope.Assignment', $scope.Assignment)
+                console.log('$scope.AssignmentList', $scope.AssignmentList)
+                $scope.AssignmentList = $scope.AssignmentListAll.filter(m => m.SubjectId == $scope.Assignment.SubjectId);
+                console.log('$scope.AssignmentList', $scope.AssignmentList)
+            }
+
+            $scope.ChangeAssignment = function (id) {
+                NetworkService.get('PraescioCommon/GetAssignmentDetail?assignmentid='+id).success(function (data) {
+                    $scope.Assignment = data.Assignment;
+                    $scope.ChangeStandard(data.Assignment.StandardId);
+
+                });
+            }
 
             $scope.loadFile = function (files) {
 

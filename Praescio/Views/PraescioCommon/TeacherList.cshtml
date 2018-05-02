@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "TeacherListFullVersion";
     var institutionid = ViewBag.InstitutionId;
-    var isIndividual = institutionid > 1 ? false : true;
+    bool isIndividual = (Convert.ToInt32(institutionid) > 1 ? false : true);
 }
 
 <style>
@@ -115,18 +115,18 @@
                                     <th>Email</th>
                                     <th>Phone No.</th>
                                     <th>Registration Date</th>
-                                    <th>Expiry Date</th>
+                                    @*<th>Expiry Date</th>*@
                                     <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr dir-paginate="teacher in TeacherList.AccountDetail |itemsPerPage:10|filter:searchText" total-items="totalcount">
                                     <td ng-show="IsVisible"><input type="checkbox" ng-model="teacher.StudentRegisterAllowed" /></td>
-                                    <td><a href="@Url.Content("~/InstitutionTeacher/TeacherProfile")?teacherAccountId={{teacher.AccountId}}&isIndividual=@Convert.ToString(ViewBag.IsIndividual)">{{teacher. FirstName}}</a></td>
+                                    <td><a href="@Url.Content("~/InstitutionTeacher/TeacherProfile")?teacherAccountId={{teacher.AccountId}}&isIndividual=@Convert.ToString(ViewBag.IsIndividual)">{{((teacher.FirstName ? teacher.FirstName : '') + ' ' + (teacher.FatherName ? teacher.FatherName : '') + ' ' + (teacher.LastName ? teacher.LastName : '')).replace('  ', ' ')}}</a></td>
                                     <td>{{teacher.Email}}</td>
                                     <td>{{teacher.MobileNo}}</td>
                                     <td>{{teacher.CreatedOn| date:'dd MMM yyyy'}}</td>
-                                    <td>{{teacher.ExpiredOn| date:'dd MMM yyyy'}}</td>
+                                    @*<td>{{teacher.ExpiredOn| date:'dd MMM yyyy'}}</td>*@
                                     <td>{{teacher.IsActive==true?'Active':'InActive'}}</td>
                                 </tr>
                             </tbody>
@@ -238,7 +238,7 @@
                         jQuery.map(sheet1, function (item, index) {
                             item.DateOfBirth = ConvertDateFormat(item.DateOfBirth);
                             item.ActivateOn = ConvertDateFormat(item.ActivateOn);
-                            item.ExpiredOn = ConvertDateFormat(item.ExpiredOn);
+                            //item.ExpiredOn = ConvertDateFormat(item.ExpiredOn);
                             return sheet1;
                         });
 

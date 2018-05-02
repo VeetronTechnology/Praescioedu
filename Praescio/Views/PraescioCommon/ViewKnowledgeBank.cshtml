@@ -30,24 +30,61 @@
 
                         <div class="clearfix"></div>
                     </div>
-                    <div class="col-sm-6">
-                        <label style="float:left;white-space:nowrap;">
-                            Show &nbsp;&nbsp;&nbsp;&nbsp;
-                            <select name="filtertype" style="display:inline !important;width:60px !important;" class="form-control input-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>
-                            &nbsp;&nbsp;&nbsp;&nbsp;entries
-                        </label>
-                    </div> <div class="col-sm-6"><label style="float:right;padding-right:53px;white-space:nowrap;">Search:&nbsp;&nbsp;&nbsp;&nbsp;<input type="search" style="display:inline !important" class="form-control input-sm" placeholder=""></label></div>
+                    
                     <div class="x_content">
 
+                        <div class="form-group">
+                            <label for="heard" class="required">Select Board</label>
+                            <select id="Board" name="Board" ng-change="ChangeBoard(Assignment.BoardId)" class="input-sm form-control" ng-model="Assignment.BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-required="true">
+                                <option value="">-- Select Board --</option>
+                            </select>
+                            <p ng-show="AssignmentForm.Board.$invalid && (AssignmentForm.Board.$dirty || submitted ||AssignmentForm.Board.$touched )" class="text-danger">Board is required.</p>
+                        </div>
+
+                        <div class="form-group">
+                            <div>
+                                <label for="heard">Select Medium</label>
+                                <select id="Medium" name="Medium" class="input-sm form-control" ng-model="Assignment.MediumId" ng-disabled="Assignment.BoardId>1" ng-options="option.Id as option.Name for option in MediumList" ng-change="ChangeMedium(Assignment.MediumId)" ng-required="true">
+                                    <option value="">-- Select Medium --</option>
+                                </select>
+                            </div>
+                            <p ng-show="AssignmentForm.Medium.$invalid && (AssignmentForm.Medium.$dirty || submitted ||AssignmentForm.Medium.$touched )" class="text-danger">Medium is required.</p>
+                        </div>
+
+                        <div class="form-group">
+                            <div>
+                                <label for="heard">Select Standard</label>
+                                <select id="Standard" name="Standard" class="input-sm form-control" ng-model="Assignment.StandardId" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="ChangeStandard(Assignment.StandardId)" ng-required="true">
+                                    <option value="">-- Select Standard --</option>
+                                </select>
+                            </div>
+                            <p ng-show="AssignmentForm.Standard.$invalid && (AssignmentForm.Standard.$dirty || submitted ||AssignmentForm.Standard.$touched )" class="text-danger">Standard is required.</p>
+                        </div>
+                        <br /><br />
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label style="float:left;white-space:nowrap;">
+                                    Show &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <select name="filtertype" style="display:inline !important;width:60px !important;" class="form-control input-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;entries
+                                </label>
+                            </div> 
+                            <div class="col-sm-6">
+                                <label style="float:right;padding-right:53px;white-space:nowrap;">Search:&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="search" style="display:inline !important" class="form-control input-sm" placeholder="">
+                                </label>
+                            </div>
+                        </div>
+                        <br />
                         <table id="datatable1" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th>Title</th>
                                     <th>Description</th>
                                     <th>File</th>
-                                    <th>Added By</th>
+                                    @*<th>Added By</th>*@
                                     <th>Status</th>
-                                    <th></th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -55,10 +92,10 @@
                                     <td>{{k.KnowledgeBank.Title}}</td>
                                     <td>{{k.KnowledgeBank.Description}}</td>
                                     <td><a target="_blank" ng-href='~/{{k.KnowledgeBank.PDFFileSrc}}'>File</a></td>
-                                    <td>{{k.KnowledgeBank.CreatedAccount.FirstName + ' '+k.KnowledgeBank.CreatedAccount.LastName}}</td>
+                                    @*<td>{{k.KnowledgeBank.CreatedAccount.FirstName + ' '+k.KnowledgeBank.CreatedAccount.LastName}}</td>*@
                                     <td>{{k.KnowledgeBank.IsActive?'Active':'In Active'}}</td>
                                     @*td><a ng-href="/PraescioAdmin/AddKnowledgeBank?knowledgeBankId={{k.KnowledgeBank.KnowledgeBankId}}" class="btn btn-success btn-xs">Edit </a> |
-                                    <a class="btn btn-danger btn-xs" ng-click="DeleteKnowledgeBank(k.KnowledgeBank.KnowledgeBankId)">Delete</a></td>*@
+                    <a class="btn btn-danger btn-xs" ng-click="DeleteKnowledgeBank(k.KnowledgeBank.KnowledgeBankId)">Delete</a></td>*@
                                 </tr>
                             </tbody>
                         </table>
@@ -97,6 +134,27 @@
                     $scope.totalcount = data.totalRecord;
                 });
             }
+
+            NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
+                $scope.BoardList = data;
+            });
+
+            $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
+                { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }] 
+
+            NetworkService.get('PraescioAdmin/GetMedium').success(function (data) {
+                $scope.MediumList = data;
+
+            });
+            $scope.ChangeBoard = function (boardname) {
+                if (boardname > 1) {
+                    $scope.Assignment.MediumId = 1;
+                }
+            }
+
+           
+
+
 
             $scope.DeleteKnowledgeBank = function (id) {
                 $.confirm({

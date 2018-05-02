@@ -20,7 +20,7 @@ namespace Praescio.API.Controllers
     {
         [HttpGet]
         [Route("GetActivityList")]
-        public HttpResponseMessage GetActivityList(int pageNo = 1, int itemPerPage = 10, string flag = "")
+        public HttpResponseMessage GetActivityList(int pageNo = 1, int itemsPerPage = 20, string flag = "")
         {
             PraescioContext db = new PraescioContext();
             var content = db.Activities;
@@ -29,7 +29,7 @@ namespace Praescio.API.Controllers
                                                 select new ActivityViewModel
                                                 {
                                                     Activities = a
-                                                }).Skip((pageNo - 1) * itemPerPage).Take(itemPerPage).ToList();
+                                                }).Skip((pageNo - 1) * itemsPerPage).Take(itemsPerPage).ToList();
 
             return Request.CreateResponse(HttpStatusCode.OK, Activity);
 
@@ -154,7 +154,7 @@ namespace Praescio.API.Controllers
 
         [HttpGet]
         [Route("GetStudentList")]
-        public HttpResponseMessage GetStudentList(bool isIndividual, string version, int institutionId = 0, int pageNo = 1, int itemPerPage = 10)
+        public HttpResponseMessage GetStudentList(bool isIndividual, string version, int institutionId = 0, int pageNo = 1, int itemPerPage = 10, string searchText = "")
         {
             UserList Student = new UserList();
             PraescioContext db = new PraescioContext();
@@ -162,7 +162,10 @@ namespace Praescio.API.Controllers
 
             if (isIndividual)
             {
-                var account = db.Account.Where(x => x.VersionType == version && x.IsIndividual == true && x.AccountType.AccountTypeId == (int)AccountType.IndividualStudent);
+                var account = db.Account.Where(x => ((string.IsNullOrEmpty(searchText) && x.FirstName == x.FirstName) ||
+                                        (searchText != "" && x.FirstName.Contains(searchText)) || (searchText != "" && x.LastName.Contains(searchText)) || (searchText != "" && x.Email.Contains(searchText))
+                                        || (searchText != "" && x.MobileNo.Contains(searchText))) &&
+                (x.VersionType == version && x.IsIndividual == true && x.AccountType.AccountTypeId == (int)AccountType.IndividualStudent));
                 Student.AccountDetail = account.OrderBy(x => x.AccountId).Skip((pageNo - 1) * itemPerPage).Take(itemPerPage).ToList();
                 Student.TotalRecord = account.Count();
 
@@ -174,7 +177,10 @@ namespace Praescio.API.Controllers
             }
             else
             {
-                var account = db.Account.Where(x => (x.InstitutionAccountId == LoggedInAccount.InstitutionAccountId || x.InstitutionAccountId == institutionId) && x.AccountType.AccountTypeId == (int)AccountType.Student);
+                var account = db.Account.Where(x => ((string.IsNullOrEmpty(searchText) && x.FirstName == x.FirstName) ||
+                                        (searchText != "" && x.FirstName.Contains(searchText)) || (searchText != "" && x.LastName.Contains(searchText)) || (searchText != "" && x.Email.Contains(searchText))
+                                        || (searchText != "" && x.MobileNo.Contains(searchText))) &&
+                (x.InstitutionAccountId == LoggedInAccount.InstitutionAccountId || x.InstitutionAccountId == institutionId) && x.AccountType.AccountTypeId == (int)AccountType.Student);
                 Student.AccountDetail = account.OrderBy(x => x.AccountId).Skip((pageNo - 1) * itemPerPage).Take(itemPerPage).ToList();
                 Student.TotalRecord = account.Count();
 
@@ -998,11 +1004,11 @@ namespace Praescio.API.Controllers
 
         [HttpGet]
         [Route("GetQuestionContent")]
-        public HttpResponseMessage GetQuestionContent(int CategoryTypeId, int pageNo = 1, int itemPerPage = 10)
+        public HttpResponseMessage GetQuestionContent(int CategoryTypeId, int pageNo = 1, int itemsPerPage = 20)
         {
             PraescioContext db = new PraescioContext();
             var ListContent = db.QuestionContent.Where(x => x.CategoryTypeId == CategoryTypeId).Distinct();
-            var content = ListContent.OrderBy(x => x.ContentId).Skip((pageNo - 1) * itemPerPage).Take(itemPerPage).ToList();
+            var content = ListContent.OrderBy(x => x.ContentId).Skip((pageNo - 1) * itemsPerPage).Take(itemsPerPage).ToList();
             var count = ListContent.Count();
 
             return Request.CreateResponse(HttpStatusCode.OK, new { contentData = content, totalRecord = count });
@@ -1113,18 +1119,18 @@ namespace Praescio.API.Controllers
                 account.DateOfBirth = user.DateOfBirth;
                 account.Email = user.Email;
                 account.MobileNo = user.MobileNo;
-                account.VersionType = user.Version;
-                account.BoardId = boardlist.FirstOrDefault(s => s.BoardName.ToLower().Contains(user.Board.ToLower())) != null ? (int?)boardlist.FirstOrDefault(s => s.BoardName.ToLower().Contains(user.Board.ToLower())).Id : null;
+                //account.VersionType = user.Version;
+                //account.BoardId = boardlist.FirstOrDefault(s => s.BoardName.ToLower().Contains(user.Board.ToLower())) != null ? (int?)boardlist.FirstOrDefault(s => s.BoardName.ToLower().Contains(user.Board.ToLower())).Id : null;
                 account.MotherName = user.MotherName;
                 account.FatherName = user.FatherName;
                 account.ParentEmail = user.ParentEmailId;
                 account.ParentMobileNo = user.ParentMobileNo;
                 account.ActivateOn = user.ActivateOn;
-                account.ExpiredOn = user.ExpiredOn;
+                //account.ExpiredOn = user.ExpiredOn;
                 account.Address = user.Address;
-                account.StateId = statelist.FirstOrDefault(s => s.StateName.ToLower().Contains(user.State.ToLower())) != null ? (int?)statelist.FirstOrDefault(s => s.StateName.ToLower().Contains(user.State.ToLower())).Id : null;
-                account.City = user.City;
-                account.PinCode = user.PinCode;
+                //account.StateId = statelist.FirstOrDefault(s => s.StateName.ToLower().Contains(user.State.ToLower())) != null ? (int?)statelist.FirstOrDefault(s => s.StateName.ToLower().Contains(user.State.ToLower())).Id : null;
+                //account.City = user.City;
+                //account.PinCode = user.PinCode;
 
 
             SET_UserName:
@@ -1202,19 +1208,19 @@ namespace Praescio.API.Controllers
                 account.DateOfBirth = user.DateOfBirth;
                 account.Email = user.Email;
                 account.MobileNo = user.MobileNo;
-                account.VersionType = user.Version;
-                account.BoardId = boardlist.FirstOrDefault(s => s.BoardName.ToLower().Contains(user.Board.ToLower())) != null ? (int?)boardlist.FirstOrDefault(s => s.BoardName.ToLower().Contains(user.Board.ToLower())).Id : null;
+                //account.VersionType = user.Version;
+                //account.BoardId = boardlist.FirstOrDefault(s => s.BoardName.ToLower().Contains(user.Board.ToLower())) != null ? (int?)boardlist.FirstOrDefault(s => s.BoardName.ToLower().Contains(user.Board.ToLower())).Id : null;
                 account.StudentStandardId = standardlist.FirstOrDefault(s => user.StandardSubject.Contains(s.StandardName)) != null ? (int?)standardlist.FirstOrDefault(s => user.StandardSubject.Contains(s.StandardName)).Id : null;
                 account.MotherName = user.MotherName;
                 account.FatherName = user.FatherName;
                 account.ParentEmail = user.ParentEmailId;
                 account.ParentMobileNo = user.ParentMobileNo;
                 account.ActivateOn = user.ActivateOn;
-                account.ExpiredOn = user.ExpiredOn;
+                //account.ExpiredOn = user.ExpiredOn;
                 account.Address = user.Address;
-                account.StateId = statelist.FirstOrDefault(s => s.StateName.ToLower().Contains(user.State.ToLower())) != null ? (int?)statelist.FirstOrDefault(s => s.StateName.ToLower().Contains(user.State.ToLower())).Id : null;
-                account.City = user.City;
-                account.PinCode = user.PinCode;
+                //account.StateId = statelist.FirstOrDefault(s => s.StateName.ToLower().Contains(user.State.ToLower())) != null ? (int?)statelist.FirstOrDefault(s => s.StateName.ToLower().Contains(user.State.ToLower())).Id : null;
+                //account.City = user.City;
+                //account.PinCode = user.PinCode;
 
 
             SET_UserName:

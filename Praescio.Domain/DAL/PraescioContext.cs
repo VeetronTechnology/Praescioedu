@@ -38,6 +38,7 @@ namespace Praescio.Domain.DAL
         public DbSet<Mst_Board> Board { get; set; }
         public DbSet<Mst_PrincipalDetail> PrincipalDetail { get; set; }
         public DbSet<Mst_State> State { get; set; }
+        public DbSet<Mst_City> City { get; set; }
         public DbSet<Mst_AssignmentType> AssignmentType { get; set; }
         public DbSet<Assignment> Assignment { get; set; }
         public DbSet<AssignmentTeacherMapping> AssignmentTeacherMapping { get; set; }
