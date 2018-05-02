@@ -58,11 +58,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr dir-paginate="content in ContentList |itemsPerPage:10|filter:searchText" total-items="totalcount">
+                                <tr dir-paginate="content in ContentList |itemsPerPage:20|filter:searchText" total-items="totalcount">
                                     <td ng-show="IsVisible"><input type="checkbox" ng-model="content.Checked" style="cursor:pointer;" /></td>
                                     <td>{{content.ContentOption}}</td>
                                     <td>{{content.ContentAnswer}}</td>
-                                    <td>{{content.CreatedAccount.FirstName}}</td>
+                                    @*<td>{{content.CreatedAccount.FirstName}}</td>*@
                                 </tr>
                             </tbody>
                         </table>
@@ -146,17 +146,18 @@
             $scope.totalcount = 0;
             $scope.SearchText = "";
 
-            $scope.itemsPerPage = 0;
+            $scope.itemsPerPage = 20;
 
             $scope.Assignment = {};
             $scope.AssignmentListAll = [];
 
             $scope.Teacher = {};
-            $scope.TitleName = 'List of Content'
+            $scope.TitleName = 'List of Content';
 
              $scope.LoadContent = function () {
-                 NetworkService.get('PraescioCommon/GetQuestionContent?isIndividual=@ViewBag.IsIndividual&version=@ViewBag.Version&institutionId=@ViewBag.InstitutionId&searchText=' + $scope.SearchText).success(function (data) {
-                     $scope.ContentList = data;
+                 NetworkService.get('PraescioCommon/GetQuestionContent?CategoryTypeId=@ViewBag.CategoryTypeId&isIndividual=@ViewBag.IsIndividual&version=@ViewBag.Version&institutionId=@ViewBag.InstitutionId&searchText=' + $scope.SearchText).success(function (data) {
+                     $scope.ContentList = data.contentData;
+                     console.log('$scope.ContentList', $scope.ContentList);
                     $scope.totalcount = data.TotalRecord;
                 });
             };

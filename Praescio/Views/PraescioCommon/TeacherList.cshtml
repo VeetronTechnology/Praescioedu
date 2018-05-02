@@ -45,7 +45,7 @@
                 <div class="x_panel">
                     <div class="x_title">
                         <h2>List of Teacher</h2>
-
+                        <h5 class="pull-right"> <b>School Name: &nbsp;&nbsp;&nbsp; {{InstitutionDetail.Institution.InstitutionName}}</b></h5>
                         <div class="clearfix"></div>
                     </div>
                     <div class="col-sm-6">
@@ -179,6 +179,9 @@
             $scope.ShowHide = function () {
                 $scope.IsVisible = $scope.IsVisible ? false : true;
             }
+            NetworkService.get('PraescioAdmin/GetSchoolDetail?institutionId=@ViewBag.InstitutionId').success(function (data) {
+                $scope.InstitutionDetail = data;
+            });
 
             $scope.AddPermission = function () {
                 NetworkService.insert('IndividualTeacher/AddStudentRegisterPermissionForTeacher', $scope.TeacherList).success(function (data) {

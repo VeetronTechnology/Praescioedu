@@ -164,7 +164,7 @@ namespace Praescio.API.Controllers
             {
                 var account = db.Account.Where(x => ((string.IsNullOrEmpty(searchText) && x.FirstName == x.FirstName) ||
                                         (searchText != "" && x.FirstName.Contains(searchText)) || (searchText != "" && x.LastName.Contains(searchText)) || (searchText != "" && x.Email.Contains(searchText))
-                                        || (searchText != "" && x.MobileNo.Contains(searchText))) &&
+                                        || (searchText != "" && x.MobileNo.Contains(searchText)) || (searchText != "" && x.ParentNo.Contains(searchText))) &&
                 (x.VersionType == version && x.IsIndividual == true && x.AccountType.AccountTypeId == (int)AccountType.IndividualStudent));
                 Student.AccountDetail = account.OrderBy(x => x.AccountId).Skip((pageNo - 1) * itemPerPage).Take(itemPerPage).ToList();
                 Student.TotalRecord = account.Count();
@@ -179,7 +179,7 @@ namespace Praescio.API.Controllers
             {
                 var account = db.Account.Where(x => ((string.IsNullOrEmpty(searchText) && x.FirstName == x.FirstName) ||
                                         (searchText != "" && x.FirstName.Contains(searchText)) || (searchText != "" && x.LastName.Contains(searchText)) || (searchText != "" && x.Email.Contains(searchText))
-                                        || (searchText != "" && x.MobileNo.Contains(searchText))) &&
+                                        || (searchText != "" && x.MobileNo.Contains(searchText)) || (searchText != "" && x.ParentNo.Contains(searchText))) &&
                 (x.InstitutionAccountId == LoggedInAccount.InstitutionAccountId || x.InstitutionAccountId == institutionId) && x.AccountType.AccountTypeId == (int)AccountType.Student);
                 Student.AccountDetail = account.OrderBy(x => x.AccountId).Skip((pageNo - 1) * itemPerPage).Take(itemPerPage).ToList();
                 Student.TotalRecord = account.Count();
@@ -1004,10 +1004,16 @@ namespace Praescio.API.Controllers
 
         [HttpGet]
         [Route("GetQuestionContent")]
-        public HttpResponseMessage GetQuestionContent(int CategoryTypeId, int pageNo = 1, int itemsPerPage = 20)
+        public HttpResponseMessage GetQuestionContent(int CategoryTypeId, int pageNo = 1, int itemsPerPage = 20, string searchText = "")
         {
             PraescioContext db = new PraescioContext();
             var ListContent = db.QuestionContent.Where(x => x.CategoryTypeId == CategoryTypeId).Distinct();
+
+            if (searchText != "")
+            {
+                ListContent = ListContent.Where(x => x.ContentOption.Contains(searchText) ||
+                                                x.ContentAnswer.Contains(searchText));
+            }
             var content = ListContent.OrderBy(x => x.ContentId).Skip((pageNo - 1) * itemsPerPage).Take(itemsPerPage).ToList();
             var count = ListContent.Count();
 

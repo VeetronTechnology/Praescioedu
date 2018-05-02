@@ -79,7 +79,7 @@
                                 <p class="day">{{activity.Activities.CreatedOn| date:'dd'}}</p>
                             </a>
                             <div class="media-body">
-                                <a class="title" href="@Url.Content("~/" + "{{activity.Activities.URL}}")">{{activity.Activities.ActivityName}}</a>
+                                <a class="title" href="{{ActivityURL(activity.Activities.URL)}}">{{activity.Activities.ActivityName}}</a>
                                 <p>{{activity.Activities.Query}}</p>
                             </div>
                         </article>
@@ -134,14 +134,24 @@
 @section Scripts{
 
     <script type="text/javascript">
-            myApp.controller('AdminDashboardCtrl', function ($scope, $rootScope, $filter, NetworkService) {
-                $scope.TitleName = 'Dashboard'
+        myApp.controller('AdminDashboardCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+            $scope.TitleName = 'Dashboard';
 
-                NetworkService.get('PraescioCommon/GetActivityList').success(function (data) {
-                    $scope.ActivityList = data;
-                    $scope.totalcount = data.TotalRecord;
-                });
+            NetworkService.get('PraescioCommon/GetActivityList').success(function (data) {
+                $scope.ActivityList = data;
+                $scope.totalcount = data.TotalRecord;
             });
+
+            $scope.ActivityURL = function (url) {
+                if (url.indexOf('TeacherProfile?accountid=') >= 0) {
+                    url = url.replace("TeacherProfile?accountid=", "TeacherProfile?teacherAccountId=");
+                } if (url.indexOf('StudentProfile?accountid=') >= 0) {
+                    url = url.replace("StudentProfile?accountid=", "StudentProfile?StudentAccountId=");
+                }
+                var baseurl = "@(string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~")))";
+                return baseurl+ url;
+            }
+        });
     </script>
 }
 
