@@ -71,7 +71,7 @@
 
                             <div class="form-group">
                                 <label>Gender</label>
-                                <p>
+                                @*<p>
                                     Male:
                                     @if (ViewBag.AccountId == 0)
                                     {
@@ -86,6 +86,24 @@
                                         <input type="radio" class="flat" name="gender" id="genderM" ng-model="Teacher.Gender" ng-value="Male"  /> Female:
                                         <input type="radio" class="flat" name="gender" id="genderF" ng-model="Teacher.Gender" ng-value="Female"/>
                                     </span>
+                                    }
+                                </p>*@
+
+                                <p>
+                                    @if (ViewBag.AccountId == 0)
+                                    {
+                                        <select id="Version" ng-hide="savingRequest" name="Gender" ng-model="Teacher.Gender" class="input-sm form-control">
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                        </select>
+                                    }
+                                    else
+                                    {
+                                        @*<span>{{Student.Gender}}</span>*@
+                                        <select id="Version" disabled="disabled" ng-hide="savingRequest" name="Gender" ng-model="Teacher.Gender" class="input-sm form-control" style="cursor: not-allowed; pointer-events: none;">
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                        </select>
                                     }
                                 </p>
                             </div>
@@ -269,7 +287,7 @@
                             <div class="form-group">
                                 <label for="City" class="required">Enter City</label>
                                 @*<input type="text" id="City" ng-model="Teacher.City" class="form-control alpha" preventspace="true" name="City" data-parsley-trigger="change" placeholder="Enter City" required />*@
-                                <select id="City" name="City" class="input-sm form-control" ng-model="Teacher.CityId" ng-options="option.Id as option.CityName for option in CityList" ng-change="" ng-required="true">
+                                <select id="City" name="City" class="input-sm form-control" ng-model="Teacher.City" ng-options="option.city_name as option.city_name for option in CityList" ng-change="" ng-required="true">
                                     <option value="">-- Select City --</option>
                                 </select>
                                 <p ng-show="TeacherRegistration.City.$invalid && (TeacherRegistration.City.$dirty || submitted ||TeacherRegistration.City.$touched )" class="text-danger">City is required.</p>
@@ -393,6 +411,10 @@
                     $scope.Teacher.DateOfBirth = $filter('date')($scope.Teacher.DateOfBirth, "dd/MM/yyyy");
                     $scope.Teacher.ActivateOn = $filter('date')($scope.Teacher.ActivateOn, "dd/MM/yyyy");
                     $scope.Teacher.ExpiredOn = $filter('date')($scope.Teacher.ExpiredOn, "dd/MM/yyyy");
+                    
+                    if ($scope.Teacher.StateId != undefined) {
+                        $scope.ChangeState($scope.Teacher.StateId);
+                    }
                 });
             }
 

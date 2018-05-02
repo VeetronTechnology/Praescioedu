@@ -77,23 +77,40 @@
 
                             <div class="form-group">
                                 <label>Gender</label>
-                                <p>
+                                @*<p>
                                     Male:
                                     @if (ViewBag.AccountId == 0)
                                     {
                                         <span ng-hide="savingRequest">
-                                            <input type="radio" class="flat" name="gender" id="genderM" ng-model="Student.Gender" ng-value="Male" /> Female:
-                                            <input type="radio" class="flat" name="gender" id="genderF" ng-model="Student.Gender" ng-value="Female"  />
+                                            <input type="radio" class="flat" name="gender" id="genderM" ng-model="Student.Gender" ng-value="Male" ng-click="ChangeGender('Male')" /> Female:
+                                            <input type="radio" class="flat" name="gender" id="genderF" ng-model="Student.Gender" ng-value="Female" ng-click="ChangeGender('Female')"  />
                                         </span>
                                     }
                                     else
                                     {
                                         <span ng-hide="savingRequest">
-                                            <input type="radio" class="flat" name="gender" id="genderM" ng-model="Student.Gender" ng-value="Male" style="cursor: not-allowed; pointer-events: none;"/> Female:
-                                            <input type="radio" class="flat" name="gender" id="genderF" ng-model="Student.Gender" ng-value="Female"  style="cursor: not-allowed; pointer-events: none;"/>
+                                            <input type="radio" class="flat" name="gender" id="genderM" ng-model="Student.Gender" ng-value="Male" ng-click="ChangeGender('Male')" style="cursor: not-allowed; pointer-events: none;"/> Female:
+                                            <input type="radio" class="flat" name="gender" id="genderF" ng-model="Student.Gender" ng-value="Female" ng-click="ChangeGender('Female')"  style="cursor: not-allowed; pointer-events: none;"/>
                                         </span>
                                     }
                                     
+                                </p>*@
+                                <p>
+                                    @if (ViewBag.AccountId == 0)
+                                    {
+                                        <select id="Version" ng-hide="savingRequest" name="Gender" ng-model="Student.Gender" class="input-sm form-control">
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                        </select>
+                                    }
+                                    else
+                                    {
+                                        @*<span>{{Student.Gender}}</span>*@
+                                        <select id="Version" disabled="disabled" ng-hide="savingRequest" name="Gender" ng-model="Student.Gender" class="input-sm form-control" style="cursor: not-allowed; pointer-events: none;">
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                        </select>
+                                    }
                                 </p>
                             </div>
 
@@ -354,7 +371,7 @@
             $scope.Student = {};
             $scope.Student.ActivateOn = '@DateTime.Parse(DateTime.Now.ToString().Trim()).ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)';
             $scope.Student.ExpiredOn = '@DateTime.Parse(DateTime.Now.AddYears(1).ToString().Trim()).ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)';
-            $scope.TitleName = 'Register Student'
+            $scope.TitleName = 'Register Student';
 
             $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
                                { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }]
@@ -449,11 +466,13 @@
                 $scope.Student.ExpiredOn = $filter('date')($scope.Student.ExpiredOn, "dd/MM/yyyy");
             }
 
+            $scope.ChangeGender = function(gender) {
+                $scope.Student.Gender = gender;
+            }
+
             $scope.RegisterStudent = function () {
                 $scope.Student.Subject = [];
-
-                $scope.Student.Gender = $("input[name='gender']:checked").val();
-
+                
                 if (!$scope.StudentRegistration.$valid) {
                     $scope.submitted = true;
                 }
@@ -468,7 +487,7 @@
                     $scope.Student.InstitutionAccountId = '@Praescio.Models.Common.ACCOUNT.InstitutionAccountId';
                     $scope.Student.AccountTypeId = '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)';
                     var data = '{"account":' + JSON.stringify($scope.Student) + ',"studentsubject":' + JSON.stringify($scope.Student.Subject) + ',"studentstandard":' + JSON.stringify($scope.Student.Standard) + ',"accounttypeid":' + '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)' + ',"isTeacher":' + false + '}';
-                    console.log(data);
+                    //console.log(data);
                     NetworkService.insert('PraescioAdmin/RegisterStudent', data).success(function (data) {
                         $scope.savingRequest = false;
                         $scope.Student.ActivateOn = activateOn;
@@ -500,8 +519,8 @@
 
             $scope.UpdateStudent = function () {
 
-                $scope.Student.Gender = $("input[name='gender']:checked").val();
-
+                //$scope.Student.Gender = $("input[name='gender']:checked").val();
+                
                 if (!$scope.StudentRegistration.$valid) {
                     $scope.submitted = true;
                 }
@@ -519,7 +538,7 @@
                         + JSON.stringify($scope.Student.Subject) + ',"studentstandard":' + JSON.stringify($scope.Student.Standard)
                         + ',"accounttypeid":' + '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)'
                         + ',"isTeacher":' + false + '}';
-                    console.log(data);
+                    //console.log(data);
                     NetworkService.insert('PraescioAdmin/UpdateStudent', data).success(function (data) {
                         $scope.savingRequest = false;
                         $scope.Student.ActivateOn = activateOn;
