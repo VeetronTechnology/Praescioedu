@@ -98,7 +98,7 @@
                                 <p>
                                     @if (ViewBag.AccountId == 0)
                                     {
-                                        <select id="Version" ng-hide="savingRequest" name="Gender" ng-model="Student.Gender" class="input-sm form-control">
+                                        <select id="Gender" ng-hide="savingRequest" name="Gender" ng-model="Student.Gender" class="input-sm form-control">
                                             <option value="Male">Male</option>
                                             <option value="Female">Female</option>
                                         </select>
@@ -106,7 +106,7 @@
                                     else
                                     {
                                         @*<span>{{Student.Gender}}</span>*@
-                                        <select id="Version" disabled="disabled" ng-hide="savingRequest" name="Gender" ng-model="Student.Gender" class="input-sm form-control" style="cursor: not-allowed; pointer-events: none;">
+                                        <select id="Gender" disabled="disabled" ng-hide="savingRequest" name="Gender" ng-model="Student.Gender" class="input-sm form-control" style="cursor: not-allowed; pointer-events: none;">
                                             <option value="Male">Male</option>
                                             <option value="Female">Female</option>
                                         </select>
@@ -486,6 +486,8 @@
                     $scope.Student.IsIndividual = true;
                     $scope.Student.InstitutionAccountId = '@Praescio.Models.Common.ACCOUNT.InstitutionAccountId';
                     $scope.Student.AccountTypeId = '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)';
+                    var dob = moment($scope.Student.DateOfBirth, 'DD/MM/YYYY');
+                    $scope.Student.DateOfBirth = dob.format('YYYY-MM-DD HH:mm:ss.SSS Z');
                     var data = '{"account":' + JSON.stringify($scope.Student) + ',"studentsubject":' + JSON.stringify($scope.Student.Subject) + ',"studentstandard":' + JSON.stringify($scope.Student.Standard) + ',"accounttypeid":' + '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)' + ',"isTeacher":' + false + '}';
                     //console.log(data);
                     NetworkService.insert('PraescioAdmin/RegisterStudent', data).success(function (data) {
@@ -534,6 +536,8 @@
                     $scope.Student.IsIndividual = true;
                     $scope.Student.InstitutionAccountId = '@Praescio.Models.Common.ACCOUNT.InstitutionAccountId';
                     $scope.Student.AccountTypeId = '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)';
+                    var dob = moment($scope.Student.DateOfBirth, 'DD/MM/YYYY');
+                    $scope.Student.DateOfBirth = dob.format('YYYY-MM-DD HH:mm:ss.SSS Z');
                     var data = '{"account":' + JSON.stringify($scope.Student) + ',"studentsubject":'
                         + JSON.stringify($scope.Student.Subject) + ',"studentstandard":' + JSON.stringify($scope.Student.Standard)
                         + ',"accounttypeid":' + '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)'

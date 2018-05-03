@@ -180,11 +180,17 @@
 
                             <div class="form-group">
                                 <label>Gender</label>
-                                <p>
+                              @*<p>
                                     Male:
                                     <input type="radio" class="flat" name="gender" id="genderM" value="Male" checked="" required /> Female:
                                     <input type="radio" class="flat" name="gender" id="genderF" value="Female" />
-                                </p>
+                                </p>*@
+                              <p>
+                                  <select id="Version" name="Gender" ng-model="Principal.Gender" class="input-sm form-control" required>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                  </select>
+                              </p>
                             </div>
 
 
@@ -308,6 +314,10 @@
             $scope.Institution = {};
             $scope.Institution.ActivateOn = '@DateTime.Parse(DateTime.Now.ToString().Trim()).ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)';
             $scope.Institution.ExpiredOn = '@DateTime.Parse(DateTime.Now.AddYears(1).ToString().Trim()).ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)';
+
+            $scope.ChangeGender = function(gender) {
+              $scope.Principal.Gender = gender;
+            }
 
             $scope.reset = function () {
 

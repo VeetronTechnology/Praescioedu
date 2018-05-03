@@ -45,11 +45,17 @@
 
                             <div class="form-group">
                                 <label>Gender</label>
-                                <p>
+                              @*<p>
                                     Male:
                                     <input type="radio" class="flat" name="gender" id="genderM" value="Male" checked="" required /> Female:
                                     <input type="radio" class="flat" name="gender" id="genderF" value="Female" />
-                                </p>
+                                </p>*@
+                              <p>
+                                  <select id="Gender" name="Gender" ng-model="Student.Gender" class="input-sm form-control" required>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                  </select>
+                              </p>
                             </div>
 
                             <div class="form-group">
@@ -165,7 +171,7 @@
             @*$scope.Student.ActivateOn = '@DateTime.Parse(DateTime.Now.ToString().Trim()).ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)';
             $scope.Student.ActivateOn = '@DateTime.Parse(DateTime.Now.AddYears(1).ToString().Trim()).ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)';*@
 
-            $scope.TitleName = 'Register Student'
+          $scope.TitleName = 'Register Student';
 
             $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
                                { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }]
@@ -174,7 +180,7 @@
                                { Id: 4, SubjectName: 'Science' }, { Id: 5, SubjectName: 'Mathematics' }];
 
             @*$scope.VersionType = [{ Id: 1, Name: '@Praescio.Domain.AppCode.VersionType.FullVersion' }, { Id: 2, Name: '@Praescio.Domain.AppCode.VersionType.TrialVerion' }];*@
-
+          
             NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
                 $scope.BoardList = data;
             });
@@ -233,17 +239,19 @@
 
 
             $scope.RegisterStudent = function () {
-                $scope.Student.Gender = $("input[name='gender']:checked").val();
+                //$scope.Student.Gender = $("input[name='gender']:checked").val();
 
                 if (!$scope.StudentRegistration.$valid) {
                     $scope.submitted = true;
                 }
                 else {
-
+                    
                     $scope.savingRequest = true;
                     $scope.Student.IsIndividual = false;
                     $scope.Student.InstitutionAccountId = '@Praescio.Models.Common.ACCOUNT.InstitutionAccountId';
                     $scope.Student.AccountTypeId = '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Student)';
+                    var dob = moment($scope.Student.DateOfBirth, 'DD/MM/YYYY');
+                    $scope.Student.DateOfBirth = dob.format('YYYY-MM-DD HH:mm:ss.SSS Z');
                     var data = '{"account":' + JSON.stringify($scope.Student) + ',"studentsubject":' + JSON.stringify($scope.Student.Subject) + ',"studentstandard":' + JSON.stringify($scope.Student.Standard) + ',"accounttypeid":' + '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Student)' + ',"isTeacher":' + false + '}';
                     NetworkService.insert('PraescioAdmin/RegisterStudent', data).success(function (data) {
                         $scope.savingRequest = false;
@@ -269,7 +277,7 @@
             }
 
             $scope.UpdateStudent = function () {
-                $scope.Student.Gender = $("input[name='gender']:checked").val();
+                //$scope.Student.Gender = $("input[name='gender']:checked").val();
 
                 if (!$scope.StudentRegistration.$valid) {
                     $scope.submitted = true;
@@ -279,6 +287,8 @@
                     $scope.savingRequest = true;
                     $scope.Student.IsIndividual = false;
                     $scope.Student.AccountTypeId = '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Student)';
+                    var dob = moment($scope.Student.DateOfBirth, 'DD/MM/YYYY');
+                    $scope.Student.DateOfBirth = dob.format('YYYY-MM-DD HH:mm:ss.SSS Z');
                     var data = '{"account":' + JSON.stringify($scope.Student) + ',"studentsubject":' + JSON.stringify($scope.Student.Subject) + ',"studentstandard":' + JSON.stringify($scope.Student.Standard) + ',"accounttypeid":' + '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Student)' + ',"isTeacher":' + false + '}';
                     NetworkService.insert('PraescioAdmin/UpdateStudent', data).success(function (data) {
                         $scope.savingRequest = false;

@@ -58,11 +58,15 @@
 
                             <div class="form-group">
                                 <label>Gender</label>
-                                <p>
+                              @*<p>
                                     Male:
                                     <input type="radio" class="flat" name="gender" id="genderM" value="Male" checked="" required /> Female:
                                     <input type="radio" class="flat" name="gender" id="genderF" value="Female" />
-                                </p>
+                                </p>*@
+                              <select id="Gender" name="Gender" ng-model="Student.Gender" class="input-sm form-control" required>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                              </select>
                             </div>
 
                             <div class="form-group">
@@ -206,7 +210,7 @@
 
             $scope.RegisterStudent = function () {
 
-                $scope.Student.Gender = $("input[name='gender']:checked").val();
+                //$scope.Student.Gender = $("input[name='gender']:checked").val();
 
                 if (!$scope.StudentRegistration.$valid) {
                     $scope.submitted = true;
@@ -221,6 +225,8 @@
                     $scope.Student.IsIndividual = false;
                     $scope.Student.InstitutionAccountId = '@Praescio.Models.Common.ACCOUNT.InstitutionAccountId';
                     $scope.Student.AccountTypeId = '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Student)';
+                    var dob = moment($scope.Student.DateOfBirth, 'DD/MM/YYYY');
+                    $scope.Student.DateOfBirth = dob.format('YYYY-MM-DD HH:mm:ss.SSS Z');
                     var data = '{"account":' + JSON.stringify($scope.Student) + ',"studentsubject":' + JSON.stringify($scope.Student.Subject) + ',"accounttypeid":' + '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)' + ',"isTeacher":' + false + '}';
                     NetworkService.insert('PraescioAdmin/RegisterStudent', data).success(function (data) {
                         $scope.savingRequest = false;

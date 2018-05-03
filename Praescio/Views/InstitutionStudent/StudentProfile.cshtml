@@ -4,21 +4,23 @@
 }
 <div class="right_col" role="main" ng-controller="StudentProfileCtrl">
     <div class="cont">
-
-
-        <div class="table-agile-info" style="padding: 2em 0 10.7em 0">
+        <div class="table-agile-info" style="padding: 0 0 10.7em 0">
             <div class="panel panel-default">
-                <div class="panel-heading">
-                    Student Profile
-                    <span class="pull-right" style="margin-top:12px;">
-                        <h6>
-                            School Name:
-                            <a href="@Url.Action("SchoolList", "PraescioAdmin")">
-                                <b>{{Student.OrganizationAccount.InstitutionName}}</b>
-                            </a>
-                        </h6>
-                    </span>
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col-md-6">
+                    <h2>Student Profile</h2>
+                  </div>
+                  <div class="col-md-6">
+                    <h2>
+                      School Name:
+                      <a href="@Url.Action("SchoolDetails", "PraescioAdmin")?institutionId={{Student.OrganizationAccount.InstitutionAccountId}}" title="{{Student.OrganizationAccount.InstitutionName}}">
+                        {{Student.OrganizationAccount.InstitutionName}}
+                      </a>
+                    </h2>
+                  </div>
                 </div>
+              </div>
                 <div>
                     <table class="table" ui-jq="footable" ui-options='{
         "paging": {

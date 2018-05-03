@@ -31,15 +31,19 @@
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
-                    <div class="x_title">
-                        <h2>List Of @assignmentTitle </h2>
-
-                        <div class="clearfix"></div>
+                  <div class="x_title">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <h2>List Of @assignmentTitle</h2>
+                      </div>
+                      <div class="col-md-6">
+                        <label for="chk-hidepublished" class="pull-right">
+                          Hide Published <input type="checkbox" checked="checked" name="chk-hidepublished" id="chk-hidepublished" value="true" ng-model="HidePublished" ng-change="LoadContent()"/>
+                        </label>
+                      </div>
                     </div>
+                  </div>
                     <div class="x_content">
-
-
-
                         @if (Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.SuperAdmin) == Praescio.Models.Common.ACCOUNT.AccountTypeId || Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualTeacher) == Praescio.Models.Common.ACCOUNT.AccountTypeId || Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Teacher) == Praescio.Models.Common.ACCOUNT.AccountTypeId)
                         {
                             <div class="row">
@@ -112,7 +116,7 @@
                                     {
                                         <td><a ng-href='~/{{assignment.UploadFileSrc}}' target="_blank">Download</a></td>
                                         <td>
-                                            <a ng-href="~/Praescio/AddAssignment?assignmentType={{assignment.AssignmentTypeId}}&assignmentid={{assignment.AssignmentId}}" class="btn btn-success btn-xs">Edit </a> |
+                                            <a ng-disabled="assignment.IsPublished" ng-href="~/Praescio/AddAssignment?assignmentType={{assignment.AssignmentTypeId}}&assignmentid={{assignment.AssignmentId}}" class="btn btn-success btn-xs">Edit </a> |
                                             <a class="btn btn-danger btn-xs" ng-click="DeleteAssignment(assignment.AssignmentId)">Delete</a>
                                         </td>
                                     }
@@ -167,6 +171,7 @@
             $scope.SearchText = "";
             $scope.Assignment = {};
             $scope.AssignmentListAll = [];
+            $scope.HidePublished = true;
 
             $scope.ShowHide = function () {
                 $scope.IsVisible = $scope.IsVisible ? false : true;
@@ -174,13 +179,13 @@
 
             $scope.LoadContent = function () {
 
-                NetworkService.get('PraescioCommon/GetAssignmentList?AssignmentType=@ViewBag.AssignmentType&searchText=' + $scope.SearchText).success(function (data) {
+              NetworkService.get('PraescioCommon/GetAssignmentList?AssignmentType=@ViewBag.AssignmentType&searchText=' + $scope.SearchText + '&HidePublished=' + $scope.HidePublished).success(function (data) {
                     $scope.AssignmentList = data.dataContent;
                     $scope.totalcount = data.totalRecord;
                 });
             }
             $scope.LoadContent();
-
+          
             $scope.onPageChange = function (pageno) {
                 var url = '&pageNo=' + pageno + '&itemPerPage=' + $scope.itemPerPage + '&AssignmentType=@ViewBag.AssignmentType';
 

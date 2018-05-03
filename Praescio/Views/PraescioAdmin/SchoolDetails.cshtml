@@ -1,7 +1,11 @@
 ﻿@{
     ViewBag.Title = "School_details";
 }
-
+<style>
+  table#tbl-schooldetails th, table#tbl-schoolmgt th {
+    width: 40%;
+  }
+</style>
 <!-- page content -->
 <div class="right_col" role="main" ng-controller="SchoolDetailCtrl" ng-cloak>
     <div class="">
@@ -30,15 +34,14 @@
                                 <h2>School Details </h2>
                             </div>
                             <div class="col-md-6">
-                                <h6>
-                                    <b style="font-size:15px; color:#000;">School Name: &nbsp;&nbsp;&nbsp; {{InstitutionDetail.Institution.InstitutionName}}</b>
-                                </h6>
+                                <h2>
+                                    School Name: &nbsp;&nbsp;&nbsp; {{InstitutionDetail.Institution.InstitutionName}}
+                                </h2>
                             </div>
                         </div>
-
                     </div>
                     <div class="x_content">
-                        <table class="table table-striped">
+                        <table class="table table-striped" id="tbl-schooldetails">
                             <tbody>                       
                               
 
@@ -155,7 +158,7 @@
                     <div class="x_content">
 
 
-                        <table class="table table-striped">
+                        <table class="table table-striped" id="tbl-schoolmgt">
                             <tbody>
                                 
                                 <tr>

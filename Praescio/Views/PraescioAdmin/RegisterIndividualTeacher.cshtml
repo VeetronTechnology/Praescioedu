@@ -471,6 +471,8 @@
                     $scope.Teacher.IsIndividual = true;
                     $scope.Teacher.InstitutionAccountId = '@Praescio.Models.Common.ACCOUNT.InstitutionAccountId';
                     $scope.Teacher.AccountTypeId = '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)'
+                    var dob = moment($scope.Teacher.DateOfBirth, 'DD/MM/YYYY');
+                    $scope.Teacher.DateOfBirth = dob.format('YYYY-MM-DD HH:mm:ss.SSS Z');
                     var data = '{"account":' + JSON.stringify($scope.Teacher) + ',"TeacherMappingStandard":' + JSON.stringify($scope.Teacher.TeacherMappingStandard) + ',"accounttypeid":' + '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)' + ',"isTeacher":' + true + '}';
                     NetworkService.insert('PraescioAdmin/RegisterTeacher', data).success(function (data) {
                         $scope.savingRequest = false;
@@ -520,6 +522,8 @@
                     $scope.Teacher.IsIndividual = true;
                     $scope.Teacher.InstitutionAccountId = '@Praescio.Models.Common.ACCOUNT.InstitutionAccountId';
                     $scope.Teacher.AccountTypeId = '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)'
+                    var dob = moment($scope.Teacher.DateOfBirth, 'DD/MM/YYYY');
+                    $scope.Teacher.DateOfBirth = dob.format('YYYY-MM-DD HH:mm:ss.SSS Z');
                     var data = '{"account":' + JSON.stringify($scope.Teacher)
                         + ',"TeacherMappingStandard":' + JSON.stringify($scope.Teacher.TeacherMappingStandard)
                         + ',"accounttypeid":' + '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)'

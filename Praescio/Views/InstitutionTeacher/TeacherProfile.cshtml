@@ -5,7 +5,7 @@
 
 <div class="right_col" role="main" ng-controller="TeacherProfileCtrl">
     <div class="cont">
-        <ol class="breadcrumb breadcrumb-bg-teal align-right">
+        <ol class="breadcrumb align-right">
             <li><a href="@Url.Action("Dashboard", "InstitutionTeacher")"><i class="material-icons">home</i> Home</a></li>
             <li><i class="material-icons">library_books</i> Teacher Profile</li>
         </ol>
@@ -15,17 +15,21 @@
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
-                     <div class="panel-heading">
-                            Teacher Profile
-                            <span class="pull-right" style="margin-top:12px;">
-                                <h6>
-                                    School Name:
-                                    <a href="@Url.Action("SchoolList", "PraescioAdmin")">
-                                        <b>{{Teacher.OrganizationAccount.InstitutionName}}</b>
-                                    </a>
-                                </h6>
-                            </span>
+                      <div class="panel-heading">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <h2>Teacher Profile</h2>
+                          </div>
+                          <div class="col-md-6">
+                            <h2>
+                              School Name:
+                              <a href="@Url.Action("SchoolDetails", "PraescioAdmin")?institutionId={{Teacher.OrganizationAccount.InstitutionAccountId}}" title="{{Teacher.OrganizationAccount.InstitutionName}}">
+                                {{Teacher.OrganizationAccount.InstitutionName}}
+                              </a>
+                            </h2>
+                          </div>
                         </div>
+                      </div>
                         <div class="body">
                             <div class="bs-example" data-example-id="media-alignment">
                                 <div class="body table-responsive">
@@ -175,18 +179,17 @@
                     $scope.Teacher = data.UserDetail;
                     $scope.MappedStandard = data.TeacherStandard;
                     $scope.IsBlocked = !$scope.Teacher.IsActive;
+                    
+                    NetworkService.get('PraescioCommon/GetPackage?userPackageRole=@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)').success(function (data) {
+                        $scope.PackageList = data;
+                        
+                        var package = data.filter(m => m.id == $scope.Teacher.PackageId);
+                        if (package) {
+                            $scope.PackageName = ($scope.Teacher.VersionType.toLowerCase()=='trial' ? 'Free' : package.text);
+                        }
+                    });
                 });
             }
-
-            NetworkService.get('PraescioCommon/GetPackage?userPackageRole=@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)').success(function (data) {
-                $scope.PackageList = data;
-
-                console.log("package data==", data);
-                var package = data.filter(m => m.id == $scope.Teacher.PackageId);
-                if (package) {
-                    $scope.PackageName = package.text;
-                }
-            });
 
             $scope.LoadUser();
 

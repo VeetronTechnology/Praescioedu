@@ -445,7 +445,7 @@ namespace Praescio.API.Controllers
 
         [HttpGet]
         [Route("GetAssignmentList")]
-        public HttpResponseMessage GetAssignmentList(int pageNo = 1, int itemPerPage = 10, int assignmentType = 0, string searchText = "")
+        public HttpResponseMessage GetAssignmentList(int pageNo = 1, int itemPerPage = 10, int assignmentType = 0, string searchText = "", Boolean HidePublished = false)
         {
             List<Assignment> assignmentList = new List<Assignment>();
             PraescioContext db = new PraescioContext();
@@ -462,6 +462,10 @@ namespace Praescio.API.Controllers
                                         //&& (assign.Title.Trim().ToLower().Contains(searchText.Trim() == ""? assign.Title.ToLower().Trim():searchText.ToLower().Trim()) || assign.Description.ToLower().Trim() == searchText.ToLower().Trim())
                                         select assign).Distinct().ToList();
 
+                if (HidePublished)
+                {
+                    schoolAssignment = schoolAssignment.Where(m => m.IsPublished == false).ToList();
+                }
                 assignmentList = schoolAssignment.OrderBy(x => x.AssignmentId).Skip((pageNo - 1) * itemPerPage).Take(itemPerPage).ToList();
                 return Request.CreateResponse(HttpStatusCode.OK, new { dataContent = assignmentList, totalRecord = schoolAssignment.Count });
 
