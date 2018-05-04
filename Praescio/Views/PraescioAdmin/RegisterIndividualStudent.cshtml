@@ -465,11 +465,7 @@
 
                 $scope.Student.ExpiredOn = $filter('date')($scope.Student.ExpiredOn, "dd/MM/yyyy");
             }
-
-            $scope.ChangeGender = function(gender) {
-                $scope.Student.Gender = gender;
-            }
-
+          
             $scope.RegisterStudent = function () {
                 $scope.Student.Subject = [];
                 
@@ -520,9 +516,6 @@
             }
 
             $scope.UpdateStudent = function () {
-
-                //$scope.Student.Gender = $("input[name='gender']:checked").val();
-                
                 if (!$scope.StudentRegistration.$valid) {
                     $scope.submitted = true;
                 }
@@ -542,7 +535,7 @@
                         + JSON.stringify($scope.Student.Subject) + ',"studentstandard":' + JSON.stringify($scope.Student.Standard)
                         + ',"accounttypeid":' + '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)'
                         + ',"isTeacher":' + false + '}';
-                    //console.log(data);
+                    console.log(data);
                     NetworkService.insert('PraescioAdmin/UpdateStudent', data).success(function (data) {
                         $scope.savingRequest = false;
                         $scope.Student.ActivateOn = activateOn;

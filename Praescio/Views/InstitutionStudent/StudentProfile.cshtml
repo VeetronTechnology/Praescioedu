@@ -8,13 +8,13 @@
             <div class="panel panel-default">
               <div class="panel-heading">
                 <div class="row">
-                  @if (@ViewBag.IsIndividual == false)
+                  @if (ViewBag.IsIndividual == false)
                   {
-                    <div class="col-md-6">
-                      <h2>Student Profile</h2>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                      <h2 class="text-left">Student Profile</h2>
                     </div>
-                    <div class="col-md-6">
-                      <h2>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                      <h2 class="text-left">
                         School Name:
                         <a href="@Url.Action("SchoolDetails", "PraescioAdmin")?institutionId={{Student.OrganizationAccount.InstitutionAccountId}}" title="{{Student.OrganizationAccount.InstitutionName}}">
                           {{Student.OrganizationAccount.InstitutionName}}
@@ -25,136 +25,120 @@
                   else
                   {
                     <div class="col-md-12">
-                      <h2>Student Profile</h2>
+                      <h2 class="text-left">Student Profile</h2>
                     </div>
                   }
                 </div>
               </div>
-                <div>
-                    <table class="table" ui-jq="footable" ui-options='{
-        "paging": {
-          "enabled": true
-        },
-        "filtering": {
-          "enabled": true
-        },
-        "sorting": {
-          "enabled": true
-        }}'>
-                        <tbody>
-                            <tr data-expanded="true">
-                                <th>First Name</th>
-                                <td>{{Student.FirstName}}</td>
-                            </tr>
-                            <tr data-expanded="true">
-                                <th>Last Name</th>
-                                <td>{{Student.LastName}}</td>
-                            </tr>
-                            <tr data-expanded="true">
-                                <th>Email Id</th>
-                                <td>{{Student.Email}}</td>
-                            </tr>
-                            <tr data-expanded="true">
-                                <th>Password</th>
-                                <td>*********  <a href="#" ng-click="SendResetPasswordLink()" class="btn btn-success">Reset Password</a></td>
-                            </tr>
-                            <tr data-expanded="true">
-                                <th>Gender</th>
-                                <td>{{Student.Gender}}</td>
-                            </tr>
-                            <tr data-expanded="true">
-                                <th>Date Of Birth</th>
-                                <td>{{Student.DateOfBirth |date :  "dd MMM yyyy"}}</td>
-                            </tr>
-                            <!--   <tr data-expanded="true">
-               <th>Amount Paid</th>
-               <td>{{Student.AmountPaid}}</td>
-                </tr>
-            -->
-                            <tr data-expanded="true">
-                                <th>Father Name</th>
-                                <td>{{Student.FatherName}}</td>
-                            </tr>
-                            <tr data-expanded="true">
-                                <th>Mother Name</th>
-                                <td>{{Student.MotherName}}</td>
-                            </tr>
-                            <tr data-expanded="true">
-                                <th>Parent Email</th>
-                                <td>{{Student.ParentEmail}}</td>
-                            </tr>
-                            <tr data-expanded="true">
-                                <th>Parent No</th>
-                                <td>{{Student.ParentNo}}</td>
-                            </tr>
-                            <tr data-expanded="true">
-                                <th>Activation Start Date</th>
-                                <td>{{Student.ActivateOn |date :  "dd MMM yyyy"}}</td>
-                            </tr>
-                            <tr data-expanded="true" ng-if="Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)">
-                                <th>Activation End Date</th>
-                                <td>{{Student.ExpiredOn |date :  "dd MMM yyyy"}}</td>
-                            </tr>
-                            <tr data-expanded="true" ng-if="Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)">
-                                <th>Student Address</th>
-                                <td>{{Student.Address}}</td>
-                            </tr>
+              <div class="body" style="padding: 10px;">
+                <div class="bs-example" data-example-id="media-alignment">
+                  <div class="body table-responsive">
+                    <table class="table table-striped tbl-equalwidth">
+                      <tbody>
+                      <tr data-expanded="true">
+                        <th>First Name</th>
+                        <td>{{Student.FirstName}}</td>
+                      </tr>
+                      <tr data-expanded="true">
+                        <th>Last Name</th>
+                        <td>{{Student.LastName}}</td>
+                      </tr>
+                      <tr data-expanded="true">
+                        <th>Email Id</th>
+                        <td>{{Student.Email}}</td>
+                      </tr>
+                      <tr data-expanded="true">
+                        <th>Password</th>
+                        <td>*********  <a href="#" ng-click="SendResetPasswordLink()" class="btn btn-success">Reset Password</a></td>
+                      </tr>
+                      <tr data-expanded="true">
+                        <th>Gender</th>
+                        <td>{{Student.Gender}}</td>
+                      </tr>
+                      <tr data-expanded="true">
+                        <th>Date Of Birth</th>
+                        <td>{{Student.DateOfBirth |date :  "dd MMM yyyy"}}</td>
+                      </tr>
+                      <!--   <tr data-expanded="true">
+                        <th>Amount Paid</th>
+                        <td>{{Student.AmountPaid}}</td>
+                      </tr>
+                      -->
+                      <tr data-expanded="true">
+                        <th>Father Name</th>
+                        <td>{{Student.FatherName}}</td>
+                      </tr>
+                      <tr data-expanded="true">
+                        <th>Mother Name</th>
+                        <td>{{Student.MotherName}}</td>
+                      </tr>
+                      <tr data-expanded="true">
+                        <th>Parent Email</th>
+                        <td>{{Student.ParentEmail}}</td>
+                      </tr>
+                      <tr data-expanded="true">
+                        <th>Parent No</th>
+                        <td>{{Student.ParentNo}}</td>
+                      </tr>
+                      <tr data-expanded="true">
+                        <th>Activation Start Date</th>
+                        <td>{{Student.ActivateOn |date :  "dd MMM yyyy"}}</td>
+                      </tr>
+                      <tr data-expanded="true" ng-if="Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)">
+                        <th>Activation End Date</th>
+                        <td>{{Student.ExpiredOn |date :  "dd MMM yyyy"}}</td>
+                      </tr>
+                      <tr data-expanded="true" ng-if="Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)">
+                        <th>Student Address</th>
+                        <td>{{Student.Address}}</td>
+                      </tr>
 
-                            <tr data-expanded="true">
-                                <th>Students School Name</th>
-                                <td>{{Student.OrganizationAccount.InstitutionName}}</td>
-                            </tr>
-                            <tr data-expanded="true" ng-if="Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Student)">
-                                <th>School Address</th>
-                                <td>{{Student.OrganizationAccount.Address}}</td>
-                            </tr>
-                            <tr data-expanded="true" ng-if="Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Student)">
-                                <th>Board</th>
-                                <td>{{Student.OrganizationAccount.Board.BoardName}}</td>
-                            </tr>
-                            <tr data-expanded="true" ng-if="Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)">
-                                <th>Board</th>
-                                <td>{{Student.Board.BoardName}}</td>
-                            </tr>
-                            <tr data-expanded="true" ng-if="Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Student)">
-                                <th>Medium</th>
-                                <td>{{Student.OrganizationAccount.Medium.Name}}</td>
-                            </tr>
-                            <tr data-expanded="true" ng-if="Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)">
-                                <th>Medium</th>
-                                <td>{{Student.Medium.Name}}</td>
-                            </tr>
-                            <tr data-expanded="true">
-                                <th>Standard</th>
-                                <td>{{Student.Standard.StandardName}}</td>
-                            </tr>
-                            <!-- <tr data-expanded="true">
-                <th>Current Package</th>
-                 <td>Yearly</td>
-                 </tr>
-            -->
-                            <tr data-expanded="true">
-                                <th>Date Of Registration</th>
-                                <td>{{Student.CreatedOn |date :  "dd MMM yyyy"}}</td>
-                            </tr>
+                      <tr data-expanded="true">
+                        <th>Students School Name</th>
+                        <td>{{Student.OrganizationAccount.InstitutionName}}</td>
+                      </tr>
+                      <tr data-expanded="true" ng-if="Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Student)">
+                        <th>School Address</th>
+                        <td>{{Student.OrganizationAccount.Address}}</td>
+                      </tr>
+                      <tr data-expanded="true" ng-if="Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Student)">
+                        <th>Board</th>
+                        <td>{{Student.OrganizationAccount.Board.BoardName}}</td>
+                      </tr>
+                      <tr data-expanded="true" ng-if="Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)">
+                        <th>Board</th>
+                        <td>{{Student.Board.BoardName}}</td>
+                      </tr>
+                      <tr data-expanded="true" ng-if="Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Student)">
+                        <th>Medium</th>
+                        <td>{{Student.OrganizationAccount.Medium.Name}}</td>
+                      </tr>
+                      <tr data-expanded="true" ng-if="Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)">
+                        <th>Medium</th>
+                        <td>{{Student.Medium.Name}}</td>
+                      </tr>
+                      <tr data-expanded="true">
+                        <th>Standard</th>
+                        <td>{{Student.Standard.StandardName}}</td>
+                      </tr>
+                      <!-- <tr data-expanded="true">
+                        <th>Current Package</th>
+                        <td>Yearly</td>
+                      </tr>
+                      -->
+                      <tr data-expanded="true">
+                        <th>Date Of Registration</th>
+                        <td>{{Student.CreatedOn |date :  "dd MMM yyyy"}}</td>
+                      </tr>
 
-                        </tbody>
+                      </tbody>
                     </table>
 
-
-
-                    @if (@ViewBag.IsIndividual == false)
-    {
-                <a class="btn btn-success" href="@Url.Content("~/InstitutionAdmin/RegisterStudent")?accountid={{Student.AccountId}}">Update</a>
-}
-else
-{
-                <a ng-if="ViewBag.IsIndividual==True" class="btn btn-success" href="@Url.Content("~/PraescioAdmin/RegisterIndividualStudent")?accountid={{Student.AccountId}}">Update</a>
-
-}
-
-                    <!--<a href="#BlockModal" data-toggle="modal" class="btn btn-danger" ng-if="IsBlocked">UnBlock</a>-->
+                    <a ng-if="AllowEdit" class="btn btn-success" href="@Url.Content(ViewBag.IsIndividual ? "~/InstitutionAdmin/RegisterStudent" : "~/PraescioAdmin/RegisterIndividualStudent")?accountid={{Student.AccountId}}">Update</a>
+                    <a ng-if="AllowEdit" href="#BlockModal" data-toggle="modal" class="btn btn-danger">{{IsBlocked ? "Unblock" : "Block"}}</a>
+                  </div>
                 </div>
+              </div>
             </div>
         </div>
     </div>
@@ -229,13 +213,35 @@ else
     <script type="text/javascript">
 
         myApp.controller('StudentProfileCtrl', function ($scope, $rootScope, $filter, NetworkService) {
-            $scope.itemPerPage = 10;
+          $scope.itemPerPage = 10;
+          $scope.AllowEdit = false;
 
             $scope.LoadUser = function () {
                 NetworkService.get('PraescioCommon/GetStudentProfile?userid=@ViewBag.StudentAccountId').success(function (data) {
                     $scope.Student = data.UserDetail;
                     $scope.MappedStandard = data.TeacherStandard;
                     $scope.IsBlocked = !$scope.Student.IsActive;
+
+                    if ($scope.Student.IsIndividual == true &&
+                      "@Praescio.Models.Common.ACCOUNT.AccountTypeId" ==
+                      "@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.SuperAdmin)") {
+                      $scope.AllowEdit = true;
+                    }
+                    if ($scope.Student.IsIndividual == false &&
+                      ("@Praescio.Models.Common.ACCOUNT.AccountTypeId" ==
+                      "@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Admin)" ||
+                        "@Praescio.Models.Common.ACCOUNT.AccountTypeId" ==
+                        "@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Teacher)"
+                      ) &&
+                        "@Praescio.Models.Common.ACCOUNT.InstitutionAccountId" == $scope.Student.InstitutionAccountId
+                      ) {
+                      $scope.AllowEdit = true;
+                    }
+                    if ("@Praescio.Models.Common.ACCOUNT.AccountId" == $scope.Student.AccountId) {
+                      $scope.AllowEdit = true;
+                    }
+
+                    console.log('$scope.Student.IsIndividual', $scope.Student.IsIndividual,"@Praescio.Models.Common.ACCOUNT.AccountTypeId", "@Praescio.Models.Common.ACCOUNT.AccountId","@Praescio.Models.Common.ACCOUNT.InstitutionAccountId", $scope.Student.InstitutionAccountId)
                 });
             }
             $scope.LoadUser();

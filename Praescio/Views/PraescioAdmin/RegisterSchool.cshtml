@@ -186,7 +186,7 @@
                                     <input type="radio" class="flat" name="gender" id="genderF" value="Female" />
                                 </p>*@
                               <p>
-                                  <select id="Version" name="Gender" ng-model="Principal.Gender" class="input-sm form-control" required>
+                                  <select id="Gender" name="Gender" ng-model="Principal.Gender" class="input-sm form-control" required>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
                                   </select>
@@ -314,11 +314,7 @@
             $scope.Institution = {};
             $scope.Institution.ActivateOn = '@DateTime.Parse(DateTime.Now.ToString().Trim()).ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)';
             $scope.Institution.ExpiredOn = '@DateTime.Parse(DateTime.Now.AddYears(1).ToString().Trim()).ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)';
-
-            $scope.ChangeGender = function(gender) {
-              $scope.Principal.Gender = gender;
-            }
-
+          
             $scope.reset = function () {
 
                 $scope.Institution = {};
@@ -392,6 +388,10 @@
                     $scope.Institution.ActivateOn = $filter('date')($scope.Institution.ActivateOn, "dd/MM/yyyy");
                     $scope.Institution.ExpiredOn = $filter('date')($scope.Institution.ExpiredOn, "dd/MM/yyyy");
                     $scope.Principal = data.PrincipalDetail;
+                  
+                    if ($scope.Institution.StateId != undefined) {
+                      $scope.ChangeState($scope.Institution.StateId);
+                    }
                 });
             }
 
@@ -431,7 +431,7 @@
 
             $scope.RegisterSchool = function () {
 
-                $scope.Principal.Gender = $("input[name='gender']:checked").val();
+                //$scope.Principal.Gender = $("input[name='gender']:checked").val();
 
                 var ActivateOn = $scope.Institution.ActivateOn;
                 var ExpiredOn = $scope.Institution.ExpiredOn;
@@ -496,7 +496,7 @@
             }
 
             $scope.UpdateSchool = function () {
-                $scope.Principal.Gender = $("input[name='gender']:checked").val();
+                //$scope.Principal.Gender = $("input[name='gender']:checked").val();
 
                 var ActivateOn = $scope.Institution.ActivateOn;
                 var ExpiredOn = $scope.Institution.ExpiredOn;
