@@ -312,8 +312,13 @@ else
                             text: "Press Ok to Continue.",
                             type: "success",
                             confirmButtonColor: "green",
-                            showCancelButton: false,
-
+                            showCancelButton: false
+                        },
+                        function (isConfirm) {
+                          if (isConfirm) {
+                            var assignment = '@ViewBag.Assignmentid';
+                            window.location.href = '@Url.Content("~/Praescio/ViewAssignment?assignmentType=")@ViewBag.AssignmentType';
+                          }
                         });
                     });
                 });
@@ -344,12 +349,12 @@ else
                             closeOnConfirm: false,
                             closeOnCancel: true
                         },
-                                 function (isConfirm) {
-                                     if (isConfirm) {
-                                         var assignment = '@ViewBag.Assignmentid';
-                                         window.location.href = '@Url.Content("~/Praescio/ViewAssignment?assignmentType=")@ViewBag.AssignmentType';
-                                     }
-                                 });
+                        function (isConfirm) {
+                            if (isConfirm) {
+                                var assignment = '@ViewBag.Assignmentid';
+                                window.location.href = '@Url.Content("~/Praescio/ViewAssignment?assignmentType=")@ViewBag.AssignmentType';
+                            }
+                        });
                     });
                 });
             }

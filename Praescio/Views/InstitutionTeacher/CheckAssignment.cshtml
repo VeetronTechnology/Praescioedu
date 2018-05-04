@@ -22,8 +22,11 @@
     #pnl-ats .info-box .content .text {
         color: #fff !important;
     }
+    #pnl-ats label.active {
+      box-shadow: 0 8px 6px -6px black;
+    }
     #pnl-ats label.active .content .text {
-        color: #555 !important; font-weight: bold !important;
+        font-weight: bold !important; font-size: 15px;
     }
     input[name="assignmentType"] {
         display: none;
@@ -151,8 +154,8 @@
                                     <th>Email</th>
                                     <th>Phone No.</th>
                                     <th>Registration Date</th>
-                                    <th>Expiry Date</th>
-                                    <th>Status</th>
+                                    @*<th>Expiry Date</th>
+                                    <th>Status</th>*@
                                     <th></th>
                                 </tr>
                             </thead>
@@ -163,8 +166,8 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
-                                <td></td>
+                                @*<td></td>
+                                <td></td>*@
                                 <td></td>
                             </tr>
                         </table>
@@ -175,8 +178,8 @@
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Phone No.</th>
-                                    <th>Registration Date</th>
-                                    <th>Expiry Date</th>
+                                    @*<th>Registration Date</th>
+                                    <th>Expiry Date</th>*@
                                     <th>Status</th>
                                     <th></th>
                                 </tr>
@@ -186,8 +189,8 @@
                                     <td>{{student.FirstName}}</td>
                                     <td>{{student.Email}}</td>
                                     <td>{{student.MobileNo}}</td>
-                                    <td>{{student.CreatedOn| date:'dd MMM yyyy'}}</td>
-                                    <td>{{student.ExpiredOn}}</td>
+                                    @*<td>{{student.CreatedOn| date:'dd MMM yyyy'}}</td>
+                                    <td>{{student.ExpiredOn}}</td>*@
                                     <td>{{student.IsActive==true?'Active':'DeActive'}}</td>
                                     <td><a href="@Url.Action("TestHistory", "InstitutionTeacher")?StandardId={{StandardId}}&subjectId={{SubjectId}}&AssignmentId={{AssignmentId}}&userId={{student.AccountId}}">Check Answer</a></td>
                                 </tr>
@@ -281,17 +284,13 @@
             }
 
             $scope.ChangeAssignmentList = function () {
-                console.log('$scope.AssignmentListAll', $scope.AssignmentListAll)
-                console.log('$scope.AssignmentList', $scope.AssignmentList, $scope.assignmentType)
                 $scope.AssignmentList = $scope.AssignmentListAll.filter(m => m.SubjectId == $scope.SubjectId && m.StandardId == $scope.StandardId && m.AssignmentTypeId == $scope.assignmentType);
-                console.log('$scope.AssignmentList', $scope.AssignmentList)
             }
 
             $scope.ChangeAssignment = function (id) {
                 NetworkService.get('PraescioCommon/GetAssignmentDetail?assignmentid='+id).success(function (data) {
                     $scope.Student = data.Student;
                     $scope.ChangeStandard(data.Student.StandardId);
-
                 });
             }
 

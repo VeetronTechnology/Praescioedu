@@ -1,11 +1,6 @@
 ﻿@{
     ViewBag.Title = "School_details";
 }
-<style>
-  table#tbl-schooldetails th, table#tbl-schoolmgt th {
-    width: 40%;
-  }
-</style>
 <!-- page content -->
 <div class="right_col" role="main" ng-controller="SchoolDetailCtrl" ng-cloak>
     <div class="">
@@ -30,123 +25,126 @@
                 <div class="x_panel">
                     <div class="x_title">
                         <div class="row">
-                            <div class="col-md-6">
-                                <h2>School Details </h2>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <h2 class="text-left">School Details </h2>
                             </div>
-                            <div class="col-md-6">
-                                <h2>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <h2 class="text-left">
                                     School Name: &nbsp;&nbsp;&nbsp; {{InstitutionDetail.Institution.InstitutionName}}
                                 </h2>
                             </div>
                         </div>
                     </div>
-                    <div class="x_content">
-                        <table class="table table-striped" id="tbl-schooldetails">
-                            <tbody>                       
+                <div class="body">
+                  <div class="bs-example" data-example-id="media-alignment">
+                    <div class="body table-responsive">
+                      <table class="table table-striped tbl-equalwidth">
+                        <tbody>                       
                               
 
-                                <tr>
-                                    <th>School Name</th>
-                                    <td>{{InstitutionDetail.Institution.InstitutionName}}</td>
-                                </tr>
-                                <tr>
-                                    <th>School Registration Number</th>
-                                    <td>{{InstitutionDetail.Institution.RegistrationNo}}</td>
-                                </tr>
-                                <tr>
-                                    <th>School Address</th>
-                                    <td>{{InstitutionDetail.Institution.Address}}</td>
-                                </tr>
-                                <tr>
-                                    <th>School Domain Key</th>
-                                    <td>{{InstitutionDetail.Institution.DomainKey}}</td>
-                                </tr>
-                                <tr>
-                                    <th>Mobile Number</th>
-                                    <td>{{InstitutionDetail.Institution.MobileNo}}</td>
-                                </tr>
-                                <tr>
-                                    <th>Landline Number</th>
-                                    <td>{{InstitutionDetail.Institution.LandlineNo}}</td>
-                                </tr>                               
+                        <tr>
+                          <th>School Name</th>
+                          <td>{{InstitutionDetail.Institution.InstitutionName}}</td>
+                        </tr>
+                        <tr>
+                          <th>School Registration Number</th>
+                          <td>{{InstitutionDetail.Institution.RegistrationNo}}</td>
+                        </tr>
+                        <tr>
+                          <th>School Address</th>
+                          <td>{{InstitutionDetail.Institution.Address}}</td>
+                        </tr>
+                        <tr>
+                          <th>School Domain Key</th>
+                          <td>{{InstitutionDetail.Institution.DomainKey}}</td>
+                        </tr>
+                        <tr>
+                          <th>Mobile Number</th>
+                          <td>{{InstitutionDetail.Institution.MobileNo}}</td>
+                        </tr>
+                        <tr>
+                          <th>Landline Number</th>
+                          <td>{{InstitutionDetail.Institution.LandlineNo}}</td>
+                        </tr>                               
                               
-                                <tr>
-                                    <th>School email id</th>
-                                    <td>{{InstitutionDetail.Institution.Email}}</td>
-                                </tr>
-                                <tr>
-                                    <th>Board</th>
-                                    <td>{{InstitutionDetail.Institution.Board.BoardName}}</td>
-                                </tr>
-                                <tr>
-                                    <th>State</th>
-                                    <td>{{InstitutionDetail.Institution.State.StateName}}</td>
-                                </tr>
-                                <tr>
-                                    <th>City</th>
-                                    <td>{{InstitutionDetail.Institution.City}}</td>
-                                </tr>
-                                <tr>
-                                    <th>Pincode</th>
-                                    <td>{{InstitutionDetail.Institution.Pincode}}</td>
-                                </tr>
+                        <tr>
+                          <th>School email id</th>
+                          <td>{{InstitutionDetail.Institution.Email}}</td>
+                        </tr>
+                        <tr>
+                          <th>Board</th>
+                          <td>{{InstitutionDetail.Institution.Board.BoardName}}</td>
+                        </tr>
+                        <tr>
+                          <th>State</th>
+                          <td>{{InstitutionDetail.Institution.State.StateName}}</td>
+                        </tr>
+                        <tr>
+                          <th>City</th>
+                          <td>{{InstitutionDetail.Institution.City}}</td>
+                        </tr>
+                        <tr>
+                          <th>Pincode</th>
+                          <td>{{InstitutionDetail.Institution.Pincode}}</td>
+                        </tr>
 
 
-                                <tr>
-                                    <th>School Medium</th>
-                                    <td>{{InstitutionDetail.Institution.Medium.Name}}</td>
-                                </tr>
-                                <tr>
-                                    <th>Amount Paid</th>
-                                    <td>{{InstitutionDetail.Institution.AmountPaid}} INR</td>
-                                </tr>
-                                <tr>
-                                    <th>Total Count Of Allowed Students</th>
-                                    <td>{{InstitutionDetail.Institution.NoOfStudent}}</td>
-                                </tr>
-                                <tr>
-                                    <th>Total Count Of Allowed Teachers</th>
-                                    <td>{{InstitutionDetail.Institution.NoOfTeacher}}</td>
-                                </tr>
-                                <tr>
-                                    <th>Registered Student's Count</th>
-                                    <td>{{InstitutionDetail.RegisteredStudent}}</td>
-                                </tr>
-                                <tr>
-                                    <th>Registered Teacher's Count</th>
-                                    <td>{{InstitutionDetail.RegisteredTeacher}}</td>
-                                </tr>
-                                <tr>
-                                    <th>Pending Student</th>
-                                    <td>{{InstitutionDetail.PendingStudent}}</td>
-                                </tr>
-                                <tr>
-                                    <th>Pending Teacher</th>
-                                    <td>{{InstitutionDetail.PendingTeacher}}</td>
-                                </tr>
+                        <tr>
+                          <th>School Medium</th>
+                          <td>{{InstitutionDetail.Institution.Medium.Name}}</td>
+                        </tr>
+                        <tr>
+                          <th>Amount Paid</th>
+                          <td>{{InstitutionDetail.Institution.AmountPaid}} INR</td>
+                        </tr>
+                        <tr>
+                          <th>Total Count Of Allowed Students</th>
+                          <td>{{InstitutionDetail.Institution.NoOfStudent}}</td>
+                        </tr>
+                        <tr>
+                          <th>Total Count Of Allowed Teachers</th>
+                          <td>{{InstitutionDetail.Institution.NoOfTeacher}}</td>
+                        </tr>
+                        <tr>
+                          <th>Registered Student's Count</th>
+                          <td>{{InstitutionDetail.RegisteredStudent}}</td>
+                        </tr>
+                        <tr>
+                          <th>Registered Teacher's Count</th>
+                          <td>{{InstitutionDetail.RegisteredTeacher}}</td>
+                        </tr>
+                        <tr>
+                          <th>Pending Student</th>
+                          <td>{{InstitutionDetail.PendingStudent}}</td>
+                        </tr>
+                        <tr>
+                          <th>Pending Teacher</th>
+                          <td>{{InstitutionDetail.PendingTeacher}}</td>
+                        </tr>
 
-                                <tr>
-                                    <th>School Address Proof</th>
-                                    <td><a target="_blank" ng-href='~/{{InstitutionDetail.Institution.AddressProofSrc}}'><i class="fa fa-file-pdf-o" style="font-size:48px;color:red"></i></a></td>
-                                </tr>
+                        <tr>
+                          <th>School Address Proof</th>
+                          <td><a target="_blank" ng-href='~/{{InstitutionDetail.Institution.AddressProofSrc}}'><i class="fa fa-file-pdf-o" style="font-size:48px;color:red"></i></a></td>
+                        </tr>
 
-                                <tr> 
+                        <tr> 
                                 
-                                    <th>Activation Date</th>
-                                    <td>{{InstitutionDetail.Institution.ActivateOn| date:"dd MMM, yyyy"}}</td>
-                                </tr>
+                          <th>Activation Date</th>
+                          <td>{{InstitutionDetail.Institution.ActivateOn| date:"dd MMM, yyyy"}}</td>
+                        </tr>
 
 
-                                <tr>
-                                    <th>Expiry Date</th>
-                                    <td>{{InstitutionDetail.Institution.ExpiredOn| date:"dd MMM, yyyy"}}</td>
-                                </tr>
+                        <tr>
+                          <th>Expiry Date</th>
+                          <td>{{InstitutionDetail.Institution.ExpiredOn| date:"dd MMM, yyyy"}}</td>
+                        </tr>
 
-                            </tbody>
-                        </table>
-
+                        </tbody>
+                      </table>
                     </div>
+                  </div>
                 </div>
+              </div>
             </div>
 
             <div class="col-md-12 col-sm-12 col-xs-12">
@@ -155,45 +153,47 @@
                         <h2>School Management / Principal Details</h2>
                         <div class="clearfix"></div>
                     </div>
-                    <div class="x_content">
-
-
-                        <table class="table table-striped" id="tbl-schoolmgt">
-                            <tbody>
+                  <div class="x-content">
+                    <div class="bs-example" data-example-id="media-alignment">
+                      <div class="body table-responsive">
+                        <table class="table table-striped tbl-equalwidth">
+                          <tbody>
                                 
-                                <tr>
-                                    <th>Principal Name</th>
-                                    <td>{{InstitutionDetail.PrincipalDetail.Name}}</td>
-                                </tr>
-                                <tr>
-                                    <th>Designation</th>
-                                    <td>{{InstitutionDetail.PrincipalDetail.Designation}}</td>
-                                </tr>
-                                <tr>
-                                    <th>Gender</th>
-                                    <td>{{InstitutionDetail.PrincipalDetail.Gender}}</td>
-                                </tr>
-                                <tr>
-                                    <th>Email id	</th>
-                                    <td>{{InstitutionDetail.PrincipalDetail.Email}}</td>
-                                </tr>
-                                <tr>
-                                    <th>Phone Number</th>
-                                    <td>{{InstitutionDetail.PrincipalDetail.Designation}}</td>
-                                </tr>
-                                <tr>
-                                    <th>Person Photo Id</th>
-                                    <td><a target="_blank" ng-href='~/{{InstitutionDetail.PrincipalDetail.PersonPhotoSrc}}'><i class="fa fa-file-pdf-o" style="font-size:48px;color:red"></i></a></td>
+                          <tr>
+                            <th>Principal Name</th>
+                            <td>{{InstitutionDetail.PrincipalDetail.Name}}</td>
+                          </tr>
+                          <tr>
+                            <th>Designation</th>
+                            <td>{{InstitutionDetail.PrincipalDetail.Designation}}</td>
+                          </tr>
+                          <tr>
+                            <th>Gender</th>
+                            <td>{{InstitutionDetail.PrincipalDetail.Gender}}</td>
+                          </tr>
+                          <tr>
+                            <th>Email id	</th>
+                            <td>{{InstitutionDetail.PrincipalDetail.Email}}</td>
+                          </tr>
+                          <tr>
+                            <th>Phone Number</th>
+                            <td>{{InstitutionDetail.PrincipalDetail.Designation}}</td>
+                          </tr>
+                          <tr>
+                            <th>Person Photo Id</th>
+                            <td><a target="_blank" ng-href='~/{{InstitutionDetail.PrincipalDetail.PersonPhotoSrc}}'><i class="fa fa-file-pdf-o" style="font-size:48px;color:red"></i></a></td>
                                   
-                                </tr>
-                                <tr>
-                                    <th>Authority Letter</th>
-                                    <td><a target="_blank" ng-href='~/{{InstitutionDetail.PrincipalDetail.AuthorityLetterSrc}}'><i class="fa fa-file-pdf-o" style="font-size:48px;color:red"></i></a></td>
-                                </tr>
+                          </tr>
+                          <tr>
+                            <th>Authority Letter</th>
+                            <td><a target="_blank" ng-href='~/{{InstitutionDetail.PrincipalDetail.AuthorityLetterSrc}}'><i class="fa fa-file-pdf-o" style="font-size:48px;color:red"></i></a></td>
+                          </tr>
 
-                            </tbody>
+                          </tbody>
                         </table>
+                      </div>
                     </div>
+                  </div>
                 </div>
             </div>
 

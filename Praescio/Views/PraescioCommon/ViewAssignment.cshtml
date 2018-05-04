@@ -123,26 +123,36 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div ng-show="IsVisible">
-                            <div class="form-group">
-                                <div>
-                                    <label for="heard">Select Standard</label>
-                                    <select id="Standard" name="Standard" class="input-sm form-control" ng-model="Assignment.StandardId" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="ChangeStandard(Assignment.StandardId)" ng-required="true">
-                                        <option value="">-- Select Standard --</option>
-                                    </select>
-                                </div>
-                                <p ng-show="AssignmentForm.Standard.$invalid && (AssignmentForm.Standard.$dirty || submitted ||AssignmentForm.Standard.$touched )" class="text-danger">Standard is required.</p>
-                            </div>
-
-                            <div class="form-group">
-                                <div>
-                                    <label for="heard">Select Subject</label>
-                                    <select id="Subject" name="Subject" class="input-sm form-control" ng-model="Assignment.SubjectId" ng-options="option.Id as option.SubjectName for option in SubjectList" ng-change="ChangeSubject(Assignment.SubjectId)" ng-required="true">
-                                        <option value="">-- Select Subject --</option>
-                                    </select>
-                                </div>
-                            </div>
+                      <div ng-show="IsVisible">
+                        <div class="form-group">
+                          <div>
+                            <label for="heard">Select Medium</label>
+                            <select id="Medium" name="Medium" class="input-sm form-control" ng-model="Assignment.MediumId" ng-disabled="Assignment.BoardId>1" ng-options="option.Id as option.Name for option in MediumList" ng-change="" ng-required="true">
+                              <option value="">-- Select Medium --</option>
+                            </select>
+                          </div>
+                          <p ng-show="AssignmentForm.Medium.$invalid && (AssignmentForm.Medium.$dirty || submitted ||AssignmentForm.Medium.$touched )" class="text-danger">Medium is required.</p>
                         </div>
+
+                        <div class="form-group">
+                          <div>
+                            <label for="heard">Select Standard</label>
+                            <select id="Standard" name="Standard" class="input-sm form-control" ng-model="Assignment.StandardId" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="ChangeStandard(Assignment.StandardId)" ng-required="true">
+                              <option value="">-- Select Standard --</option>
+                            </select>
+                          </div>
+                          <p ng-show="AssignmentForm.Standard.$invalid && (AssignmentForm.Standard.$dirty || submitted ||AssignmentForm.Standard.$touched )" class="text-danger">Standard is required.</p>
+                        </div>
+
+                        <div class="form-group">
+                          <div>
+                            <label for="heard">Select Subject</label>
+                            <select id="Subject" name="Subject" class="input-sm form-control" ng-model="Assignment.SubjectId" ng-options="option.Id as option.SubjectName for option in SubjectList" ng-change="ChangeSubject(Assignment.SubjectId)" ng-required="true">
+                              <option value="">-- Select Subject --</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
                         <dir-pagination-controls max-size="10"
                                                  direction-links="true"
                                                  on-page-change="onPageChange(newPageNumber)"
@@ -194,11 +204,16 @@
                     $scope.totalcount = data.totalRecord;
                 });
             }
+          
+            NetworkService.get('PraescioAdmin/GetMedium').success(function (data) {
+              $scope.MediumList = data;
+            });
+
             $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
                 { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }]
 
             $scope.ChangeStandard = function (id) {
-                NetworkService.get('PraescioCommon/GetSubject?standardid=' + id ).success(function (data) {
+                NetworkService.get('PraescioCommon/GetSubject?standardid=' + id + '&mediumid=' + $scope.Assignment.MediumId).success(function (data) {
                     $scope.SubjectList = data;
                     console.log(data);
                 });
