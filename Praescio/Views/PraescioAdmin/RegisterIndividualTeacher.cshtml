@@ -70,7 +70,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Gender</label>
+                                <label class="required">Gender</label>
                                 @*<p>
                                     Male:
                                     @if (ViewBag.AccountId == 0)
@@ -91,21 +91,22 @@
 
                                 <p>
                                     @if (ViewBag.AccountId == 0)
-                                    {
-                                        <select id="Version" ng-hide="savingRequest" name="Gender" ng-model="Teacher.Gender" class="input-sm form-control">
-                                            <option value="Male">Male</option>
-                                            <option value="Female">Female</option>
-                                        </select>
-                                    }
-                                    else
-                                    {
-                                        @*<span>{{Student.Gender}}</span>*@
-                                        <select id="Version" disabled="disabled" ng-hide="savingRequest" name="Gender" ng-model="Teacher.Gender" class="input-sm form-control" style="cursor: not-allowed; pointer-events: none;">
-                                            <option value="Male">Male</option>
-                                            <option value="Female">Female</option>
-                                        </select>
-                                    }
-                                </p>
+                                {
+                            <select id="Version" ng-hide="savingRequest" name="Gender" ng-init="Teacher.Gender = 'Male'" ng-model="Teacher.Gender" class="input-sm form-control" required>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                                }
+                                else
+                                {
+                            @*<span>{{Student.Gender}}</span>*@
+                            <select id="Version" disabled="disabled" ng-hide="savingRequest" name="Gender" ng-init="Teacher.Gender = 'Male'" ng-model="Teacher.Gender" class="input-sm form-control" style="cursor: not-allowed; pointer-events: none;" required>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                                 }
+                                <p ng-show="TeacherRegistration.Gender.$invalid && (TeacherRegistration.Gender.$dirty || submitted ||TeacherRegistration.Gender.$touched )" class="text-danger">Gender is required.</p>
+                                
                             </div>
 
                             <div class="form-group">
@@ -115,7 +116,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="dob">Date Of Birth</label>
+                                <label for="dob" class="required">Date Of Birth</label>
                                 @if (ViewBag.AccountId == 0)
                                 {
                                     <input type="text" ng-hide="savingRequest" id="DateOfBirth" ng-model="Teacher.DateOfBirth" class="form-control" name="DateOfBirth" data-parsley-trigger="change" placeholder="Enter DateOfBirth" required />
@@ -135,14 +136,14 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="address">Address</label>
+                                <label for="address" class="required">Address</label>
                                 <textarea id="address" ng-model="Teacher.Address" required="required" class="form-control" name="Address" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.." placeholder="Enter Address"
                                           data-parsley-validation-threshold="10"></textarea>
                             </div>
 
 
                             <div class="form-group">
-                                <label for="Version">Select Version</label>
+                                <label for="Version" class="required">Select Version</label>
                                 @if (ViewBag.AccountId == 0)
                                 {
                                     <select id="Version" name="Version" ng-hide="savingRequest" ng-change="ChangeExpiredDate()" class="input-sm form-control" ng-model="Teacher.VersionType" ng-options="option.Name as option.Name for option in VersionType" ng-change="" ng-required="true">
@@ -157,17 +158,17 @@
                             </div>
 
                            
-                            <p ng-show="TeacherRegistration.Board.$invalid && (TeacherRegistration.Board.$dirty || submitted ||TeacherRegistration.Board.$touched )" class="text-danger">Board is required.</p>
+                            <p ng-show="TeacherRegistration.Version.$invalid && (TeacherRegistration.Version.$dirty || submitted ||TeacherRegistration.Version.$touched )" class="text-danger">Select Version is required.</p>
 
                             <div class="form-group" ng-if="Teacher.VersionType=='@Praescio.Domain.AppCode.VersionType.Paid'">
-                                <label for="Package">Select Package</label>
+                                <label for="Package" class="required">Select Package</label>
                                 @if (ViewBag.AccountId == 0) {
-                                    <select id="Package" ng-hide="savingRequest" name="Package" class="form-control " ng-model="Teacher.PackageId" ng-options="option.id as option.text for option in PackageList" ng-change="PackageChange();">
+                                    <select id="Package" ng-hide="savingRequest" name="Package" class="form-control " ng-model="Teacher.PackageId" ng-options="option.id as option.text for option in PackageList" ng-change="PackageChange();" required>
                                         <option value="">Select Package</option>
                                     </select>
                                 }
                                 else {
-                                    <select id="Package" ng-hide="savingRequest" readonly name="Package" class="form-control disabledInput" ng-model="Teacher.PackageId" ng-options="option.id as option.text for option in PackageList" ng-change="PackageChange();">
+                                    <select id="Package" ng-hide="savingRequest" readonly name="Package" class="form-control disabledInput" ng-model="Teacher.PackageId" ng-options="option.id as option.text for option in PackageList" ng-change="PackageChange();" required>
                                         <option value="">Select Package</option>
                                     </select>
                                 }
@@ -175,7 +176,7 @@
                             </div>
 
                             <div class="form-group" ng-if="Teacher.VersionType=='@Praescio.Domain.AppCode.VersionType.Paid'">
-                                <label for="AmountPaid">Amount Paid</label>
+                                <label for="AmountPaid" class="required">Amount Paid</label>
                                 @if (ViewBag.AccountId == 0)
                                 {
                                     <input type="text" ng-hide="savingRequest" id="AmountPaid" name="AmountPaid" ng-model="Teacher.AmountPaid" class="form-control" data-space="false">
@@ -189,7 +190,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="Version">Select Activate Date</label>
+                                <label for="Version" class="required">Select Activate Date</label>
                                  @if (ViewBag.AccountId == 0)
                                 {
                                     <input type="text" ng-hide="savingRequest" id="ActivateDate" name="ActivateDate" ng-model="Teacher.ActivateOn" ng-change="ChangeExpiredDate()" class="form-control" data-space="false">
@@ -202,7 +203,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="Version">Select Expired Date</label>
+                                <label for="Version" class="required">Select Expired Date</label>
                                 <input type="text" id="ExpiredDate" name="ExpiredDate" readonly ng-model="Teacher.ExpiredOn" class="form-control" data-space="false">
                             </div>
 
@@ -225,7 +226,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="SubjectName">Select Medium</label>
+                                <label for="SubjectName" class="required">Select Medium</label>
                                 @if (ViewBag.AccountId == 0)
                                 {
                                     <select id="Medium" ng-hide="savingRequest" name="Medium" class="input-sm form-control" ng-disabled="Teacher.BoardId>1" ng-model="Teacher.MediumId" ng-options="option.Id as option.MediumName for option in MediumList" ng-change="" ng-required="true">
@@ -253,7 +254,7 @@
                                     <div ng-repeat="option in Teacher.TeacherMappingStandard" class="col-md-4 col-xs-4" style="padding:0px !important">
                                         <div class="form-group" style="padding-right:10px !important">
                                             <div>
-                                                <label for="SubjectName">Select Standard</label>
+                                                <label for="SubjectName" class="required">Select Standard</label>
                                                 <select id="Standard" name="Standard" class="input-sm form-control" ng-model="option.StandardId" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="ChangeStandard(option.StandardId,$index,Subject$index)" ng-init="Subject$index =[]" ng-required="true">
                                                     <option value="">-- Select Standard --</option>
                                                 </select>
@@ -262,7 +263,7 @@
 
                                         <div class="form-group" style="padding-right:10px !important">
                                             <div>
-                                                <label for="heard">Select Subject</label>
+                                                <label for="heard" class="required">Select Subject</label>
                                                 <select class="input-sm form-control select2" multiple="" id="Subject{{$index}}" name="Subject{{$index}}"
                                                         data-placeholder="Select Subject" ng-required="true" ng-model="option.SubjectId">
                                                     <option value=""></option>
@@ -295,7 +296,7 @@
 
                             <div class="form-group">
                                 <label for="pincode" class="required">Enter Pin Code</label>
-                                <input type="text" id="Pincode" ng-model="Teacher.PinCode" class="form-control number" name="Pincode" ng-minlength="6" maxlength="6" data-parsley-trigger="change" placeholder="Enter Pin Code" required />
+                                <input type="text" id="Pincode" ng-model="Teacher.PinCode" class="form-control" name="Pincode" ng-minlength="6" maxlength="6" ng-pattern="/[0-9]{6}/" data-parsley-trigger="change" placeholder="Enter Pin Code" required />
                                 <p ng-show="TeacherRegistration.Pincode.$invalid && (TeacherRegistration.Pincode.$dirty || submitted ||TeacherRegistration.Pincode.$touched )" class="text-danger">Pincode is required.</p>
                             </div>
 

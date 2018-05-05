@@ -35,31 +35,53 @@
                         <form id="SchoolForm" name="SchoolForm" novalidate ng-submit="request.$valid" data-parsley-validate>
                             <div class="form-group ">
                                 <label for="schoolname" class="required">School Name</label>
-                                <input type="text" id="fullname" ng-model="Institution.InstitutionName" class="form-control required alpha" name="fullname" placeholder="School Name" required />
+                                  @if(ViewBag.institutionId == 0)
+				                   {
+                                <input type="text" ng-hide="savingRequest" id="fullname" ng-model="Institution.InstitutionName" class="form-control required alpha" name="fullname" placeholder="School Name" required />
+		                           }
+			                      else
+			                      {
+			                      <input typr="text" ng-hide="savingRequest" readonly id="fullname" ng-model="Institution.InstitutionName" class="form-control required alpha" name="fullname" placeholder="School Name" required />
+			                      }
                                 <p ng-show="SchoolForm.fullname.$invalid && (SchoolForm.fullname.$dirty || submitted ||SchoolForm.fullname.$touched )" class="text-danger">School Name is required.</p>
                             </div>
 
                             <div class="form-group ">
                                 <label for="DomainKey" class="required">School Domain Key</label>
-                                <input type="text" id="DomainKey" ng-model="Institution.DomainKey" preventspace="true" ng-minlength="3" ng-maxlength="3" maxlength="3" class="form-control required alpha" name="DomainKey" placeholder="Domain Key" required />
+                                @if (ViewBag.institutionId == 0)
+                                {
+                                    <input type="text" id="DomainKey" ng-model="Institution.DomainKey" preventspace="true" ng-minlength="3" ng-maxlength="3" maxlength="3" class="form-control required alpha" name="DomainKey" placeholder="Domain Key" required />
+                                }
+                                else
+                                {
+                                    <input type="text" ng-hide="savingRequest" readonly id="DomainKey" ng-model="Institution.DomainKey" preventspace="true" ng-minlength="3" ng-maxlength="3" maxlength="3" class="form-control required alpha" name="DomainKey" placeholder="Domain Key" required />
+                                }
+
                                 <p ng-show="SchoolForm.DomainKey.$invalid && (SchoolForm.DomainKey.$dirty || submitted ||SchoolForm.DomainKey.$touched )" class="text-danger">min 3 char is required.</p>
                             </div>
 
                             <div class="form-group">
                                 <label for="SchoolRegNo" class="required">School Registration Number</label>
+                                @if (ViewBag.institutionId == 0)
+                                {
                                 <input type="text" id="SchoolRegNo" ng-model="Institution.RegistrationNo" class="form-control alphanumeric" name="SchoolRegNo" data-parsley-trigger="change" placeholder="School Registration Number" required />
+                                }
+                                else
+                                {
+                                  <input type="text" ng-hide="savingRequest" readonly id="SchoolRegNo" ng-model="Institution.RegistrationNo" class="form-control alphanumeric" name="SchoolRegNo" data-parsley-trigger="change" placeholder="School Registration Number" required />
+
+                                }
                                 <p ng-show="SchoolForm.SchoolRegNo.$invalid && (SchoolForm.SchoolRegNo.$dirty || submitted ||SchoolForm.SchoolRegNo.$touched )" class="text-danger">School Reg No is required.</p>
                             </div>
 
                             <div class="form-group">
                                 <label for="MobileNo" class="required">Mobile No</label>
-                                <input type="text" id="MobileNo" ng-model="Institution.MobileNo" class="form-control number" name="MobileNo" maxlength="10" data-parsley-trigger="change" placeholder="Enter Mobile No" required />
+                                <input type="tel" id="MobileNo" ng-model="Institution.MobileNo" class="form-control number" name="MobileNo"  ng-minlength="10"  maxlength="10" data-parsley-trigger="change" placeholder="Enter Mobile No" required />
                                 <p ng-show="SchoolForm.MobileNo.$invalid && (SchoolForm.MobileNo.$dirty || submitted ||SchoolForm.MobileNo.$touched )" class="text-danger">Mobile is required.</p>
-
                             </div>
 
                             <div class="form-group">
-                                <label for="LandlineNo">Landline No</label>
+                                <label class="required" for="LandlineNo">Landline No</label>
                                 <input type="text" id="LandlineNo" ng-model="Institution.LandlineNo" class="form-control number" name="LandlineNo" maxlength="10" data-parsley-trigger="change" placeholder="Enter Landline No" />
                             </div>
 
@@ -69,50 +91,108 @@
                                 <p ng-show="SchoolForm.SchoolEmail.$invalid && (SchoolForm.SchoolEmail.$dirty || submitted ||SchoolForm.SchoolEmail.$touched )" class="text-danger">Enter valid Email ID.</p>
                             </div>
 
-                            <div class="form-group">
-                                <label for="address">Address</label>
-                                <textarea id="address" ng-model="Institution.Address" required="required" class="form-control" name="Address" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.." placeholder="Enter Address"
-                                          data-parsley-validation-threshold="10"></textarea>
+                              <div class="form-group">
+                                <label for="Address" class="required">Address</label>
+                                 @if(ViewBag.institutionId == 0)
+                                 {
+                                     <textarea id="Address"  ng-model="Institution.Address" class="form-control" name="Address" data-parsley-trigger="change" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.." placeholder="Enter Address"
+                                          data-parsley-validation-threshold="10" required></textarea>
+
+                                 }
+                                 else
+                                 {
+                                     <textarea ng-hide="savingRequest" readonly id="Address"  ng-model="Institution.Address" class="form-control" name="Address" data-parsley-trigger="change" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.." placeholder="Enter Address"
+                                          data-parsley-validation-threshold="10" required></textarea>
+                                
+                                 }
+                                <p ng-show="SchoolForm.Address.$invalid && (SchoolForm.Address.$dirty || submitted ||SchoolForm.Address.$touched )" class="text-danger">Address is required.</p>
                             </div>
+
 
                             <div class="form-group">
                                 <label for="heard" class="required">Select Board</label>
+                                @if (ViewBag.institutionId == 0)
+                                {
                                 <select id="Board" name="Board" ng-change="ChangeBoard(Institution.BoardId)" class="input-sm form-control" ng-model="Institution.BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-required="true">
-                                    <option value="">-- Select Board --</option>
+                                    <option value="">-- Select Board --</option>                           
                                 </select>
+                                }
+                                else
+                                {
+                                    <select ng-hide="savingRequest" id="Board" name="Board" ng-change="ChangeBoard(Institution.BoardId)" class="disabledInput input-sm form-control" readonly  ng-model="Institution.BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-required="true">
+                                    <option value="">-- Select Board --</option>                           
+                                </select>
+                                }
                                 <p ng-show="SchoolForm.Board.$invalid && (SchoolForm.Board.$dirty || submitted ||SchoolForm.Board.$touched )" class="text-danger">Board is required.</p>
                             </div>
 
                             <div class="form-group">
                                 <label for="heard" class="required">Select Medium</label>
+                                @if (ViewBag.institutionId == 0)
+                                {
                                 <select id="Medium" name="Medium" class="input-sm form-control" ng-disabled="Institution.BoardId>1" ng-model="Institution.MediumId" ng-options="option.Id as option.Name for option in MediumList" ng-change="" ng-required="true">
                                     <option value="">-- Select Medium --</option>
                                 </select>
+                                }
+                                else
+                                {
+                                     <select id="Medium" name="Medium" class="disabledInput input-sm form-control" ng-disabled="Institution.BoardId>1" readonly ng-model="Institution.MediumId" ng-options="option.Id as option.Name for option in MediumList" ng-change="" ng-required="true">
+                                    <option value="">-- Select Medium --</option>
+                                </select>                            
+                                }
                                 <p ng-show="SchoolForm.Medium.$invalid && (SchoolForm.Medium.$dirty || submitted ||SchoolForm.Medium.$touched )" class="text-danger">Medium is required.</p>
                             </div>
 
                             <div class="form-group">
                                 <label for="heard" class="required">Select State</label>
+                                  @if (ViewBag.institutionId == 0)
+                                  {
                                 <select id="State" name="State" class="input-sm form-control" ng-model="Institution.StateId" ng-options="option.Id as option.StateName for option in StateList" ng-change="ChangeState(Institution.StateId)" ng-required="true">
                                     <option value="">-- Select State --</option>
                                 </select>
+                                  }
+                                  else
+                                  {
+                                      <input type="hidden" name="State" ng-model="Institution.State" />
+                                      <select id="State" name="State" disabled="disabled" class="input-sm form-control" readonly ng-model="Institution.StateId" ng-options="option.Id as option.StateName for option in StateList" ng-change="ChangeState(Institution.StateId)" ng-required="true">
+                                    <option value="">-- Select State --</option>
+                                </select>
+                                  }
                                 <p ng-show="SchoolForm.State.$invalid && (SchoolForm.State.$dirty || submitted ||SchoolForm.State.$touched )" class="text-danger">State is required.</p>
                             </div>
 
                             <div class="form-group">
-                                <label for="City" class="required">Enter City</label>
-                                @*<input type="text" id="City" ng-model="Institution.City" class="form-control alpha" preventspace="true" maxlength="30" name="City" data-parsley-trigger="change" placeholder="Enter City" required />*@
-                                <select id="City" name="City" class="input-sm form-control" ng-model="Institution.City" ng-options="option.city_name as option.city_name for option in CityList" ng-required="true">
-                                    <option value="">-- Select State --</option>
-                                </select>
+                              <label for="City" class="required">Enter City</label>
+                            @if (ViewBag.institutionId == 0)
+                            {
+                              <select id="City" name="City" class="input-sm form-control" ng-model="Institution.City" ng-options="option.city_name as option.city_name for option in CityList" ng-required="true">
+                                <option value="">-- Select State --</option>
+                              </select>
+                            }
+                            else
+                            {
+                              <input type="hidden" name="City" ng-model="Institution.City"/>
+                              <select id="City" name="City" disabled="disabled" class="input-sm form-control" readonly ng-model="Institution.City" ng-options="option.city_name as option.city_name for option in CityList" ng-required="true">
+                                <option value="">-- Select State --</option>
+                              </select>
+                            }
                                 <p ng-show="SchoolForm.City.$invalid && (SchoolForm.City.$dirty || submitted ||SchoolForm.City.$touched )" class="text-danger">City is required.</p>
                             </div>
 
                             <div class="form-group">
                                 <label for="pincode" class="required">Enter Pin Code</label>
-                                <input type="text" id="Pincode" ng-model="Institution.Pincode" class="form-control number" ng-minlength="6" maxlength="6" name="Pincode" data-parsley-trigger="change" placeholder="Enter Pin Code" required />
-                                <p ng-show="SchoolForm.Pincode.$invalid && (SchoolForm.Pincode.$dirty || submitted ||SchoolForm.Pincode.$touched )" class="text-danger">Pincode is required.</p>
-                            </div>
+                                @if (ViewBag.institutionId == 0)
+                                {                              
+                                 <input type="text" id="Pincode" ng-model="Institution.Pincode" class="form-control number" ng-minlength="6" maxlength="6" ng-pattern="/[0-9]{6}/" name="Pincode" data-parsley-trigger="change" placeholder="Enter Pin Code" required />
+                              
+                                }
+                                else
+                                {
+                                    <input type="text" ng-hide="savingRequest" readonly id="Pincode" ng-model="Institution.Pincode" class="form-control number" ng-minlength="6" maxlength="6" ng-pattern="/[0-9]{6}/" name="Pincode" data-parsley-trigger="change" placeholder="Enter Pin Code" required />
+                                }
+                                 <p ng-show="SchoolForm.Pincode.$invalid && (SchoolForm.Pincode.$dirty || submitted ||SchoolForm.Pincode.$touched )" class="text-danger">Pincode is required.</p>
+                                 </div>
+                               
                             <div class="form-group">
                                 <label for="SchoolAddressProof" class="required">School Address Proof</label>
                                 <input id="SchoolAddressProof" ng-model="file" valid-file name="file" ng-required="@ViewBag.InstitutionId<1" type="file" ng-files="getTheFiles($files)" accept="application/pdf" onselect="Call()" />
@@ -121,8 +201,16 @@
 
                             <div class="form-group">
                                 <label for="Version" class="required">Select Activate Date</label>
+                               @if (ViewBag.institutionId == 0)
+                               {
                                 <input type="text" id="ActivateDate" name="ActivateDate" ng-model="Institution.ActivateOn" ng-change="ChangeExpiredDate()" class="form-control" data-space="false">
-                                <p ng-show="SchoolForm.ActivateDate.$invalid && (SchoolForm.ActivateDate.$dirty || submitted ||SchoolForm.ActivateDate.$touched )" class="text-danger">ActivateDate is required.</p>
+                               }
+                               else
+                               {
+                                <input type="text" ng-hide="savingRequest" readonly id="ActivateDate" name="ActivateDate" ng-model="Institution.ActivateOn" ng-change="ChangeExpiredDate()" class="form-control" data-space="false">
+
+                               }
+                                   <p ng-show="SchoolForm.ActivateDate.$invalid && (SchoolForm.ActivateDate.$dirty || submitted ||SchoolForm.ActivateDate.$touched )" class="text-danger">ActivateDate is required.</p>
                             </div>
 
                             <div class="form-group">
@@ -133,19 +221,27 @@
 
                             <div class="form-group">
                                 <label for="AmountPaid" class="required">Amount Paid</label>
-                                <input type="text" id="AmountPaid" name="AmountPaid" ng-model="Institution.AmountPaid" class="form-control number" data-space="false">
-                                <p ng-show="SchoolForm.AmountPaid.$invalid && (SchoolForm.AmountPaid.$dirty || submitted ||SchoolForm.AmountPaid.$touched )" class="text-danger">Amount Paid is required.</p>
+                                @if (ViewBag.institutionId == 0)
+                                {
+                                <input type="text" id="AmountPaid" name="AmountPaid" ng-model="Institution.AmountPaid" class="form-control number" data-space="false"   required>
+                                }
+                                else
+                                {
+                                <input type="text" ng-hide="savingRequest" readonly id="AmountPaid" name="AmountPaid" ng-model="Institution.AmountPaid" class="form-control number" data-space="false"   required >
+
+                                }
+                                    <p ng-show="SchoolForm.AmountPaid.$invalid && (SchoolForm.AmountPaid.$dirty || submitted ||SchoolForm.AmountPaid.$touched )" class="text-danger">Amount Paid is required.</p>
                             </div>
 
                             <div class="form-group">
                                 <label for="NoOfTeacher" class="required">No Of Teacher Allowed</label>
-                                <input type="text" id="NoOfTeacher" name="NoOfTeacher" ng-model="Institution.NoOfTeacher" class="form-control number" data-space="false">
+                                <input type="text" id="NoOfTeacher" name="NoOfTeacher" ng-model="Institution.NoOfTeacher" class="form-control number" data-space="false" required>
                                 <p ng-show="SchoolForm.NoOfTeacher.$invalid && (SchoolForm.NoOfTeacher.$dirty || submitted ||SchoolForm.NoOfTeacher.$touched )" class="text-danger">No Of Teacher allowed is required.</p>
                             </div>
 
                             <div class="form-group">
                                 <label for="NoOfStudent" class="required">No Of Student Allowed</label>
-                                <input type="text" id="NoOfStudent" name="NoOfStudent" ng-model="Institution.NoOfStudent" class="form-control number" data-space="false">
+                                <input type="text" id="NoOfStudent" name="NoOfStudent" ng-model="Institution.NoOfStudent" class="form-control number" data-space="false" required>
                                 <p ng-show="SchoolForm.NoOfStudent.$invalid && (SchoolForm.NoOfStudent.$dirty || submitted ||SchoolForm.NoOfStudent.$touched )" class="text-danger">No Of Student allowed is required.</p>
                             </div>
 
@@ -168,7 +264,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="MobileNo" class="required">Mobile No</label>
-                                <input type="text" id="MobileNo" ng-model="Principal.MobileNo" class="form-control number" name="MobileNo" maxlength="10" data-parsley-trigger="change" placeholder="Enter Mobile No" required />
+                                <input type="text" id="MobileNo" ng-model="Principal.MobileNo" class="form-control number" name="MobileNo" ng-minlength="10" maxlength="10" data-parsley-trigger="change" placeholder="Enter Mobile No" required />
                                 <p ng-show="SchoolForm.MobileNo.$invalid && (SchoolForm.MobileNo.$dirty || submitted ||SchoolForm.MobileNo.$touched )" class="text-danger">Mobile is required.</p>
 
                             </div>
@@ -179,28 +275,36 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Gender</label>
+                                <label class="required">Gender</label>
                               @*<p>
                                     Male:
                                     <input type="radio" class="flat" name="gender" id="genderM" value="Male" checked="" required /> Female:
                                     <input type="radio" class="flat" name="gender" id="genderF" value="Female" />
                                 </p>*@
                               <p>
-                                  <select id="Gender" name="Gender" ng-model="Principal.Gender" class="input-sm form-control" required>
+                                  <select id="Gender" name="Gender" ng-init="Principal.Gender = 'Male'" ng-model="Principal.Gender"  class="input-sm form-control" required>
+                                    <option value="">--Select Gender--</option>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
                                   </select>
+                                 <p ng-show="SchoolForm.Gender.$invalid && (SchoolForm.Gender.$dirty || submitted ||SchoolForm.Gender.$touched )" class="text-danger">Gender is required.</p>
+
                               </p>
                             </div>
 
 
                             <div class="form-group" style="margin-bottom:15px !important">
                                 <div class="col-md-3" style="padding:0px !important">
-                                    <label for="PersonPhotoSrc">Person photo Id</label>
-                                    <input type="file" id="PersonPhotoSrc" name="PersonPhotoSrc" accept="application/pdf" multiple ng-files="getPersonFile($files)" data-parsley-trigger="change" placeholder="Enter Pin Code" />
+                                    <label for="PersonPhotoSrc" class="required">Person photo Id</label>
+                                    <input type="file" id="PersonPhotoSrc" name="PersonPhotoSrc" accept="application/pdf" multiple ng-files="getPersonFile($files)" data-parsley-trigger="change" placeholder="Enter Pin Code" required />
+                                    <p ng-show="SchoolForm.PersonPhotoSrc.$invalid && (SchoolForm.PersonPhotoSrc.$dirty || submitted ||SchoolForm.PersonPhotoSrc.$touched )" class="text-danger">Person Photo Id is required.</p>
+
                                 </div>
                                 <div class="col-md-9">
-                                    <img src="~/{{UpdateContent.PrincipalDetail.PersonPhotoSrc}}" ng-show="UpdateContent" style="width:8em; height:6em;" alt="Alternate Text" />
+                                  @*<img src="~/{{UpdateContent.PrincipalDetail.PersonPhotoSrc}}" ng-show="UpdateContent" class="PersonPhotoSrc" alt="Alternate Text" />*@
+                                  <object data="~/{{UpdateContent.PrincipalDetail.PersonPhotoSrc}}" width="40" height="40" ng-show="UpdateContent" class="PersonPhotoSrc">
+                                    <img src="~/Content/assets/production/images/user.png" alt="Profile image" width="40" height="40">
+                                  </object>
                                 </div>
                                 <br />
                                 <br />
@@ -209,8 +313,9 @@
                             <div class="form-group" style="margin-bottom:25px !important">
                                 <div class="col-md-12" style="padding:0px !important">
                                     <div class="col-md-3" style="padding:0px !important">
-                                        <label for="AuthorityLetterSrc">Authority Letter</label>
-                                        <input type="file" id="AuthorityLetterSrc" name="AuthorityLetterSrc" accept="application/pdf" multiple ng-files="getAuthorityLetter($files)" data-parsley-trigger="change" placeholder="Enter Pin Code" />
+                                        <label for="AuthorityLetterSrc" class="required">Authority Letter</label>
+                                        <input type="file" id="AuthorityLetterSrc" name="AuthorityLetterSrc" accept="application/pdf" multiple ng-files="getAuthorityLetter($files)" data-parsley-trigger="change" placeholder="Enter Pin Code" required />
+                                        <p ng-show="SchoolForm.AuthorityLetterSrc.$invalid && (SchoolForm.AuthorityLetterSrc.$dirty || submitted ||SchoolForm.AuthorityLetterSrc.$touched )" class="text-danger">Authority later is required.</p>
                                     </div>
                                     <div class="col-md-9">
                                         <a target="_blank" ng-href='~/{{UpdateContent.PrincipalDetail.AuthorityLetterSrc}}' ng-show="UpdateContent"><i class="fa fa-file-pdf-o" style="font-size:48px;color:red"></i></a>
@@ -421,7 +526,6 @@
             }
 
             $scope.ChangeState = function (id) {
-                console.log('ChangeState', id)
                 if (id != '' && id > 0) {
                     NetworkService.get('PraescioAdmin/GetCityList?StateId='+id).success(function (data) {
                         $scope.CityList = data;

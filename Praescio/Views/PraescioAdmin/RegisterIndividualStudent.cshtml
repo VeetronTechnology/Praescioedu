@@ -76,7 +76,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Gender</label>
+                                <label class="required">Gender</label>
                                 @*<p>
                                     Male:
                                     @if (ViewBag.AccountId == 0)
@@ -98,7 +98,7 @@
                                 <p>
                                     @if (ViewBag.AccountId == 0)
                                     {
-                                        <select id="Gender" ng-hide="savingRequest" name="Gender" ng-model="Student.Gender" class="input-sm form-control">
+                                        <select id="Gender" ng-hide="savingRequest" name="Gender" ng-init="Student.Gender = 'Male'" ng-model="Student.Gender" class="input-sm form-control" required>
                                             <option value="Male">Male</option>
                                             <option value="Female">Female</option>
                                         </select>
@@ -106,16 +106,18 @@
                                     else
                                     {
                                         @*<span>{{Student.Gender}}</span>*@
-                                        <select id="Gender" disabled="disabled" ng-hide="savingRequest" name="Gender" ng-model="Student.Gender" class="input-sm form-control" style="cursor: not-allowed; pointer-events: none;">
+                                        <select id="Gender" disabled="disabled" ng-hide="savingRequest" name="Gender" ng-init="Student.Gender = 'Male'" ng-model="Student.Gender" class="input-sm form-control" style="cursor: not-allowed; pointer-events: none;" required>
                                             <option value="Male">Male</option>
                                             <option value="Female">Female</option>
                                         </select>
                                     }
+                                    <p ng-show="StudentRegistration.Gender.$invalid && (StudentRegistration.Gender.$dirty || submitted ||StudentRegistration.Gender.$touched )" class="text-danger">Gender is required.</p>
+
                                 </p>
                             </div>
 
                             <div class="form-group">
-                                <label for="dob">Date Of Birth</label>
+                                <label class="required" for="dob">Date Of Birth</label>
                                 @if (ViewBag.AccountId == 0)
                                 {
                                     <input type="text" ng-hide="savingRequest" id="DateOfBirth"  ng-model="Student.DateOfBirth" class="form-control" name="DateOfBirth" data-parsley-trigger="change" placeholder="Enter DateOfBirth" required />
@@ -136,20 +138,20 @@
 
 
                             <div class="form-group">
-                                <label for="regno">Students Mobile Number</label>
+                                <label for="regno" class="required">Students Mobile Number</label>
                                 <input type="text" id="StudentMobileNo" ng-model="Student.MobileNo" maxlength="10" class="form-control number" name="StudentMobileNo" data-parsley-trigger="change" placeholder="Mobile Number" required />
                                 <p ng-show="StudentRegistration.StudentMobileNo.$invalid && (StudentRegistration.StudentMobileNo.$dirty || submitted ||StudentRegistration.StudentMobileNo.$touched )" class="text-danger">Mobile No is required.</p>
                             </div>
 
                             <div class="form-group">
-                                <label for="Address">Address</label>
+                                <label for="Address" class="required">Address</label>
                                 <textarea id="Address" required="required" ng-model="Student.Address" class="form-control" name="Address" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.." placeholder="Enter Address"
                                           data-parsley-validation-threshold="10"></textarea>
                                 <p ng-show="StudentRegistration.Address.$invalid && (StudentRegistration.Address.$dirty || submitted ||StudentRegistration.Address.$touched )" class="text-danger">Address is required.</p>
                             </div>
 
                             <div class="form-group">
-                                <label for="Version">Select Version</label>
+                                <label for="Version" class="required">Select Version</label>
                                 @if (ViewBag.AccountId == 0)
                                 {
                                     <select id="Version" ng-hide="savingRequest" name="Version" ng-change="ChangeExpiredDate()" class="input-sm form-control"  ng-model="Student.VersionType" ng-options="option.Name as option.Name for option in VersionType" ng-change="" ng-required="true">
@@ -167,7 +169,7 @@
                             </div>
 
                             <div class="form-group" ng-if="Student.VersionType=='@Praescio.Domain.AppCode.VersionType.Paid'">
-                                <label for="Package">Select Package</label>
+                                <label for="Package" class="required">Select Package</label>
                                 @if (ViewBag.AccountId == 0)
                                 {
                                     <select id="Package" ng-hide="savingRequest" name="Package" class="form-control " ng-model="Student.PackageId" ng-options="option.id as option.text for option in PackageList" ng-change="PackageChange();">
@@ -184,7 +186,7 @@
                             </div>
 
                             <div class="form-group" ng-if="Student.VersionType=='@Praescio.Domain.AppCode.VersionType.Paid'">
-                                <label for="AmountPaid">Amount Paid</label>
+                                <label for="AmountPaid" class="required">Amount Paid</label>
                                 @if (ViewBag.AccountId == 0)
                                 {
                                     <input type="text" ng-hide="savingRequest" id="AmountPaid" name="AmountPaid"  ng-model="Student.AmountPaid" class="form-control" data-space="false">                                   
@@ -198,7 +200,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="heard">Select Board</label>
+                                <label for="heard" class="required">Select Board</label>
                                  @if (ViewBag.AccountId == 0)
                                 {
                                     <select id="Board" ng-hide="savingRequest" name="Board" class="input-sm form-control" ng-change="ChangeBoard(Student.BoardId)" ng-model="Student.BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-required="true">
@@ -215,7 +217,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="SubjectName">Select Medium</label>
+                                <label for="SubjectName" class="required">Select Medium</label>
                                 @if (ViewBag.AccountId == 0)
                                 {
                                     <select id="Medium" ng-hide="savingRequest" name="Medium" class="input-sm form-control" ng-disabled="Student.BoardId>1"  ng-model="Student.MediumId" ng-options="option.Id as option.MediumName for option in MediumList" ng-required="true">
@@ -232,7 +234,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="Standard">Select Standard</label>
+                                <label for="Standard" class="required">Select Standard</label>
                                 @if (ViewBag.AccountId == 0)
                                 {
                                     <select id="Standard" ng-hide="savingRequest" name="Standard" class="input-sm form-control" ng-model="Student.Standard" ng-options="option.Id as option.StandardName for option in StandardList"  ng-required="true">
@@ -266,7 +268,7 @@
 
 
                             <div class="form-group">
-                                <label for="schoolname">Mother's Name </label>
+                                <label for="schoolname" class="required">Mother's Name </label>
                                 @if (ViewBag.AccountId == 0)
                                 {
                                     <input type="text" ng-hide="savingRequest" id="MotherName" class="form-control" name="MotherName"  ng-model="Student.MotherName" placeholder="Enter Mother's First Name" required />
@@ -279,7 +281,7 @@
                                 <p ng-show="StudentRegistration.MotherName.$invalid && (StudentRegistration.MotherName.$dirty || submitted ||StudentRegistration.MotherName.$touched )" class="text-danger">Mother Name is required.</p>
                             </div>
                             <div class="form-group">
-                                <label for="schoolname">Father's Name</label>
+                                <label for="schoolname" class="required">Father's Name</label>
                                 @if (ViewBag.AccountId == 0)
                                 {
                                     <input type="text" ng-hide="savingRequest" id="FatherName" class="form-control" name="FatherName"  ng-model="Student.FatherName" placeholder="Enter Father's First Name" required />
@@ -307,14 +309,14 @@
 
                             </div>
                             <div class="form-group">
-                                <label for="phoneno">Phone No.</label>
+                                <label for="phoneno" class="required">Phone No.</label>
                                 <input type="text" id="ParentNo" class="form-control number" maxlength="10" name="ParentNo" ng-model="Student.ParentNo" placeholder="Enter Parent Mobile No" required />
                                 <p ng-show="StudentRegistration.ParentNo.$invalid && (StudentRegistration.ParentNo.$dirty || submitted ||StudentRegistration.ParentNo.$touched )" class="text-danger">Parent Mobile No is required.</p>
                             </div>
 
                             <div class="form-group">
 
-                                <label for="Version">Select Activate Date</label>
+                                <label for="Version" class="required">Select Activate Date</label>
                                 @if (ViewBag.AccountId == 0)
                                 {
                                     <input type="text"  ng-hide="savingRequest" id="ActivateDate" name="ActivateDate"  ng-model="Student.ActivateOn" ng-change="ChangeExpiredDate()" class="form-control" data-space="false">
@@ -328,7 +330,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="Version">Select Expired Date</label>
+                                <label for="Version" class="required">Select Expired Date</label>
                                 <input type="text" id="ExpiredOn" name="ExpiredOn" readonly ng-model="Student.ExpiredOn" class="form-control" data-space="false">
                             </div>
 

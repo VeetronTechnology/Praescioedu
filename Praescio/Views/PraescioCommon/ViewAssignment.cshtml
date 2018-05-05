@@ -197,7 +197,7 @@
             $scope.LoadContent();
           
             $scope.onPageChange = function (pageno) {
-                var url = '&pageNo=' + pageno + '&itemPerPage=' + $scope.itemPerPage + '&AssignmentType=@ViewBag.AssignmentType';
+              var url = '&pageNo=' + pageno + '&itemPerPage=' + $scope.itemPerPage + '&AssignmentType=@ViewBag.AssignmentType' + '&HidePublished=' + $scope.HidePublished;
 
                 NetworkService.get('PraescioCommon/GetAssignmentList?' + url).success(function (data) {
                     $scope.AssignmentList = data.dataContent;
