@@ -260,7 +260,10 @@
            
 
             NetworkService.get('PraescioCommon/GetAssignmentTypeList').success(function (data) {
-                $scope.AssignmentTypeList = data;
+              $scope.AssignmentTypeList = [];
+              if (data) {
+                $scope.AssignmentTypeList = data.filter(m => m.AssignmentTypeName.toLowerCase() == 'praescio lesson' || m.AssignmentTypeName.toLowerCase() == 'pextra');
+              }
             });
 
             $scope.GetAssignmentByType = function (AssignmentTypeId) {
@@ -273,8 +276,10 @@
             $scope.selectedFile = null;
             $scope.msg = "";
 
-            $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
-            { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }]
+          $scope.StandardList = [
+            { Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
+            { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }
+          ];
 
             NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
                 $scope.BoardList = data;
@@ -292,7 +297,6 @@
             }
 
             $scope.ChangeStandard = function (id) {
-              console.log('ChangeStandard', id, $scope.Assignment.MediumId)
               NetworkService.get('PraescioCommon/GetSubjectSingleMedium?standardid=' + id + '&mediumid=' + $scope.Assignment.MediumId).success(function (data) {
                     $scope.SubjectList = data;
                 });

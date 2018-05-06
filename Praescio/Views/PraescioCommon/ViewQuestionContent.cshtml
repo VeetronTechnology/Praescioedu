@@ -186,7 +186,7 @@
             }
 
             $scope.ChangeStandard = function (id) {
-                NetworkService.get('PraescioCommon/GetSubject?standardid=' + id + '&mediumid=' + $scope.Assignment.MediumId).success(function (data) {
+              NetworkService.get('PraescioCommon/GetSubjectSingleMedium?standardid=' + id + '&mediumid=' + $scope.Assignment.MediumId).success(function (data) {
                     $scope.SubjectList = data;
                     console.log("subject ==", data);
                 });
@@ -199,7 +199,7 @@
             $scope.GetAssignmentByType = function (AssignmentTypeId) {
                 NetworkService.get('PraescioCommon/GetAssignmentList?AssignmentType=' + AssignmentTypeId).success(function (data) {
                     $scope.AssignmentListAll = data.dataContent;
-                    console.log(data.dataContent);
+                    //console.log(data.dataContent);
                     $scope.ChangeAssignmentList();
                 });
             }

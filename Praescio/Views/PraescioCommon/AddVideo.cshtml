@@ -156,7 +156,10 @@
 
 
                 NetworkService.get('PraescioCommon/GetAssignmentTypeList').success(function (data) {
-                    $scope.AssignmentTypeList = data;
+                  $scope.AssignmentTypeList = [];
+                  if (data) {
+                    $scope.AssignmentTypeList = data.filter(m => m.AssignmentTypeName.toLowerCase() == 'praescio lesson' || m.AssignmentTypeName.toLowerCase() == 'pextra');
+                  }
                 });
 
                 $scope.GetAssignmentByType = function (AssignmentTypeId) {
