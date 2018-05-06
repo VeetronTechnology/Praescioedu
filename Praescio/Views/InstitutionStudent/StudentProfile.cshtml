@@ -134,7 +134,7 @@
                       </tbody>
                     </table>
 
-                    <a ng-if="AllowEdit" class="btn btn-success" href="@Url.Content(ViewBag.IsIndividual ? "~/InstitutionAdmin/RegisterStudent" : "~/PraescioAdmin/RegisterIndividualStudent")?accountid={{Student.AccountId}}">Update</a>
+                    <a ng-if="AllowEdit" class="btn btn-success" href="@Url.Content(!ViewBag.IsIndividual ? "~/InstitutionAdmin/RegisterStudent" : "~/PraescioAdmin/RegisterIndividualStudent")?accountid={{Student.AccountId}}">Update</a>
                     <a ng-if="AllowEdit" href="#BlockModal" data-toggle="modal" class="btn btn-danger">{{IsBlocked ? "Unblock" : "Block"}}</a>
                   </div>
                 </div>
