@@ -214,12 +214,13 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('input[name="assignmentType"]').on('change', function (e) {
-                $('#pnl-ats label').removeClass('active');
-                if ($(this).is(':checked')) {
-                    $(this).closest('label').addClass('active');
-                }
-            })
+          $('input[name="assignmentType"]').on('change',
+            function (e) {
+              $('#pnl-ats label').removeClass('active');
+              if ($(this).is(':checked')) {
+                $(this).closest('label').addClass('active');
+              }
+            });
         });
 
         myApp.controller('CheckAssignmentCtrl', function ($scope, $rootScope, $filter, NetworkService) {
@@ -270,7 +271,7 @@
             $scope.ChangeStandard = function (id) {
                 $scope.AssignmentList = [];
                 $scope.SubjectList = [];
-                NetworkService.get('PraescioCommon/GetSubject?standardid=' + id + '&mediumid=' + $scope.MediumId).success(function (data) {
+                NetworkService.get('PraescioCommon/GetSubjectSingleMedium?standardid=' + id + '&mediumid=' + $scope.MediumId).success(function (data) {
                     $scope.SubjectList = data;
                 });
             }
@@ -284,7 +285,7 @@
             }
 
             $scope.ChangeAssignmentList = function () {
-                $scope.AssignmentList = $scope.AssignmentListAll.filter(m => m.SubjectId == $scope.SubjectId && m.StandardId == $scope.StandardId && m.AssignmentTypeId == $scope.assignmentType);
+              $scope.AssignmentList = $scope.AssignmentListAll.filter(m => m.SubjectId == $scope.SubjectId && m.StandardId == $scope.StandardId && m.AssignmentTypeId == $scope.assignmentType);
             }
 
             $scope.ChangeAssignment = function (id) {

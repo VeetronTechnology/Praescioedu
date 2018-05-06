@@ -144,8 +144,8 @@
 
                             <div class="form-group">
                                 <label for="Version" class="required">Select Version</label>
-                                @if (ViewBag.AccountId == 0)
-                                {
+                                @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.SuperAdmin))
+                                      {
                                     <select id="Version" name="Version" ng-hide="savingRequest" ng-change="ChangeExpiredDate()" class="input-sm form-control" ng-model="Teacher.VersionType" ng-options="option.Name as option.Name for option in VersionType" ng-change="" ng-required="true">
                                         <option value="">-- Select Version --</option>
                                     </select>
@@ -162,7 +162,7 @@
 
                             <div class="form-group" ng-if="Teacher.VersionType=='@Praescio.Domain.AppCode.VersionType.Paid'">
                                 <label for="Package" class="required">Select Package</label>
-                                @if (ViewBag.AccountId == 0) {
+                                @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.SuperAdmin)) {
                                     <select id="Package" ng-hide="savingRequest" name="Package" class="form-control " ng-model="Teacher.PackageId" ng-options="option.id as option.text for option in PackageList" ng-change="PackageChange();" required>
                                         <option value="">Select Package</option>
                                     </select>
@@ -177,7 +177,7 @@
 
                             <div class="form-group" ng-if="Teacher.VersionType=='@Praescio.Domain.AppCode.VersionType.Paid'">
                                 <label for="AmountPaid" class="required">Amount Paid</label>
-                                @if (ViewBag.AccountId == 0)
+                                @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.SuperAdmin))
                                 {
                                     <input type="text" ng-hide="savingRequest" id="AmountPaid" name="AmountPaid" ng-model="Teacher.AmountPaid" class="form-control" data-space="false">
                                 }
@@ -244,7 +244,7 @@
                             </div>
 
                             @if (ViewBag.AccountId == 0)
-                            {
+                                {
                                 <div class="col-md-12 col-xs-12">
                                     <span class="btn btn-primary uploadbtn" ng-click="addstandard()">Add Standard</span>
                                     <span class="btn btn-primary uploadbtn" ng-click="removeStandard()" ng-if="Teacher.TeacherMappingStandard.length>1">Remove Standard</span>

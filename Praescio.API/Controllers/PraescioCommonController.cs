@@ -1411,5 +1411,16 @@ namespace Praescio.API.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, subjectlist);
 
         }
+
+        [HttpGet]
+        [Route("GetSubjectSingleMedium")]
+        public HttpResponseMessage GetSubjectSingleMedium(int? standardid, int mediumid)
+        {
+            PraescioContext db = new PraescioContext();
+            var subjectlist = db.Subject.Where(x => x.StandardId == standardid && (x.MediumId == mediumid)).ToList();
+
+            return Request.CreateResponse(HttpStatusCode.OK, subjectlist);
+
+        }
     }
 }

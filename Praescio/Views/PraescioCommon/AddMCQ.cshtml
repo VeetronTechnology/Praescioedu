@@ -292,7 +292,8 @@
             }
 
             $scope.ChangeStandard = function (id) {
-                NetworkService.get('PraescioCommon/GetSubject?standardid=' + id + '&mediumid=' + $scope.Assignment.MediumId).success(function (data) {
+              console.log('ChangeStandard', id, $scope.Assignment.MediumId)
+              NetworkService.get('PraescioCommon/GetSubjectSingleMedium?standardid=' + id + '&mediumid=' + $scope.Assignment.MediumId).success(function (data) {
                     $scope.SubjectList = data;
                 });
             }

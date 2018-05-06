@@ -121,14 +121,14 @@
 @section Scripts{
 
     <script type="text/javascript">
-      
+
         myApp.controller('addVideoCtrl', function ($scope, $rootScope, $filter, NetworkService) {
 
             $scope.Assignment = {};
             $scope.AssignmentListAll = [];
             NetworkService.get('PraescioCommon/GetAssignmentListDropDown?AssignmentType=@ViewBag.AssignmentType').success(function (data) {
                 $scope.AssignmentListAll = data.dataContent;
-                console.log(data);
+                //console.log(data);
             });
 
             var formdata = new FormData();
@@ -148,7 +148,7 @@
 
             $scope.selectedFile = null;
             $scope.msg = "";
-           
+
 
 
                 $scope.MCQAnswerList = [{ "id": 'A', "text": 'A' }, { "id": 'B', "text": 'B' }, { "id": 'C', "text": 'C' }, { "id": 'D', "text": 'D' }];
@@ -188,7 +188,7 @@
             }
 
                 $scope.ChangeStandard = function (id) {
-                    NetworkService.get('PraescioCommon/GetSubject?standardid=' + id + '&mediumid=' + $scope.Assignment.MediumId).success(function (data) {
+                    NetworkService.get('PraescioCommon/GetSubjectSingleMedium?standardid=' + id + '&mediumid=' + $scope.Assignment.MediumId).success(function (data) {
                         $scope.SubjectList = data;
                     });
                 }
@@ -209,10 +209,10 @@
                 }
 
                 $scope.ChangeAssignmentList = function () {
-                    console.log('$scope.Assignment', $scope.Assignment, $scope.Assignment.SubjectId)
-                    console.log('$scope.AssignmentList', $scope.AssignmentListAll)
+                    //console.log('$scope.Assignment', $scope.Assignment, $scope.Assignment.SubjectId)
+                    //console.log('$scope.AssignmentList', $scope.AssignmentListAll)
                     $scope.AssignmentList = $scope.AssignmentListAll.filter(m => m.SubjectId == $scope.Assignment.SubjectId);
-                    console.log('$scope.AssignmentList', $scope.AssignmentList)
+                    //console.log('$scope.AssignmentList', $scope.AssignmentList)
                 }
 
             $scope.ChangeAssignment = function (id) {
@@ -222,7 +222,7 @@
 
                 });
             }
-            
+
 
         });
     </script>
