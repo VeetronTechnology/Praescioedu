@@ -20,6 +20,8 @@ namespace Praescio.Domain.Models
         public Mst_Account Account { get; set; }
         public bool? hasError { get; set; }
         public string errorMessage { get; set; }
+        public Mst_Account ParentAccount { get; set; }
+        public Mst_Account StudentAccount { get; set; }
 
     }
 

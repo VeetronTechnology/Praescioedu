@@ -1,4 +1,4 @@
-﻿
+﻿@using Praescio.BusinessEntities.Common
 @{
     ViewBag.Title = "Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,63 +7,79 @@
 
 <div class="right_col" role="main" ng-controller="AdminDashboardCtrl">
     <div class="">
-        <!-- Small boxes (Stat box) -->
-        <div class="row">
-            <div class="col-lg-3 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-aqua">
-                    <div class="inner">
-                        <h3>150</h3>
-                        <p>New Orders</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-shopping-bag"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                </div>
-            </div><!-- ./col -->
-            <div class="col-lg-3 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3>53<sup style="font-size: 20px">%</sup></h3>
-                        <p>Bounce Rate</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-bar-chart"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                </div>
-            </div><!-- ./col -->
-            <div class="col-lg-3 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-yellow">
-                    <div class="inner">
-                        <h3>44</h3>
-                        <p>User Registrations</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-user-plus"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                </div>
-            </div><!-- ./col -->
-            <div class="col-lg-3 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-red">
-                    <div class="inner">
-                        <h3>65</h3>
-                        <p>Unique Visitors</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-pie-chart"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                </div>
-            </div><!-- ./col -->
-        </div><!-- /.row -->
+      <div class="row clearfix">
 
-        <div class="row">
+        <div class="market-updates">
+          <div class="col-md-3 market-update-gd">
+            <a href="@Url.Action("CreativityUploads", "Parents")">
+              <div class="market-update-block clr-block-2">
+                <div class="col-md-12 market-update-left">
+                  <h4>Creativity Uploads</h4>
+                </div>
+                <div class="clearfix"> </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-3 market-update-gd">
+            <a href="@Url.Action("Help", "Praescio")">
+              <div class="market-update-block clr-block-1">
+                <div class="col-md-12 market-update-left">
+                  <h4>Notice</h4>
+                </div>
+                <div class="clearfix"> </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-3 market-update-gd">
+            <a href="@Url.Action("StudentProfile", "InstitutionStudent")?StudentAccountId=@Praescio.Models.Common.STUDENTACCOUNT.AccountId">
+              <div class="market-update-block clr-block-3">
+                <div class="col-md-12 market-update-left">
+                  <h4>Student Profile</h4>
+                </div>
+                <div class="clearfix"> </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-3 market-update-gd">
+            @{
+                var urlHE = "";
+                if (Praescio.Models.Common.ACCOUNT.BoardId != 4)
+                {
+                  urlHE = Url.Action("AssignmentResult", "Praescio", new { assignmentType = (int)AssignmentType.All });
+
+                  if (Praescio.Models.Common.STUDENTACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+                  {
+                    urlHE = Url.Action("AssignmentResult", "Praescio", new { assignmentType = (int)AssignmentType.IndividualAssignment });
+                  }
+                  else if (Praescio.Models.Common.STUDENTACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student)
+                  {
+                    urlHE = Url.Action("AssignmentResult", "Praescio", new { assignmentType = (int)AssignmentType.InstitutionAssignment });
+                  }
+                  else
+                  {
+                    urlHE = Url.Action("AssignmentResult", "Praescio", new { assignmentType = (int)AssignmentType.PraescioLesson });
+                  }
+                }
+                else
+                {
+                  urlHE = Url.Action("AssignmentResult", "Praescio", new { assignmentType = (int)AssignmentType.PExtra });
+                }
+              }
+            <a href="@urlHE">
+              <div class="market-update-block clr-block-4">
+                <div class="col-md-12 market-update-left">
+                  <h4>History Of Exam</h4>
+                </div>
+                <div class="clearfix"> </div>
+              </div>
+            </a>
+          </div>
+          <div class="clearfix"> </div>
+        </div>
+
+      </div><!-- /.row -->
+
+        @*<div class="row">
             <div class="col-md-12">
                 <div class="x_panel">
                     <div class="x_title">
@@ -81,50 +97,10 @@
                                 <p>{{activity.Activities.Query}}</p>
                             </div>
                         </article>
-                        @*<article class="media event">
-                                <a class="pull-left date">
-                                    <p class="month">April</p>
-                                    <p class="day">23</p>
-                                </a>
-                                <div class="media-body">
-                                    <a class="title" href="#">Item Two Title</a>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                </div>
-                            </article>
-                            <article class="media event">
-                                <a class="pull-left date">
-                                    <p class="month">April</p>
-                                    <p class="day">23</p>
-                                </a>
-                                <div class="media-body">
-                                    <a class="title" href="#">Item Two Title</a>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                </div>
-                            </article>
-                            <article class="media event">
-                                <a class="pull-left date">
-                                    <p class="month">April</p>
-                                    <p class="day">23</p>
-                                </a>
-                                <div class="media-body">
-                                    <a class="title" href="#">Item Two Title</a>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                </div>
-                            </article>
-                            <article class="media event">
-                                <a class="pull-left date">
-                                    <p class="month">April</p>
-                                    <p class="day">23</p>
-                                </a>
-                                <div class="media-body">
-                                    <a class="title" href="#">Item Three Title</a>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                </div>
-                            </article>*@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>*@
     </div>
 </div>
 

@@ -15,7 +15,7 @@ namespace Praescio.Domain.AppCode
 
     public static class KnowledgeBankReceiver
     {
-        public const string ALL = "1,5,6";
+        public const string ALL = "1,2,3,4,5,6";
         public const string TEACHER = "3,5";
         public const string STUDENT = "4,6";
     }

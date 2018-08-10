@@ -38,6 +38,8 @@ namespace Praescio.Controllers
                         var userdetail = JsonConvert.DeserializeObject<AccountViewModel>(responseString);
 
                         Common.ACCOUNT = userdetail.Account;
+                        Common.PARENTACCOUNT = userdetail.ParentAccount;
+                        Common.STUDENTACCOUNT = userdetail.StudentAccount;
 
                         if (!string.IsNullOrEmpty(returnUrl))
                             return Redirect(returnUrl);
@@ -55,7 +57,7 @@ namespace Praescio.Controllers
                         else if (userdetail.Account.AccountTypeId == (int)AccountType.IndividualStudent)
                             return RedirectToAction("Dashboard", "IndividualStudent");
                         else if (userdetail.Account.AccountTypeId == (int)AccountType.StudentParent)
-                            return RedirectToAction("Dashboard", "PraescioAdmin");
+                            return RedirectToAction("Dashboard", "Parents");
                         else
                             return View(model);
                     }
@@ -139,7 +141,7 @@ namespace Praescio.Controllers
                             else if (userdetail.Account.AccountTypeId == (int)AccountType.IndividualStudent)
                                 returnUrl = this.Url.Action("Dashboard", "IndividualStudent");
                             else if (userdetail.Account.AccountTypeId == (int)AccountType.StudentParent)
-                                returnUrl = this.Url.Action("Dashboard", "PraescioAdmin");
+                                returnUrl = this.Url.Action("Dashboard", "Parents");
 
                             ViewBag.ReturnUrl = returnUrl;
                             ViewBag.Success = "Password changed successfully.";
@@ -166,6 +168,13 @@ namespace Praescio.Controllers
                 ViewBag.Error = ex.Message + "-----" + ex.StackTrace;
                 return View(model);
             }
+        }
+
+        [HttpGet]
+        public ActionResult AccountInactive(int inactiveReason = 0)
+        {
+            ViewBag.InactiveReason = inactiveReason;
+            return View();
         }
 
     }

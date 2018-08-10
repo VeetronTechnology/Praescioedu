@@ -61,6 +61,13 @@
   .bg-teal .content .text,
   .bg-teal .content .number {
     color: #fff !important; }
+  
+.bg-aqua {
+  background-color: #00c0ef !important;
+  color: #fff; }
+  .bg-aqua .content .text,
+  .bg-aqua .content .number {
+    color: #fff !important; }
 
 .bg-green {
   background-color: #4CAF50 !important;
@@ -1275,6 +1282,14 @@ div#graph1,div#graph4,div#graph5,div#graph6,div#graph7,div#graph8,div#graph9 {
 
 .PersonPhotoSrc {
     background-image: url('../images/user.png');
-    width: 8em;
-    height: 6em;
+    width: 40px;
+    height: 40px;
+}
+
+.truncate {
+    width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
 }

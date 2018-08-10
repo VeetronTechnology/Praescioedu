@@ -2,7 +2,7 @@
 <Content>
   <EmailForApproval>
     <!--Request Approval-->
-    <PasswordResetLink id="Approver" subject="AOPM CFT Notification : Request ID : txtRequest (txtrequesttitle) is pending for your action" desc="send to approver on plan sending"  >
+    <PasswordResetLink id="Approver" subject="Praescio : Reset password" desc="Reset password"  >
       Dear User,<br /><br />
       Below given is the link to reset your password<br /><br />
       <!--Request ID: txtRequest (txtrequesttitle)<br /><br /><br />-->
@@ -14,7 +14,7 @@
       <table>
         <tr>
           <td>
-            **** This is an auto-generated email, please do not reply. In case of any queries, please contact "IT-PMO@axisbank.com" ****<br /><br />
+            **** This is an auto-generated email, please do not reply. In case of any queries, please contact "support@praescioedu.com" ****<br /><br />
           </td>
         </tr>
       </table><br /><br /><br />
@@ -513,5 +513,26 @@
         </tr>
       </table><br /><br /><br />
     </SprintResendToInitiator>
-  </EmailForApproval>
+  
+  <!--Registration-->
+  
+    <IndividualStudentRegister id="Approver" subject="Praescio : Student Registration" desc="Student Registration"  >
+      Dear User,<br /><br />
+      Your account has been created successfully @ txtrequesttitle<br /><br />
+      <!--Request ID: txtRequest (txtrequesttitle)<br /><br /><br />-->
+
+      <br /><br /><br />
+      Username: txtusername<br />
+      Password: txtpassword<br /><br />
+      Praescio Support<br /><br />
+
+      <table>
+        <tr>
+          <td>
+            **** This is an auto-generated email, please do not reply. In case of any queries, please contact "support@praescioedu.com" ****<br /><br />
+          </td>
+        </tr>
+      </table><br /><br /><br />
+    </IndividualStudentRegister>
+</EmailForApproval>
 </Content>

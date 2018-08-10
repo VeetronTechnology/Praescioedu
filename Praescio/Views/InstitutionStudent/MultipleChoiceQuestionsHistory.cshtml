@@ -5,8 +5,8 @@
 }
 
 <div class="right_col" role="main" ng-controller="MCQCheckCtrl">
-    <div class="cont">
-        <div class="table-agile-info">
+    <div class="content">
+        <div class="table-agile-info1">
             <ol class="breadcrumb">
                 <li><a href="lesson_history.html">Lesson</a></li>
                 <li><a href="test_history.html">Test History</a></li>
@@ -15,17 +15,18 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Multiple Choice Questions
-                    <span class="tools pull-right" style="font-size:12px;font-weight:600;">
+                    @*<span class="tools pull-right" style="font-size:12px;font-weight:600;">
                         <a href="javascript:;">Total: Duration : ddd:hh:mm</a>
-                    </span>
+                    </span>*@
                 </div>
                 <div class="panel-body">
                     <div>
                         <table class="table table-striped b-t b-light">
                             <tbody>
                                 <tr>
-                                    <th>Answer</th>
+                                    <th>Question</th>
                                     <th>Correct Answer</th>
+                                    <th>Student's Answer</th>
                                     <th>Result</th>
                                     <th>Marks Obtained</th>
 
@@ -33,6 +34,7 @@
                                 <tr ng-repeat="act in Acitivity.studentActivity">
                                     <td>{{$index+1}}. {{act.Question.Title}}</td>
                                     <td>{{act.Question.CorrectAnswer}}</td>
+                                    <td>{{act.UserAssessment.Answer}}</td>
                                     <td>
                                         <i ng-if="act.UserAssessment.MarkScored==1" class="fa fa-check text-success text-active"></i>
                                         <i ng-if="act.UserAssessment.MarkScored==0" class="fa fa-times text-danger text-active"></i>

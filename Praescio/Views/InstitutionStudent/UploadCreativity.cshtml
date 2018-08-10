@@ -4,45 +4,202 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="right_col" role="main" style="background:#48c9b0">
+<div class="right_col" role="main" ng-controller="addCreativityCtrl">
     <div class="cont">
-        <div class="table-agile-info">
+        <div class="table-agile-info1">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Upload Creativity
                 </div>
                 <div class="panel-body">
                     <div class="position-center">
-                        <form class="form-horizontal" role="form">
-                            <div class="form-group">
-                                <label for="Title" class="col-lg-3 col-sm-3 control-label">Title:</label>
-                                <div class="col-lg-9">
-                                    <input type="text" class="form-control" id="Title" placeholder="Title">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="Description" class="col-lg-3 col-sm-3 control-label">Description:</label>
-                                <div class="col-lg-9">
-                                    <textarea class="form-control"></textarea>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="Description" class="col-lg-3 col-sm-3 control-label">Upload File:</label>
-                                <div class="col-lg-9">
-                                    <input type="file">
-                                </div>
-                            </div>
+                      <form class="form-horizontal form-label-left" name="AssignmentForm">
+                        <div class="form-group">
+                          <label for="Title" class="col-lg-3 col-sm-3 control-label">Title:</label>
+                          <div class="col-lg-9">
+                            <input type="text" id="Title" ng-model="Creativity.Title" class="form-control" name="Title" placeholder="Title" required />
+                            <p ng-show="AssignmentForm.Title.$invalid && (AssignmentForm.Title.$dirty || submitted ||AssignmentForm.Title.$touched )" class="text-danger">Title is required.</p>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="Description" class="col-lg-3 col-sm-3 control-label">Description:</label>
+                          <div class="col-lg-9">
+                            <textarea id="Description" required="required" ng-model="Creativity.Description" class="form-control" name="Description" data-parsley-trigger="keyup" data-parsley-minlength="0" data-parsley-maxlength="250" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.." placeholder="Enter Description"
+                                      data-parsley-validation-threshold="0"></textarea>
+                            <p ng-show="AssignmentForm.Description.$invalid && (AssignmentForm.Description.$dirty || submitted ||AssignmentForm.Description.$touched )" class="text-danger">Description is required.</p>
+                          </div>
+                        </div>
+                        @*<div class="form-group">
+                          <label for="Subject" class="col-lg-3 col-sm-3 control-label">Select Subject</label>
+                          <div class="col-lg-9">
+                            <select id="Subject" name="Subject" class="input-sm form-control" ng-model="Creativity.SubjectId" ng-options="option.Id as option.SubjectName for option in SubjectList" ng-change="" ng-required="true">
+                              <option value="">-- Select Subject --</option>
+                            </select>
+                            <p ng-show="AssignmentForm.Standard.$invalid && (AssignmentForm.Standard.$dirty || submitted ||AssignmentForm.Standard.$touched )" class="text-danger">Subject is required.</p>
+                          </div>
+                        </div>*@
+                        <div class="form-group">
+                          <label for="Description" class="col-lg-3 col-sm-3 control-label">Upload File:</label>
+                          <div class="col-lg-9">
+                            <input id="file" ng-model="file" valid-file name="file" required type="file" ng-files="getTheFiles($files)" onselect="Call()" />
+                            <p ng-show="AssignmentForm.file.$invalid && (AssignmentForm.file.$dirty || submitted || AssignmentForm.file.$touched )" class="text-danger">File is required.</p>
+                          </div>
+                        </div>
 
-                            <div class="form-group">
-                                <div class="col-lg-offset-3 col-lg-9">
-                                    <button type="submit" class="btn btn-success">Clear</button>
-                                    <button type="submit" class="btn btn-danger">Submit</button>
-                                </div>
-                            </div>
-                        </form>
+                        <div class="form-group">
+                          <div class="col-md-offset-3 col-md-9">
+                            <button type="button" class="btn btn-primary waves-effect" ng-click="SaveFile()" ng-disabled="savingRequest || fileUploading">
+                              SUBMIT
+                              <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts{
+
+  <script type="text/javascript">
+      myApp.directive('ngFiles', ['$parse', function ($parse) {
+        function fn_link(scope, element, attrs) {
+          var onChange = $parse(attrs.ngFiles);
+          element.on('change', function (event) {
+            onChange(scope, { $files: event.target.files });
+          });
+        };
+
+        return {
+          link: fn_link
+        }
+      }])
+        .directive('ngInitial', function () {
+          return {
+            restrict: 'A',
+            controller: [
+              '$scope', '$element', '$attrs', '$parse', function ($scope, $element, $attrs, $parse) {
+                var getter, setter, val;
+                val = $attrs.ngInitial || $attrs.value;
+                getter = $parse($attrs.ngModel);
+                setter = getter.assign;
+                setter($scope, val);
+              }
+            ]
+          };
+        })
+        .directive('validFile', function () {
+          return {
+            require: 'ngModel',
+            link: function (scope, el, attrs, ngModel) {
+              //change event is fired when file is selected
+              el.bind('change', function () {
+                scope.$apply(function () {
+                  ngModel.$setViewValue(el.val());
+                  ngModel.$render();
+                });
+              });
+            }
+          }
+        })
+
+      myApp.controller('addCreativityCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+
+        $scope.Creativity = {};
+        $scope.fileUploading = false;
+
+        var formdata = new FormData();
+        $scope.getTheFiles = function ($files) {
+          formdata = new FormData();
+          $scope.isDisplay = true;
+          $scope.fileUploading = true;
+          if ($files.length != 0)
+            $scope.FileUpload = [];
+          for (var i = 0; i < $files.length; i++) {
+            $scope.FileUpload.push({ FileName: $files[i].name, ContentType: $files[i].type, Size: $files[i].size });
+          }
+          $scope.isDisplay = true;
+          angular.forEach($files, function (value, key) {
+            formdata.append(0, value);
+          });
+
+          NetworkService.UploadFiles('@Url.Content("~/PraescioCommon/SaveFile")', formdata).success(function (response) {
+              //console.log('response', response)
+            $scope.fileUploading = false;
+            $scope.Creativity.FileSrc = response.filelocation;
+          }).error(function (data) {
+            $scope.fileUploading = false;
+            $scope.FileUpload = [];
+            $scope.files = null;
+            angular.element("input[type='file']").val(null);
+            swal({
+              title: "File upload failed. Please try again.",
+              text: "Press Ok to Continue.",
+              type: "error",
+              confirmButtonColor: "red",
+              showCancelButton: false,
+            });
+          });
+        };
+
+        $scope.selectedFile = null;
+        $scope.msg = "";
+
+        $scope.MediumId = "@Praescio.Models.Common.ACCOUNT.MediumId";
+        $scope.StandardId = "@Praescio.Models.Common.ACCOUNT.Standard.Id";
+        $scope.BoardId = "@Praescio.Models.Common.ACCOUNT.BoardId";
+
+        NetworkService.get('PraescioCommon/GetSubjectSingleMedium?standardid=' + $scope.StandardId + '&mediumid=' + $scope.MediumId + '&boardid=' + $scope.BoardId).success(function (data) {
+          $scope.SubjectList = data;
+
+          if (
+            "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)"
+            || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"
+          )
+          {
+            $scope.SubjectList = $scope.SubjectList.filter(m => $scope.TeacherSubjects.indexOf(m.Id) > -1);
+          }
+        });
+
+        $scope.SaveFile = function () {
+          if (!$scope.AssignmentForm.$valid) {
+            $scope.submitted = true;
+            return;
+          }
+          $scope.savingRequest = true;
+
+          //$scope.Creativity.MediumId = $scope.MediumId;
+          //$scope.Creativity.StandardId = null; // $scope.StandardId;
+          //$scope.Creativity.SubjectId = null; // removed
+          $scope.Creativity.FileSrc = $scope.Creativity.FileSrc;
+          $scope.Creativity.AccountId = parseInt("@Praescio.Models.Common.ACCOUNT.AccountId");
+
+          NetworkService.insert('PraescioCommon/SaveCreativity', $scope.Creativity).then(function (response) {
+            $scope.savingRequest = false;
+            if (response.data.success) {
+              swal({
+                title: "Creativity has been successfully saved!!!",
+                text: "Press Ok to Continue.",
+                type: "success",
+                confirmButtonColor: "green",
+                showCancelButton: false
+              }, function () {
+                window.location.href = "@Url.Action("CreativityUploads", "Parents")";
+              });
+            } else {
+              swal({
+                title: "Error: " + response.data.message,
+                text: "Press Ok to Continue.",
+                type: "error",
+                confirmButtonColor: "red",
+                showCancelButton: false
+              });
+            }
+          });
+        }
+      });
+  </script>
+}

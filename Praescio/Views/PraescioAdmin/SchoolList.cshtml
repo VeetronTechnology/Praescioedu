@@ -34,10 +34,21 @@
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="form-group">
-                                <div class="col-md-9 col-sm-9 col-xs-9">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                  
                                 </div>
 
-                                <div class="col-md-3 col-sm-3 col-xs-3">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                  <div class="form-group">
+                                    <div>
+                                      <label for="Status" style="float: left">Filter by Status</label>
+                                      <select style="width: 100px; float: left; margin-left: 10px;" id="Status" name="Status" class="input-sm form-control" ng-model="Status" ng-change="LoadContent()">
+                                        <option value="-1" selected="selected">-- Select Status --</option>
+                                        <option value="1">Active</option>
+                                        <option value="0">Inactive</option>
+                                      </select>
+                                    </div>
+                                  </div>
                                     <input type="text" class="form-control" ng-model="SearchText" ng-keyup="SearchText.length>3 ||SearchText.length==0?LoadContent():'';" style="width:150px;float:right;" placeholder="Search" name="Search" value="" />
                                 </div>
                             </div>
@@ -87,21 +98,13 @@
 
         myApp.controller('SchoolListCtrl', function ($scope, $rootScope, $filter, NetworkService) {
             $scope.itemPerPage = 10;
-
             $scope.Teacher = {};
-            $scope.TitleName = 'School List'
+            $scope.TitleName = 'School List';
             $scope.SearchText = "";
-
-            $scope.LoadContent = function () {
-                NetworkService.get('PraescioAdmin/GetInstitutionList?searchText=' + $scope.SearchText).success(function (data) {
-                    $scope.SchoolList = data.contentData;
-                    $scope.totalcount = data.totalRecord;
-                });
-            }
-            $scope.LoadContent();
+            $scope.Status = -1;
 
             $scope.onPageChange = function (pageno) {
-                var url = '&pageNo=' + pageno + '&itemPerPage=' + $scope.itemPerPage;
+                var url = 'pageNo=' + pageno + '&itemPerPage=' + $scope.itemPerPage + '&searchText=' + $scope.SearchText + '&IsActive=' + $scope.Status;
 
                 NetworkService.get('PraescioAdmin/GetInstitutionList?' + url).success(function (data) {
                     $scope.SchoolList = data.contentData;
@@ -109,6 +112,10 @@
                 });
             }
 
+            $scope.LoadContent = function () {
+              $scope.onPageChange(1);
+            }
+            $scope.LoadContent();
         });
     </script>
 }

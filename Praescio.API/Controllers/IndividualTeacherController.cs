@@ -37,15 +37,16 @@ namespace Praescio.API.Controllers
 
         [HttpGet]
         [Route("GetStudentList")]
-        public HttpResponseMessage GetStudentList(int standardid, int mediumid, int pageNo = 1, int itemPerPage = 10, string searchText = "")
+        public HttpResponseMessage GetStudentList(int boardid, int mediumid, int standardid, int pageNo = 1, int itemPerPage = 10, string searchText = "")
         {
             PraescioContext db = new PraescioContext();
             var studentList = (from a in db.Account
                                where ((string.IsNullOrEmpty(searchText) && a.FirstName == a.FirstName) ||
                                          (searchText != "" && a.FirstName.Contains(searchText)) || (searchText != "" && a.LastName.Contains(searchText)) || (searchText != "" && a.Email.Contains(searchText))
                                          || (searchText != "" && a.MobileNo.Contains(searchText))) &&
-                              a.AccountTypeId== (int)AccountType.IndividualStudent && a.StudentStandardId == standardid && a.MediumId == mediumid && a.IsActive
-                                   select a);
+                              a.AccountTypeId== (int)AccountType.IndividualStudent && a.BoardId == boardid && a.StudentStandardId == standardid && a.MediumId == mediumid && a.IsActive
+                              && a.CreatedBy == LoggedInAccount.AccountId
+                               select a);
             var accountList = studentList.OrderBy(x => x.AccountId).Skip((pageNo - 1) * itemPerPage).Take(itemPerPage).ToList();
             return Request.CreateResponse(HttpStatusCode.OK, new { studentDetail = accountList, totalRecord = studentList.Count() });
 

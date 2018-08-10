@@ -41,6 +41,8 @@ namespace Praescio.Domain.DAL
         public DbSet<Mst_City> City { get; set; }
         public DbSet<Mst_AssignmentType> AssignmentType { get; set; }
         public DbSet<Assignment> Assignment { get; set; }
+        public DbSet<AssignmentHKPMapping> AssignmentHKPMapping { get; set; }
+        public DbSet<AssignmentHKPStudent> AssignmentHKPStudent { get; set; }
         public DbSet<AssignmentTeacherMapping> AssignmentTeacherMapping { get; set; }
         public DbSet<KnowledgeBank> KnowledgeBank { get; set; }
         public DbSet<QuestionType> QuestionType { get; set; }
@@ -53,6 +55,11 @@ namespace Praescio.Domain.DAL
         public DbSet<Medium> Medium { get; set; }
         public DbSet<TeacherStandardMapping> StandardMapping { get; set; }
         public DbSet<Mst_ExceptionLog> ExceptionLog { get; set; }
+        public DbSet<Video> Video { get; set; }
+        public DbSet<Creativity> Creativity { get; set; }
+        public DbSet<CreativityComment> CreativityComment { get; set; }
+        public DbSet<Notice> Notice { get; set; }
+        public DbSet<PaymentTransaction> PaymentTransaction { get; set; }
         #endregion
 
         /// <summary>

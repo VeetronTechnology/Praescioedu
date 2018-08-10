@@ -10,8 +10,8 @@
 </style>
 
 <div class="right_col" role="main" ng-controller="SearchStudentCtrl">
-    <div class="cont">
-        <ol class="breadcrumb breadcrumb-bg-teal align-right">
+    <div class="content">
+        <ol class="breadcrumb align-right">
             <li><a href="index.html"><i class="material-icons">home</i> Home</a></li>
             <li><i class="material-icons">remove_red_eye</i> View Student</li>
         </ol>
@@ -90,6 +90,7 @@
                                                         <th>Email</th>
                                                         <th>Phone No.</th>
                                                         <th>Gender</th>
+                                                        <th>Registration Date</th>
                                                         <th>Status</th>
                                                     </tr>
                                                 </thead>
@@ -99,6 +100,7 @@
                                                         <td>{{student.Email}}</td>
                                                         <td>{{student.MobileNo}}</td>
                                                         <td>{{student.Gender}}</td>
+                                                        <td>{{student.CreatedOn | date:"dd MMM, yyyy"}}</td>
                                                         <td>{{student.IsActive==1?'Active':'InActive'}}</td>
                                                     </tr>
                                                 </tbody>
@@ -153,7 +155,7 @@
                 console.log($scope.TextSearch);
                 console.log($scope.StandardId);
 
-                NetworkService.get('IndividualTeacher/GetStudentList?standardid=' + $scope.StandardId + '&mediumid=' + $scope.MediumId + '&SearchText=' + $scope.TextSearch).success(function (data) {
+                NetworkService.get('IndividualTeacher/GetStudentList?boardid=' + $scope.BoardId + '&standardid=' + $scope.StandardId + '&mediumid=' + $scope.MediumId + '&SearchText=' + $scope.TextSearch).success(function (data) {
                     $scope.StudentList = data.studentDetail;
                     $scope.totalcount = data.totalRecord;
                 });

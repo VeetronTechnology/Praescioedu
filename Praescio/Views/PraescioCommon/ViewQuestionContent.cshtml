@@ -26,13 +26,11 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="row x_title">
-                        <div class="col-md-6">
-                            <h2>List of @ContentString</h2>
-
-                            <div class="clearfix"></div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <h2 class="text-left">List of @ContentString</h2>
                         </div>
-                        <div class="col-sm-6">
-                            <label style="float:right;padding-right:53px;white-space:nowrap;">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <label class="text-left" style="float:right;padding-right:53px;white-space:nowrap;">
                                 Search:
                                 <input  type="text" class="form-control" ng-model="SearchText" ng-keyup="SearchText.length>3 ||SearchText.length==0?LoadContent():'';" style="display:inline; width:150px;float:right;" placeholder="Search" name="Search" value="" />
                             </label>
@@ -48,13 +46,12 @@
                                     <th>Word</th>
                                     @if (ContentString == "Antonyms")
                                     {
-                                    <th>Antonyms</th>}
-
+                                      <th>Antonyms</th>
+                                    }
                                     else
                                     {
-                                    <th>Synonyms</th>}
-                                     
-                                    
+                                      <th>Synonyms</th>
+                                    }
                                 </tr>
                             </thead>
                             <tbody>
@@ -73,6 +70,13 @@
                         </dir-pagination-controls>
 
                         <div ng-show="IsVisible">
+
+                          <div class="form-group">
+                            <label for="Version">Select Type</label>
+                            <select id="Assignment" name="Assignment" class="input-sm form-control" ng-model="AssignmentTypeId" ng-options="option.AssignmentTypeId as option.AssignmentTypeName for option in AssignmentTypeList" ng-change="GetAssignmentByType(AssignmentTypeId)" ng-required="true">
+                              <option value="">-- Select Type--</option>
+                            </select>
+                          </div>
 
                             <div class="form-group" >
                                 <label for="heard" class="required">Select Board</label>
@@ -110,15 +114,7 @@
                                     </select>
                                 </div>
                             </div>
-
-
-                            <div class="form-group" >
-                                <label for="Version">Select Type</label>
-                                <select id="Assignment" name="Assignment" class="input-sm form-control" ng-model="AssignmentTypeId" ng-options="option.AssignmentTypeId as option.AssignmentTypeName for option in AssignmentTypeList" ng-change="GetAssignmentByType(AssignmentTypeId)" ng-required="true">
-                                    <option value="">-- Select Type--</option>
-                                </select>
-                            </div>
-
+                          
                             <div class="form-group" >
                                 <label for="Version">Select Assignment</label>
                                 <select id="Assignment" name="Assignment" class="input-sm form-control" ng-model="AssignmentId" ng-options="option.AssignmentId as option.Title for option in AssignmentList" ng-change="" ng-required="true">
@@ -171,58 +167,144 @@
             { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }]
 
             NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
-                $scope.BoardList = data;
+                if ("@((int)Praescio.BusinessEntities.Common.AssignmentType.PExtra)" == "@ViewBag.AssignmentType") {
+                  $scope.BoardList = data.filter(m => m.Id == 4);
+                } else {
+                  $scope.BoardList = data;
+                }
+                $scope.Assignment.BoardId = $scope.BoardList[0].Id;
+                $scope.ChangeBoard($scope.Assignment.BoardId);
             });
 
+            $scope.GetAssignmentByType = function (AssignmentTypeId) {
+              $scope.AssignmentTypeId = AssignmentTypeId;
+              $scope.ChangeAssignmentList();
+
+              NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
+                if ($scope.AssignmentTypeId == "@(Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.PExtra))") {
+                  // Show only PE Board for PExtra
+                  // 4 => PE Board
+                  $scope.BoardList = data.filter(m => m.Id == 4);
+                  //$scope.Assignment.BoardId = 4;
+                  //$scope.ChangeBoard(4);
+                } else {
+                  $scope.BoardList = data.filter(m => m.Id != 4);
+                }
+
+                if (
+                  "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)"
+                  || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"
+                  || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Admin)"
+                )
+                {
+                  $scope.BoardList = $scope.BoardList.filter(m => m.Id == "@Praescio.Models.Common.ACCOUNT.BoardId");
+                }
+
+                $scope.Assignment.BoardId = $scope.BoardList[0].Id;
+                $scope.ChangeBoard($scope.Assignment.BoardId);
+              });
+            }
 
             NetworkService.get('PraescioAdmin/GetMedium').success(function (data) {
-                $scope.MediumList = data;
+                if ("@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Student)"
+                  || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)"
+                  || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"
+                  || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Admin)"
+                  || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)")
+                {
+                  var usrMediumId = "@Praescio.Models.Common.ACCOUNT.MediumId";
+                  if (usrMediumId == "" || usrMediumId == null) {
+                    usrMediumId = 1;
+                  }
+                  $scope.MediumList = data.filter(m => m.Id == usrMediumId);
+                } else {
+                  $scope.MediumList = data;
+                }
+
+                $scope.Assignment.MediumId = $scope.MediumList[0].Id;
 
             });
             $scope.ChangeBoard = function (boardname) {
                 if (boardname > 1) {
                     $scope.Assignment.MediumId = 1;
                 }
+                $scope.SubjectList = [];
+                $scope.Assignment.StandardId = '';
             }
 
             $scope.ChangeStandard = function (id) {
-              NetworkService.get('PraescioCommon/GetSubjectSingleMedium?standardid=' + id + '&mediumid=' + $scope.Assignment.MediumId).success(function (data) {
-                    $scope.SubjectList = data;
-                    console.log("subject ==", data);
-                });
+              NetworkService.get('PraescioCommon/GetSubjectSingleMedium?standardid=' + id + '&mediumid=' + $scope.Assignment.MediumId + '&boardid=' + $scope.Assignment.BoardId).success(function (data) {
+                $scope.SubjectList = data;
+
+                if (
+                  "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)"
+                  || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"
+                )
+                {
+                  $scope.SubjectList = $scope.SubjectList.filter(m => $scope.TeacherSubjects.indexOf(m.Id) > -1);
+                }
+              });
+            }
+
+            $scope.ChangeMedium = function (MediumId) {
+              $scope.SubjectList = [];
+              $scope.Assignment.StandardId = '';
             }
 
             NetworkService.get('PraescioCommon/GetAssignmentTypeList').success(function (data) {
-                $scope.AssignmentTypeList = data;
+              $scope.AssignmentTypeList = data.filter(m => m.AssignmentTypeId != @((int)Praescio.BusinessEntities.Common.AssignmentType.Handwriting) && m.AssignmentTypeId != @((int)Praescio.BusinessEntities.Common.AssignmentType.Pronounciation));
+              if (data) {
+                if ("@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.SuperAdmin)") {
+                  $scope.AssignmentTypeList = data.filter(m => m.AssignmentTypeId == parseInt("@((int)Praescio.BusinessEntities.Common.AssignmentType.PraescioLesson)") || m.AssignmentTypeId == parseInt("@((int)Praescio.BusinessEntities.Common.AssignmentType.PExtra)"));
+                } else {
+                  //$scope.AssignmentTypeList = data.filter(m => m.AssignmentTypeName.toLowerCase() == 'praescio lesson' || m.AssignmentTypeName.toLowerCase() == 'pextra');
+                  if (parseInt("@Praescio.Models.Common.ACCOUNT.BoardId") == 4) {
+                    $scope.AssignmentTypeList = $scope.AssignmentTypeList.filter(m => m.AssignmentTypeId == parseInt("@((int)Praescio.BusinessEntities.Common.AssignmentType.PExtra)"));
+                  } else {
+                    if ("@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)" || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Admin)") {
+                      $scope.AssignmentTypeList = $scope.AssignmentTypeList.filter(m => m.AssignmentTypeId == parseInt("@((int)Praescio.BusinessEntities.Common.AssignmentType.InstitutionAssignment)"));
+                    } else if ("@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)") {
+                      $scope.AssignmentTypeList = $scope.AssignmentTypeList.filter(m => m.AssignmentTypeId == parseInt("@((int)Praescio.BusinessEntities.Common.AssignmentType.IndividualAssignment)"));
+                    } else {
+                      $scope.AssignmentTypeList = $scope.AssignmentTypeList.filter(m => m.AssignmentTypeId == parseInt("@((int)Praescio.BusinessEntities.Common.AssignmentType.PraescioLesson)"));
+                    }
+                  }
+                }
+              }
             });
 
-            $scope.GetAssignmentByType = function (AssignmentTypeId) {
-                NetworkService.get('PraescioCommon/GetAssignmentList?AssignmentType=' + AssignmentTypeId).success(function (data) {
-                    $scope.AssignmentListAll = data.dataContent;
-                    //console.log(data.dataContent);
-                    $scope.ChangeAssignmentList();
-                });
-            }
+            //$scope.GetAssignmentByType = function (AssignmentTypeId) {
+            //  $scope.ChangeAssignmentList();
+            //}
 
             $scope.ChangeSubject = function (id) {
                 $scope.ChangeAssignmentList();
             }
 
             $scope.ChangeAssignmentList = function () {
-                console.log('$scope.Assignment', $scope.Assignment, $scope.Assignment.SubjectId)
-                console.log('$scope.AssignmentList', $scope.AssignmentListAll)
-                $scope.AssignmentList = $scope.AssignmentListAll.filter(m => m.SubjectId == $scope.Assignment.SubjectId);
-                console.log('$scope.AssignmentList', $scope.AssignmentList)
+              if ($scope.AssignmentTypeId == '' || $scope.AssignmentTypeId == undefined) {
+                $scope.AssignmentList = [];
+                return;
+              }
+
+              var url = 'pageNo=1&itemPerPage=9999&AssignmentType=' + $scope.AssignmentTypeId + '&HidePublished=true';
+              url += '&BoardId=' + ($scope.Assignment.BoardId == '' || $scope.Assignment.BoardId == undefined ? 0 : $scope.Assignment.BoardId) +
+                '&MediumId=' + ($scope.Assignment.MediumId == '' || $scope.Assignment.MediumId == undefined ? 0 : $scope.Assignment.MediumId) +
+                '&StandardId=' + ($scope.Assignment.StandardId == '' || $scope.Assignment.StandardId == undefined ? 0 : $scope.Assignment.StandardId) +
+                '&SubjectId=' + ($scope.Assignment.SubjectId == '' || $scope.Assignment.SubjectId == undefined ? 0 : $scope.Assignment.SubjectId) +
+                '&AttemptedOnly=false';
+              NetworkService.get('PraescioCommon/GetAssignmentListV2?' + url).success(function (data) {
+                $scope.AssignmentList = data.dataContent;
+              });
             }
 
             $scope.ChangeAssignment = function (id) {
                 NetworkService.get('PraescioCommon/GetAssignmentDetail?assignmentid=' + id).success(function (data) {
                     $scope.Assignment = data.Assignment;
                     $scope.AssignmentId(data.Assignment.StandardId);
-
                 });
             }
-           
+
 
 
             $scope.ShowHide = function () {

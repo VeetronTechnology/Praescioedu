@@ -81,6 +81,8 @@ namespace Praescio.Domain.Models
         public string State { get; set; }
         public string City { get; set; }
         public int? PinCode { get; set; }
+        public int? BoardId { get; set; }
+        public int? MediumId { get; set; }
     }
 
 }

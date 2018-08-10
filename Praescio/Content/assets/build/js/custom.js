@@ -5064,4 +5064,3 @@ if (typeof NProgress != 'undefined') {
 				
 	});	
 	
-

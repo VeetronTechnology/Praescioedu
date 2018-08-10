@@ -75,25 +75,25 @@
                             
                             <div class="form-group">
                                 <label class="required">Gender</label>
-                            <p>
-                                    @if (ViewBag.AccountId == 0)
+                                <p>
+                                @if (ViewBag.AccountId == 0)
                                 {
-                                    <select id="Version" ng-hide="savingRequest" name="Gender" ng-model="Teacher.Gender" class="input-sm form-control" required>
+                                    <select id="Gender" ng-hide="savingRequest" name="Gender" ng-model="Teacher.Gender" class="input-sm form-control" required>
                                         <option value="Male">Male</option>
                                         <option value="Female">Female</option>
                                     </select>
                                 }
                                 else
                                 {
-                                 <select id="Version" disabled="disabled" ng-hide="savingRequest" name="Gender" ng-model="Teacher.Gender" class="input-sm form-control" style="cursor: not-allowed; pointer-events: none;" required>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                            </select>
-                                 }
+                                    <input type="hidden" name="Gender" ng-model="Teacher.Gender">
+                                    <select id="Gender" disabled="disabled" ng-hide="savingRequest" name="Gender" ng-model="Teacher.Gender" class="input-sm form-control" style="cursor: not-allowed; pointer-events: none;">
+                                      <option value="Male">Male</option>
+                                      <option value="Female">Female</option>
+                                    </select>
+                                }
+                                </p>
                                 <p ng-show="TeacherRegistration.Gender.$invalid && (TeacherRegistration.Gender.$dirty || submitted ||TeacherRegistration.Gender.$touched )" class="text-danger">Gender is required.</p>
-                                
                             </div>
-
 
                             <div class="form-group">
                                 <label for="dob" class="required">Date Of Birth</label>
@@ -112,11 +112,7 @@
                                 <label for="regno" class="required">Mobile Number</label>
                                 <input type="text" id="MobileNo" ng-model="Teacher.MobileNo" maxlength="10" class="form-control number" name="MobileNo" data-parsley-trigger="change" placeholder="Mobile Number" required />
                                 <p ng-show="TeacherRegistration.MobileNo.$invalid && (TeacherRegistration.MobileNo.$dirty || submitted ||TeacherRegistration.MobileNo.$touched )" class="text-danger">Mobile is required.</p>
-
-
                             </div>
-
-
 
                             <div class="form-group">
                                 <label for="email" class="required">Email id</label>
@@ -134,55 +130,113 @@
                                 <label for="Board" class="required">Select Board</label>
                                 @if(ViewBag.AccountId == 0)
                                 {
-                                <select id="Board" name="Board" class="input-sm form-control" ng-model="Teacher.BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-change="" ng-required="true">
-                                    <option value="">-- Select Board --</option></select>
+                                    <select id="Board" name="Board" class="input-sm form-control" ng-model="Teacher.BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-change="" ng-required="true">
+                                      <option value="">-- Select Board --</option>
+                                    </select>
                                 }
                                 else
-                                    {
+                                {
                                     <select ng-hide="savingRequest" readonly id="Board" name="Board" class="input-sm form-control disabledInput" ng-model="Teacher.BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-change="" ng-required="true" style="cursor:not-allowed; pointer-events:none">
-                                     <option value="">-- Select Board --</option>
+                                      <option value="">-- Select Board --</option>
                                     </select>
-                                    }
-                                    
-                                    <p ng-show="TeacherRegistration.Board.$invalid && (TeacherRegistration.Board.$dirty || submitted ||TeacherRegistration.Board.$touched )" class="text-danger">Board is required</p>
-                                    @*<p ng-show="(TeacherRegistration.Standard.$invalid && submitted)" class="text-danger">Standard is required.</p>*@
-</div>
-
-
-                            <div class="col-md-12 col-xs-12">
-                                <span class="btn btn-primary" ng-click="addstandard()">Add Standard</span>
+                                }
+                                <p ng-show="TeacherRegistration.Board.$invalid && (TeacherRegistration.Board.$dirty || submitted ||TeacherRegistration.Board.$touched )" class="text-danger">Board is required</p>
+                                @*<p ng-show="(TeacherRegistration.Standard.$invalid && submitted)" class="text-danger">Standard is required.</p>*@
                             </div>
-                            <div class="col-md-12 col-xs-12">
-                                <div ng-repeat="option in Teacher.TeacherMappingStandard" class="col-md-4 col-xs-4" style="padding:0px !important">
-                                    <div class="form-group" style="padding-right:10px !important">
-                                        <div>
-                                            <label for="Standard">Select Standard</label>
-                                            <select id="Standard" name="Standard" class="input-sm form-control" ng-model="option.StandardId" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="ChangeStandard(option.StandardId,$index,Subject$index)" ng-init="Subject$index =[]" ng-required="true">
-                                                <option value="">-- Select Standard --</option>
-                                            </select>
-                                        </div>
-                                        <p ng-show="Teacher.Subject.length > 3 || (TeacherRegistration.Subject.$invalid && submitted)" class="text-danger">Max 3 Subject is required.</p>
-                                    </div>
-
-                                    <div class="form-group" style="padding-right:10px !important">
-                                        <div>
-                                            <label for="Subject">Select Subject</label>
-                                            <select class="input-sm form-control select2" multiple="" id="Subject{{$index}}" name="Subject{{$index}}"
-                                                    data-placeholder="Select Subject" ng-required="true" ng-model="option.SubjectId">
-                                                <option value=""></option>
-                                                <option ng-repeat="option in Subject$index.SubjectList" value="{{option.Id}}">{{option.SubjectName}}</option>
-                                            </select>
-                                        </div>
-                                        <p ng-show="(TeacherRegistration.Standard.$invalid && submitted)" class="text-danger">Standard is required.</p>
-                                    </div>
+                          
+                            @*@if (ViewBag.AccountId > 0)
+                            {
+                                <div class="col-md-12 col-xs-12">
+                                  <span class="btn btn-primary" ng-click="addstandard()">Add Standard</span>
                                 </div>
-                            </div>
-                            @* } *@
+                                <div class="col-md-12 col-xs-12">
+                                  <div ng-repeat="option in Teacher.TeacherMappingStandard" class="col-md-4 col-xs-4" style="padding:0px !important">
+                                    <div class="form-group" style="padding-right:10px !important">
+                                      <div>
+                                        <label for="Standard">Select Standard</label>
+                                        <select id="Standard" name="Standard" class="input-sm form-control" ng-model="option.StandardId" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="ChangeStandard(option.StandardId,$index,Subject$index)" ng-init="Subject$index =[]" ng-required="true">
+                                          <option value="">-- Select Standard --</option>
+                                        </select>
+                                      </div>
+                                      <p ng-show="Teacher.Subject.length > 3 || (TeacherRegistration.Subject.$invalid && submitted)" class="text-danger">Max 3 Subject is required.</p>
+                                    </div>
 
+                                    <div class="form-group" style="padding-right:10px !important">
+                                      <div>
+                                        <label for="Subject">Select Subject</label>
+                                        <select class="input-sm form-control select2" multiple="" id="Subject{{$index}}" name="Subject{{$index}}"
+                                                data-placeholder="Select Subject" ng-required="true" ng-model="option.SubjectId">
+                                          <option value=""></option>
+                                          <option ng-repeat="option in Subject$index.SubjectList" value="{{option.Id}}">{{option.SubjectName}}</option>
+                                        </select>
+                                      </div>
+                                      <p ng-show="(TeacherRegistration.Standard.$invalid && submitted)" class="text-danger">Standard is required.</p>
+                                    </div>
+                                  </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-12 col-xs-12">
+                                  <div ng-repeat="option in Teacher.TeacherMappingStandard" class="col-md-4 col-xs-4" style="padding:0px !important">
+                                    <div class="form-group" style="padding-right:10px !important">
+                                      <div>
+                                        <label for="Standard">Select Standard</label>
+                                        <select id="Standard" name="Standard" class="input-sm form-control" ng-model="option.StandardId" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="ChangeStandard(option.StandardId,$index,Subject$index)" ng-init="Subject$index =[]" ng-required="true">
+                                          <option value="">-- Select Standard --</option>
+                                        </select>
+                                      </div>
+                                    </div>
+
+                                    <div class="form-group" style="padding-right:10px !important">
+                                      <div>
+                                        <label for="Subject">Select Subject</label>
+                                        <select class="input-sm form-control select2" multiple="" id="Subject{{$index}}" name="Subject{{$index}}"
+                                                data-placeholder="Select Subject" ng-required="true" ng-model="option.SubjectId">
+                                          <option value=""></option>
+                                          <option ng-repeat="option in Subject$index.SubjectList" value="{{option.Id}}">{{option.SubjectName}}</option>
+                                        </select>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            }*@
+
+                          <div class="col-md-12 col-xs-12">
+                            <span class="btn btn-primary uploadbtn" ng-click="addstandard()">Add Standard</span>
+                            <span class="btn btn-primary uploadbtn" ng-click="removeStandard()" ng-if="Teacher.TeacherMappingStandard.length>1">Remove Standard</span>
+                          </div>
+
+                          <div class="col-md-12 col-xs-12">
+                            <div ng-repeat="option in Teacher.TeacherMappingStandard" class="col-md-4 col-xs-4" style="padding:0px !important">
+                              <div class="form-group" style="padding-right:10px !important">
+                                <div>
+                                  <label for="Standard" class="required">Select Standard</label>
+                                  <select id="Standard" name="Standard" class="input-sm form-control" ng-model="option.StandardId" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="ChangeStandard(option.StandardId,$index,Subject$index)" ng-init="Subject$index =[]" ng-required="true">
+                                    <option value="">-- Select Standard --</option>
+                                  </select>
+                                </div>
+                              </div>
+
+                              <div class="form-group" style="padding-right:10px !important">
+                                <div>
+                                  <label for="heard" class="required">Select Subject</label>
+                                  <select name="Subject{{$index}}" multiple ui-select2 class="input-sm form-control select2"
+                                          ng-model="option.SubjectId"
+                                          ng-options="someObject.Id as someObject.SubjectName for someObject in SubjectListAll[$index]">
+                                    <option value="">-- Select an option--</option>
+                                  </select>
+                                </div>
+                                <p ng-show="(SubjectsSelectedCount == 0 && submitted)" class="text-danger">Subject is required.</p>
+                              </div>
+                            </div>
+                            <p style="clear: both" ng-show="SubjectsSelectedCount > 3 || (TeacherRegistration.Subject.$invalid && submitted)" class="text-danger">Max 3 Subjects allowed.</p>
+                          </div>
+                            
                             <br />
                             @if (ViewBag.AccountId == 0)
                             {
-                                <span class="btn btn-primary" ng-click="reset()">Reset</span>
+                                @*<span class="btn btn-primary" ng-click="reset()">Reset</span>*@
                                 <span class="btn btn-primary" ng-click="RegisterTeacher()" ng-disabled="savingRequest">
                                     Submit
                                     <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
@@ -204,55 +258,138 @@
     </div>
 </div>
 
-
-
 <!-- footer content -->
 @section Scripts{
 
     <script type="text/javascript">
-
-
         myApp.controller('TeacherRegisterCtrl', function ($scope, $rootScope, $filter, NetworkService) {
 
             $scope.MediumId = '@Praescio.Models.Common.ACCOUNT.OrganizationAccount.MediumId';
+            $scope.BoardId = '@Praescio.Models.Common.ACCOUNT.OrganizationAccount.BoardId';
 
+            $scope.TitleName = 'Register School';
+            $scope.SubjectsSelectedCount = 0;
+            $scope.SubjectListAll = [];
             $scope.Teacher = {};
+            $scope.Teacher.Standard = [];
+            $scope.Teacher.UserName = '';
+            $scope.Teacher.MediumId = '@Praescio.Models.Common.ACCOUNT.OrganizationAccount.MediumId';
+
             $scope.Teacher.TeacherMappingStandard = [{
                 "StandardId": null,
                 "SubjectId": null
             }];
 
+            $scope.$watch("Teacher.TeacherMappingStandard", function (newValue) {
+              $scope.SubjectsSelectedCount = 0;
+              if ($scope.Teacher.TeacherMappingStandard) {
+                //console.log('$scope.Teacher.TeacherMappingStandard.length', $scope.Teacher.TeacherMappingStandard.length, $scope.Teacher.TeacherMappingStandard)
+                for (var i = 0; i < $scope.Teacher.TeacherMappingStandard.length; i++) {
+                  if ($scope.Teacher.TeacherMappingStandard[i].SubjectId != null) {
+                    $scope.SubjectsSelectedCount += ($scope.Teacher.TeacherMappingStandard[i].SubjectId.length);
+                    //console.log('$scope.Teacher.TeacherMappingStandard[i].SubjectId.length', i, $scope.Teacher.TeacherMappingStandard[i].SubjectId.length, $scope.Teacher.TeacherMappingStandard[i].SubjectId)
+                  }
+                }
+                //console.log('$scope.SubjectsSelectedCount', $scope.SubjectsSelectedCount)
+              }
+            }, true);
+
             $scope.addstandard = function () {
+              if ($scope.Teacher.TeacherMappingStandard.length < 3) {
                 $scope.Teacher.TeacherMappingStandard.push({ "StandardId": null, "SubjectId": null })
                 $(".select2").trigger("chosen:updated");
                 setTimeout(function () {
-                    $(".select2").select2();
+                  $(".select2").select2({ maximumSelectionLength: 3 });
                 }, 200)
+              }
+              else {
+                $.alert('Max 3 standard can be added.');
+              }
             }
 
-            setTimeout(function () {
-                $(".select2").select2();
-            }, 200)
+            $scope.removeStandard = function () {
+              $scope.Teacher.TeacherMappingStandard.pop({ "StandardId": null, "SubjectId": null })
+            }
 
-            $scope.Teacher.Standard = [];
-            $scope.Teacher.UserName = '';
-            $scope.TitleName = 'Register School'
+            $scope.updatestandard = function (index, tms) {
+              console.log('upd', index, tms)
+              if (tms) {
+                if (tms.StandardId != null) {
+                  $scope.ChangeStandard(tms.StandardId, index, []);
+                }
+                $(".select2").trigger("chosen:updated");
+                setTimeout(function () {
+                  $(".select2").select2();
+                }, 200)
+              }
+              else {
+                $.alert('Max 3 standard can be added.');
+              }
+            }
+
+
+            setTimeout(function() {
+                $(".select2").select2({maximumSelectionLength: 3});
+            }, 200);
+
 
             $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
                                { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }]
 
             $scope.VersionType = [{ Id: 1, Name: 'Paid' }, { Id: 2, Name: 'Trail' }]
 
-
             NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
-                $scope.BoardList = data;
+                if ("@((int)Praescio.BusinessEntities.Common.AssignmentType.PExtra)" == "@ViewBag.AssignmentType") {
+                  $scope.BoardList = data.filter(m => m.Id == 4);
+                } else {
+                  $scope.BoardList = data.filter(m => m.Id != 4);
+                }
+
+                if (
+                  "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)"
+                  || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"
+                  || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Admin)"
+                )
+                {
+                  $scope.BoardList = $scope.BoardList.filter(m => m.Id == "@Praescio.Models.Common.ACCOUNT.BoardId");
+                }
+
+                $scope.Teacher.BoardId = $scope.BoardList[0].Id;
+                $scope.ChangeBoard($scope.Teacher.BoardId);
             });
 
+            $scope.ChangeBoard = function (boardname) {
+                if (boardname > 1) {
+                    $scope.Teacher.MediumId = 1;
+                }
+                $scope.SubjectList = [];
+                $scope.Teacher.StandardId = '';
+            }
+
+            //$scope.ChangeStandard = function (id, subid, option) {
+            //    NetworkService.get('PraescioCommon/GetSubjectSingleMedium?standardid=' + id + '&mediumid=' + $scope.MediumId).success(function (data) {
+            //        $("#Subject" + subid).select2({maximumSelectionLength: 3}).val('').trigger("chosen:updated");
+            //        option.SubjectList = data;
+            //    });
+            //}
+
             $scope.ChangeStandard = function (id, subid, option) {
-                NetworkService.get('PraescioCommon/GetSubject?standardid=' + id + '&mediumid=' + $scope.MediumId).success(function (data) {
-                    $("#Subject" + subid).select2().val('').trigger("chosen:updated");
-                    option.SubjectList = data;
-                });
+              //console.log('ChangeStandard', id, subid, option)
+              NetworkService.get('PraescioCommon/GetSubjectSingleMedium?standardid=' + id + '&mediumid=' + $scope.Teacher.MediumId + '&boardid=' + $scope.Teacher.BoardId).success(function (data) {
+
+                option.SubjectList = data;
+
+                $scope.SubjectListAll[subid] = data;
+
+                /*setTimeout(function () {
+                  var tdata = [];
+                  for (var i = 0; i < data.length; i++) {
+                    tdata.push({ 'id': data[i].Id, 'text': data[i].SubjectName });
+                  }
+
+                  $("#Subject" + subid).select2({ 'data': tdata, 'val': $scope.Teacher.TeacherMappingStandard[subid].SubjectId }).trigger('chosen:update');
+                }, 1000);*/
+              });
             }
 
             if ('@ViewBag.AccountId' > 0) {
@@ -260,14 +397,28 @@
                     $scope.Teacher = data.account;
                     $scope.MediumId = data.account.OrganizationAccount.MediumId;
 
+                    if ($scope.Teacher.InstitutionAccountId > 0) {
+                      $scope.BoardList = $scope.BoardList.filter(m => m.Id == $scope.Teacher.BoardId);
+                    }
+
                     $scope.Teacher.DateOfBirth = $filter('date')($scope.Teacher.DateOfBirth, "dd/MM/yyyy");
 
-                    $scope.Teacher.TeacherMappingStandard = [{
+                    if (data.teacherMappingStandard == null) {
+                      $scope.Teacher.TeacherMappingStandard = [{
                         "StandardId": null,
                         "SubjectId": null
-                    }];
-                    $(".select2").select2();
+                      }];
+                    } else {
+                      $scope.Teacher.TeacherMappingStandard = data.teacherMappingStandard;
+                    }
 
+                    for (var i = 0; i < $scope.Teacher.TeacherMappingStandard.length; i++) {
+                      $scope.updatestandard(i, $scope.Teacher.TeacherMappingStandard[i]);
+                    }
+
+                    $(".select2").select2({ maximumSelectionLength: 3 });
+
+                    console.log('$scope.TeacherRegistration', $scope.TeacherRegistration, $scope.TeacherRegistration.$valid)
                 });
             }
 
@@ -285,36 +436,45 @@
 
 
             $scope.RegisterTeacher = function () {
-                $scope.Teacher.Gender = $("input[name='gender']:checked").val();
+                //$scope.Teacher.Gender = $("input[name='gender']:checked").val();
+                $scope.Teacher.Gender = ($scope.Teacher.Gender == null ? "Male" : $scope.Teacher.Gender);
 
                 var activateDate = $scope.Teacher.ActivateDate;
                 var expiredDate = $scope.Teacher.ExpiredDate;
-                var DateOfBirth = $scope.Teacher.DateOfBirth;
+                var DateOfBirth = $filter('date')($scope.Teacher.DateOfBirth, "dd/MM/yyyy");
 
                 $scope.Teacher.DateOfBirth = ConvertDateFormat($scope.Teacher.DateOfBirth);
 
-                if (!$scope.TeacherRegistration.$valid) {
+                if ($scope.SubjectsSelectedCount > 3 || !$scope.TeacherRegistration.$valid) {
                     $scope.submitted = true;
-                }
-                else {
-
+                } else {
                     $scope.savingRequest = true;
-
                     $scope.Teacher.IsIndividual = false;
                     $scope.Teacher.InstitutionAccountId = '@Praescio.Models.Common.ACCOUNT.InstitutionAccountId';
                     $scope.Teacher.AccountTypeId = '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Teacher)'
                     var data = '{"account":' + JSON.stringify($scope.Teacher) + ',"TeacherMappingStandard":' + JSON.stringify($scope.Teacher.TeacherMappingStandard) + ',"accounttypeid":' + '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Teacher)' + ',"isTeacher":' + true + '}';
+
                     NetworkService.insert('PraescioAdmin/RegisterTeacher', data).success(function (data) {
                         $scope.savingRequest = false;
                         $scope.Teacher.DateOfBirth = DateOfBirth;
 
-                        swal({
+                        if (data.sucess) {
+                          swal({
                             title: "Teacher has been successfully registered!!!",
                             text: "Press Ok to Continue.",
                             type: "success",
                             confirmButtonColor: "green",
                             showCancelButton: false,
-                        });
+                          });
+                        } else {
+                          swal({
+                            title: data.message,
+                            text: "Press Ok to Continue.",
+                            type: "error",
+                            confirmButtonColor: "red",
+                            showCancelButton: false,
+                          });
+                        }
 
                     }).error(function (data) {
                         $scope.savingRequest = false;
@@ -330,31 +490,41 @@
             }
 
             $scope.UpdateTeacher = function () {
+                $scope.Teacher.Gender = ($scope.Teacher.Gender == null ? "Male" : $scope.Teacher.Gender);
 
-                $scope.Teacher.Gender = $("input[name='gender']:checked").val();
-
-                if (!$scope.TeacherRegistration.$valid) {
+                //console.log('$scope.TeacherRegistration', $scope.TeacherRegistration, $scope.TeacherRegistration.$valid)
+                if ($scope.SubjectsSelectedCount > 3 || !$scope.TeacherRegistration.$valid) {
                     $scope.submitted = true;
-                }
-                else {
-
+                } else {
                     $scope.savingRequest = true;
+                    console.log('$scope.savingRequest', $scope.savingRequest)
 
                     $scope.Teacher.IsIndividual = false;
                     $scope.Teacher.InstitutionAccountId = '@Praescio.Models.Common.ACCOUNT.InstitutionAccountId';
-                    $scope.Teacher.AccountTypeId = '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Teacher)'
+                    $scope.Teacher.AccountTypeId = '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Teacher)';
+                    console.log('$scope.Teacher', $scope.Teacher)
                     var data = '{"account":' + JSON.stringify($scope.Teacher) + ',"TeacherMappingStandard":' + JSON.stringify($scope.Teacher.TeacherMappingStandard) + ',"accounttypeid":' + '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Teacher)' + ',"isTeacher":' + true + '}';
+
                     NetworkService.insert('PraescioAdmin/UpdateTeacher', data).success(function (data) {
-                        $scope.savingRequest = false;
+                      $scope.savingRequest = false;
 
+                      if (data.sucess) {
                         swal({
-                            title: "Teacher has been successfully updated!!!",
-                            text: "Press Ok to Continue.",
-                            type: "success",
-                            confirmButtonColor: "green",
-                            showCancelButton: false,
+                          title: "Teacher has been successfully updated!!!",
+                          text: "Press Ok to Continue.",
+                          type: "success",
+                          confirmButtonColor: "green",
+                          showCancelButton: false,
                         });
-
+                      } else {
+                        swal({
+                          title: data.message,
+                          text: "Press Ok to Continue.",
+                          type: "error",
+                          confirmButtonColor: "red",
+                          showCancelButton: false,
+                        });
+                      }
                     }).error(function (data) {
                         $scope.savingRequest = false;
                         swal({
@@ -368,7 +538,7 @@
                 }
             }
 
-            $(".select2").select2();
+            $(".select2").select2({maximumSelectionLength: 3});
 
             var pickerDefault = new Pikaday(
             {

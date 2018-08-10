@@ -1,0 +1,542 @@
+﻿
+@{
+    ViewBag.Title = "ViewAssignment";
+
+    var assignmentTitle = Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.SuperAdmin ? "Lessons" : "Assignment";
+    assignmentTitle = (int)Praescio.BusinessEntities.Common.AssignmentType.PExtra == ViewBag.AssignmentType ? "P Extra" : (int)Praescio.BusinessEntities.Common.AssignmentType.Handwriting == ViewBag.AssignmentType ? "Handwriting" : (int)Praescio.BusinessEntities.Common.AssignmentType.Pronounciation == ViewBag.AssignmentType ? "Pronounciation" : assignmentTitle;
+
+    var AssignmentType = ViewBag.AssignmentType;
+}
+
+<!-- page content -->
+<div class="right_col" role="main" ng-controller="ViewAssignmentCtrl">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>@assignmentTitle</h3>
+            </div>
+            <div class="title_right">
+                <div class="col-md-8 col-sm-8 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <ol class="breadcrumb">
+                            <li><a href="@Url.Action("Dashboard", "PraescioAdmin")"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                            <li><a href="#"><i class="fa fa-list"></i> View @assignmentTitle</a></li>
+                            <li class="active">List Of @assignmentTitle</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <div class="row">
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <h2 class="text-left">List Of @assignmentTitle</h2>
+                      </div>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        @if (Praescio.Models.Common.ACCOUNT.AccountTypeId != (int)Praescio.BusinessEntities.Common.AccountType.Student && Praescio.Models.Common.ACCOUNT.AccountTypeId != (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+                        {
+                            <label for="chk-hidepublished" class="pull-right">
+                              Hide Published <input type="checkbox" checked="checked" ng-disabled="IsVisible" name="chk-hidepublished" id="chk-hidepublished" value="true" ng-model="HidePublished" ng-change="ChangeHidePublished()" />
+                            </label>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                    <div class="x_content">
+                      <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                          <div class="form-group">
+                            <label for="Board">Select Board</label>
+                            <select id="Board" name="Board" class="input-sm form-control" ng-model="AssignmentFitler.BoardId" ng-options="option.Id as option.BoardName for option in AFBoardList" ng-change="AFChangeBoard(AssignmentFitler.BoardId)">
+                              <option value="">-- Select Board --</option>
+                            </select>
+                          </div>
+
+                          <div class="form-group">
+                            <div>
+                              <label for="Medium">Select Medium</label>
+                              <select id="Medium" name="Medium" class="input-sm form-control" ng-model="AssignmentFitler.MediumId" ng-disabled="AssignmentFitler.BoardId>1" ng-options="option.Id as option.Name for option in AFMediumList" ng-change="AFChangeMedium(AssignmentFitler.MediumId)">
+                                <option value="">-- Select Medium --</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <div>
+                              <label for="Standard">Select Standard</label>
+                              <select id="Standard" name="Standard" class="input-sm form-control" ng-model="AssignmentFitler.StandardId" ng-options="option.Id as option.StandardName for option in AFStandardList" ng-change="AFChangeStandard(AssignmentFitler.StandardId)">
+                                <option value="">-- Select Standard --</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <!--<div class="form-group">
+                            <div>
+                              <label for="Subject">Select Subject</label>
+                              <select id="Subject" name="Subject" class="input-sm form-control" ng-model="AssignmentFitler.SubjectId" ng-options="option.Id as option.SubjectName for option in AFSubjectList">
+                                <option value="">-- Select Subject --</option>
+                              </select>
+                            </div>
+                          </div>-->
+
+                          <div class="form-group">
+                            <div class="row">
+                              <div class="col-md-9 col-sm-9 col-xs-9">
+                                <input type="button" name="btn-filter" value="Filter @assignmentTitle" class="btn btn-primary btn-sm" ng-click="FilterAssignments()" />
+
+                                @if (Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.SuperAdmin) == Praescio.Models.Common.ACCOUNT.AccountTypeId || Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualTeacher) == Praescio.Models.Common.ACCOUNT.AccountTypeId || Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Teacher) == Praescio.Models.Common.ACCOUNT.AccountTypeId || Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Admin) == Praescio.Models.Common.ACCOUNT.AccountTypeId)
+                                {
+                                    <a ng-click="ShowHide()" href="#" class="btn btn-primary btn-sm">Publish</a>
+
+                                    @*<a class="btn btn-primary uploadbtn" title="Trail List" href="@Url.Action("AddAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.Handwriting)"><i title="Add Assignment"></i> <span class="nav-label"> Add New @assignmentTitle</span></a>*@
+                                    @*<a class="btn btn-primary btn-sm" title="Trail List" href="@Url.Action("AddAssignment", "Praescio")?assignmentType=@ViewBag.AssignmentType"><i title="Add @assignmentTitle"></i> <span class="nav-label"> Add New @assignmentTitle</span></a>*@
+                                }
+                              </div>
+                              <div class="col-md-3 col-sm-3 col-xs-3">
+                                <input type="text" class="form-control" ng-model="SearchText" ng-keyup="SearchText.length>3 ||SearchText.length==0?LoadContent():'';" style="width:150px;float:right;" placeholder="Search" name="Search" value="" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+
+                        <table class="table table-bordered table-striped table-hover js-basic-example " id="myTable1" role="grid" aria-describedby="myTable_info">
+                            <thead>
+                                <tr role="row">
+                                    <th width="80px" ng-show="IsVisible"><input type="checkbox" id="chkIsPublished" style="cursor:pointer;" /></th>
+                                    @*  <th class="sorting_desc" tabindex="0" aria-controls="myTable" rowspan="1" colspan="1" style="width: 57px;" aria-label="Standard: activate to sort column ascending" aria-sort="descending">Standard</th>*@
+                                    @*<th class="sorting col-md-2" aria-label="Subject: activate to sort column ascending">Subject</th>*@
+                                    <th class="sorting col-md-2" aria-label="Title: activate to sort column ascending">Title</th>
+                                    <th class="sorting col-md-2" aria-controls="myTable" aria-label="Description: activate to sort column ascending">Description</th>
+                                    <th class="sorting col-md-2" aria-label="Teacher Name: activate to sort column ascending">Teacher Name</th>
+                                    @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.SuperAdmin) || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Admin
+                                        || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Teacher || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)
+                                    {
+                                        <th class="sorting col-md-2" aria-label="File: activate to sort column ascending">File</th>
+                                    }
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr role="row" class="odd" dir-paginate="assignment in AssignmentList |itemsPerPage:10|filter:searchText" total-items="totalcount">
+                                    <td ng-show="IsVisible"><input type="checkbox" class="chkIsPublished" name="chkIsPublished_{{$index}}" ng-model="assignment.IsPublished" ng-disabled="assignment.IsPublished" style="cursor:pointer;" /></td>
+                                    @*<td class="sorting_1">{{assignment.Standard.StandardName}}</td>*@
+                                    @*<td>{{assignment.Subject.SubjectName}}</td>*@
+                                    <td><a href="#" ng-click="setModalViewDetails(assignment)">{{assignment.Title}}</a></td>
+                                    <td><span class="truncate">{{assignment.Description}}</span></td>
+                                    <td>{{assignment.Account.FirstName}} {{assignment.Account.LastName}}</td>
+                                    @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.SuperAdmin) || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Admin
+                                    || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Teacher || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)
+                                     {
+                                    <td><a ng-if="assignment.UploadFileSrc != ''" ng-href='~/{{assignment.UploadFileSrc}}' target="_blank">Download</a></td>
+                                    <td>
+                                        <a ng-if="!assignment.IsPublished" ng-href="~/Praescio/AddHandwritingAssignment?assignmentType={{assignment.AssignmentTypeId}}&assignmentid={{assignment.AssignmentId}}" class="btn btn-success btn-xs">Edit </a>
+                                        <a ng-if="assignment.IsPublished" disabled="disabled" ng-href="#" class="btn btn-success btn-xs disabledInput">Edit </a> <span ng-if="!assignment.IsPublished">|</span>
+                                        <a ng-if="!assignment.IsPublished" class="btn btn-danger btn-xs" ng-click="DeleteAssignment(assignment.AssignmentId)">Delete</a>
+                                    </td>
+                                     }
+                                </tr>
+                            </tbody>
+                        </table>
+                      <div ng-show="IsVisible">
+                        @*<div class="form-group">
+                          <div>
+                            <label for="Board">Select Board</label>
+                            <select id="Board" name="Board" class="input-sm form-control" ng-model="Assignment.BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-change="ChangeBoard(Assignment.BoardId)">
+                              <option value="">-- Select Board --</option>
+                            </select>
+                          </div>
+                          <p ng-show="AssignmentForm.Board.$invalid && (AssignmentForm.Board.$dirty || submitted ||AssignmentForm.Board.$touched )" class="text-danger">Board is required.</p>
+                        </div>
+
+                        <div class="form-group">
+                          <div>
+                            <label for="heard">Select Medium</label>
+                            <select id="Medium" name="Medium" class="input-sm form-control" ng-model="Assignment.MediumId" ng-options="option.Id as option.Name for option in MediumList" ng-change="ChangeMedium(Assignment.MediumId)" ng-required="true">
+                              <option value="">-- Select Medium --</option>
+                            </select>
+                          </div>
+                          <p ng-show="AssignmentForm.Medium.$invalid && (AssignmentForm.Medium.$dirty || submitted ||AssignmentForm.Medium.$touched )" class="text-danger">Medium is required.</p>
+                        </div>
+
+                        <div class="form-group">
+                          <div>
+                            <label for="heard">Select Standard</label>
+                            <select id="Standard" name="Standard" class="input-sm form-control" ng-model="Assignment.StandardId" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="ChangeStandard(Assignment.StandardId)" ng-required="true">
+                              <option value="">-- Select Standard --</option>
+                            </select>
+                          </div>
+                          <p ng-show="AssignmentForm.Standard.$invalid && (AssignmentForm.Standard.$dirty || submitted ||AssignmentForm.Standard.$touched )" class="text-danger">Standard is required.</p>
+                        </div>*@
+
+                        @*<div class="form-group">
+                          <div>
+                            <label for="heard">Select Subject</label>
+                            <select id="Subject" name="Subject" class="input-sm form-control" ng-model="Assignment.SubjectId" ng-options="option.Id as option.SubjectName for option in SubjectList" ng-change="ChangeSubject(Assignment.SubjectId)" ng-required="true">
+                              <option value="">-- Select Subject --</option>
+                            </select>
+                          </div>
+                        </div>*@
+                      </div>
+                        <dir-pagination-controls max-size="10"
+                                                 direction-links="true"
+                                                 on-page-change="onPageChange(newPageNumber)"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                        <br />
+                        <p ng-show="IsPublishValid" class="text-danger">Please select at least one assignment.</p>
+
+                        <span ng-show="IsVisible" class="btn btn-primary uploadbtn clearfix pull-left" ng-click="PublishAssignment()" ng-disabled="savingRequestHKP">
+                            Submit
+                            <i class="fa fa-spinner fa-spin" ng-show="savingRequestHKP"></i>
+                        </span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('#chkIsPublished').on('change', function (e) {
+          var isChecked = $(this).is(':checked');
+          $('input.chkIsPublished').not(':disabled').prop('checked', isChecked).trigger('changed');
+        });
+      });
+
+        myApp.controller('ViewAssignmentCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+            $scope.itemPerPage = 10;
+            $scope.SearchText = "";
+            $scope.Assignment = {};
+            $scope.AssignmentListAll = [];
+            $scope.HidePublished = true;
+            $scope.BoardList = [];
+
+            $scope.AFBoardList = [];
+            $scope.AFMediumList = [];
+            $scope.AFStandardList = [];
+            $scope.AFSubjectList = [];
+            $scope.AssignmentFitler = { BoardId: 0, MediumId: 0, StandardId: 0, SubjectId: 0 };
+            $scope.IsPublishValid = false;
+
+            if ("@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Student)"
+            || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)") {
+              $scope.HidePublished = false;
+            }
+
+            $scope.onPageChange = function (pageno) {
+              var url = '&pageNo=' + pageno + '&itemPerPage=' + $scope.itemPerPage + '&AssignmentType=@ViewBag.AssignmentType' + '&HidePublished=' + $scope.HidePublished;
+              url += '&BoardId=' + ($scope.AssignmentFitler.BoardId == '' ? 0 : $scope.AssignmentFitler.BoardId) +
+                '&MediumId=' + ($scope.AssignmentFitler.MediumId == '' ? 0 : $scope.AssignmentFitler.MediumId) +
+                '&StandardId=' + ($scope.AssignmentFitler.StandardId == '' ? 0 : $scope.AssignmentFitler.StandardId) +
+                '&SubjectId=' + ($scope.AssignmentFitler.SubjectId == '' ? 0 : $scope.AssignmentFitler.SubjectId) +
+                '&AttemptedOnly=false';
+                NetworkService.get('PraescioCommon/GetAssignmentListV2?' + url).success(function (data) {
+                    $scope.AssignmentList = data.dataContent;
+                    $scope.totalcount = data.totalRecord;
+                });
+            }
+
+            $scope.LoadContent = function () {
+
+              @*NetworkService.get('PraescioCommon/GetAssignmentList?AssignmentType=@ViewBag.AssignmentType&searchText=' + $scope.SearchText + '&HidePublished=' + $scope.HidePublished).success(function (data) {
+                $scope.AssignmentList = data.dataContent;
+                $scope.totalcount = data.totalRecord;
+              });*@
+              $scope.onPageChange(1);
+            }
+
+
+            $scope.ChangeHidePublished = function () {
+              if ($scope.IsVisible) {
+                $scope.HidePublished = true;
+              }
+              $scope.LoadContent();
+            }
+
+            $scope.ShowHide = function () {
+              $scope.IsVisible = $scope.IsVisible ? false : true;
+              if ($scope.IsVisible) {
+                $scope.HidePublished = true;
+                $scope.ChangeHidePublished();
+              }
+            }
+
+
+            $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
+              { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }];
+
+            $scope.AFStandardList = $scope.StandardList;
+
+            if ("@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Student)"
+              || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)"
+              @*|| "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"
+              || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)"*@
+            )
+            {
+              var usrStandardId = "@(Praescio.Models.Common.ACCOUNT.Standard == null ? 1 : Praescio.Models.Common.ACCOUNT.Standard.Id)";
+              if (usrStandardId == "" || usrStandardId == null) {
+                usrStandardId = 1;
+              }
+
+              $scope.StandardList = $scope.StandardList.filter(m => m.Id == usrStandardId);
+              $scope.AFStandardList = $scope.StandardList.filter(m => m.Id == usrStandardId);
+              $scope.AssignmentFitler.StandardId = usrStandardId;
+            }
+
+            $scope.TeacherMappingStandard = [];
+            $scope.TeacherSubjects = [];
+            if (
+              "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)"
+              || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"
+            )
+            {
+              NetworkService.get('PraescioCommon/GetUserRegisterationDetail?accountId=@Praescio.Models.Common.ACCOUNT.AccountId').success(function (data) {
+                $scope.TeacherMappingStandard = data.teacherMappingStandard;
+                var standards = [];
+
+                $scope.TeacherMappingStandard.forEach(function (k) {
+                  standards.push(k.StandardId);
+                  k.SubjectId.forEach(function (k2) {
+                    $scope.TeacherSubjects.push(k2);
+                  });
+                });
+
+                $scope.AFStandardList = $scope.AFStandardList.filter(m => standards.indexOf(m.Id) > -1);
+              });
+            }
+
+            //$scope.ChangeBoard = function (boardname) {
+            //  if (boardname > 1) {
+            //    $scope.Assignment.MediumId = 1;
+            //  }
+            //  $scope.SubjectList = [];
+            //  $scope.Assignment.StandardId = '';
+            //}
+
+            //$scope.ChangeMedium = function (MediumId) {
+            //  $scope.SubjectList = [];
+            //  $scope.Assignment.StandardId = '';
+            //}
+
+            //$scope.ChangeStandard = function (id) {
+            //    NetworkService.get('PraescioCommon/GetSubjectSingleMedium?standardid=' + id + '&mediumid=' + $scope.Assignment.MediumId).success(function (data) {
+            //        $scope.SubjectList = data;
+            //    });
+            //}
+
+            NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
+              @*if ("@Praescio.Models.Common.ACCOUNT.BoardId" == "4") {
+                $scope.BoardList = data.filter(m => m.Id == 4);
+              } else {
+                $scope.BoardList = data.filter(m => m.Id != 4);
+              }*@
+              $scope.BoardList = data;
+              //console.log('$scope.BoardList 1', $scope.BoardList, "@Praescio.Models.Common.ACCOUNT.BoardId", "@ViewBag.AssignmentType")
+              if (
+                "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Student)"
+                || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)"
+                || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)"
+                || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"
+                || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Admin)"
+              )
+              {
+                $scope.BoardList = $scope.BoardList.filter(m => m.Id == "@Praescio.Models.Common.ACCOUNT.BoardId");
+              }
+              console.log('$scope.BoardList 1', $scope.BoardList)
+              $scope.AFBoardList = $scope.BoardList;
+
+              if ($scope.BoardList.length > 0) {
+                $scope.AssignmentFitler.BoardId = $scope.BoardList[0].Id;
+                $scope.AFChangeBoard($scope.AssignmentFitler.BoardId);
+              }
+
+              //$scope.Assignment.BoardId = $scope.BoardList[0].Id;
+              //$scope.ChangeBoard($scope.Assignment.BoardId);
+              $scope.FilterAssignments();
+            });
+
+            $scope.AFChangeBoard = function (boardname) {
+              if (boardname > 1) {
+                $scope.AssignmentFitler.MediumId = 1;
+              }
+              $scope.AFSubjectList = [];
+              $scope.AssignmentFitler.StandardId = '';
+
+              //if ($scope.AFStandardList.length == 1) {
+              //  $scope.AssignmentFitler.StandardId = $scope.AFStandardList[0].Id;
+              //}
+            }
+
+
+            NetworkService.get('PraescioAdmin/GetMedium').success(function (data) {
+              if ("@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Student)"
+                || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)"
+                || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"
+                || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)")
+              {
+                var usrMediumId = "@Praescio.Models.Common.ACCOUNT.MediumId";
+                if (usrMediumId == "" || usrMediumId == null) {
+                  usrMediumId = 1;
+                }
+                //console.log('medium', "@Praescio.Models.Common.ACCOUNT.MediumId", usrMediumId)
+                $scope.MediumList = data.filter(m => m.Id == usrMediumId);
+                $scope.AFMediumList = data.filter(m => m.Id == usrMediumId);
+              } else {
+                $scope.MediumList = data;
+                $scope.AFMediumList = data;
+              }
+
+              //if ($scope.AFMediumList.length == 1) {
+              //  $scope.AssignmentFitler.MediumId = $scope.AFMediumList[0].Id;
+              //}
+            });
+
+            $scope.AFChangeMedium = function (MediumId) {
+              $scope.AFSubjectList = [];
+              $scope.AssignmentFitler.StandardId = '';
+              //if ($scope.AFStandardList.length == 1) {
+              //  $scope.AssignmentFitler.StandardId = $scope.AFStandardList[0].Id;
+              //}
+            }
+
+            $scope.AFChangeStandard = function (id) {
+              NetworkService.get('PraescioCommon/GetSubjectSingleMedium?standardid=' + id + '&mediumid=' + $scope.AssignmentFitler.MediumId + '&boardid=' + $scope.AssignmentFitler.BoardId).success(function (data) {
+                $scope.AFSubjectList = data;
+                //if ($scope.AFSubjectList.length == 1) {
+                //  $scope.AssignmentFitler.SubjectId = $scope.AFSubjectList[0].Id;
+                //}
+
+                if (
+                  "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)"
+                || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"
+                )
+                {
+                  $scope.AFSubjectList = $scope.AFSubjectList.filter(m => $scope.TeacherSubjects.indexOf(m.Id) > -1);
+                }
+              });
+            }
+
+            $scope.FilterAssignments = function () {
+              $scope.onPageChange(1);
+            }
+
+            $scope.PublishAssignment = function () {
+                var assignments = [];
+                $scope.AssignmentList.forEach(function (itm, index) {
+                  //console.log('chkIsPublished_', index, $('input[name="chkIsPublished_' + index + '"]').is(':checked'));
+                  if ($('input[name="chkIsPublished_' + index + '"]').is(':checked')) {
+                    var data = {
+                      BoardId: $scope.AssignmentFitler.BoardId,
+                      MediumId: $scope.AssignmentFitler.MediumId,
+                      StandardId: $scope.AssignmentFitler.StandardId,
+                      AssignmentId: itm.AssignmentId,
+                      IsPublished: true
+                    }
+                    assignments.push(data);
+                  }
+                });
+
+                if (assignments.length == 0) {
+                  $scope.IsPublishValid = true;
+                  return;
+                }
+
+                if ($scope.AssignmentFitler.BoardId == 0 || $scope.AssignmentFitler.BoardId == '' || $scope.AssignmentFitler.BoardId == null ||
+                  $scope.AssignmentFitler.MediumId == 0 || $scope.AssignmentFitler.MediumId == '' || $scope.AssignmentFitler.MediumId == null ||
+                  $scope.AssignmentFitler.StandardId == 0 || $scope.AssignmentFitler.StandardId == '' || $scope.AssignmentFitler.StandardId == null) {
+                  swal({
+                    title: "Please select Board, Medium and Standard.",
+                    text: "Press Ok to Continue.",
+                    type: "error",
+                    confirmButtonColor: "red",
+                    showCancelButton: false
+                  });
+                  return;
+                }
+
+                $scope.savingRequestHKP = true;
+                var data = '{"dataContent":' + JSON.stringify(assignments) + '}';
+                console.log('data', data);
+
+                NetworkService.insert('PraescioCommon/PublishAssignmentHKP', data).success(function (data) {
+                    $scope.savingRequestHKP = false;
+                    swal({
+                        title: "@assignmentTitle has been published successfully !!!",
+                        text: "Press Ok to Continue.",
+                        type: "success",
+                        confirmButtonColor: "green",
+                        showCancelButton: false,
+                    });
+
+                    $scope.LoadContent();
+
+
+                    $scope.savingRequest = false;
+                    $scope.IsVisible = false;
+                }).error(function (data, status) {
+                    $scope.savingRequest = false;
+                    swal({
+                        title: data.Message,
+                        text: "Press Ok to Continue.",
+                        type: "error",
+                        confirmButtonColor: "red",
+                        showCancelButton: false,
+                    });
+                });
+            }
+
+            $scope.DeleteAssignment = function (id) {
+
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover this imaginary file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                        NetworkService.insert('PraescioCommon/DeleteAssignment?id=' + id, null).success(function (data) {
+                            swal({
+                                title: "Assignment has been deleted successfully!!!",
+                                text: "Press Ok to Continue.",
+                                type: "success",
+                                confirmButtonColor: "green",
+                                showCancelButton: false,
+                            });
+                            $scope.LoadContent();
+                        });
+                    } else {
+                    }
+                });
+            }
+
+            $scope.setModalViewDetails = function (assignment) {
+              swal({
+                title: 'View Details',
+                html: true,
+                text: '<table class="table table-bordered table-stripped text-left"><tbody>' +
+                '<tr><td><strong>Assignment Title</strong></td><td>' + assignment.Title + '</td></tr>' +
+                '<tr><td><strong>Assignment Description</strong></td><td>' + (assignment.Description == null ? '' : assignment.Description) + '</td></tr>' +
+                '<tr><td><strong>Teacher Name</strong></td><td>' + (assignment.Account.FirstName + ' ' + assignment.Account.LastName) + '</td></tr>' +
+                '</tbody></table>',
+                //type: "info",
+                confirmButtonColor: "info",
+                showCancelButton: false
+              });
+            }
+
+        });
+    </script>
+}

@@ -26,6 +26,7 @@ namespace Praescio.Controllers
     }
 
     [SessionExpired]
+    [ChangePasswordFirstLogin]
     [RoutePrefix("Praescio")]
     public class PraescioCommonController : BaseController
     {
@@ -41,11 +42,12 @@ namespace Praescio.Controllers
         }
 
         [Route("StudentList")]
-        public ActionResult StudentList(bool isIndividual = false, string version = "", int institutionId = 0)
+        public ActionResult StudentList(bool isIndividual = false, string version = "", int institutionId = 0, int standardId = 0)
         {
             ViewBag.IsIndividual = isIndividual;
             ViewBag.Version = version;
             ViewBag.InstitutionId = institutionId;
+            ViewBag.StandardId = standardId;
 
             return View();
         }
@@ -71,6 +73,20 @@ namespace Praescio.Controllers
 
         [Route("ViewAssignment")]
         public ActionResult ViewAssignment(int assignmentType)
+        {
+            ViewBag.AssignmentType = assignmentType;
+            return View();
+        }
+
+        [Route("ViewAssignmentHKP")]
+        public ActionResult ViewAssignmentHKP(int assignmentType)
+        {
+            ViewBag.AssignmentType = assignmentType;
+            return View();
+        }
+
+        [Route("ViewAssignmentHKPStudent")]
+        public ActionResult ViewAssignmentHKPStudent(int assignmentType)
         {
             ViewBag.AssignmentType = assignmentType;
             return View();
@@ -112,8 +128,9 @@ namespace Praescio.Controllers
             return View();
         }
         [Route("ViewVideo")]
-        public ActionResult ViewVideo()
+        public ActionResult ViewVideo(int assignmentId)
         {
+            ViewBag.AssignmentId = assignmentId;
             return View();
         }
 
@@ -171,9 +188,11 @@ namespace Praescio.Controllers
             return file;
         }
 
-        [Route("AddHandwritingAssigment")]
-        public ActionResult AddHandwritingAssigment()
+        [Route("AddHandwritingAssignment")]
+        public ActionResult AddHandwritingAssignment(int assignmentType, int assignmentid = 0)
         {
+            ViewBag.AssignmentType = assignmentType;
+            ViewBag.Assignmentid = assignmentid;
             return View();
         }
 
@@ -197,6 +216,23 @@ namespace Praescio.Controllers
         [Route("Help")]
         public ActionResult Help()
         {
+            return View();
+        }
+
+        [Route("TestHKP")]
+        public ActionResult TestHKP(int assignmentId, int userId, int standardId = 0, int subjectId = 0)
+        {
+            ViewBag.StandardId = standardId;
+            ViewBag.SubjectId = subjectId;
+            ViewBag.AssignmentId = assignmentId;
+            ViewBag.UserId = userId;
+            return View();
+        }
+
+        [Route("CreativityDetails")]
+        public ActionResult CreativityDetails(int CreativityId)
+        {
+            ViewBag.CreativityId = CreativityId;
             return View();
         }
     }

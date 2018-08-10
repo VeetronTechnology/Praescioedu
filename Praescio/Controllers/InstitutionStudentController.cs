@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Praescio.CustomFilter;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -6,6 +7,7 @@ using System.Web.Mvc;
 
 namespace Praescio.Controllers
 {
+    [ChangePasswordFirstLogin]
     public class InstitutionStudentController : Controller
     {
         // GET: InstitutionStudent

@@ -1,51 +1,69 @@
-﻿
+﻿@using Praescio.BusinessEntities.Common
 <ul class="nav side-menu">
     <li>
         <a href="@Url.Action("Dashboard", "Parents")"><i class="fa fa-dashboard"></i> Dashboard</a>
     </li>
     <li>
-        <a href="@Url.Action("StudentProfile", "InstitutionStudent")"><i class="fa fa-user"></i>Student Profile</a>
+        <a href="@Url.Action("StudentProfile", "InstitutionStudent")?StudentAccountId=@Praescio.Models.Common.STUDENTACCOUNT.AccountId"><i class="fa fa-user"></i>Student Profile</a>
     </li>
-     
-         
-    <li>
-        <a href="@Url.Action("SchoolInformation", "Parents")"><i class="fa fa-graduation-cap"></i>  School Information</a>
-    </li>
-    <li>
-        <a href="@Url.Action("StudentPackageDetails", "Parents")"><i class="fa fa-money"></i>Student Package Details</a>
-    </li>
+    @if (Praescio.Models.Common.STUDENTACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student)
+    {
+        <li>
+          <a href="@Url.Action("SchoolInformation", "Parents")"><i class="fa fa-graduation-cap"></i>School Information</a>
+        </li>
+    }
+    @*@if (Praescio.Models.Common.STUDENTACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+    {
+        <li>
+          <a href="@Url.Action("StudentPackageDetails", "Parents")"><i class="fa fa-money"></i>Student Package Details</a>
+        </li>
+    }*@
 
     <li>
         <a href="@Url.Action("CreativityUploads", "Parents")"><i class="fa fa-paint-brush"></i>Creativity Uploads</a>
     </li>
-    <li>
+    @*<li>
         <a href="@Url.Action("CommentHistory", "Parents")"><i class="fa fa-graduation-cap"></i>Comment History</a>
     </li>
     <li>
         <a href="@Url.Action("StudentsCreativity", "Parents")"><i class="fa fa-graduation-cap"></i>Student's Creativity</a>
-    </li>
+    </li>*@
    
    
 
     <li>
         <a><i class="fa fa-user"></i> History Of Exam <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
+        @if (Praescio.Models.Common.ACCOUNT.BoardId != 4)
+        {
             <li>
-                <a title="Trail List" href="@Url.Action("AddAssignment", "Praescio")"><i title="Add Lessons" class="fa fa-university"></i> <span class="nav-label"> Praescio Lessons</span></a>
+              <a title="Praescio Lesson" href="@Url.Action("AssignmentResult", "Praescio", new { assignmentType = (int)AssignmentType.All })"><i title="Praescio Lessons"></i> <span class="nav-label">Praescio Lessons</span></a>
             </li>
             <li>
-                <a title="Trail List" href="@Url.Action("UploadAssignmentQuestion", "Praescio")"><i title="Add Lessons" class="fa fa-university"></i> <span class="nav-label">Assignment List </span></a>
+              @if (Praescio.Models.Common.STUDENTACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+              {
+                  <a title="Assignment" href="@Url.Action("AssignmentResult", "Praescio", new { assignmentType = (int)AssignmentType.IndividualAssignment })"><i title="Assignment"></i> <span class="nav-label">Assignment</span></a>
+              }
+              else if (Praescio.Models.Common.STUDENTACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student)
+              {
+                  <a title="Assignment" href="@Url.Action("AssignmentResult", "Praescio", new { assignmentType = (int)AssignmentType.InstitutionAssignment })"><i title="Assignment"></i> <span class="nav-label">Assignment</span></a>
+              }
+              else
+              {
+                  <a title="Assignment" href="@Url.Action("AssignmentResult", "Praescio", new { assignmentType = (int)AssignmentType.PraescioLesson })"><i title="Assignment"></i> <span class="nav-label">Assignment</span></a>
+              }
             </li>
+        }
+        else
+        {
             <li>
-                <a title="Full Version" href="@Url.Action("ViewAssignment", "Praescio")"><i title="View Lessons" class="fa fa-university"></i> <span class="nav-label"> P-Extra Act</span></a>
+              <a title="P-Extra Act" href="@Url.Action("AssignmentResult", "Praescio", new { assignmentType = (int)AssignmentType.PExtra })"><i title="P-Extra Act"></i> <span class="nav-label">P-Extra Act</span></a>
             </li>
-            <li>
-                <a href="@Url.Action("CheckAssignment", "InstitutionTeacher")"><i class="fa fa-check"></i>Check Lesson</a>
-            </li>
+        }
         </ul>
     </li>
      
-    <li>
+    @*<li>
         <a><i class="fa fa-file-word-o"></i>Edu Study <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
 	
@@ -55,18 +73,18 @@
             <li><a href="@Url.Action("PronunciationDevelopment", "PraescioAdmin")">Pronunciation Development</a></li>
           
         </ul>
-    </li>
-    <li>
+    </li>*@
+    @*<li>
         <a href="#"><i class="fa fa-plus"></i>Knowledge Bank<span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
             <li><a href="@Url.Action("AddKnowledgeBank", "Praescio")">Add Knowledge Bank</a></li>
             <li><a href="@Url.Action("ViewKnowledgeBank", "Praescio")">View Knowledge Bank</a></li>
             <li><a href="@Url.Action("KnowledgeBankHistory", "Praescio")">Knowledge Bank History</a></li>
         </ul>
-    </li>
+    </li>*@
 
     <li>
-        <a href="@Url.Action("SchoolNotice", "InstitutionTeacher")"><i class="fa fa-sticky-note"></i>School Notice</a>
+        <a href="@Url.Action("SchoolNotice", "InstitutionTeacher")"><i class="fa fa-sticky-note"></i>Notice</a>
     </li>
     <li>
         <a href="@Url.Action("Help", "Praescio")"><i class="fa fa-circle"></i>Help</a>

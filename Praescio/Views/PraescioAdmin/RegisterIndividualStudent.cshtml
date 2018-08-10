@@ -30,10 +30,10 @@
             <div class="col-md-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Individual Student Registration</h2>
+                        <h2>@(ViewBag.InstitutionId > 0 ? "Student Registration" : "Individual Student Registration")</h2>
                         <div class="clearfix"></div>
                     </div>
-                    <div class="x_content">
+                    <div class="x_content" id="pnl-frmPU">
                         <!-- start form for validation -->
                         <form id="StudentRegistration" name="StudentRegistration" data-parsley-validate>
 
@@ -138,8 +138,8 @@
 
 
                             <div class="form-group">
-                                <label for="regno" class="required">Students Mobile Number</label>
-                                <input type="text" id="StudentMobileNo" ng-model="Student.MobileNo" maxlength="10" class="form-control number" name="StudentMobileNo" data-parsley-trigger="change" placeholder="Mobile Number" required />
+                                <label for="regno" class="required">Parent's Mobile Number</label>
+                                <input type="text" id="StudentMobileNo" ng-model="Student.MobileNo" maxlength="10" ng-pattern="/[0-9]{10}/" class="form-control number phonenumber" name="StudentMobileNo" data-parsley-trigger="keyup" placeholder="Mobile Number" required />
                                 <p ng-show="StudentRegistration.StudentMobileNo.$invalid && (StudentRegistration.StudentMobileNo.$dirty || submitted ||StudentRegistration.StudentMobileNo.$touched )" class="text-danger">Mobile No is required.</p>
                             </div>
 
@@ -148,55 +148,6 @@
                                 <textarea id="Address" required="required" ng-model="Student.Address" class="form-control" name="Address" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.." placeholder="Enter Address"
                                           data-parsley-validation-threshold="10"></textarea>
                                 <p ng-show="StudentRegistration.Address.$invalid && (StudentRegistration.Address.$dirty || submitted ||StudentRegistration.Address.$touched )" class="text-danger">Address is required.</p>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="Version" class="required">Select Version</label>
-                                @if (ViewBag.AccountId == 0)
-                                {
-                                    <select id="Version" ng-hide="savingRequest" name="Version" ng-change="ChangeExpiredDate()" class="input-sm form-control"  ng-model="Student.VersionType" ng-options="option.Name as option.Name for option in VersionType" ng-change="" ng-required="true">
-                                        <option value="">-- Select Version --</option>
-                                    </select>
-                                }
-                                else
-                                {
-                                    <select id="Version" ng-hide="savingRequest" name="Version" ng-change="ChangeExpiredDate()" class="disabledInput input-sm form-control" readonly ng-model="Student.VersionType" ng-options="option.Name as option.Name for option in VersionType" ng-change="" ng-required="true">
-                                        <option value="">-- Select Version --</option>
-                                    </select>
-                                    
-                                }
-                                <p ng-show="StudentRegistration.Version.$invalid && (StudentRegistration.Version.$dirty || submitted ||StudentRegistration.Version.$touched )" class="text-danger">Version is required.</p>
-                            </div>
-
-                            <div class="form-group" ng-if="Student.VersionType=='@Praescio.Domain.AppCode.VersionType.Paid'">
-                                <label for="Package" class="required">Select Package</label>
-                                @if (ViewBag.AccountId == 0)
-                                {
-                                    <select id="Package" ng-hide="savingRequest" name="Package" class="form-control " ng-model="Student.PackageId" ng-options="option.id as option.text for option in PackageList" ng-change="PackageChange();">
-                                        <option value="">Select Package</option>
-                                    </select>
-                                }
-                                else
-                                {
-                                    <select id="Package" ng-hide="savingRequest" name="Package" class="form-control disabledInput" readonly ng-model="Student.PackageId" ng-options="option.id as option.text for option in PackageList" ng-change="PackageChange();">
-                                        <option value="">Select Package</option>
-                                    </select>                                    
-                                }
-                                <p ng-show="StudentRegistration.Package.$invalid && (StudentRegistration.Package.$dirty || submitted ||StudentRegistration.Package.$touched )" class="text-danger">Package is required.</p>
-                            </div>
-
-                            <div class="form-group" ng-if="Student.VersionType=='@Praescio.Domain.AppCode.VersionType.Paid'">
-                                <label for="AmountPaid" class="required">Amount Paid</label>
-                                @if (ViewBag.AccountId == 0)
-                                {
-                                    <input type="text" ng-hide="savingRequest" id="AmountPaid" name="AmountPaid"  ng-model="Student.AmountPaid" class="form-control" data-space="false">                                   
-                                }
-                                else
-                                {
-                                    <input type="text" ng-hide="savingRequest" id="AmountPaid" name="AmountPaid" readonly ng-model="Student.AmountPaid" class="form-control" data-space="false">                                   
-                                }
-                                
-                                <p ng-show="StudentRegistration.AmountPaid.$invalid && (StudentRegistration.AmountPaid.$dirty || submitted ||StudentRegistration.AmountPaid.$touched )" class="text-danger">Amount Paid is required.</p>
                             </div>
 
                             <div class="form-group">
@@ -220,13 +171,13 @@
                                 <label for="SubjectName" class="required">Select Medium</label>
                                 @if (ViewBag.AccountId == 0)
                                 {
-                                    <select id="Medium" ng-hide="savingRequest" name="Medium" class="input-sm form-control" ng-disabled="Student.BoardId>1"  ng-model="Student.MediumId" ng-options="option.Id as option.MediumName for option in MediumList" ng-required="true">
+                                    <select id="Medium" ng-hide="savingRequest" name="Medium" class="input-sm form-control" ng-disabled="Student.BoardId>1"  ng-model="Student.MediumId" ng-options="option.Id as option.MediumName for option in MediumList" ng-change="ChangeMedium(Student.MediumId)" ng-required="true">
                                         <option value="">-- Select Medium --</option>
                                     </select>
                                 }
                                 else
                                 {
-                                    <select id="Medium" ng-hide="savingRequest" name="Medium" class="input-sm form-control disabledInput" ng-disabled="Student.BoardId>1" readonly ng-model="Student.MediumId" ng-options="option.Id as option.MediumName for option in MediumList" ng-required="true">
+                                    <select id="Medium" ng-hide="savingRequest" name="Medium" class="input-sm form-control disabledInput" ng-disabled="Student.BoardId>1" readonly ng-model="Student.MediumId" ng-options="option.Id as option.MediumName for option in MediumList" ng-change="ChangeMedium(Student.MediumId)" ng-required="true">
                                         <option value="">-- Select Medium --</option>
                                     </select>
                                 }
@@ -237,13 +188,13 @@
                                 <label for="Standard" class="required">Select Standard</label>
                                 @if (ViewBag.AccountId == 0)
                                 {
-                                    <select id="Standard" ng-hide="savingRequest" name="Standard" class="input-sm form-control" ng-model="Student.Standard" ng-options="option.Id as option.StandardName for option in StandardList"  ng-required="true">
+                                    <select id="Standard" ng-hide="savingRequest" name="Standard" class="input-sm form-control" ng-model="Student.Standard" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="ChangeStandard(Student.Standard)" ng-required="true">
                                         <option value="">-- Select Standard --</option>
                                     </select>
                                 }
                                 else
                                 {
-                                    <select id="Standard" ng-hide="savingRequest" name="Standard" class="input-sm form-control disabledInput" readonly ng-model="Student.Standard" ng-options="option.Id as option.StandardName for option in StandardList" ng-required="true">
+                                    <select id="Standard" ng-hide="savingRequest" name="Standard" class="input-sm form-control disabledInput" readonly ng-model="Student.Standard" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="ChangeStandard(Student.Standard)" ng-required="true">
                                         <option value="">-- Select Standard --</option>
                                     </select>
                                 }
@@ -266,6 +217,61 @@
      -->
 
 
+
+                          <div class="form-group">
+                            <label for="Version" class="required">Select Version</label>
+                            @if (ViewBag.AccountId == 0)
+                            {
+                                <input ng-if="IsPaid" type="hidden" name="Version" ng-model="Student.VersionType" />
+                                    <select id="Version" ng-disabled="IsPaid" ng-hide="savingRequest" name="Version" class="input-sm form-control" ng-model="Student.VersionType" ng-options="option.Name as option.Name for option in VersionType" ng-change="" ng-required="true">
+                                      <option value="">-- Select Version --</option> ng-change="ChangeExpiredDate()"
+                                    </select>
+                            }
+                            else
+                            {
+                                <input ng-if="IsPaid" type="hidden" name="Version" ng-model="Student.VersionType" />
+                                    <select id="Version" ng-disabled="IsPaid" ng-hide="savingRequest" name="Version" ng-change="ChangeExpiredDate()" class="input-sm form-control" ng-model="Student.VersionType" ng-options="option.Name as option.Name for option in VersionType" ng-change="" ng-required="true">
+                                      <option value="">-- Select Version --</option>
+                                    </select>
+
+                            }
+                            <p ng-show="StudentRegistration.Version.$invalid && (StudentRegistration.Version.$dirty || submitted ||StudentRegistration.Version.$touched )" class="text-danger">Version is required.</p>
+                          </div>
+
+                          <div class="form-group" ng-if="Student.VersionType=='@Praescio.Domain.AppCode.VersionType.Paid'">
+                            <label for="Package" class="required">Select Package</label>
+                            @if (ViewBag.AccountId == 0)
+                            {
+                                <input ng-if="IsPaid" type="hidden" name="Version" ng-model="Student.PackageId" />
+                                    <select id="Package" ng-disabled="IsPaid" ng-hide="savingRequest" name="Package" class="form-control " ng-model="Student.PackageId" ng-options="option.id as option.text for option in PackageList" ng-change="PackageChange();">
+                                      <option value="">Select Package</option>
+                                    </select>
+                            }
+                            else
+                            {
+                                <input ng-if="IsPaid" type="hidden" name="PackageId" ng-model="Student.PackageId" />
+                                    <select id="Package" ng-disabled="IsPaid" ng-hide="savingRequest" name="Package" class="form-control" ng-model="Student.PackageId" ng-options="option.id as option.text for option in PackageList" ng-change="PackageChange();">
+                                      <option value="">Select Package</option>
+                                    </select>
+                            }
+                            <p ng-show="StudentRegistration.Package.$invalid && (StudentRegistration.Package.$dirty || submitted ||StudentRegistration.Package.$touched )" class="text-danger">Package is required.</p>
+                          </div>
+
+                          <div class="form-group" ng-if="Student.VersionType=='@Praescio.Domain.AppCode.VersionType.Paid'">
+                            <label for="AmountPaid" class="required">Amount Paid</label>
+                            @if (ViewBag.AccountId == 0)
+                            {
+                                <input ng-if="IsPaid" type="hidden" name="AmountPaid" ng-model="Student.AmountPaid" />
+                                    <input type="number" ng-disabled="IsPaid" ng-readonly="@(Praescio.Models.Common.ACCOUNT.AccountTypeId) == @((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher) || Student.AccountTypeId == @(Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent))" ng-hide="savingRequest" id="AmountPaid" name="AmountPaid" ng-model="Student.AmountPaid" class="form-control" data-space="false">
+                            }
+                            else
+                            {
+                                <input ng-if="IsPaid" type="hidden" name="AmountPaid" ng-model="Student.AmountPaid" />
+                                    <input type="number" ng-disabled="IsPaid" ng-readonly="@(Praescio.Models.Common.ACCOUNT.AccountTypeId) == @((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher) || Student.AccountTypeId == @(Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent))" ng-hide="savingRequest" id="AmountPaid" name="AmountPaid" ng-model="Student.AmountPaid" class="form-control" data-space="false">
+                            }
+
+                            <p ng-show="StudentRegistration.AmountPaid.$invalid && (StudentRegistration.AmountPaid.$dirty || submitted ||StudentRegistration.AmountPaid.$touched )" class="text-danger">Amount Paid is required.</p>
+                          </div>
 
                             <div class="form-group">
                                 <label for="schoolname" class="required">Mother's Name </label>
@@ -309,14 +315,14 @@
 
                             </div>
                             <div class="form-group">
-                                <label for="phoneno" class="required">Phone No.</label>
-                                <input type="text" id="ParentNo" class="form-control number" maxlength="10" name="ParentNo" ng-model="Student.ParentNo" placeholder="Enter Parent Mobile No" required />
-                                <p ng-show="StudentRegistration.ParentNo.$invalid && (StudentRegistration.ParentNo.$dirty || submitted ||StudentRegistration.ParentNo.$touched )" class="text-danger">Parent Mobile No is required.</p>
+                                <label for="phoneno">Phone No.</label>
+                                <input type="text" id="ParentNo" class="form-control number" maxlength="10" ng-pattern="/[0-9]{10}/" name="ParentNo" ng-model="Student.ParentNo" placeholder="Enter Parent Mobile No" />
+                              <p ng-show="StudentRegistration.ParentNo.$invalid && (StudentRegistration.ParentNo.$dirty || submitted ||StudentRegistration.ParentNo.$touched )" class="text-danger">Phone No. is invalid.</p>
                             </div>
 
                             <div class="form-group">
 
-                                <label for="Version" class="required">Select Activate Date</label>
+                                <label for="ActivateDate" class="required">Select Activate Date</label>
                                 @if (ViewBag.AccountId == 0)
                                 {
                                     <input type="text"  ng-hide="savingRequest" id="ActivateDate" name="ActivateDate"  ng-model="Student.ActivateOn" ng-change="ChangeExpiredDate()" class="form-control" data-space="false">
@@ -330,18 +336,24 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="Version" class="required">Select Expired Date</label>
+                                <label for="ExpiredOn" class="required">Select Expired Date</label>
                                 <input type="text" id="ExpiredOn" name="ExpiredOn" readonly ng-model="Student.ExpiredOn" class="form-control" data-space="false">
                             </div>
 
                             <br />
-                            <span class="btn btn-primary" ng-click="reset()">Reset</span>
+                            @*<span class="btn btn-primary" ng-click="reset()">Reset</span>*@
 
                             @if (ViewBag.AccountId == 0)
                             {
                             <span class="btn btn-primary" ng-click="RegisterStudent()" ng-disabled="savingRequest">
-                                Submit
-                                <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                               @if(Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.SuperAdmin)
+                               {
+                                   <span>Save</span>
+                               } else
+                               {
+                                   <span>{{ Student.Version == 'Paid' ? "Save" : "Pay Now"}}</span>
+                               }
+                               <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
                             </span>
                             }
                             else
@@ -362,244 +374,486 @@
 
 @section Scripts{
 
-
-
     <script type="text/javascript">
 
+      myApp.controller('StudentRegisterCtrl', function ($scope, $rootScope, $filter, NetworkService, $http) {
 
-        myApp.controller('StudentRegisterCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+        $scope.Student = {};
+        $scope.IsPaid = false;
+        $scope.Student.ActivateOn = '@DateTime.Parse(DateTime.Now.ToString().Trim()).ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)';
+        $scope.Student.ExpiredOn = '@DateTime.Parse(DateTime.Now.AddDays(7).ToString().Trim()).ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)';
+        $scope.TitleName = 'Register Student';
+        $scope.PackageListAll = [];
+        $scope.PackageList = [];
 
+        $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
+        { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }]
 
-            $scope.Student = {};
-            $scope.Student.ActivateOn = '@DateTime.Parse(DateTime.Now.ToString().Trim()).ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)';
-            $scope.Student.ExpiredOn = '@DateTime.Parse(DateTime.Now.AddYears(1).ToString().Trim()).ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)';
-            $scope.TitleName = 'Register Student';
+        $scope.MediumList = [{ Id: 1, MediumName: 'English' }, { Id: 2, MediumName: 'Marathi' }];
+        $scope.VersionType = [{ Id: 1, Name: '@Praescio.Domain.AppCode.VersionType.Paid' }, { Id: 2, Name: '@Praescio.Domain.AppCode.VersionType.Trial' }];
 
-            $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
-                               { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }]
+        @*if (parseInt('@ViewBag.InstitutionId') > 0) {
+          $scope.VersionType = [{ Id: 1, Name: '@Praescio.Domain.AppCode.VersionType.Paid' }];
+        }*@
 
-          
-            $scope.MediumList = [{ Id: 1, MediumName: 'English' }, { Id: 2, MediumName: 'Marathi' }];
+        if (@*"@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Student)"
+                || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)"
+                || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"*@
+          "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)"
+        ) {
+          $scope.VersionType = [{ Id: 1, Name: '@Praescio.Domain.AppCode.VersionType.Paid' }];
+          $scope.Student.VersionType = 1;
+          //console.log('VersionType $scope.Student.VersionType', $scope.Student.VersionType, $scope.VersionType)
+        }
 
+        $scope.InstitutionDetail = {};
 
-            $scope.VersionType = [{ Id: 1, Name: '@Praescio.Domain.AppCode.VersionType.Paid' }, { Id: 2, Name: '@Praescio.Domain.AppCode.VersionType.Trial' }];
+        if (@ViewBag.InstitutionId > 0) {
+          NetworkService.get('PraescioAdmin/GetSchoolDetail?institutionId=@ViewBag.InstitutionId').success(function (data) {
+            $scope.InstitutionDetail = data;
+
+            $scope.MediumList = $scope.MediumList.filter(m => m.Id == $scope.InstitutionDetail.Institution.MediumId);
+            $scope.Student.MediumId = $scope.MediumList[0].Id;
+            console.log('$scope.MediumList[0].MediumId', $scope.MediumList, $scope.MediumList[0].Id)
 
             NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
-                $scope.BoardList = data;
+              $scope.BoardList = data.filter(m => m.Id == $scope.InstitutionDetail.Institution.BoardId);
+              $scope.Student.BoardId = $scope.BoardList[0].Id;
             });
 
-            NetworkService.get('PraescioAdmin/GetState').success(function (data) {
-                $scope.StateList = data;
-            });
+            $scope.Student.ExpiredOn = $filter('date')($scope.InstitutionDetail.Institution.ExpiredOn, "dd/MM/yyyy");
+          });
+        } else {
+          NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
+            $scope.BoardList = data;
+          });
+        }
+
+
+        NetworkService.get('PraescioAdmin/GetState').success(function (data) {
+          $scope.StateList = data;
+        });
+
+        NetworkService.get('PraescioCommon/GetPackage?userPackageRole=@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)').success(function (data) {
+          $scope.PackageListAll = data.filter(m => m.isActive == true);
+        });
+
+        if ('@ViewBag.AccountId' > 0) {
+          NetworkService.get('PraescioCommon/GetUserRegisterationDetail?accountId=@ViewBag.AccountId').success(function (data) {
+            $scope.Student = data.account;
+            $scope.Student.Standard = data.account.StudentStandardId;
 
             NetworkService.get('PraescioCommon/GetPackage?userPackageRole=@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)').success(function (data) {
-                $scope.PackageList = data;
+              $scope.PackageListAll = data.filter(m => m.isActive == true);
+              $scope.Student.SelectPackage = { "id": 1, "text": "INSTITUTION PACKAGE 1", "amount": 2000 };
             });
 
-            
 
-            if ('@ViewBag.AccountId' > 0) {
-                NetworkService.get('PraescioCommon/GetUserRegisterationDetail?accountId=@ViewBag.AccountId').success(function (data) {
-                    $scope.Student = data.account;
-                    $scope.Student.Standard = data.account.StudentStandardId;
-
-                    NetworkService.get('PraescioCommon/GetPackage?userPackageRole=@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)').success(function (data) {
-                        $scope.PackageList = data;
-                        $scope.Student.SelectPackage = { "id": 1, "text": "INSTITUTION PACKAGE 1", "amount": 2000 };
-                    });
-
-
-                    $scope.Student.DateOfBirth = $filter('date')($scope.Student.DateOfBirth, "dd/MM/yyyy");
-                    $scope.Student.ActivateOn = $filter('date')($scope.Student.ActivateOn, "dd/MM/yyyy");
-                    $scope.Student.ExpiredOn = $filter('date')($scope.Student.ExpiredOn, "dd/MM/yyyy");
-                    $scope.Student.SelectPackage= { "id": 1, "text": "INSTITUTION PACKAGE 1", "amount": 2000 };
-
-
-                    setTimeout(function () {
-                        //$scope.Student.Subject = data.subject;
-                        //$('#Subject').val(data.subject).trigger('chosen:updated');
-                        $scope.Student.Subject = [];
-                        $(".select2").select2();
-                    }, 2000);
-                });
-            }
-
-            $scope.ChangeBoard = function (boardname) {
-                if (boardname > 1) {
-                    $scope.Student.MediumId = 1;
-                }
-            }
-
-            $scope.PackageChange = function () {
-                var Parentobj = $filter('filter')($scope.PackageList, { id: $scope.Student.PackageId });
-                $scope.Student.AmountPaid = Parentobj[0].amount;
-            }
-
-            @*$scope.ChangeStandard = function (id) {
-                NetworkService.get('PraescioCommon/GetSubject?standardid=' + id + '&mediumid=' + $scope.Student.MediumId).success(function (data) {
-                    $(".select2").select2().val('').trigger("chosen:updated");
-                    $scope.SubjectList = data;
-                });
-            }*@
-
-            $scope.reset = function () {
-                $scope.Student = {};
-                //$('#Subject').val('').trigger('chosen:updated');
-                $(".select2").select2();
-            };
+            $scope.Student.DateOfBirth = $filter('date')($scope.Student.DateOfBirth, "dd/MM/yyyy");
+            $scope.Student.ActivateOn = $filter('date')($scope.Student.ActivateOn, "dd/MM/yyyy");
+            $scope.Student.ExpiredOn = $filter('date')($scope.Student.ExpiredOn, "dd/MM/yyyy");
+            $scope.Student.SelectPackage = { "id": 1, "text": "INSTITUTION PACKAGE 1", "amount": 2000 };
+            $scope.IsPaid = ("@Praescio.BusinessEntities.Common.VersionType.Paid" == $scope.Student.VersionType ? true : false);
+            //console.log('$scope.IsPaid', $scope.IsPaid, "@Praescio.BusinessEntities.Common.VersionType.Paid", $scope.Student.VersionType)
+            setTimeout(function () {
+              //$scope.Student.Subject = data.subject;
+              //$('#Subject').val(data.subject).trigger('chosen:updated');
+              $scope.Student.Subject = [];
+              $(".select2").select2();
+            }, 2000);
+            $scope.SetPackage();
+          });
+        }
 
 
-            $scope.ChangeExpiredDate = function () {
-                var d = new Date(ConvertDateFormat($scope.Student.ActivateOn));
+        $scope.SetPackage = function () {
+          console.log('$scope.PackageList', $scope.Student.BoardId, $scope.Student.Standard, $scope.Student.MediumId, $scope.PackageListAll, $scope.PackageList);
+          $scope.PackageList = $scope.PackageListAll.filter(m => m.boardId == $scope.Student.BoardId && m.mediumId == $scope.Student.MediumId && m.standardId == $scope.Student.Standard);
+          console.log('$scope.PackageList_2', $scope.PackageList);
+        }
 
-                var addDays = $scope.Student.VersionType == '@Praescio.BusinessEntities.Common.VersionType.Paid' ? 365 : 7;
+        $scope.ChangeBoard = function (boardname) {
+          if (boardname > 1) {
+            $scope.Student.MediumId = 1;
+          }
+          $scope.SetPackage();
+        }
+
+        $scope.PackageChange = function () {
+          //console.log(' $scope.Student.PackageId', $scope.Student.PackageId)
+          var Parentobj = $filter('filter')($scope.PackageListAll, { id: $scope.Student.PackageId });
+          //console.log('Parentobj', Parentobj)
+          if (Parentobj != null && Parentobj.length > 0) {
+            $scope.Student.AmountPaid = Parentobj[0].amount;
+            $scope.ChangeExpiredDate();
+          } else {
+            $scope.Student.AmountPaid = '';
+          }
+        }
+
+        $scope.ChangeMedium = function (medium) {
+          $scope.SetPackage();
+        }
+
+        $scope.ChangeStandard = function (standard) {
+          $scope.SetPackage();
+        }
 
 
-                var year = d.getFullYear();
-                var month = d.getMonth();
-                var day = d.getDate();
-
-                var date = new Date(year, month, day);
-                var newdate = new Date(date);
-
-                newdate.setDate(newdate.getDate() + addDays);
-                $scope.Student.ExpiredOn = newdate;
-
-                $scope.Student.ExpiredOn = $filter('date')($scope.Student.ExpiredOn, "dd/MM/yyyy");
-            }
-          
-            $scope.RegisterStudent = function () {
-                $scope.Student.Subject = [];
-                
-                if (!$scope.StudentRegistration.$valid) {
-                    $scope.submitted = true;
-                }
-                else {
-                    var activateOn = $scope.Student.ActivateOn;
-                    var expiredOn = $scope.Student.ExpiredOn;
-                    $scope.Student.ActivateOn = ConvertDateFormat($scope.Student.ActivateOn);
-                    $scope.Student.ExpiredOn = ConvertDateFormat($scope.Student.ExpiredOn);
-
-                    $scope.savingRequest = true;
-                    $scope.Student.IsIndividual = true;
-                    $scope.Student.InstitutionAccountId = '@Praescio.Models.Common.ACCOUNT.InstitutionAccountId';
-                    $scope.Student.AccountTypeId = '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)';
-                    var dob = moment($scope.Student.DateOfBirth, 'DD/MM/YYYY');
-                    $scope.Student.DateOfBirth = dob.format('YYYY-MM-DD HH:mm:ss.SSS Z');
-                    var data = '{"account":' + JSON.stringify($scope.Student) + ',"studentsubject":' + JSON.stringify($scope.Student.Subject) + ',"studentstandard":' + JSON.stringify($scope.Student.Standard) + ',"accounttypeid":' + '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)' + ',"isTeacher":' + false + '}';
-                    //console.log(data);
-                    NetworkService.insert('PraescioAdmin/RegisterStudent', data).success(function (data) {
-                        $scope.savingRequest = false;
-                        $scope.Student.ActivateOn = activateOn;
-                        $scope.Student.ExpiredOn = expiredOn;
-
-                        swal({
-                            title: "Student has been successfully registered!!!",
-                            text: "Press Ok to Continue.",
-                            type: "success",
-                            confirmButtonColor: "green",
-                            showCancelButton: false,
-                        });
-
-                        $scope.reset();
-                    }).error(function (data) {
-                        $scope.Student.ActivateOn = expiredOn;
-                        $scope.Student.ExpiredOn = expiredOn;
-                        $scope.savingRequest = false;
-                        swal({
-                            title: data,
-                            text: "Press Ok to Continue.",
-                            type: "error",                            
-                            confirmButtonColor: "red",
-                            showCancelButton: false,
-                        });
-                    });
-                }
-            }
-
-            $scope.UpdateStudent = function () {
-                if (!$scope.StudentRegistration.$valid) {
-                    $scope.submitted = true;
-                }
-                else {
-                    var activateOn = $scope.Student.ActivateOn;
-                    var expiredOn = $scope.Student.ExpiredOn;
-                    $scope.Student.ActivateOn = ConvertDateFormat($scope.Student.ActivateOn);
-                    $scope.Student.ExpiredOn = ConvertDateFormat($scope.Student.ExpiredOn);
-
-                    $scope.savingRequest = true;
-                    $scope.Student.IsIndividual = true;
-                    $scope.Student.InstitutionAccountId = '@Praescio.Models.Common.ACCOUNT.InstitutionAccountId';
-                    $scope.Student.AccountTypeId = '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)';
-                    var dob = moment($scope.Student.DateOfBirth, 'DD/MM/YYYY');
-                    $scope.Student.DateOfBirth = dob.format('YYYY-MM-DD HH:mm:ss.SSS Z');
-                    var data = '{"account":' + JSON.stringify($scope.Student) + ',"studentsubject":'
-                        + JSON.stringify($scope.Student.Subject) + ',"studentstandard":' + JSON.stringify($scope.Student.Standard)
-                        + ',"accounttypeid":' + '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)'
-                        + ',"isTeacher":' + false + '}';
-                    console.log(data);
-                    NetworkService.insert('PraescioAdmin/UpdateStudent', data).success(function (data) {
-                        $scope.savingRequest = false;
-                        $scope.Student.ActivateOn = activateOn;
-                        $scope.Student.ExpiredOn = expiredOn;
-
-                        swal({
-                            title: "Student has been successfully updated!!!",
-                            text: "Press Ok to Continue.",
-                            type: "success",
-                            confirmButtonColor: "green",
-                            showCancelButton: false,
-                        });
-                        $scope.reset();
-
-                    }).error(function (data) {
-                        $scope.Student.ActivateOn = expiredOn;
-                        $scope.Student.ExpiredOn = expiredOn;
-                        $scope.savingRequest = false;
-                        swal({
-                            title: data,
-                            text: "Press Ok to Continue.",
-                            type: "error",
-                            confirmButtonColor: "red",
-                            showCancelButton: false,
-                        });
-                    });
-                }
-            }
-
-            $(".select2").select2();
-
-            var date = new Date();
-            date.setDate(date.getDate());
-            date.setFullYear(date.getFullYear() - 10);
-
-            var pickerDefault = new Pikaday(
-            {
-                field: document.getElementById('ActivateDate'),
-                format: 'DD/MM/YYYY',
-                minDate: new Date()
+        @*$scope.ChangeStandard = function (id) {
+            NetworkService.get('PraescioCommon/GetSubject?standardid=' + id + '&mediumid=' + $scope.Student.MediumId).success(function (data) {
+                $(".select2").select2().val('').trigger("chosen:updated");
+                $scope.SubjectList = data;
             });
-          
-            var datepicker = $.fn.datepicker.noConflict();
-            $.fn.bootstrapDP = datepicker;
+        }*@
 
-            if (! $("#DateOfBirth").prop('readonly')) {
-                $("#DateOfBirth").bootstrapDP({
-                    endDate: date,
-                    format: "dd/mm/yyyy",
-                    autoclose: true,
-                    pickerPosition: "bottom-left"
-                }).change(function () {
+        $scope.reset = function () {
+          $scope.Student = {};
+          //$('#Subject').val('').trigger('chosen:updated');
+          $(".select2").select2();
+        };
 
-                    var age = CalcAge(ConvertDateFormat($(this).val()), '#DateOfBirth');
-                    if (age < 10) {
-                        $("#DateOfBirth").val('');
-                        $.alert('Age is less than 10.');
-                    }
-                });
+
+        $scope.ChangeExpiredDate = function () {
+          //console.log('ChangeExpiredDate')
+          var currentDate = moment();
+          var activateOn = moment($filter('date')($scope.Student.ActivateOn, "dd/MM/yyyy"), 'DD/MM/YYYY');
+          var expiredOn = moment();
+          var InstitutionId = parseInt('@ViewBag.InstitutionId');
+          //console.log('ChangeExpiredDate', $scope.Student.PackageId, package, currentDate.format('DD-MM-YYYY'), activateOn.format('DD-MM-YYYY'), expiredOn.format('DD-MM-YYYY'));
+
+          if (InstitutionId > 0) {
+            $scope.Student.ActivateOn = activateOn.format('DD/MM/YYYY');
+            $scope.Student.ExpiredOn = $filter('date')($scope.Student.OrganizationAccount.ExpiredOn, "dd/MM/yyyy");
+            return;
+          }
+
+          if ($scope.Student.VersionType == '@Praescio.BusinessEntities.Common.VersionType.Paid' && $scope.PackageList.length > 0) {
+            var package = $scope.PackageList.filter(m => m.id == $scope.Student.PackageId);
+
+            if ($scope.Student.PackageId == null || package.length == 0) {
+              return;
             }
-            
+            package = package[0];
 
-        });
+            if (package.intervalType == 'month') {
+              expiredOn = moment(activateOn).add(package.interval, 'M');
+            } else if (package.intervalType == 'year') {
+              expiredOn = moment(activateOn).add(package.interval, 'Y');
+            } else if (package.intervalType == 'day') {
+              expiredOn = moment(activateOn).add(package.interval, 'd');
+            }
+            //console.log('expiredOn', $scope.Student.PackageId, package, currentDate.format('DD-MM-YYYY'), activateOn.format('DD-MM-YYYY'), expiredOn.format('DD-MM-YYYY'));
+          } else {
+            expiredOn = moment(activateOn).add(7, 'd');
+          }
+
+          $scope.Student.ActivateOn = activateOn.format('DD/MM/YYYY');
+          $scope.Student.ExpiredOn = expiredOn.format('DD/MM/YYYY');
+
+          @*$scope.Student.ActivateOn = $filter('date')(new Date(), "dd/MM/yyyy");
+          var d = new Date(ConvertDateFormat($scope.Student.ActivateOn));
+
+          console.log('package', daysToAdd, package)
+
+          var addDays = $scope.Student.VersionType == '@Praescio.BusinessEntities.Common.VersionType.Paid' ? 365 : 7;
+
+          var year = d.getFullYear();
+          var month = d.getMonth();
+          var day = d.getDate();
+
+          var date = new Date(year, month, day);
+          var newdate = new Date(date);
+
+          newdate.setDate(newdate.getDate() + addDays);
+          $scope.Student.ExpiredOn = newdate;
+
+          $scope.Student.ExpiredOn = $filter('date')($scope.Student.ExpiredOn, "dd/MM/yyyy");*@
+        }
+
+        $scope.RegisterStudent = function () {
+          $scope.Student.Subject = [];
+          if ($scope.Student.VersionType == 'Paid' && ($scope.Student.PackageId == null || $scope.Student.PackageId == 0)) {
+            $scope.submitted = true;
+            return;
+          }
+          if (!$scope.StudentRegistration.$valid) {
+            $scope.submitted = true;
+            return;
+          }
+          else {
+            var activateOn = $scope.Student.ActivateOn;
+            var expiredOn = $scope.Student.ExpiredOn;
+            $scope.Student.ActivateOn = ConvertDateFormat($scope.Student.ActivateOn);
+            $scope.Student.ExpiredOn = ConvertDateFormat($scope.Student.ExpiredOn);
+            $scope.Student.DateOfBirth = ConvertDateFormat($scope.Student.DateOfBirth);
+
+            $scope.savingRequest = true;
+            $scope.Student.IsIndividual = true;
+            $scope.Student.InstitutionAccountId = '@Praescio.Models.Common.ACCOUNT.InstitutionAccountId';
+            $scope.Student.AccountTypeId = '@(ViewBag.InstitutionId > 0 ? Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Student) : Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent))';
+
+            if ($scope.Student.VersionType == 'Paid' && $scope.Student.AccountTypeId == @(Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)) ) {
+              $scope.Student.IsActive = false;
+            }
+
+            var data = '{"account":' + JSON.stringify($scope.Student) + ',"studentsubject":' + JSON.stringify($scope.Student.Subject) + ',"studentstandard":' + JSON.stringify($scope.Student.Standard) + ',"accounttypeid":' + '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)' + ',"isTeacher":' + false + '}';
+            //console.log(data);
+            NetworkService.insert('PraescioAdmin/RegisterStudent', data).success(function (data) {
+              $scope.savingRequest = false;
+              $scope.Student.ActivateOn = activateOn;
+              $scope.Student.ExpiredOn = expiredOn;
+
+              if (data.sucess) {
+                if (data.RegisteredAccountId != undefined) {
+                  $scope.Student.AccountId = data.RegisteredAccountId;
+                }
+                if ($scope.Student.VersionType == 'Paid'
+                  && $scope.Student.AccountTypeId == @(Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent))
+                  && ("@Praescio.Models.Common.ACCOUNT.AccountTypeId" != "@((int)Praescio.BusinessEntities.Common.AccountType.SuperAdmin)")
+                  ) {
+                    $scope.PaymentRequest();
+                    //$scope.reset(); //TODO
+                    //window.history.back();
+                } else {
+                    swal({
+                      title: "Student has been successfully registered!!!",
+                      text: "Press Ok to Continue.",
+                      type: "success",
+                      confirmButtonColor: "green",
+                      showCancelButton: false,
+                    }, function (isConfirm) {
+                      //console.log('$scope.Student.Version', isConfirm, $scope.Student)
+                      if (isConfirm) {
+                        var url = '';
+                        var institutionId = parseInt('@ViewBag.InstitutionId');
+                        if (institutionId > 0) {
+                          url = '&institutionId=' + institutionId;
+                        }
+                        window.location.href = "@Url.Action("StudentList", "Praescio")?version=" + $scope.Student.VersionType + '&IsIndividual=' + $scope.Student.IsIndividual + url;
+                      } else {
+                        $scope.reset();
+                      }
+                    });
+                }
+              } else {
+                swal({
+                  title: data.message,
+                  text: "Press Ok to Continue.",
+                  type: "error",
+                  confirmButtonColor: "red",
+                  showCancelButton: false
+                });
+              }
+            }).error(function (data) {
+              $scope.Student.ActivateOn = expiredOn;
+              $scope.Student.ExpiredOn = expiredOn;
+              $scope.savingRequest = false;
+              swal({
+                title: data,
+                text: "Press Ok to Continue.",
+                type: "error",
+                confirmButtonColor: "red",
+                showCancelButton: false,
+              });
+            });
+          }
+        }
+
+        $scope.UpdateStudent = function () {
+          if (!$scope.StudentRegistration.$valid) {
+            $scope.submitted = true;
+          }
+          else {
+            var activateOn = $scope.Student.ActivateOn;
+            var expiredOn = $scope.Student.ExpiredOn;
+            $scope.Student.ActivateOn = ConvertDateFormat($scope.Student.ActivateOn);
+            $scope.Student.ExpiredOn = ConvertDateFormat($scope.Student.ExpiredOn);
+            $scope.Student.DateOfBirth = ConvertDateFormat($scope.Student.DateOfBirth);
+
+            $scope.savingRequest = true;
+            $scope.Student.IsIndividual = true;
+            $scope.Student.InstitutionAccountId = '@Praescio.Models.Common.ACCOUNT.InstitutionAccountId';
+            $scope.Student.AccountTypeId = '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)';
+
+            var data = '{"account":' + JSON.stringify($scope.Student) + ',"studentsubject":'
+              + JSON.stringify($scope.Student.Subject) + ',"studentstandard":' + JSON.stringify($scope.Student.Standard)
+              + ',"accounttypeid":' + '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)'
+              + ',"isTeacher":' + false + '}';
+
+            NetworkService.insert('PraescioAdmin/UpdateStudent', data).success(function (data) {
+              $scope.savingRequest = false;
+
+              if (activateOn != undefined)
+                $scope.Student.ActivateOn = activateOn;
+              if (expiredOn != undefined)
+                $scope.Student.ExpiredOn = expiredOn;
+
+              if (data.sucess) {
+                swal({
+                  title: "Student has been successfully updated!!!",
+                  text: "Press Ok to Continue.",
+                  type: "success",
+                  confirmButtonColor: "green",
+                  showCancelButton: false,
+                });
+                $scope.reset();
+              } else {
+                swal({
+                  title: data.message,
+                  text: "Press Ok to Continue.",
+                  type: "error",
+                  confirmButtonColor: "red",
+                  showCancelButton: false
+                });
+              }
+            }).error(function (data) {
+              $scope.Student.ActivateOn = expiredOn;
+              $scope.Student.ExpiredOn = expiredOn;
+              $scope.savingRequest = false;
+              swal({
+                title: data,
+                text: "Press Ok to Continue.",
+                type: "error",
+                confirmButtonColor: "red",
+                showCancelButton: false,
+              });
+            });
+          }
+        }
+
+        $(".select2").select2();
+
+        var date = new Date();
+        date.setDate(date.getDate());
+        date.setFullYear(date.getFullYear() - 10);
+
+        //var pickerDefault = new Pikaday(
+        //  {
+        //    field: document.getElementById('ActivateDate'),
+        //    format: 'DD/MM/YYYY',
+        //    minDate: new Date()
+        //  });
+
+        var datepicker = $.fn.datepicker.noConflict();
+        $.fn.bootstrapDP = datepicker;
+
+        if (!$("#ActivateDate").prop('readonly')) {
+          $("#ActivateDate").bootstrapDP({
+            startDate: new Date(),
+            format: "dd/mm/yyyy",
+            autoclose: true,
+            pickerPosition: "bottom-left"
+          }).change(function () {
+            $scope.ChangeExpiredDate();
+          });
+        }
+
+        if (!$("#DateOfBirth").prop('readonly')) {
+          $("#DateOfBirth").bootstrapDP({
+            endDate: date,
+            format: "dd/mm/yyyy",
+            autoclose: true,
+            pickerPosition: "bottom-left"
+          }).change(function () {
+
+            var age = CalcAge(ConvertDateFormat($(this).val()), '#DateOfBirth');
+            if (age < 10) {
+              $("#DateOfBirth").val('');
+              $.alert('Age is less than 10.');
+            }
+          });
+        }
+
+
+          $scope.paymentProcessing = false;
+
+          $scope.PaymentRequest = function () {
+            console.log('$scope.Student.VersionType PaymentRequest', $scope.Student.VersionType)
+            if ($scope.Student.VersionType != 'Paid') {
+              return;
+            }
+            $scope.paymentProcessing = true;
+            //var data = '{"dataContent":' + JSON.stringify($scope.frmPU) + '}';
+            var data = {};
+
+            data.service_provider = "payu_paisa";
+            data.surl = "@Url.Action("PaymentResponse", "Payment", null, Request.Url.Scheme)";
+            data.curl = "@Url.Action("PaymentCancelled", "Payment", null, Request.Url.Scheme)";
+            data.furl = "@Url.Action("PaymentFailed", "Payment", null, Request.Url.Scheme)";
+
+            @*data.key = "@ViewBag.paymentinfo.Key";*@
+            data.hash_string = null;
+            data.hash = null;
+            data.txnid = $scope.Student.AccountId;
+
+            var package = $scope.PackageList.filter(m => m.id == $scope.Student.PackageId);
+            console.log('$scope.PackageList', $scope.PackageList, $scope.Student.PackageId, package)
+            data.amount = 1; // package[0].amount; // TODO - TEST
+            //data.productinfo = JSON.stringify(package);// package[0].id;
+            data.productinfo = package[0].id;
+            data.firstname = $scope.Student.FirstName;
+            data.lastname = $scope.Student.LastName;
+            data.email = $scope.Student.Email;
+            data.phone = $scope.Student.MobileNo;
+            data.address1 = $scope.Student.Address;
+            data.address2 = null;
+            data.city = $scope.Student.City;
+            data.state = $scope.Student.State;
+            data.country = null;
+            data.zipcode = $scope.Student.PinCode;
+            data.udf1 = $scope.Student.AccountTypeId;
+            data.udf2 = $scope.Student.AccountId;
+
+            console.log('data Student', data)
+
+            $http.post("@Url.Action("PayNow", "Payment")", data)
+              .success(function (responseData) {
+                $scope.paymentProcessing = false;
+                console.log("success !" + responseData);
+                console.log('data', data)
+
+                if (responseData.Success) {
+                  $('#pnl-frmPU').html(responseData.Content);
+                } else {
+                  swal({
+                    title: responseData.Message,
+                    text: "Press Ok to Continue.",
+                    type: "error",
+                    confirmButtonColor: "red",
+                    showCancelButton: false,
+                  });
+                }
+              })
+              .error(function (responseData) {
+                console.log("Error !" + responseData);
+                $scope.paymentProcessing = false;
+              });
+          }
+
+      });
+
+      //$(document).ready(function () {
+      //  $(".phonenumber").on('keydown', function (e) {
+      //    console.log('keyCode', e.keyCode)
+      //    // Allow: backspace, delete, tab, escape, enter and .
+      //    if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+      //      // Allow: Ctrl/cmd+A
+      //      (e.keyCode == 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+      //      // Allow: Ctrl/cmd+C
+      //      (e.keyCode == 67 && (e.ctrlKey === true || e.metaKey === true)) ||
+      //      // Allow: Ctrl/cmd+X
+      //      (e.keyCode == 88 && (e.ctrlKey === true || e.metaKey === true)) ||
+      //      // Allow: home, end, left, right
+      //      (e.keyCode >= 35 && e.keyCode <= 39)) {
+      //      // let it happen, don't do anything
+      //      return;
+      //    }
+      //    // Ensure that it is a number and stop the keypress
+      //    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+      //      e.preventDefault();
+      //    }
+      //  });
+      //});
     </script>
 }

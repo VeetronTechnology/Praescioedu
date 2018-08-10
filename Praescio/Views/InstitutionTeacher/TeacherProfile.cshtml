@@ -44,18 +44,46 @@
                                 <div class="body table-responsive">
                                     <table class="table table-striped tbl-equalwidth">
                                         <tbody>
-                                            <tr>
+                                            @*<tr>
                                                 <th>Teacher Id</th>
                                                 <td>TCR1001</td>
-                                            </tr>
+                                            </tr>*@
                                             <tr>
                                                 <th>Teacher Name</th>
                                                 <td>{{Teacher.FirstName + ' ' + Teacher.LastName}}</td>
                                             </tr>
-                                            <tr>
+
+                                          @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Teacher))
+                                          {
+                                              <tr>
                                                 <th>School Name</th>
                                                 <td>{{Teacher.OrganizationAccount.InstitutionName}}</td>
-                                            </tr>
+                                              </tr>
+                                              <tr>
+                                                <th>Board Name</th>
+                                                <td>{{Teacher.OrganizationAccount.Board.BoardName}}</td>
+                                              </tr>
+                                              <tr>
+                                                <th>Medium Name</th>
+                                                <td>{{Teacher.OrganizationAccount.Medium.Name}}</td>
+                                              </tr>
+                                          }
+                                          else
+                                          {
+                                              @*<tr>
+                                                <th>School Name</th>
+                                                <td>{{Teacher.InstitutionName}}</td>
+                                              </tr>*@
+                                              <tr>
+                                                <th>Board Name</th>
+                                                <td>{{Teacher.Board.BoardName}}</td>
+                                              </tr>
+                                              <tr>
+                                                <th>Medium Name</th>
+                                                <td>{{Teacher.Medium.Name}}</td>
+                                              </tr>
+                                          }
+                                            
                                             <tr>
                                                 <th>Teacher Standard & Subjects </th>
                                                 <td>
@@ -182,7 +210,7 @@
                     $scope.MappedStandard = data.TeacherStandard;
                     $scope.IsBlocked = !$scope.Teacher.IsActive;
 
-                  
+
                     if ($scope.Teacher.IsIndividual == true &&
                       "@Praescio.Models.Common.ACCOUNT.AccountTypeId" ==
                       "@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.SuperAdmin)") {
@@ -202,13 +230,13 @@
                       $scope.AllowEdit = true;
                     }
                     console.log('$scope.Teacher.IsIndividual', $scope.Teacher.IsIndividual, "@Praescio.Models.Common.ACCOUNT.AccountTypeId", "@Praescio.Models.Common.ACCOUNT.AccountId", "@Praescio.Models.Common.ACCOUNT.InstitutionAccountId", $scope.Teacher.InstitutionAccountId)
-                    
+
                     NetworkService.get('PraescioCommon/GetPackage?userPackageRole=@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)').success(function (data) {
                         $scope.PackageList = data;
-                        
+
                         var package = data.filter(m => m.id == $scope.Teacher.PackageId);
                         if (package) {
-                          $scope.PackageName = ($scope.Teacher.VersionType == null || $scope.Teacher.VersionType.toLowerCase()=='trial' ? 'Free' : package.text);
+                          $scope.PackageName = ($scope.Teacher.VersionType == null || $scope.Teacher.VersionType == "@Praescio.BusinessEntities.Common.VersionType.Trial" ? 'Free' : package[0].text);
                         }
                     });
                 });

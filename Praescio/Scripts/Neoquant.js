@@ -175,14 +175,18 @@ $.fn.Pikadate2 = function () {
 
 //Convert dd/mm/yyyy => mm/dd/yyyy
 ConvertDateFormat = function (date) {
-    date = date.toString();
+  if (date == undefined || date == '') return '';
+  /*  date = date.toString();
     if (date != '' && date != null) {
         var initial = date.split(/\//);
         return [initial[1], initial[0], initial[2]].join('/'); //=> 'mm/dd/yyyy'
     }
     else {
         return '';
-    }
+    }*/
+
+  var dt = moment(date, 'DD/MM/YYYY');
+  return dt.format('YYYY-MM-DD HH:mm:ss.SSS Z');
 };
 
 CalcAge = function (val, prop) {
@@ -221,4 +225,41 @@ $(function () {
 
 });
 
+GetStopWatchTime = function (startTime) {
+  if (startTime != null || startTime != undefined) {
+    var tStartDate = moment(startTime, 'YYYY-MM-DD HH:mm:ss.SSS Z');
+    var seconds = (new Date() - tStartDate) / 1000;
 
+    var days = Math.floor(seconds / (3600 * 24));
+    seconds -= days * 3600 * 24;
+    var hrs = Math.floor(seconds / 3600);
+    seconds -= hrs * 3600;
+    var mnts = Math.floor(seconds / 60);
+    seconds -= mnts * 60;
+
+    return days + ":" + hrs + ":" + mnts;
+  }
+  else {
+    return '';
+  }
+};
+
+GetStopWatchTime2 = function (startTime, endTime) {
+  if (startTime != null || startTime != undefined || endTime != null || endTime != undefined) {
+    var tStartDate = moment(startTime, 'YYYY-MM-DD HH:mm:ss.SSS Z');
+    var tEndTime = moment(endTime, 'YYYY-MM-DD HH:mm:ss.SSS Z');
+    var seconds = (tEndTime - tStartDate) / 1000;
+
+    var days = Math.floor(seconds / (3600 * 24));
+    seconds -= days * 3600 * 24;
+    var hrs = Math.floor(seconds / 3600);
+    seconds -= hrs * 3600;
+    var mnts = Math.floor(seconds / 60);
+    seconds -= mnts * 60;
+
+    return days + ":" + hrs + ":" + mnts;
+  }
+  else {
+    return '';
+  }
+};

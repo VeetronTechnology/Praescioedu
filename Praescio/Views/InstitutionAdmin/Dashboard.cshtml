@@ -4,8 +4,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="right_col" role="main">
-    <div class="">
+<div class="right_col" role="main" ng-controller="AdminDashboardCtrl">
+    <div class="content">
         <!-- Small boxes (Stat box) -->
 
         <div class="block-header">
@@ -22,7 +22,8 @@
                             <div class="text">TEACHER</div>
                             <div class="number count-to" data-from="0" data-to="125" data-speed="15" data-fresh-interval="20"></div>
                         </div>
-                    </div><a>
+                    </div>
+                </a>
 
             </div>
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -74,7 +75,18 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-                        <article class="media event">
+                      @*<article class="media event" ng-repeat="activity in ActivityList">
+                        <a class="pull-left date">
+                          <p class="month">{{activity.Activities.CreatedOn| date:'MMM'}}</p>
+                          <p class="day">{{activity.Activities.CreatedOn| date:'dd'}}</p>
+                        </a>
+                        <div class="media-body">
+                          <a class="title" href="{{ActivityURL(activity.Activities.URL)}}">{{activity.Activities.ActivityName}}</a>
+                          <p>{{activity.Activities.Query}}</p>
+                        </div>
+                      </article>*@
+
+                        @*<article class="media event">
                             <a class="pull-left date">
                                 <p class="month">April</p>
                                 <p class="day">23</p>
@@ -123,7 +135,8 @@
                                 <a class="title" href="notification_details.html">Parent's Meeting</a>
                                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                             </div>
-                        </article>
+                        </article>*@
+
                     </div>
                 </div>
             </div>
@@ -141,9 +154,24 @@
 
     <script type="text/javascript">
 
-            myApp.controller('AdminDashboardCtrl', function ($scope, $rootScope, $filter, NetworkService) {
-                $scope.TitleName = 'Dashboard'
+        myApp.controller('AdminDashboardCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+            $scope.TitleName = 'Dashboard';
+
+              NetworkService.get('PraescioCommon/GetActivityList').success(function (data) {
+                $scope.ActivityList = data;
+                $scope.totalcount = data.TotalRecord;
             });
+
+            $scope.ActivityURL = function (url) {
+                if (url.indexOf('TeacherProfile?accountid=') >= 0) {
+                    url = url.replace("TeacherProfile?accountid=", "TeacherProfile?teacherAccountId=");
+                } if (url.indexOf('StudentProfile?accountid=') >= 0) {
+                    url = url.replace("StudentProfile?accountid=", "StudentProfile?StudentAccountId=");
+                }
+                var baseurl = "@(string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~")))";
+                return baseurl+ url;
+            }
+        });
     </script>
 }
 

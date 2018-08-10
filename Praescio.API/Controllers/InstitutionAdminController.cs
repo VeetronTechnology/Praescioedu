@@ -45,8 +45,8 @@ namespace Praescio.API.Controllers
             InstitutionPackageContent package = new InstitutionPackageContent();
             package.RegisteredStudent = db.Account.Where(x => x.InstitutionAccountId == institutionId && x.AccountTypeId == (int)BusinessEntities.Common.AccountType.Student).Count();
             package.RegisteredTeacher = db.Account.Where(x => x.InstitutionAccountId == institutionId && x.AccountTypeId == (int)BusinessEntities.Common.AccountType.Teacher).Count();
-            package.PendingStudent = Convert.ToInt16(institution.NoOfStudent) - package.PendingStudent;
-            package.PendingTeacher = (int)institution.NoOfTeacher - package.PendingTeacher;
+            package.PendingStudent = Math.Max(0, Convert.ToInt32(institution.NoOfStudent) - package.RegisteredStudent);
+            package.PendingTeacher = Math.Max(0, Convert.ToInt32(institution.NoOfTeacher) - package.RegisteredTeacher);
             package.PrincipalDetail = db.PrincipalDetail.FirstOrDefault(x => x.InstitutionAccountId == institutionId);
 
 

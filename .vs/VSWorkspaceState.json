@@ -1,10 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\Praescio",
-    "\\Praescio\\Views",
-    "\\Praescio\\Views\\PraescioAdmin"
+    ""
   ],
-  "SelectedNode": "\\Praescio\\Views\\PraescioAdmin\\SchoolList.cshtml",
+  "SelectedNode": "\\Praescio.Domain",
   "PreviewInSolutionExplorer": false
 }

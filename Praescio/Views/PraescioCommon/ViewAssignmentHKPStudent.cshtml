@@ -1,0 +1,339 @@
+﻿@{
+    ViewBag.Title = "ViewAssignment";
+
+    var assignmentTitle = Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.SuperAdmin ? "Lessons" : "Assignment";
+    assignmentTitle = (int)Praescio.BusinessEntities.Common.AssignmentType.PExtra == ViewBag.AssignmentType ? "P Extra" : (int)Praescio.BusinessEntities.Common.AssignmentType.Handwriting == ViewBag.AssignmentType ? "Handwriting" : (int)Praescio.BusinessEntities.Common.AssignmentType.Pronounciation == ViewBag.AssignmentType ? "Pronounciation" : assignmentTitle;
+
+    var AssignmentType = ViewBag.AssignmentType;
+}
+
+<!-- page content -->
+<div class="right_col" role="main" ng-controller="ViewAssignmentCtrl">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>@assignmentTitle</h3>
+      </div>
+      <div class="title_right">
+        <div class="col-md-8 col-sm-8 col-xs-12 form-group pull-right top_search">
+          <div class="input-group">
+            <ol class="breadcrumb">
+              <li><a href="@Url.Action("Dashboard", "PraescioAdmin")"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+              <li><a href="#"><i class="fa fa-list"></i> View @assignmentTitle</a></li>
+              <li class="active">List Of @assignmentTitle</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <div class="row">
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <h2 class="text-left">List Of @assignmentTitle</h2>
+              </div>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                @if (Praescio.Models.Common.ACCOUNT.AccountTypeId != (int)Praescio.BusinessEntities.Common.AccountType.Student && Praescio.Models.Common.ACCOUNT.AccountTypeId != (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+                {
+                    <label for="chk-hidepublished" class="pull-right">
+                      Hide Published <input type="checkbox" checked="checked" ng-disabled="IsVisible" name="chk-hidepublished" id="chk-hidepublished" value="true" ng-model="HidePublished" ng-change="ChangeHidePublished()" />
+                    </label>
+                }
+              </div>
+            </div>
+          </div>
+          <div class="x_content">
+            <div class="row">
+              <table class="table table-bordered table-striped table-hover js-basic-example " id="myTable1" role="grid" aria-describedby="myTable_info">
+                <thead>
+                  <tr role="row">
+                    <th class="sorting col-md-3" tabindex="0" aria-controls="myTable" rowspan="1" colspan="1" aria-label="Title: activate to sort column ascending">Title</th>
+                    <th class="sorting col-md-3" tabindex="0" aria-controls="myTable" rowspan="1" colspan="1" aria-label="Description: activate to sort column ascending">Description</th>
+                    <th class="sorting col-md-2" tabindex="0" aria-controls="myTable" rowspan="1" colspan="1" aria-label="File: activate to sort column ascending">File</th>
+                    <th class="sorting col-md-2" tabindex="0" aria-controls="myTable" rowspan="1" colspan="1">Teacher Name</th>
+                    <th class="col-md-2">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr role="row" class="odd" dir-paginate="assignment in AssignmentList |itemsPerPage:10|filter:searchText" total-items="totalcount">
+                    <td><a href="#" ng-click="setModalViewDetails(assignment)">{{assignment.Assignment.Title}}</a></td>
+                    <td><span class="truncate">{{assignment.Assignment.Description}}</span></td>
+                    <td><a ng-href='~/{{assignment.Assignment.UploadFileSrc}}' target="_blank">Download</a></td>
+                    <td>{{assignment.Assignment.Account.FirstName}} {{assignment.Assignment.Account.LastName}}</td>
+                    <td>
+                      <a ng-if="assignment.AssignmentHKPStudent == null || assignment.AssignmentHKPStudent.StatusId == @((int)Praescio.BusinessEntities.Common.AssignmentStatus.PendingWithStudent)" href="#" class="btn btn-primary btn-xs " ng-click="setModal(assignment)">Attempt</a>
+                      <a ng-if="assignment.AssignmentHKPStudent.StatusId == @((int)Praescio.BusinessEntities.Common.AssignmentStatus.CheckedByTeacher)" href="#" class="btn btn-success btn-xs " ng-click="setModalViewResult(assignment)">View Result</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <dir-pagination-controls max-size="10"
+                                       direction-links="true"
+                                       on-page-change="onPageChange(newPageNumber)"
+                                       boundary-links="true">
+              </dir-pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="mdlAssignmentAttempt" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+          <h4 class="modal-title">Attempt Assignment - {{Assignment.Assignment.Title}}</h4>
+        </div>
+        <div class="modal-body">
+          <div class="x_content">
+            <!-- start form for validation -->
+            <form id="AssignmentForm" name="AssignmentForm" data-parsley-validate>
+              <div class="form-group">
+                @if ((int)Praescio.BusinessEntities.Common.AssignmentType.Handwriting == ViewBag.AssignmentType)
+                {
+                    <div class="">
+                      <label for="UploadFile">Upload File</label>
+                      <input id="UploadFile" ng-model="file" valid-file name="file" required type="file" ng-files="getTheFiles($files)" accept="application/pdf,image/*" onselect="Call()" />
+                      <span>(*Choose only Pdf/Image)</span>
+                    </div>
+                }
+                else if ((int)Praescio.BusinessEntities.Common.AssignmentType.Pronounciation == ViewBag.AssignmentType)
+                {
+                    <div class="">
+                      <label for="UploadFile">Upload File</label>
+                      <input id="UploadFile" ng-model="file" valid-file name="file" required type="file" ng-files="getTheFiles($files)" accept="video/*,audio/*" onselect="Call()" />
+                      <span>(*Choose only MP3/MP4)</span>
+                    </div>
+                }
+                <p ng-show="AssignmentForm.file.$invalid && (AssignmentForm.file.$dirty || submitted ||AssignmentForm.file.$touched )" class="text-danger">Upload file is required.</p>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
+          <button type="button" class="btn btn-primary waves-effect" ng-click="AttemptAssignment()" ng-disabled="savingRequest || fileUploading">
+            SUBMIT
+            <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+@section Scripts{
+
+  <script type="text/javascript">
+      myApp.directive('ngFiles', ['$parse', function ($parse) {
+          function fn_link(scope, element, attrs) {
+              var onChange = $parse(attrs.ngFiles);
+              element.on('change', function (event) {
+                  onChange(scope, { $files: event.target.files });
+              });
+          };
+
+          return {
+              link: fn_link
+          }
+      }])
+      .directive('ngInitial', function () {
+          return {
+              restrict: 'A',
+              controller: [
+                  '$scope', '$element', '$attrs', '$parse', function ($scope, $element, $attrs, $parse) {
+                      var getter, setter, val;
+                      val = $attrs.ngInitial || $attrs.value;
+                      getter = $parse($attrs.ngModel);
+                      setter = getter.assign;
+                      setter($scope, val);
+                  }
+              ]
+          };
+      })
+      .directive('validFile', function () {
+          return {
+              require: 'ngModel',
+              link: function (scope, el, attrs, ngModel) {
+                  //change event is fired when file is selected
+                  el.bind('change', function () {
+                      scope.$apply(function () {
+                          ngModel.$setViewValue(el.val());
+                          ngModel.$render();
+                      });
+                  });
+              }
+          }
+      })
+
+        myApp.controller('ViewAssignmentCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+            $scope.itemPerPage = 10;
+            $scope.SearchText = "";
+            $scope.Assignment = {};
+            $scope.AssignmentListAll = [];
+            $scope.fileUploading = false;
+
+            var formdata = new FormData();
+            $scope.getTheFiles = function ($files) {
+              formdata = new FormData();
+              $scope.isDisplay = true;
+              $scope.fileUploading = true;
+              if ($files.length != 0)
+                  $scope.FileUpload = [];
+              for (var i = 0; i < $files.length; i++) {
+                $scope.FileUpload.push({ FileName: $files[i].name, ContentType: $files[i].type, Size: $files[i].size });
+              }
+              $scope.isDisplay = true;
+              angular.forEach($files, function (value, key) {
+                  formdata.append(0, value);
+              });
+
+              NetworkService.UploadFiles('@Url.Content("~/PraescioCommon/SaveFile")', formdata).success(function (response) {
+                  //console.log('response', response)
+                  $scope.fileUploading = false;
+                  $scope.Assignment.UploadFileSrc = response.filelocation;
+              }).error(function (data) {
+                  $scope.fileUploading = false;
+                  $scope.FileUpload = [];
+                  $scope.files = null;
+                  angular.element("input[type='file']").val(null);
+                  swal({
+                      title: "File upload failed. Please try again.",
+                      text: "Press Ok to Continue.",
+                      type: "error",
+                      confirmButtonColor: "red",
+                      showCancelButton: false,
+                  });
+              });
+            };
+
+            $scope.selectedFile = null;
+            $scope.msg = "";
+
+            $scope.AssignmentFitler = {
+                BoardId: "@Praescio.Models.Common.ACCOUNT.BoardId",
+                MediumId: "@Praescio.Models.Common.ACCOUNT.MediumId",
+                StandardId: "@Praescio.Models.Common.ACCOUNT.Standard.Id",
+                SubjectId: 0
+            };
+
+            $scope.onPageChange = function (pageno) {
+              var url = '&pageNo=' + pageno + '&itemPerPage=' + $scope.itemPerPage + '&AssignmentType=@ViewBag.AssignmentType' + '&HidePublished=false';
+              url += '&BoardId=' + ($scope.AssignmentFitler.BoardId == '' ? 0 : $scope.AssignmentFitler.BoardId) +
+                '&MediumId=' + ($scope.AssignmentFitler.MediumId == '' ? 0 : $scope.AssignmentFitler.MediumId) +
+                '&StandardId=' + ($scope.AssignmentFitler.StandardId == '' ? 0 : $scope.AssignmentFitler.StandardId) +
+                '&SubjectId=' + ($scope.AssignmentFitler.SubjectId == '' ? 0 : $scope.AssignmentFitler.SubjectId);
+                NetworkService.get('PraescioCommon/GetAssignmentListHKP?' + url).success(function (data) {
+                    $scope.AssignmentList = data.dataContent;
+                    $scope.totalcount = data.totalRecord;
+                });
+            }
+
+            $scope.LoadContent = function () {
+              $scope.onPageChange(1);
+            }
+            $scope.LoadContent();
+
+            $scope.setModal = function (assignment) {
+              console.log('assignment', assignment)
+              $scope.Assignment = assignment;
+
+              $('#mdlAssignmentAttempt').modal('show');
+
+            }
+
+            $scope.AttemptAssignment = function () {
+                
+                if (!$scope.AssignmentForm.$valid) {
+                  $scope.submitted = true;
+                  return;
+                }
+
+                $scope.savingRequest = true;
+
+                var frmData = {
+                  AssignmentId: $scope.Assignment.Assignment.AssignmentId,
+                  AssignmentHKPMappingId: $scope.Assignment.AssignmentHKPMapping.Id,
+                  StudentId: "@Praescio.Models.Common.ACCOUNT.AccountId",
+                  UploadFileSrc: $scope.Assignment.UploadFileSrc,
+                }
+
+                var data = JSON.stringify(frmData);
+                console.log('$scope.Assignment', $scope.Assignment, data);
+                NetworkService.insert('PraescioCommon/AssignmentHKPAttempt', data).success(function (data) {
+                    $scope.savingRequest = false;
+                    $('#mdlAssignmentAttempt').modal('hide');
+                    if(data.success) {
+                        swal({
+                            title: "@assignmentTitle has been attempted successfully !!!",
+                            text: "Press Ok to Continue.",
+                            type: "success",
+                            confirmButtonColor: "green",
+                            showCancelButton: false,
+                        });
+                    } else {
+                        swal({
+                            title: data.Message,
+                            text: "Press Ok to Continue.",
+                            type: "error",
+                            confirmButtonColor: "red",
+                            showCancelButton: false
+                        });
+                    }
+
+                    $scope.LoadContent();
+                }).error(function (data, status) {
+                    $scope.savingRequest = false;
+                    swal({
+                        title: data.Message,
+                        text: "Press Ok to Continue.",
+                        type: "error",
+                        confirmButtonColor: "red",
+                        showCancelButton: false
+                    });
+                });
+            }
+
+            $scope.setModalViewDetails = function (assignment) {
+              swal({
+                title: 'View Details',
+                html: true,
+                text: '<table class="table table-bordered table-stripped text-left"><tbody>' +
+                '<tr><td><strong>Assignment Title</strong></td><td>' + assignment.Assignment.Title + '</td></tr>' +
+                '<tr><td><strong>Assignment Description</strong></td><td>' + (assignment.Assignment.Description == null ? '' : assignment.Assignment.Description) + '</td></tr>' +
+                '<tr><td><strong>Teacher Name</strong></td><td>' + (assignment.Assignment.Account.FirstName + ' ' + assignment.Assignment.Account.LastName) + '</td></tr>' +
+                '</tbody></table>',
+                //type: "info",
+                confirmButtonColor: "info",
+                showCancelButton: false
+              });
+            }
+
+            $scope.setModalViewResult = function (assignment) {
+              swal({
+                title: 'View Result',
+                html: true,
+                text: '<table class="table table-bordered table-stripped text-left"><tbody>' +
+                '<tr><td><strong>Assignment Title</strong></td><td>' + assignment.Assignment.Title + '</td></tr>' +
+                //'<tr><td><strong>Assignment Description</strong></td><td>' + assignment.Assignment.Description + '</td></tr>' +
+                '<tr><td><strong>Marks Scored</strong></td><td>' + assignment.AssignmentHKPStudent.TotalMarksScored + '</td></tr>' +
+                '<tr><td><strong>Teacher Name</strong></td><td>' + (assignment.Assignment.Account.FirstName + ' ' + assignment.Assignment.Account.LastName) + '</td></tr>' +
+                '</tbody></table>',
+                //type: "info",
+                confirmButtonColor: "info",
+                showCancelButton: false
+              });
+            }
+
+        });
+  </script>
+}

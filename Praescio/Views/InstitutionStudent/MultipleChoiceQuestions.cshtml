@@ -6,7 +6,7 @@
 
 
 <div class="right_col" role="main" ng-controller="MCQCtrl">
-    <div class="cont">
+    <div class="content">
 
         <div class="table-agile-info">
             <ol class="breadcrumb">
@@ -14,71 +14,73 @@
                 <li><a href="start_test.html">Start Test</a></li>
                 <li class="active">Multiple Choice Questions</li>
             </ol>
-            <div class="panel panel-default">
+            <div class="panel panel-default" id="tbl-questions">
                 <div class="panel-heading">
                     Multiple Choice Questions
-                    <span class="tools pull-right" style="font-size:12px;font-weight:600;">
-                        <a href="javascript:;">Active: Duration : ddd:hh:mm</a>
+                    <span title="Days:Hours:Minutes" class="tools pull-right" style="font-size:12px;font-weight:600;">
+                      Active Duration:
+                      <span ng-if="ExamStartDateTimer == null">Not Started</span>
+                      <span ng-if="ExamStartDateTimer != null">{{ ExamStartDateTimer }}</span>
                     </span>
                 </div>
+
+
+              <form role="form" name="SchoolForm" id="SchoolForm" data-parsley-validate>
                 <div ng-repeat="q in Question">
 
-                    <div class="panel-body">
-                        <form role="form">
-                            <label>
-                                {{$index +1 }}. {{q.Question.Title}}
-                            </label>
-                            <div class="col-md-12 col-xs-12">
-                                <div class="col-md-4 col-md-offset-4">
-                                    <img src="~/{{q.Question.MCQQuestionImageSrc}}" ng-show="q.Question.MCQImage1Src" style="width:8em; height:6em;" alt="Alternate Text" />
-                                </div>
-                            </div>
-
-                            <div class="col-md-12 col-xs-12">
-                                <div class="col-md-6 col-xs-6">
-                                    A. {{q.Question.MCQText1}} <img src="~/{{q.Question.MCQImage1Src}}" ng-show="q.Question.MCQImage1Src" style="width:8em; height:6em;" alt="Alternate Text" />
-                                    <br />
-                                </div>
-                                <div class="col-md-6 col-xs-6">
-                                    B. {{q.Question.MCQText2}} <img src="~/{{q.Question.MCQImage2Src}}" ng-show="q.Question.MCQImage2Src" style="width:8em; height:6em;" alt="Alternate Text" />
-                                    <br />
-                                </div>
-                                <br />
-                                <br />
-
-                            </div>
-                            <div class="col-md-12 col-xs-12" style="padding-top:25px;">
-                                <div class="col-md-6 col-xs-6">
-                                    C. {{q.Question.MCQText3}} <img src="~/{{q.Question.MCQImage3Src}}" ng-show="q.Question.MCQImage3Src" style="width:8em; height:6em;" alt="Alternate Text" />
-                                    <br />
-                                </div>
-                                <div class="col-md-6 col-xs-6">
-                                    D. {{q.Question.MCQText4}} <img src="~/{{q.Question.MCQImage4Src}}" ng-show="q.Question.MCQImage4Src" style="width:8em; height:6em;" alt="Alternate Text" />
-                                    <br />
-                                </div>
-                            </div>
-
-                            <div class="col-md-12 col-xs-12">
-                                <div class="col-md-4 col-xs-4">
-                                    <div class="form-group">
-                                        <label for="heard" class="required">Select Answer</label>
-                                        <select id="State" name="State" class="input-sm form-control" ng-model="q.MCQAnswer" ng-options="option.id as option.text for option in MCQAnswerList" ng-change="" ng-required="true">
-                                            <option value="">-- Select Answer --</option>
-                                        </select>
-                                        <p ng-show="SchoolForm.State.$invalid && (SchoolForm.State.$dirty || submitted ||SchoolForm.State.$touched )" class="text-danger">State is required.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                  <div class="panel-body">
+                    <label>
+                      {{$index +1 }}. {{q.Question.Title}}
+                    </label>
+                    <div class="col-md-12 col-xs-12">
+                      <div class="col-md-4 col-md-offset-4">
+                        <a ng-hide="q.Question.MCQQuestionImageSrc.indexOf('.pdf') > -1" target="_blank" href="~/{{q.Question.MCQQuestionImageSrc}}" class="thumbnail" ng-if="q.Question.MCQQuestionImageSrc != null && q.Question.MCQQuestionImageSrc != ''" style="width: 100px;height: 100px">
+                          <img width="100" src="~/{{q.Question.MCQQuestionImageSrc}}">
+                        </a>
+                        <a ng-hide="q.Question.MCQQuestionImageSrc.indexOf('.pdf') === -1" target="_blank" href="~/{{q.Question.MCQQuestionImageSrc}}" class="thumbnail" ng-if="q.Question.MCQQuestionImageSrc != null && q.Question.MCQQuestionImageSrc != ''" style="width: 100px;height: 100px">
+                          <i class="fa fa-file-pdf-o" style="font-size:48px;color:red"></i>
+                        </a>
+                      </div>
                     </div>
+
+                    <div class="col-md-12 col-xs-12">
+                      <hr />
+                      <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" ng-repeat="option in q.QuestionOption">
+                          <p>{{option.Category + '.  '+ option.Option}}</p>
+                          <a ng-hide="option.ImageSrc.indexOf('.pdf') > -1" target="_blank" href="~/{{option.ImageSrc}}" class="thumbnail" ng-if="option.ImageSrc != null && option.ImageSrc != ''" style="width: 100px;height: 100px">
+                            <img width="100" src="~/{{option.ImageSrc}}">
+                          </a>
+                          <a ng-hide="option.ImageSrc.indexOf('.pdf') === -1" target="_blank" href="~/{{option.ImageSrc}}" class="thumbnail" ng-if="option.ImageSrc != null && option.ImageSrc != ''" style="width: 100px;height: 100px">
+                            <i class="fa fa-file-pdf-o" style="font-size:48px;color:red"></i>
+                          </a>
+                        </div>
+                      </div>
+                      <hr />
+                    </div>
+
+                    <div class="col-md-12 col-xs-12">
+                      <div class="col-md-4 col-xs-4">
+                        <div class="form-group">
+                          <label for="MCQAnswer" class="required">Select Answer</label>
+                          <select id="MCQAnswer" name="MCQAnswer" class="input-sm form-control" ng-model="q.MCQAnswer" ng-options="option.id as option.text for option in MCQAnswerList" ng-change="" ng-required="true" required>
+                            <option value="">-- Select Answer --</option>
+                          </select>
+                          <p ng-show="SchoolForm.MCQAnswer.$invalid && (SchoolForm.MCQAnswer.$dirty || submitted ||SchoolForm.MCQAnswer.$touched )" class="text-danger">Answer is required.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
                 </div>
                 <div>
-                    @*<a href="#" class="btn btn-danger">Clear</a>*@
-                    <a class="btn btn-success" ng-click="SaveAnswer();" ng-disabled="savingRequest">
-                        Submit
-                        <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
-                    </a>
+                  @*<a href="#" class="btn btn-danger">Clear</a>*@
+                  <a class="btn btn-success" ng-click="SaveAnswer();" ng-disabled="savingRequest">
+                    Save
+                    <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                  </a>
                 </div>
+              </form>
             </div>
         </div>
     </div>
@@ -88,7 +90,18 @@
 
     <script type="text/javascript">
 
-    myApp.controller('MCQCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+    myApp.controller('MCQCtrl', function ($scope, $rootScope, $filter, NetworkService, $interval) {
+
+        $scope.ExamStartDateTimer = "Loading...";
+          NetworkService.get('PraescioCommon/GetUserAssessmentDetail?assignmentid=@ViewBag.assignmentid').success(function (data) {
+            if (data != null) {
+              $interval(function () {
+                $scope.ExamStartDateTimer = GetStopWatchTime(data.ExamStartDate);
+              }, 1000);
+            } else {
+              $scope.ExamStartDateTimer = null;
+            }
+        });
 
         NetworkService.get('InstitutionStudent/GetAssignmentQuestion?assignmentid=@ViewBag.Assignmentid&typeOfQuestion=@ViewBag.TypeOfQuestion').success(function (data) {
             console.log(data);
@@ -99,11 +112,30 @@
 
 
         $scope.SaveAnswer = function () {
+          //console.log('SaveAnswer', $scope.Question);
+            if (!$scope.SchoolForm.$valid) {
+              $scope.submitted = true;
+              return;
+            }
             $scope.savingRequest = true;
+
+            if ($('#tbl-questions select').filter(function () {
+              return $.trim($(this).val()).length == 0
+            }).length > 0) {
+              $scope.savingRequest = false;
+              swal({
+                title: "Please answer all questions.",
+                text: "Press Ok to Continue.",
+                type: "error",
+                confirmButtonColor: "red",
+                showCancelButton: false,
+              });
+              return;
+            }
 
             NetworkService.insert('InstitutionStudent/SaveAnswer', $scope.Question).success(function (data) {
                 $scope.savingRequest = false;
-                console.log(data);
+
                 swal({
                     title: "Answer has been successfully submitted!!!",
                     text: "Press Ok to Continue.",

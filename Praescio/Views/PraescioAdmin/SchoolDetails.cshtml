@@ -177,11 +177,15 @@
                           </tr>
                           <tr>
                             <th>Phone Number</th>
-                            <td>{{InstitutionDetail.PrincipalDetail.Designation}}</td>
+                            <td>{{InstitutionDetail.PrincipalDetail.MobileNo}}</td>
                           </tr>
                           <tr>
                             <th>Person Photo Id</th>
-                            <td><a target="_blank" ng-href='~/{{InstitutionDetail.PrincipalDetail.PersonPhotoSrc}}'><i class="fa fa-file-pdf-o" style="font-size:48px;color:red"></i></a></td>
+                            <td>
+                            <a target="_blank" ng-href='~/{{InstitutionDetail.PrincipalDetail.PersonPhotoSrc}}'>
+                              <img src="~/{{InstitutionDetail.PrincipalDetail.PersonPhotoSrc}}" width="40" height="40" class="PersonPhotoSrc"/>
+                            </a>
+                            </td>
                                   
                           </tr>
                           <tr>
@@ -245,7 +249,10 @@
             $scope.Teacher = {};
             $scope.TitleName = 'Register School'
             NetworkService.get('PraescioAdmin/GetSchoolDetail?institutionId=@ViewBag.InstitutionId').success(function (data) {
-                $scope.InstitutionDetail = data;
+              $scope.InstitutionDetail = data;
+              console.log('$scope.InstitutionDetail.PrincipalDetail.PersonPhotoSrc ', $scope.InstitutionDetail.PrincipalDetail.PersonPhotoSrc )
+              $scope.InstitutionDetail.PrincipalDetail.PersonPhotoSrc = ($scope.InstitutionDetail.PrincipalDetail.PersonPhotoSrc == null || $scope.InstitutionDetail.PrincipalDetail.PersonPhotoSrc == '' ? 'Content/assets/production/images/user.png' : $scope.InstitutionDetail.PrincipalDetail.PersonPhotoSrc);
+              console.log('$scope.InstitutionDetail.PrincipalDetail.PersonPhotoSrc ', $scope.InstitutionDetail.PrincipalDetail.PersonPhotoSrc)
             });
 
             $scope.Block = function () {

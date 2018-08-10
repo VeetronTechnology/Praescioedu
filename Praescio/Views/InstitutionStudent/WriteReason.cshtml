@@ -1,13 +1,12 @@
-﻿WriteReason
-@{
+﻿@{
     ViewBag.Title = "";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="right_col" role="main" style="background:#48c9b0" ng-controller="WriteReasonCtrl">
-    <div class="cont">
+<div class="right_col" role="main" ng-controller="WriteReasonCtrl">
+    <div class="content">
 
 
-        <div class="table-agile-info">
+        <div class="table-agile-info1">
             <ol class="breadcrumb">
                 <li><a href="lesson_index.html">Lesson</a></li>
                 <li><a href="start_test.html">Start Test</a></li>
@@ -16,32 +15,41 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Write A Reason
-                    <span class="tools pull-right" style="font-size:12px;font-weight:600;">
-                        <a href="javascript:;">Active: Duration : ddd:hh:mm</a>
+                    <span title="Days:Hours:Minutes" class="tools pull-right" style="font-size:12px;font-weight:600;">
+                      Active Duration:
+                      <span ng-if="ExamStartDateTimer == null">Not Started</span>
+                      <span ng-if="ExamStartDateTimer != null">{{ ExamStartDateTimer }}</span>
                     </span>
                 </div>
-                <div>
+                <div id="tbl-questions">
                     <table class="table table-striped b-t b-light" ng-repeat="question in QuestionList">
                         <tbody>
                             <tr>
-                                <th>Write reason for:</th>
-                                <td>{{question.Question.Title}}</td>
+                                <th class="col-lg-3 col-md-3 col-sm-5 col-xs-12">Write reason for:</th>
+                                <td class="col-lg-9 col-md-9 col-sm-7 col-xs-12">{{question.Question.Title}}</td>
                             </tr>
                             <tr>
-                                <th>Answer:</th>
-                                <td><textarea name="text" id="text" ng-model="question.AttemptAnswer"></textarea></td>
+                                <th class="col-lg-3 col-md-3 col-sm-5 col-xs-12">Answer:</th>
+                                <td class="col-lg-9 col-md-9 col-sm-7 col-xs-12">
+                                  <textarea name="text" id="text" ng-model="question.AttemptAnswer"></textarea>
+                                
+                                </td>
                             </tr>
-                            <tr data-expanded="true">
+                            @*<tr data-expanded="true">
                                 <th></th>
-                                <td>@* <a href="#" class="btn btn-danger">Clear</a> *@
+                                <td>
                                     <a class="btn btn-success" ng-click="SaveAnswer();" ng-disabled="savingRequest">
                                         Submit
                                         <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
                                     </a>
                                 </td>
-                            </tr>
+                            </tr>*@
                         </tbody>
                     </table>
+                  <a class="btn btn-success" ng-click="SaveAnswer();" ng-disabled="savingRequest">
+                    Submit
+                    <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                  </a>
                 </div>
             </div>
 
@@ -54,7 +62,17 @@
 
     <script type="text/javascript">
 
-        myApp.controller('WriteReasonCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+        myApp.controller('WriteReasonCtrl', function ($scope, $rootScope, $filter, NetworkService, $interval) {
+            $scope.ExamStartDateTimer = "Loading...";
+              NetworkService.get('PraescioCommon/GetUserAssessmentDetail?assignmentid=@ViewBag.assignmentid').success(function (data) {
+                if (data != null) {
+                  $interval(function () {
+                    $scope.ExamStartDateTimer = GetStopWatchTime(data.ExamStartDate);
+                  }, 1000);
+                } else {
+                  $scope.ExamStartDateTimer = null;
+                }
+            });
 
             NetworkService.get('InstitutionStudent/GetAssignmentQuestion?assignmentid=@ViewBag.Assignmentid&typeOfQuestion=@ViewBag.TypeOfQuestion').success(function (data) {
                 console.log(data);
@@ -62,7 +80,22 @@
             });
 
             $scope.SaveAnswer = function () {
-                $scope.savingRequest = true;
+
+              $scope.savingRequest = true;
+
+              if ($('#tbl-questions textarea').filter(function () {
+                return $.trim($(this).val()).length == 0
+              }).length > 0) {
+                $scope.savingRequest = false;
+                swal({
+                  title: "Please answer all questions.",
+                  text: "Press Ok to Continue.",
+                  type: "error",
+                  confirmButtonColor: "red",
+                  showCancelButton: false,
+                });
+                return;
+              }
 
                 NetworkService.insert('InstitutionStudent/SaveAnswer', $scope.QuestionList).success(function (data) {
                     $scope.savingRequest = false;
@@ -95,7 +128,7 @@
             }
         });
 
-       
+
 </script>
 }
 

@@ -9,25 +9,32 @@
     @*<li>
         <a href="@Url.Action("SchoolProfile", "InstitutionStudent")"><i class="fa fa-graduation-cap"></i>  School Profile</a>
     </li>*@
-    <li>
-        <a href="@Url.Action("ViewAssignment", "Praescio", new { assignmentType = (int)AssignmentType.IndividualAssignment })"><i class="fa fa-user"></i>Assignment List</a>
-    </li>
-    <li>
-        <a href="@Url.Action("ViewAssignment", "Praescio", new { assignmentType = (int)AssignmentType.PraescioLesson })"><i class="fa fa-graduation-cap"></i>Praescio Lessons</a>
-    </li>
-    <li>
-        <a href="@Url.Action("ViewAssignment", "Praescio", new { assignmentType = (int)AssignmentType.PExtra })"><i class="fa fa-graduation-cap"></i>P-Extra Act</a>
-    </li>
+
+    @if (Praescio.Models.Common.ACCOUNT.BoardId == 4)
+    {
+        <li>
+          <a href="@Url.Action("ViewAssignment", "Praescio", new { assignmentType = (int)AssignmentType.PExtra })"><i class="fa fa-graduation-cap"></i>P-Extra Act</a>
+        </li>
+    }
+    else
+    {
+        <li>
+          <a href="@Url.Action("ViewAssignment", "Praescio", new { assignmentType = (int)AssignmentType.IndividualAssignment })"><i class="fa fa-user"></i>Assignment List</a>
+        </li>
+        <li>
+          <a href="@Url.Action("ViewAssignment", "Praescio", new { assignmentType = (int)AssignmentType.PraescioLesson })"><i class="fa fa-graduation-cap"></i>Praescio Lessons</a>
+        </li>
+    }
 
 
     <li>
         <a><i class="fa fa-deviantart"></i> Personal Development <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
             <li>
-                <a title="Handwriting Development" href="@Url.Action("HandwritingDev", "InstitutionStudent")"><i title="Handwriting Development"></i> <span class="nav-label"> Handwriting Development</span></a>
+                <a title="Handwriting Development" href="@Url.Action("ViewAssignmentHKPStudent", "Praescio", new { assignmentType = (int)AssignmentType.Handwriting })"><i title="Handwriting Development"></i> <span class="nav-label"> Handwriting Development</span></a>
             </li>
             <li>
-                <a title="Pronunciation Development" href="@Url.Action("PronunciationDev", "InstitutionStudent")"><i title="Pronunciation Development"></i> <span class="nav-label"> Pronunciation Development</span></a>
+                <a title="Pronunciation Development" href="@Url.Action("ViewAssignmentHKPStudent", "Praescio", new { assignmentType = (int)AssignmentType.Pronounciation })"><i title="Pronunciation Development"></i> <span class="nav-label"> Pronunciation Development</span></a>
             </li>
         </ul>
     </li>
@@ -35,22 +42,42 @@
     <li>
         <a><i class="fa fa-history"></i> History of Exam <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
-            <li>
-                <a title="Praescio Lesson" href="@Url.Action("AssignmentResult", "Praescio", new { assignmentType = (int)AssignmentType.All })"><i title="Register Teacher"></i> <span class="nav-label">Praescio Lessons</span></a>
-            </li>
-            <li>
-                <a title="Register Student" href="@Url.Action("TestHistory", "InstitutionStudent")"><i title="Register Student"></i> <span class="nav-label">Assignment</span></a>
-            </li>
-            <li>
-                <a title="Register Student" href="@Url.Action("TestHistory", "InstitutionStudent")"><i title="Register Student"></i> <span class="nav-label">P-Extra Act</span></a>
-            </li>
+            @if (Praescio.Models.Common.ACCOUNT.BoardId != 4)
+            {
+                <li>
+                  <a title="Praescio Lesson" href="@Url.Action("AssignmentResult", "Praescio", new { assignmentType = (int)AssignmentType.PraescioLesson })"><i title="Praescio Lessons"></i> <span class="nav-label">Praescio Lessons</span></a>
+                </li>
+                @*<li>
+                      <a title="Register Student" href="@Url.Action("TestHistory", "InstitutionStudent")"><i title="Register Student"></i> <span class="nav-label">Assignment</span></a>
+                  </li>
+                  <li>
+                      <a title="Register Student" href="@Url.Action("TestHistory", "InstitutionStudent")"><i title="Register Student"></i> <span class="nav-label">P-Extra Act</span></a>
+                  </li>*@
+                <li>
+                  @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+                  {
+                      <a title="Assignment" href="@Url.Action("AssignmentResult", "Praescio", new { assignmentType = (int)AssignmentType.IndividualAssignment })"><i title="Assignment"></i> <span class="nav-label">Assignment</span></a>
+                  }
+                  else if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student)
+                  {
+                      <a title="Assignment" href="@Url.Action("AssignmentResult", "Praescio", new { assignmentType = (int)AssignmentType.InstitutionAssignment })"><i title="Assignment"></i> <span class="nav-label">Assignment</span></a>
+                  }
+                  else
+                  {
+                      <a title="Assignment" href="@Url.Action("AssignmentResult", "Praescio", new { assignmentType = (int)AssignmentType.PraescioLesson })"><i title="Assignment"></i> <span class="nav-label">Assignment</span></a>
+                  }
+                </li>
+            }
+            @if (Praescio.Models.Common.ACCOUNT.BoardId == 4)
+            {
+                <li>
+                  <a title="P-Extra Act" href="@Url.Action("AssignmentResult", "Praescio", new { assignmentType = (int)AssignmentType.PExtra })"><i title="P-Extra Act"></i> <span class="nav-label">P-Extra Act</span></a>
+                </li>
+            }
         </ul>
     </li>
 
-
-
-
-    <li>
+    @*<li>
         <a><i class="fa fa-square"></i> Edu Study<span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
             <li>
@@ -67,7 +94,7 @@
                 <a title="Pronunciation Progress" href="@Url.Action("ViewPronunciationDev", "InstitutionStudent")"><i title="Pronunciation Progress"></i> <span class="nav-label"> Pronunciation Progress</span></a>
             </li>
         </ul>
-    </li>
+    </li>*@
 
     <li>
         <a><i class="fa fa-paint-brush"></i> Upload Creativity <span class="fa fa-chevron-down"></span></a>
@@ -76,7 +103,7 @@
                 <a title="Creativity" href="@Url.Action("UploadCreativity", "InstitutionStudent")"><i title="Creativity"></i> <span class="nav-label"> Creativity</span></a>
             </li>
             <li>
-                <a title="History" href="@Url.Action("CreativityHistory", "InstitutionStudent")"><i title="History"></i> <span class="nav-label">History</span></a>
+                <a title="History" href="@Url.Action("CreativityUploads", "Parents")"><i title="History"></i> <span class="nav-label">History</span></a>
             </li>
 
         </ul>
@@ -89,5 +116,9 @@
             <li><a href="@Url.Action("KnowledgeBankHistory", "Praescio")">Knowledge Bank History</a></li>
         </ul>
     </li>
+
+  <li>
+    <a href="@Url.Action("SchoolNotice", "InstitutionTeacher")"><i class="fa fa-sticky-note"></i>Notice</a>
+  </li>
 
 </ul>

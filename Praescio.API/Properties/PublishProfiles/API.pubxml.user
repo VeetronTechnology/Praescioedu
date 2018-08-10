@@ -5,143 +5,158 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <_PublishTargetUrl>D:\ALI\PraescioNew\Praescio 5 Jan\Publish\API</_PublishTargetUrl>
+    <_PublishTargetUrl>H:\avi\elysiar\pros\praescioedu\praescioedu\Praescioedu\Publish\API</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/EntityFramework.dll">
-      <publishTime>01/14/2018 18:31:46</publishTime>
+      <publishTime>01/14/2018 18:31:48</publishTime>
     </File>
     <File Include="bin/EntityFramework.SqlServer.dll">
-      <publishTime>01/14/2018 18:30:51</publishTime>
+      <publishTime>01/14/2018 18:30:52</publishTime>
     </File>
     <File Include="bin/Microsoft.AspNet.Identity.Core.dll">
-      <publishTime>01/14/2018 18:31:06</publishTime>
+      <publishTime>01/14/2018 18:31:08</publishTime>
     </File>
     <File Include="bin/Microsoft.Owin.dll">
-      <publishTime>01/14/2018 18:31:40</publishTime>
-    </File>
-    <File Include="bin/Microsoft.Owin.Security.Cookies.dll">
-      <publishTime>01/14/2018 18:31:40</publishTime>
-    </File>
-    <File Include="bin/Microsoft.Owin.Security.dll">
-      <publishTime>01/14/2018 18:31:39</publishTime>
-    </File>
-    <File Include="bin/Microsoft.Owin.Security.OAuth.dll">
-      <publishTime>01/14/2018 18:31:41</publishTime>
-    </File>
-    <File Include="bin/Microsoft.Web.Infrastructure.dll">
       <publishTime>01/14/2018 18:31:42</publishTime>
     </File>
+    <File Include="bin/Microsoft.Owin.Security.Cookies.dll">
+      <publishTime>01/14/2018 18:31:42</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Owin.Security.dll">
+      <publishTime>01/14/2018 18:31:40</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Owin.Security.OAuth.dll">
+      <publishTime>01/14/2018 18:31:42</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Web.Infrastructure.dll">
+      <publishTime>01/14/2018 18:31:44</publishTime>
+    </File>
     <File Include="bin/Newtonsoft.Json.dll">
-      <publishTime>01/14/2018 18:32:39</publishTime>
+      <publishTime>03/24/2018 17:44:14</publishTime>
     </File>
     <File Include="bin/Owin.dll">
-      <publishTime>01/14/2018 18:32:40</publishTime>
+      <publishTime>01/14/2018 18:32:42</publishTime>
     </File>
     <File Include="bin/Praescio.API.dll">
-      <publishTime>02/11/2018 00:24:39</publishTime>
+      <publishTime>08/08/2018 08:29:06</publishTime>
+    </File>
+    <File Include="bin/Praescio.API.pdb">
+      <publishTime>08/08/2018 08:29:06</publishTime>
     </File>
     <File Include="bin/Praescio.BusinessEntities.dll">
-      <publishTime>02/11/2018 00:24:36</publishTime>
+      <publishTime>08/02/2018 17:41:14</publishTime>
+    </File>
+    <File Include="bin/Praescio.BusinessEntities.dll.config">
+      <publishTime>05/02/2018 17:42:27</publishTime>
+    </File>
+    <File Include="bin/Praescio.BusinessEntities.pdb">
+      <publishTime>08/02/2018 17:41:14</publishTime>
     </File>
     <File Include="bin/Praescio.Domain.dll">
-      <publishTime>02/11/2018 00:24:36</publishTime>
+      <publishTime>08/02/2018 17:41:13</publishTime>
+    </File>
+    <File Include="bin/Praescio.Domain.dll.config">
+      <publishTime>02/05/2018 18:56:00</publishTime>
+    </File>
+    <File Include="bin/Praescio.Domain.pdb">
+      <publishTime>08/02/2018 17:41:13</publishTime>
     </File>
     <File Include="bin/Swashbuckle.Core.dll">
-      <publishTime>01/14/2018 18:33:26</publishTime>
+      <publishTime>01/14/2018 18:33:28</publishTime>
     </File>
     <File Include="bin/System.Net.Http.Formatting.dll">
-      <publishTime>01/14/2018 18:31:19</publishTime>
+      <publishTime>01/14/2018 18:31:20</publishTime>
     </File>
     <File Include="bin/System.Web.Cors.dll">
-      <publishTime>01/14/2018 18:31:04</publishTime>
+      <publishTime>01/14/2018 18:31:06</publishTime>
     </File>
     <File Include="bin/System.Web.Helpers.dll">
-      <publishTime>01/14/2018 18:31:33</publishTime>
+      <publishTime>01/14/2018 18:31:34</publishTime>
     </File>
     <File Include="bin/System.Web.Http.Cors.dll">
-      <publishTime>01/14/2018 18:31:27</publishTime>
+      <publishTime>01/14/2018 18:31:28</publishTime>
     </File>
     <File Include="bin/System.Web.Http.dll">
-      <publishTime>01/14/2018 18:31:35</publishTime>
+      <publishTime>01/14/2018 18:31:36</publishTime>
     </File>
     <File Include="bin/System.Web.Http.WebHost.dll">
-      <publishTime>01/14/2018 18:31:31</publishTime>
+      <publishTime>01/14/2018 18:31:32</publishTime>
     </File>
     <File Include="bin/System.Web.Optimization.dll">
-      <publishTime>01/14/2018 18:31:17</publishTime>
+      <publishTime>01/14/2018 18:31:18</publishTime>
     </File>
     <File Include="bin/System.Web.Razor.dll">
-      <publishTime>01/14/2018 18:31:13</publishTime>
+      <publishTime>01/14/2018 18:31:14</publishTime>
     </File>
     <File Include="bin/System.Web.WebPages.Deployment.dll">
-      <publishTime>01/14/2018 18:31:35</publishTime>
+      <publishTime>01/14/2018 18:31:36</publishTime>
     </File>
     <File Include="bin/System.Web.WebPages.dll">
-      <publishTime>01/14/2018 18:31:37</publishTime>
+      <publishTime>01/14/2018 18:31:38</publishTime>
     </File>
     <File Include="bin/System.Web.WebPages.Razor.dll">
-      <publishTime>01/14/2018 18:31:35</publishTime>
+      <publishTime>01/14/2018 18:31:36</publishTime>
     </File>
     <File Include="bin/WebActivatorEx.dll">
-      <publishTime>01/14/2018 18:33:02</publishTime>
+      <publishTime>01/14/2018 18:33:04</publishTime>
     </File>
     <File Include="fonts/glyphicons-halflings-regular.eot">
-      <publishTime>01/14/2018 18:44:54</publishTime>
+      <publishTime>01/14/2018 18:44:56</publishTime>
     </File>
     <File Include="fonts/glyphicons-halflings-regular.svg">
-      <publishTime>01/14/2018 18:44:55</publishTime>
+      <publishTime>01/14/2018 18:44:56</publishTime>
     </File>
     <File Include="fonts/glyphicons-halflings-regular.ttf">
-      <publishTime>01/14/2018 18:44:55</publishTime>
+      <publishTime>01/14/2018 18:44:56</publishTime>
     </File>
     <File Include="fonts/glyphicons-halflings-regular.woff">
-      <publishTime>01/14/2018 18:44:56</publishTime>
+      <publishTime>01/14/2018 18:44:58</publishTime>
     </File>
     <File Include="Global.asax">
-      <publishTime>01/14/2018 18:44:53</publishTime>
+      <publishTime>01/14/2018 18:44:54</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>01/14/2018 18:44:52</publishTime>
+      <publishTime>04/30/2018 18:12:23</publishTime>
     </File>
     <File Include="Scripts/bootstrap.js">
-      <publishTime>01/14/2018 18:44:55</publishTime>
+      <publishTime>01/14/2018 18:44:56</publishTime>
     </File>
     <File Include="Scripts/bootstrap.min.js">
-      <publishTime>01/14/2018 18:44:56</publishTime>
+      <publishTime>01/14/2018 18:44:58</publishTime>
     </File>
     <File Include="Scripts/jquery-1.10.2.js">
-      <publishTime>01/14/2018 18:44:59</publishTime>
+      <publishTime>01/14/2018 18:45:00</publishTime>
     </File>
     <File Include="Scripts/jquery-1.10.2.min.js">
-      <publishTime>01/14/2018 18:44:57</publishTime>
+      <publishTime>01/14/2018 18:44:58</publishTime>
     </File>
     <File Include="Scripts/jquery-1.10.2.min.map">
-      <publishTime>01/14/2018 18:44:58</publishTime>
+      <publishTime>01/14/2018 18:45:00</publishTime>
     </File>
     <File Include="Scripts/jquery.validate.js">
-      <publishTime>01/14/2018 18:44:58</publishTime>
+      <publishTime>01/14/2018 18:45:00</publishTime>
     </File>
     <File Include="Scripts/jquery.validate.min.js">
-      <publishTime>01/14/2018 18:44:58</publishTime>
+      <publishTime>01/14/2018 18:45:00</publishTime>
     </File>
     <File Include="Scripts/jquery.validate.unobtrusive.js">
-      <publishTime>01/14/2018 18:44:55</publishTime>
+      <publishTime>01/14/2018 18:44:56</publishTime>
     </File>
     <File Include="Scripts/jquery.validate.unobtrusive.min.js">
-      <publishTime>01/14/2018 18:44:56</publishTime>
+      <publishTime>01/14/2018 18:44:58</publishTime>
     </File>
     <File Include="Template/EmailContent.xml">
-      <publishTime>01/14/2018 18:44:56</publishTime>
+      <publishTime>07/28/2018 19:39:24</publishTime>
     </File>
     <File Include="Template/MailExceptionBody.txt">
-      <publishTime>01/14/2018 18:44:57</publishTime>
+      <publishTime>01/14/2018 18:44:58</publishTime>
     </File>
     <File Include="Template/SchedulerEmailContent.xml">
-      <publishTime>01/14/2018 18:44:57</publishTime>
+      <publishTime>01/14/2018 18:44:58</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>02/11/2018 00:24:42</publishTime>
+      <publishTime>07/29/2018 00:45:09</publishTime>
     </File>
   </ItemGroup>
 </Project>

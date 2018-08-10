@@ -23,7 +23,7 @@
 </style>
 <!-- page content -->
 <div class="right_col" role="main" ng-controller="TeacherListCtrl">
-    <div class="">
+    <div class="content">
         <div class="page-title">
             <div class="title_left">
                 <h3>Dashboard</h3>
@@ -47,24 +47,24 @@
                     <div class="row">
                         @if (ViewBag.InstitutionId > 0)
                         {
-                          <div class="col-md-6">
-                            <h2>List of Teacher</h2>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            <h2 class="text-left">List of Teacher</h2>
                           </div>
-                          <div class="col-md-6">
-                            <h2>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            <h2 class="text-left">
                               School Name: &nbsp;&nbsp;&nbsp; <a href="@Url.Action("SchoolDetails", "PraescioAdmin", new {institutionId = ViewBag.InstitutionId})" title="{{InstitutionDetail.Institution.InstitutionName}}">{{InstitutionDetail.Institution.InstitutionName}}</a>
                             </h2>
                           </div>
                         }
                         else
                         {
-                          <div class="col-md-12">
-                            <h2>List of Teacher</h2>
+                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <h2 class="text-left">List of Teacher</h2>
                           </div>
                         }
                     </div>
                   </div>
-                    <div class="col-sm-6">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label style="float:left;white-space:nowrap;">
                             @*Show &nbsp;&nbsp;&nbsp;&nbsp;
                                 <select name="filtertype" style="display:inline !important;width:60px !important;" class="form-control input-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>
@@ -74,9 +74,12 @@
                                 <a ng-click="ShowHide()" href="#" class="btn btn-primary uploadbtn">Add Student Register Permission</a>
                             }
 
-
-                            <a href="@Url.Action("Download", "PraescioCommon", new { filePath = @Praescio.Domain.AppCode.CommonCode.TeacherList, @class = "btn btn-primary uploadbtn" })" class="btn btn-primary uploadbtn">Download Excel Template</a>
-                            <a href="#" class="btn btn-primary uploadbtn" data-toggle="modal" data-target=".bs-example-modal-sm">Bulk Upload Teacher</a>
+                            @if (ViewBag.InstitutionId > 0 || Praescio.Models.Common.ACCOUNT.AccountTypeId != (int)Praescio.BusinessEntities.Common.AccountType.SuperAdmin)
+                            {
+                                <a href="@Url.Action("Download", "PraescioCommon", new { filePath = @Praescio.Domain.AppCode.CommonCode.TeacherList, @class = "btn btn-primary uploadbtn" })" class="btn btn-primary uploadbtn">Download Excel Template</a>
+                                <a href="#" class="btn btn-primary uploadbtn" data-toggle="modal" data-target=".bs-example-modal-sm">Bulk Upload Teacher</a>
+                            }
+                            @*<a href="@Url.Action("RegisterIndividualTeacher", "PraescioAdmin")?institutionId=@ViewBag.InstitutionId" class="btn btn-primary uploadbtn">Add Teacher</a>*@
                         </label>
 
                         <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
@@ -113,8 +116,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <label style="float:right;padding-right:53px; white-space: nowrap; width: 100%; text-align: right;">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group1">
+                          <div>
+                            <label for="Status" style="float: left">Filter by Status</label>
+                            <select style="width: 100px; float: left; margin-left: 10px;" id="Status" name="Status" class="input-sm form-control" ng-model="Status" ng-change="LoadContent()">
+                              <option value="-1" selected="selected">-- Select Status --</option>
+                              <option value="1">Active</option>
+                              <option value="0">Inactive</option>
+                            </select>
+                          </div>
+                        </div>
+                        <label style="float:right;padding-right:5px; white-space: nowrap; width: 50%; text-align: right;">
                             Search:&nbsp;&nbsp;&nbsp;&nbsp;
                             <input type="text" class="form-control" ng-model="SearchText" ng-keyup="SearchText.length>3 ||SearchText.length==0?LoadContent():'';" style="width:150px;float:right;" placeholder="Search" name="Search" value="" />
                         </label>
@@ -174,6 +187,7 @@
 
             $scope.Teacher = {};
             $scope.TitleName = 'List of Teacher';
+            $scope.Status = -1;
 
             $scope.datePassed = function (expdate) {
                 var now = moment();
@@ -181,22 +195,20 @@
                 return (now.diff(day, 'days') > 0 ? true : false);
             }
 
-            $scope.LoadContent = function () {
-                NetworkService.get('PraescioCommon/GetTeacherList?isIndividual=@ViewBag.IsIndividual&version=@ViewBag.Version&institutionId=@ViewBag.InstitutionId&searchText=' + $scope.SearchText).success(function (data) {
-                    $scope.TeacherList = data;
-                    $scope.totalcount = data.TotalRecord;
-                });
-            };
-            $scope.LoadContent();
-
             $scope.onPageChange = function (pageno) {
-                var url = '&pageNo=' + pageno + '&itemPerPage=' + $scope.itemPerPage;
+              var url = '&pageNo=' + pageno + '&itemPerPage=' + $scope.itemPerPage + '&searchText=' + $scope.SearchText + '&IsActive=' + $scope.Status;
 
                 NetworkService.get('PraescioCommon/GetTeacherList?isIndividual=@ViewBag.IsIndividual&version=@ViewBag.Version&institutionId=@ViewBag.InstitutionId' + url).success(function (data) {
                     $scope.TeacherList = data;
                     $scope.totalcount = data.TotalRecord;
                 });
             }
+
+
+            $scope.LoadContent = function () {
+                $scope.onPageChange(1);
+            };
+            $scope.LoadContent();
 
             $scope.ShowHide = function () {
                 $scope.IsVisible = $scope.IsVisible ? false : true;
@@ -262,8 +274,12 @@
 
                         jQuery.map(sheet1, function (item, index) {
                             item.DateOfBirth = ConvertDateFormat(item.DateOfBirth);
-                            item.ActivateOn = ConvertDateFormat(item.ActivateOn);
+                            item.ActivateOn = moment().format("YYYY-MM-DD HH:mm:ss");//ConvertDateFormat(item.ActivateOn);
                             //item.ExpiredOn = ConvertDateFormat(item.ExpiredOn);
+                            item.ExpiredOn = moment($scope.InstitutionDetail.Institution.ExpiredOn, 'YYYY-MM-DD HH:mm:ss').format("YYYY-MM-DD HH:mm:ss");
+
+                            item.BoardId = $scope.InstitutionDetail.Institution.BoardId;
+                            item.MediumId = $scope.InstitutionDetail.Institution.MediumId;
                             return sheet1;
                         });
 
@@ -278,6 +294,13 @@
                                 type: "success",
                                 confirmButtonColor: "green",
                                 showCancelButton: false,
+                            }, function (isConfirm) {
+                              //console.log('$scope.Student.Version', isConfirm, $scope.Student)
+                              if (isConfirm) {
+                                window.location.href = "@Url.Action("TeacherList", "Praescio")?isIndividual=@isIndividual&institutionId=@institutionid";
+                              } else {
+                                $scope.reset();
+                              }
                             });
 
                         }).error(function (data, status) {

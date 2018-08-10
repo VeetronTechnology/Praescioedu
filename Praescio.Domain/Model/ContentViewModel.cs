@@ -77,6 +77,7 @@ namespace Praescio.Domain.Model
         public List<Question> Question { get; set; }
         public List<QuestionAssessmentDetail> QuestionAssessmentDetail { get; set; }
         public UserAssessmentDetail UserAssessmentDetail { get; set; }
+        public List<Video> Video { get; set; }
     }
 
     public class QuestionAssessmentDetail
@@ -125,6 +126,13 @@ namespace Praescio.Domain.Model
 
     }
 
+    public class AssignmentHKPMappingListContent
+    {
+        public List<AssignmentHKPMapping> dataContent { get; set; }
+        public int totalRecord { get; set; }
+
+    }
+
     public class QuestionContentViewModel
     {
         public int ContentId { get; set; }
@@ -135,4 +143,11 @@ namespace Praescio.Domain.Model
 
     }
 
+
+    public class AssignmentHKPListViewModel
+    {
+        public Assignment Assignment { get; set; }
+        public AssignmentHKPMapping AssignmentHKPMapping { get; set; }
+        public AssignmentHKPStudent AssignmentHKPStudent { get; set; }
+    }
 }

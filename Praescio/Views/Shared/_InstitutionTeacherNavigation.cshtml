@@ -8,38 +8,60 @@
     <li>
         <a href="@Url.Action("SchoolProfile", "InstitutionAdmin")"><i class="fa fa-building"></i>School Profile</a>
     </li>
-    <li>
+    @*<li>
         <a href="@Url.Action("Students", "InstitutionTeacher")"><i class="fa fa-graduation-cap"></i>Students</a>
-    </li>
+    </li>*@
 
-    <li>
-        <a><i class="fa fa-file-text"></i> Assignment <span class="fa fa-chevron-down"></span></a>
-        <ul class="nav child_menu">
+    @if (Praescio.Models.Common.ACCOUNT.BoardId == 4)
+    {
+        <li>
+          <a><i class="fa fa-file-text"></i> Assignment <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
             <li>
-                <a title="Trail List" href="@Url.Action("AddAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.InstitutionAssignment)"><i title="Add Assignment" class="fa fa-university"></i> <span class="nav-label"> Add Assignment</span></a>
+              <a title="Add Assignment" href="@Url.Action("AddAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.PExtra)"><i title="Add Assignment" class="fa fa-university"></i> <span class="nav-label"> Add Assignment</span></a>
             </li>
             <li>
-                <a title="Trail List" href="@Url.Action("UploadAssignmentQuestion", "Praescio")"><i title="Add Lessons" class="fa fa-university"></i> <span class="nav-label"> Upload Assignment Qts</span></a>
+              <a title="Upload Assignment Qts" href="@Url.Action("UploadAssignmentQuestion", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.PExtra)"><i title="Add Lessons" class="fa fa-university"></i> <span class="nav-label"> Upload Assignment Qts</span></a>
             </li>
             <li>
-                <a title="Full Version" href="@Url.Action("ViewAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.InstitutionAssignment)"><i title="View Lessons" class="fa fa-university"></i> <span class="nav-label"> View Assignment</span></a>
+              <a title="View Assignment" href="@Url.Action("ViewAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.PExtra)"><i title="View Lessons" class="fa fa-university"></i> <span class="nav-label"> View Assignment</span></a>
             </li>
-        </ul>
-    </li>
+          </ul>
+        </li>
+    }
+    else
+    {
+        <li>
+          <a><i class="fa fa-file-text"></i> Assignment <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
+            <li>
+              <a title="Add Assignment" href="@Url.Action("AddAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.InstitutionAssignment)"><i title="Add Assignment" class="fa fa-university"></i> <span class="nav-label"> Add Assignment</span></a>
+            </li>
+            <li>
+              <a title="Upload Assignment Qts" href="@Url.Action("UploadAssignmentQuestion", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.InstitutionAssignment)"><i title="Add Lessons" class="fa fa-university"></i> <span class="nav-label"> Upload Assignment Qts</span></a>
+            </li>
+            <li>
+              <a title="View Assignment" href="@Url.Action("ViewAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.InstitutionAssignment)"><i title="View Lessons" class="fa fa-university"></i> <span class="nav-label"> View Assignment</span></a>
+            </li>
+          </ul>
+        </li>
+    }
+
     <li>
         <a><i class="fa fa-file-word-o"></i>Question <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
             <li><a href="@Url.Action("AddMCQ", "Praescio")"> Add MCQ</a>
+            <li><a href="@Url.Action("AddVideo", "Praescio")"> Add Video</a>
         </ul>
     </li>
     <li>
         <a><i class="fa fa-file-text"></i> Handwriting<span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
             <li>
-                <a title="Trail List" href="@Url.Action("AddAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.Handwriting)"><i title="Add Assignment" class="fa fa-university"></i> <span class="nav-label"> Add Handwriting</span></a>
+                <a title="Add Handwriting" href="@Url.Action("AddHandwritingAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.Handwriting)"><i title="Add Assignment" class="fa fa-university"></i> <span class="nav-label"> Add Handwriting</span></a>
             </li>           
             <li>
-                <a title="Full Version" href="@Url.Action("ViewAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.Handwriting)"><i title="View Lessons" class="fa fa-university"></i> <span class="nav-label"> View Handwriting</span></a>
+                <a title="View Handwriting" href="@Url.Action("ViewAssignmentHKP", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.Handwriting)"><i title="View Lessons" class="fa fa-university"></i> <span class="nav-label"> View Handwriting</span></a>
             </li>
         </ul>
     </li>
@@ -47,15 +69,15 @@
         <a><i class="fa fa-file-text"></i> Pronunciation<span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
             <li>
-                <a title="Trail List" href="@Url.Action("AddAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.Pronounciation)"><i title="Add Assignment" class="fa fa-university"></i> <span class="nav-label"> Add Assignment</span></a>
+                <a title="Add Assignment" href="@Url.Action("AddHandwritingAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.Pronounciation)"><i title="Add Assignment" class="fa fa-university"></i> <span class="nav-label"> Add Assignment</span></a>
             </li>
             <li>
-                <a title="Full Version" href="@Url.Action("ViewPronunciationAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.PraescioLesson)"><i title="View Lessons" class="fa fa-university"></i> <span class="nav-label"> View Assignment</span></a>
+                <a title="View Assignment" href="@Url.Action("ViewAssignmentHKP", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.Pronounciation)"><i title="View Lessons" class="fa fa-university"></i> <span class="nav-label"> View Assignment</span></a>
             </li>
         </ul>
     </li>
     <li>
-        <a href="@Url.Action("CheckAssignment", "InstitutionTeacher")"><i class="fa fa-check"></i>Check Assignment</a>
+        <a href="@Url.Action("CheckAssignment", "InstitutionTeacher")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.InstitutionAssignment)"><i class="fa fa-check"></i>Check Assignment</a>
     </li>
    
     @*<li>

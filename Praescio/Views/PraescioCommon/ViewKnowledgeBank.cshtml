@@ -33,7 +33,7 @@
                     
                     <div class="x_content">
 
-                        <div class="form-group">
+                        @*<div class="form-group">
                             <label for="heard" class="required">Select Board</label>
                             <select id="Board" name="Board" ng-change="ChangeBoard(Assignment.BoardId)" class="input-sm form-control" ng-model="Assignment.BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-required="true">
                                 <option value="">-- Select Board --</option>
@@ -60,7 +60,7 @@
                             </div>
                             <p ng-show="AssignmentForm.Standard.$invalid && (AssignmentForm.Standard.$dirty || submitted ||AssignmentForm.Standard.$touched )" class="text-danger">Standard is required.</p>
                         </div>
-                        <br /><br />
+                        <br /><br />*@
                         <div class="row">
                             <div class="col-sm-6">
                                 <label style="float:left;white-space:nowrap;">
@@ -84,18 +84,25 @@
                                     <th>File</th>
                                     @*<th>Added By</th>*@
                                     <th>Status</th>
-
+                                    @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.SuperAdmin)
+                                    {
+                                        <th>Actions</th>
+                                    }
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr dir-paginate="k in KnowledgeBankList |itemsPerPage:10|filter:searchText" total-items="totalcount">
-                                    <td>{{k.KnowledgeBank.Title}}</td>
-                                    <td>{{k.KnowledgeBank.Description}}</td>
+                                    <td><a href="#" title="{{k.KnowledgeBank.Title}}" ng-click="getDetails(k.KnowledgeBank)">{{k.KnowledgeBank.Title}}</a></td>
+                                    <td><span class="truncate">{{k.KnowledgeBank.Description}}</span></td>
                                     <td><a target="_blank" ng-href='~/{{k.KnowledgeBank.PDFFileSrc}}'>File</a></td>
                                     @*<td>{{k.KnowledgeBank.CreatedAccount.FirstName + ' '+k.KnowledgeBank.CreatedAccount.LastName}}</td>*@
                                     <td>{{k.KnowledgeBank.IsActive?'Active':'In Active'}}</td>
                                     @*td><a ng-href="/PraescioAdmin/AddKnowledgeBank?knowledgeBankId={{k.KnowledgeBank.KnowledgeBankId}}" class="btn btn-success btn-xs">Edit </a> |
-                    <a class="btn btn-danger btn-xs" ng-click="DeleteKnowledgeBank(k.KnowledgeBank.KnowledgeBankId)">Delete</a></td>*@
+                                    </td>*@
+                                  @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.SuperAdmin)
+                                  {
+                                      <td><a ng-if="k.KnowledgeBank.IsActive" class="btn btn-danger btn-xs" ng-click="DeleteKnowledgeBank(k.KnowledgeBank.KnowledgeBankId)">Delete</a></td>
+                                  }
                                 </tr>
                             </tbody>
                         </table>
@@ -152,10 +159,6 @@
                 }
             }
 
-           
-
-
-
             $scope.DeleteKnowledgeBank = function (id) {
                 $.confirm({
                     title: 'Confirm!',
@@ -175,8 +178,17 @@
                         });
                     }
                 });
+            }
 
-
+            $scope.getDetails = function (data) {
+              swal({
+                title: data.Title,
+                html: true,
+                text: '<p>' + data.Description + '</p><p><a target="_blank" href="~/' + data.PDFFileSrc + '">File</a></p><p>' + (data.IsActive ? 'Active' : 'In Active') + '</p>',
+                //type: "info",
+                confirmButtonColor: "blue",
+                showCancelButton: false
+              });
             }
 
         });

@@ -5,9 +5,9 @@
 }
 
 
-<div class="right_col" role="main" style="background:#48c9b0" ng-controller="MTFCtrl">
-    <div class="cont">
-        <div class="table-agile-info">
+<div class="right_col" role="main" ng-controller="MTFCtrl">
+    <div class="content">
+        <div class="table-agile-info1">
 
             <ol class="breadcrumb">
                 <li><a href="lesson_index.html">Lesson</a></li>
@@ -18,12 +18,14 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Match The Following
-                    <span class="tools pull-right" style="font-size:12px;font-weight:600;">
-                        <a href="javascript:;">Active: Duration : ddd:hh:mm</a>
+                    <span title="Days:Hours:Minutes" class="tools pull-right" style="font-size:12px;font-weight:600;">
+                      Active Duration:
+                      <span ng-if="ExamStartDateTimer == null">Not Started</span>
+                      <span ng-if="ExamStartDateTimer != null">{{ ExamStartDateTimer }}</span>
                     </span>
                 </div>
                 <div>
-                    <table class="table table-bordered" ng-repeat="q in Question">
+                    <table class="table table-bordered" ng-repeat="q in Question" id="tbl-questions">
                         <tbody>
                             <tr ng-repeat="option in q.QuestionOption">
                                 <td>{{$index+1}}. {{option.Option}} </td>
@@ -40,7 +42,7 @@
                                 <td>
                                     @*<a href="#" class="btn btn-danger">Clear</a>*@
                                     <a class="btn btn-success" ng-click="SaveAnswer();" ng-disabled="savingRequest">
-                                        Submit
+                                        Save
                                         <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
                                     </a>
                                 </td>
@@ -62,7 +64,17 @@
 
  <script type="text/javascript">
 
-        myApp.controller('MTFCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+        myApp.controller('MTFCtrl', function ($scope, $rootScope, $filter, NetworkService, $interval) {
+            $scope.ExamStartDateTimer = "Loading...";
+            NetworkService.get('PraescioCommon/GetUserAssessmentDetail?assignmentid=@ViewBag.assignmentid').success(function (data) {
+              if (data != null) {
+                $interval(function () {
+                  $scope.ExamStartDateTimer = GetStopWatchTime(data.ExamStartDate);
+                }, 1000);
+              } else {
+                $scope.ExamStartDateTimer = null;
+              }
+            });
 
             NetworkService.get('InstitutionStudent/GetAssignmentQuestion?assignmentid=@ViewBag.Assignmentid&typeOfQuestion=@ViewBag.TypeOfQuestion').success(function (data) {
                 console.log(data);
@@ -72,6 +84,20 @@
 
             $scope.SaveAnswer = function () {
                 $scope.savingRequest = true;
+
+                if ($('#tbl-questions select').filter(function () {
+                  return $.trim($(this).val()).length == 0
+                }).length > 0) {
+                  $scope.savingRequest = false;
+                  swal({
+                    title: "Please match all combinations.",
+                    text: "Press Ok to Continue.",
+                    type: "error",
+                    confirmButtonColor: "red",
+                    showCancelButton: false,
+                  });
+                  return;
+                }
 
                 NetworkService.insert('InstitutionStudent/SaveAnswer', $scope.Question).success(function (data) {
                     $scope.savingRequest = false;
@@ -85,13 +111,12 @@
                         closeOnConfirm: false,
                         closeOnCancel: true
                     },
-                       function (isConfirm) {
-                           if (isConfirm) {
-                               var assignment = '@ViewBag.Assignmentid';
-                               window.location.href = '@Url.Content("~/Praescio/AssignmentQuestion?assignmentId=")' + assignment;
-                           }
-                       });
-
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            var assignment = '@ViewBag.Assignmentid';
+                            window.location.href = '@Url.Content("~/Praescio/AssignmentQuestion?assignmentId=")' + assignment;
+                        }
+                    });
                 }).error(function (data) {
                     $scope.savingRequest = false;
                     swal({

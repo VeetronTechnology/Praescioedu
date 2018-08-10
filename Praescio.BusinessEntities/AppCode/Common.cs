@@ -9,7 +9,8 @@ namespace Praescio.BusinessEntities.AppCode
 {
     public static class Common
     {
-        public static string PasswordResetLink = "http://localhost:50268/Account/PasswordReset";
+        public static string PasswordResetLink = Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["BaseURL"]) + "Account/PasswordReset";
+        //public static string PasswordResetLink = "http://portal.praescioedu.com/Account/PasswordReset";
         public static string BlockPassword = Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["BlockPassword"]);
 
         private static Random random = new Random();

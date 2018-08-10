@@ -88,7 +88,7 @@
                     else if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.StudentParent)
                     {
                         <div class="navbar nav_title" style="border: 0">
-                            <a href="@Url.Action("Dashboard", "PraescioAdmin")" class="site_title"><i class="fa fa-book"></i> <span>SCHOOL PARENT</span></a>
+                            <a href="@Url.Action("Dashboard", "PraescioAdmin")" class="site_title"><i class="fa fa-book"></i> <span>@(Praescio.Models.Common.STUDENTACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student ? "SCHOOL PARENT" : "PARENT")</span></a>
                         </div>
                     }
                     else if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Admin)
@@ -112,14 +112,14 @@
                     }
                     else if(Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)
                     {
-                        <div class="navbar nav_title" style="border: 0;background:#F44336">
-                            <a href="@Url.Action("Dashboard", "InstitutionTeacher" )" class="site_title"><i class="fa fa-institution"></i> <span>Individual Teacher</span></a>
+                        <div class="navbar nav_title" style="border: 0;background:#F44336;">
+                            <a href="@Url.Action("Dashboard", "InstitutionTeacher" )" class="site_title" style="font-size:17px;"><i class="fa fa-institution"></i> <span>INDIVIDUAL TEACHER</span></a>
                         </div>
                     }
 
                     <div class="clearfix"></div>
                     <!-- menu profile quick info -->
-                    @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.SuperAdmin || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Admin)
+                    @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.SuperAdmin)
                     {
                         <div class="profile clearfix">
                             <div class="profile_pic">
@@ -129,6 +129,18 @@
                                 <span>Welcome,</span>
                                 <h2>Praescio</h2>
                             </div>
+                        </div>
+                    }
+                    else if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Admin)
+                    {
+                        <div class="profile clearfix">
+                          <div class="profile_pic">
+                            <img src="~/Content/assets/production/images/Logo.png" alt="..." class="img-circle profile_img">
+                          </div>
+                          <div class="profile_info">
+                            <span>Welcome,</span>
+                            <h2>@Praescio.Models.Common.ACCOUNT.InstitutionName</h2>
+                          </div>
                         </div>
                     }
                     else if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
@@ -280,14 +292,14 @@
                                     @if (Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Admin || Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Teacher)
                                     {
                                         <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                            <img src="~/Content/assets/production/images/img.jpg" alt=""><span style="color:#FFF;">@Praescio.Models.Common.ACCOUNT.OrganizationAccount.InstitutionName</span>
+                                            <img src="~/Content/assets/production/images/icn-school.png" alt=""><span style="color:#FFF;">@Praescio.Models.Common.ACCOUNT.OrganizationAccount.InstitutionName</span>
                                             <span class="fa fa-angle-down" style="color:#FFF;"></span>
                                         </a>
                                     }
                                     else
                                     {
                                         <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                            <img src="~/Content/assets/production/images/img.jpg" alt=""><span style="color:#FFF;">@Praescio.Models.Common.ACCOUNT.FirstName @Praescio.Models.Common.ACCOUNT.LastName</span>
+                                            <img src="~/Content/assets/production/images/@(Praescio.Models.Common.ACCOUNT.Gender == "Male" ? "icn-male.png" : "icn-female.png")" alt=""><span style="color:#FFF;">@Praescio.Models.Common.ACCOUNT.FirstName @Praescio.Models.Common.ACCOUNT.LastName</span>
                                             <span class="fa fa-angle-down" style="color:#FFF;"></span>
                                         </a>
                                     }
@@ -376,7 +388,7 @@
                             <ul class="nav navbar-nav navbar-right">
                                 <li class="">
                                     <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                        <img src="~/Content/assets/production/images/img.jpg" alt=""><span style="color:#FFF;">@Praescio.Models.Common.ACCOUNT.FirstName @Praescio.Models.Common.ACCOUNT.LastName</span>
+                                        <img src="~/Content/assets/production/images/@(Praescio.Models.Common.ACCOUNT.Gender == "Male" ? "icn-male.png" : "icn-female.png")" alt=""><span style="color:#FFF;">@Praescio.Models.Common.ACCOUNT.FirstName @Praescio.Models.Common.ACCOUNT.LastName</span>
                                         <span class="fa fa-angle-down" style="color:#FFF;"></span>
                                     </a>
                                     <ul class="dropdown-menu dropdown-usermenu pull-right">

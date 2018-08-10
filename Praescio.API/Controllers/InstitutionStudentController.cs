@@ -241,24 +241,26 @@ namespace Praescio.API.Controllers
                 List<int> QuestionType = new List<int>(new int[] { 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 });
 
                 string sql = "SELECT COUNT(DISTINCT A.QuestionTypeId)UserAssessmentCount FROM Question A" +
-                              " INNER JOIN UserAssessment B ON A.QuestionId =B.QuestionId WHERE AssignmentId=@AssignmentId AND A.QuestionTypeId IN(4, 5, 6, 7, 8, 9, 10, 11, 12, 13)";
+                              " INNER JOIN UserAssessment B ON A.QuestionId =B.QuestionId WHERE AssignmentId=@AssignmentId AND B.UserId=@UserId AND A.QuestionTypeId IN(4, 5, 6, 7, 8, 9, 10, 11, 12, 13)";
 
-                int UserAssessmentCount = db.Database.SqlQuery<int>(sql, new SqlParameter("@AssignmentId", assignmentid)).First();
+                int UserAssessmentCount = db.Database.SqlQuery<int>(sql, new object[] { new SqlParameter("@AssignmentId", assignmentid), new SqlParameter("@UserId", LoggedInAccount.AccountId) }).First();
 
                 var studentAssessment = db.UserAssessment.Where(x => x.Question.AssignmentId == assignmentid && QuestionType.Contains((int)x.Question.QuestionTypeId));
 
                 if (db.Question.Where(x => x.AssignmentId==assignmentid && QuestionType.Contains((int)x.QuestionTypeId)).Select(x => x.QuestionTypeId).Distinct().Count() == UserAssessmentCount)
                 {
-                    var userAssessment = db.UserAssessmentDetail.Where(x => x.AssignmentId == assignmentid).FirstOrDefault();
+                    var userAssessment = db.UserAssessmentDetail.Where(x => x.AssignmentId == assignmentid && x.UserId == LoggedInAccount.AccountId).FirstOrDefault();
                     int totalMarks = (int)studentAssessment.Sum(x => x.MaxScore);
                     int totalMarksAchieved = (int)studentAssessment.Sum(x => x.MarkScored);
 
                     userAssessment.MaxTotalScore = totalMarks;
                     userAssessment.TotalMarksScored = totalMarksAchieved;
-                    userAssessment.StatusId = 2;
+                    userAssessment.StatusId = (int)BusinessEntities.Common.AssignmentStatus.CompletedByStudent;
+                    //userAssessment.StatusId = (int)BusinessEntities.Common.AssignmentStatus.CheckedByTeacher;
                     userAssessment.ModifiedOn = DateTime.Now;
                     userAssessment.ExamEndDate = DateTime.Now;
 
+                    db.UserAssessmentDetail.Attach(userAssessment);
                     db.Entry(userAssessment).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }

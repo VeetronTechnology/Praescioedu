@@ -14,6 +14,7 @@
         <ul class="nav child_menu">
             <li>
                 <a title="Register Teacher" href="@Url.Action("RegisterTeacher", "InstitutionAdmin")"><i title="Register Teacher"></i> <span class="nav-label"> Teacher</span></a>
+                <!--<a title="Register Teacher" href="@Url.Action("RegisterIndividualTeacher", "PraescioAdmin", new { isIndividual = false, version = "", institutionId = Praescio.Models.Common.ACCOUNT.InstitutionAccountId})"><i title="Register Teacher"></i> <span class="nav-label"> Teacher</span></a>-->
             </li>
             <li>
                 <a title="Register Student" href="@Url.Action("RegisterStudent", "InstitutionAdmin")"><i title="Register Student"></i> <span class="nav-label"> Student</span></a>
@@ -31,19 +32,26 @@
 
     
     <li>
-        <a><i class="fa fa-file-text"></i> Assigment <span class="fa fa-chevron-down"></span></a>
+        <a><i class="fa fa-file-text"></i> Assignment <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
             <li>
-                <a title="Trail List" href="@Url.Action("AddAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.InstitutionAssignment)"><i title="Add Assignment" class="fa fa-university"></i> <span class="nav-label"> Add Assignment</span></a>
+                <a title="Add Assignment" href="@Url.Action("AddAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.InstitutionAssignment)"><i title="Add Assignment" class="fa fa-university"></i> <span class="nav-label"> Add Assignment</span></a>
             </li>
             <li>
-                <a title="Trail List" href="@Url.Action("UploadAssignmentQuestion", "Praescio")"><i title="Add Lessons" class="fa fa-university"></i> <span class="nav-label"> Upload Assignment Qts</span></a>
+                <a title="Upload Assignment Qts" href="@Url.Action("UploadAssignmentQuestion", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.InstitutionAssignment)"><i title="Add Lessons" class="fa fa-university"></i> <span class="nav-label"> Upload Assignment Qts</span></a>
             </li>
             <li>
-                <a title="Full Version" href="@Url.Action("ViewAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.InstitutionAssignment)"><i title="View Lessons" class="fa fa-university"></i> <span class="nav-label"> View Assignment</span></a>
+                <a title="View Assignment" href="@Url.Action("ViewAssignment", "Praescio")?assignmentType=@Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.InstitutionAssignment)"><i title="View Lessons" class="fa fa-university"></i> <span class="nav-label"> View Assignment</span></a>
             </li>
         </ul>
     </li>
+  <li>
+    <a><i class="fa fa-file-word-o"></i>Question <span class="fa fa-chevron-down"></span></a>
+    <ul class="nav child_menu">
+      <li><a href="@Url.Action("AddMCQ", "Praescio")"> Add MCQ</a>
+      <li><a href="@Url.Action("AddVideo", "Praescio")"> Add Video</a>
+    </ul>
+  </li>
     <li>
         <a><i class="fa fa-file-word-o"></i>Synonyms <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
@@ -59,10 +67,10 @@
         </ul>
     </li>
   
-    <li>
+    @*<li>
         <a><i class="fa fa-file-word-o"></i>Edu Study <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
-            <li><a href="@Url.Action("CourseCompletionStatus", "PraescioAdmin")"> Course Completion Status</a>
+            <li><a href="@Url.Action("CourseCompletionStatus", "PraescioAdmin")">Course Completion Status</a>
             <li><a href="@Url.Action("OverallProgress", "PraescioAdmin")">Overall Progress</a></li>
             <li><a href="@Url.Action("HandwritingDevelopment", "PraescioAdmin")">Handwriting Development</a></li>
             <li><a href="@Url.Action("PronunciationDevelopment", "PraescioAdmin")">Pronunciation Development</a></li>
@@ -70,7 +78,7 @@
             <li><a href="@Url.Action("SchoolNotice", "PraescioAdmin")">School Notice</a></li>
             <li><a href="@Url.Action("SchoolInformation", "PraescioAdmin")">School Information</a></li>
         </ul>
-    </li>
+    </li>*@
     <li>
         <a href="#"><i class="fa fa-plus"></i>Knowledge Bank<span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
@@ -78,6 +86,9 @@
             <li><a href="@Url.Action("ViewKnowledgeBank", "Praescio")">View Knowledge Bank</a></li>
             <li><a href="@Url.Action("KnowledgeBankHistory", "Praescio")">Knowledge Bank History</a></li>
         </ul>
+    </li>
+    <li>
+      <a href="@Url.Action("SchoolNotice", "InstitutionTeacher")"><i class="fa fa-sticky-note"></i>Notice</a>
     </li>
 
 

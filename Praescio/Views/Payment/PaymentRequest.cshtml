@@ -1,0 +1,189 @@
+﻿
+@{
+    ViewBag.Title = "Payment Details";
+
+    var assignmentTitle = Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.SuperAdmin ? "Lessons" : "Assignment";
+    
+}
+
+<!-- page content -->
+<div class="right_col" role="main" ng-controller="PaymentCtrl">
+    <div class="content">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>@ViewBag.Title</h3>
+            </div>
+            <div class="title_right">
+                
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Payment Details</h2>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        
+                      <div class="row">
+                        <div class="col-md-12" id="pnl-frmPU">
+                          <form action="@Url.Action("PayNow", "Payment")" id="frmPU" name="frmPU" data-parsley-validate>
+                            <input type="hidden" name="key" ng-model="frm.key" value="@ViewBag.paymentinfo.Key" />
+                            <input type="hidden" name="hash_string" ng-model="frm.hash_string" value="" />
+                            <input type="hidden" name="hash" ng-model="frm.hash" />
+                            <input type="hidden" name="txnid" ng-model="frm.txnid" />
+                            <input type="hidden" name="surl" ng-model="frm.surl" value="@Url.Action("PaymentResponse", "Payment")" />
+                            <input type="hidden" name="curl" ng-model="frm.curl" value="@Url.Action("PaymentCancelled", "Payment")" />
+                            <input type="hidden" name="furl" ng-model="frm.furl" value="@Url.Action("PaymentFailed", "Payment")" />
+                            <input type="hidden" name="service_provider" ng-model="frm.service_provider" value="payu_paisa" />
+
+                            <div class="form-group col-md-6">
+                              <label for="amount">Amount</label>
+                              <input class="form-control" id="amount" name="amount" ng-model="frm.amount" />
+                            </div>
+
+                            <div class="form-group col-md-6">
+                              <label for="email">Email</label>
+                              <input class="form-control" id="email" name="email" ng-model="frm.email" />
+                            </div>
+
+                            <div class="form-group col-md-6">
+                              <label for="firstname">First Name</label>
+                              <input class="form-control" id="firstname" name="firstname" ng-model="frm.firstname" />
+                            </div>
+
+                            <div class="form-group col-md-6">
+                              <label for="lastname">Last Name</label>
+                              <input class="form-control" id="lastname" name="lastname" ng-model="frm.lastname" />
+                            </div>
+
+                            <div class="form-group col-md-6">
+                              <label for="phone">Phone</label>
+                              <input class="form-control" id="phone" name="phone" ng-model="frm.phone" />
+                            </div>
+
+                            <div class="form-group col-md-6">
+                              <label for="address1">Address1</label>
+                              <input class="form-control" id="address1" name="address1" ng-model="frm.address1" />
+                            </div>
+
+                            <div class="form-group col-md-6">
+                              <label for="address2">Address2</label>
+                              <input class="form-control" id="address2" name="address2" ng-model="frm.address2" />
+                            </div>
+
+                            <div class="form-group col-md-6">
+                              <label for="city">City</label>
+                              <input class="form-control" id="city" name="city" ng-model="frm.city" />
+                            </div>
+
+                            <div class="form-group col-md-6">
+                              <label for="state">State</label>
+                              <input class="form-control" id="state" name="state" ng-model="frm.state" />
+                            </div>
+
+                            <div class="form-group col-md-6">
+                              <label for="country">Country</label>
+                              <input class="form-control" id="country" name="country" ng-model="frm.country" />
+                            </div>
+
+                            <div class="form-group col-md-6">
+                              <label for="zipcode">Zipcode</label>
+                              <input class="form-control" id="zipcode" name="zipcode" ng-model="frm.zipcode" />
+                            </div>
+
+                            <div class="form-group col-md-6">
+                              <label for="productinfo" class="required">Product Info</label>
+                              <textarea class="form-control" name="" ng-model="frm.productinfo"></textarea>
+                            </div>
+
+                            <table>
+                              @*<tr>
+                                <td>UDF1: </td>
+                                <td><input name="udf1" ng-model="frm.udf1" /></td>
+                                <td>UDF2: </td>
+                                <td><input name="udf2" ng-model="frm.udf2" /></td>
+                              </tr>
+                              <tr>
+                                <td>UDF3: </td>
+                                <td><input name="udf3" ng-model="frm.udf3" /></td>
+                                <td>UDF4: </td>
+                                <td><input name="udf4" ng-model="frm.udf4" /></td>
+                              </tr>
+                              <tr>
+                                <td>UDF5: </td>
+                                <td><input name="udf5" ng-model="frm.udf5" /></td>
+                                <td>PG: </td>
+                                <td><input name="pg" ng-model="frm.pg" /></td>
+                              </tr>*@
+                            </table>
+                          </form>
+                        </div>
+                      </div>
+
+                        <span class="btn btn-primary uploadbtn" ng-click="ProcessPayment()" ng-disabled="savingRequest">
+                            Submit
+                            <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+
+      myApp.controller('PaymentCtrl', function ($scope, $rootScope, $filter, NetworkService, $http) {
+        $scope.itemPerPage = 10;
+        $scope.BoardId = 0;
+        $scope.MediumId = 0;
+        $scope.StandardId = 0;
+        $scope.frm = {};
+
+        $scope.FilterAssignments = function () {
+          $scope.onPageChange(1);
+        }
+
+        $scope.ProcessPayment = function () {
+          //var data = '{"dataContent":' + JSON.stringify($scope.frmPU) + '}';
+          var data = $scope.frm;
+          console.log('data', data)
+
+          data.service_provider = "payu_paisa";
+          data.surl = "@Url.Action("PaymentResponse", "Payment")";
+          data.curl = "@Url.Action("PaymentCancelled", "Payment")";
+          data.furl = "@Url.Action("PaymentFailed", "Payment")";
+
+          $http.post("@Url.Action("PayNow", "Payment")", data)
+            .success(function (responseData) {
+              console.log("success !" + responseData);
+              console.log('data', data)
+
+              if (responseData.Success) {
+                $('#pnl-frmPU').html(responseData.Content);
+              } else {
+                swal({
+                  title: responseData.Message,
+                  text: "Press Ok to Continue.",
+                  type: "error",
+                  confirmButtonColor: "red",
+                  showCancelButton: false,
+                });
+              }
+            })
+            .error(function (responseData) {
+                console.log("Error !" + responseData);
+              });
+            }
+
+        });
+    </script>
+}

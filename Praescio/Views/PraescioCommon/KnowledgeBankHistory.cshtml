@@ -53,11 +53,15 @@
                             <tbody>
                                 <tr dir-paginate="k in KnowledgeBankList |itemsPerPage:10|filter:searchText" total-items="totalcount">
                                     <td>{{k.KnowledgeBank.Title}}</td>
-                                    <td>{{k.KnowledgeBank.Description}}</td>
+                                    <td>
+                                      <a href="#" title="{{k.KnowledgeBank.Title}}" ng-click="getDetails(k.KnowledgeBank)">
+                                        {{k.KnowledgeBank.Description}}
+                                      </a>
+                                    </td>
                                     <td><a target="_blank" ng-href='~/{{k.KnowledgeBank.PDFFileSrc}}'>File</a></td>
                                     @*<td>{{k.KnowledgeBank.CreatedAccount.FirstName + ' '+k.KnowledgeBank.CreatedAccount.LastName}}</td>*@
                                     <td>{{k.KnowledgeBank.IsActive?'Active':'In Active'}}</td>
-                                    <td><a ng-href="~/Praescio/AddKnowledgeBank?knowledgeBankId={{k.KnowledgeBank.KnowledgeBankId}}" class="btn btn-success btn-xs">Edit </a> | <a class="btn btn-danger btn-xs" ng-click="DeleteKnowledgeBank(k.KnowledgeBank.KnowledgeBankId)">Delete</a></td>
+                                    <td><a ng-href="~/Praescio/AddKnowledgeBank?knowledgeBankId={{k.KnowledgeBank.KnowledgeBankId}}" class="btn btn-success btn-xs">Edit </a> <span ng-if="k.KnowledgeBank.IsActive">| <a class="btn btn-danger btn-xs" ng-click="DeleteKnowledgeBank(k.KnowledgeBank.KnowledgeBankId)">Delete</a></span></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -79,7 +83,7 @@
 @section Scripts{
 
     <script type="text/javascript">
-
+      
         myApp.controller('KnowledgeBankHistoryCtrl', function ($scope, $rootScope, $filter, NetworkService) {
             $scope.itemPerPage = 10;
 
@@ -119,8 +123,19 @@
                         });
                     }
                 });
+            }
 
-
+            $scope.getDetails = function (data) {
+              swal({
+                title: data.Title,
+                html: true,
+                text: '<table class="table table-bordered table-stripped" style="text-align: left"><tbody><tr><td><strong>Description:</strong></td><td>' + data.Description + '</td>' +
+                '<tr><td><strong>File:</strong></td><td><a target="_blank" href="~/' + data.PDFFileSrc + '">File</a></td></tr>' +
+                '<tr><td><strong>Status:</strong></td><td>' + (data.IsActive ? 'Active' : 'In Active') + '</td></tr></table>',
+                //type: "info",
+                confirmButtonColor: "blue",
+                showCancelButton: false
+              });
             }
 
         });

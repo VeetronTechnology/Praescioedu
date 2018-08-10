@@ -48,12 +48,80 @@ namespace Praescio.API.Controllers
 
                         return Request.CreateResponse(HttpStatusCode.BadRequest, response);
                     }
+                    else if (account != null && (account.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent || account.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher) && account.ActivateOn > DateTime.Now)
+                    {
+                        response.Account = null;
+                        response.hasError = true;
+                        response.errorMessage = "Your Account is not yet activated. Your account will be active only on date " + account.ActivateOn.Value.ToString("DD-MMM-YYYY") + ".";
+
+                        return Request.CreateResponse(HttpStatusCode.BadRequest, response);
+                    }
                     else if (account != null)
                     {
                         account.Password = password;
                         account.OrganizationAccount.DomainKey = domain;
                         response.Account = account;
                         response.hasError = false;
+
+                        if(account.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher || account.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Teacher)
+                        {
+                            PraescioContext db1 = new PraescioContext();
+                            account.TeacherStandardMapping = db1.StandardMapping.Where(t => t.TeacherId == account.AccountId).ToList();
+
+                            if(account.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher && account.VersionType == "Paid")
+                            {
+                                //var payment1 = db.PaymentTransaction.Where(m => m.AccountId == account.AccountId && m.PackageId == account.PackageId && m.Status.ToLower() == "success").FirstOrDefault();
+                                var payment1 = db1.PaymentTransaction.Where(t => t.AccountId == account.AccountId && t.PackageId == account.PackageId).FirstOrDefault();
+                                if (payment1 == null)
+                                {
+                                    response.Account = null;
+                                    response.hasError = true;
+                                    response.errorMessage = "Your payment has not processed.";
+
+                                    return Request.CreateResponse(HttpStatusCode.BadRequest, response);
+                                }
+                            }
+                        }
+
+                        // School admin
+                        if (account.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Admin)
+                        {
+                            var institution = db.OrganizationAccount.FirstOrDefault(x => x.InstitutionAccountId == account.InstitutionAccountId);
+                            account.Board = institution.Board;
+                            account.BoardId = institution.BoardId;
+                            account.Medium = institution.Medium;
+                            account.MediumId = institution.MediumId;
+                        }
+
+                        if (account.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student || account.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)
+                        {
+                            response.ParentAccount = db.Account.Where(t => t.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.StudentParent && t.Email == account.ParentEmail).FirstOrDefault();
+
+                            // check if payment done
+                            if(account.VersionType == "Paid")
+                            {
+                                var creator = (account.CreatedBy == null ? null : db.Account.Where(m => m.AccountId == (int)account.CreatedBy).FirstOrDefault());
+                                if (account.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent
+                                    && creator != null && creator.AccountTypeId != (int)Praescio.BusinessEntities.Common.AccountType.SuperAdmin)
+                                {
+                                    var payment = db.PaymentTransaction.Where(m => m.AccountId == account.AccountId && m.PackageId == account.PackageId && (m.Status.ToLower() == "success")).FirstOrDefault();
+                                    if (payment == null)
+                                    {
+                                        response.Account = null;
+                                        response.hasError = true;
+                                        response.errorMessage = "Your payment has not processed.";
+
+                                        return Request.CreateResponse(HttpStatusCode.BadRequest, response);
+                                    }
+                                }
+                            }
+                        }
+
+                        if (account.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.StudentParent)
+                        {
+                            response.StudentAccount = db.Account.Where(t => (t.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.Student || t.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent) && t.ParentEmail == account.Email).FirstOrDefault();
+                        }
+                        response.Account = account;
 
                         return Request.CreateResponse(HttpStatusCode.OK, response);
                     }
@@ -206,6 +274,8 @@ namespace Praescio.API.Controllers
                     else if (account != null)
                     {
                         account.Password = model.Password;
+                        account.UpdatePwdDateTime = DateTime.Now;
+
                         db.Entry(account).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
                         response.Account = account;

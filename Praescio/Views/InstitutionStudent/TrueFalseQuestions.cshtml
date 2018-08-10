@@ -5,9 +5,9 @@
 }
 
 
-<div class="right_col" role="main" style="background:#48c9b0" ng-controller="TrueFalseCtrl">
-    <div class="cont">
-        <div class="table-agile-info">
+<div class="right_col" role="main" ng-controller="TrueFalseCtrl">
+    <div class="content">
+        <div class="table-agile-info1">
 
             <ol class="breadcrumb">
                 <li><a href="lesson_index.html">Lesson</a></li>
@@ -18,12 +18,14 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     True / False Questions
-                    <span class="tools pull-right" style="font-size:12px;font-weight:600;">
-                        <a href="javascript:;">Active: Duration : ddd:hh:mm</a>
+                    <span title="Days:Hours:Minutes" class="tools pull-right" style="font-size:12px;font-weight:600;">
+                      Active Duration:
+                      <span ng-if="ExamStartDateTimer == null">Not Started</span>
+                      <span ng-if="ExamStartDateTimer != null">{{ ExamStartDateTimer }}</span>
                     </span>
                 </div>
                 <div>
-                    <table class="table table-striped b-t b-light">
+                    <table class="table table-striped b-t b-light" id="tbl-questions">
                         <tbody>
                             <tr ng-repeat="question in QuestionList">
                                 <td>{{$index+1}}.&nbsp;&nbsp;&nbsp;  {{question.Question.Title}} </td>
@@ -56,7 +58,17 @@
 
 <script type="text/javascript">
 
-        myApp.controller('TrueFalseCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+        myApp.controller('TrueFalseCtrl', function ($scope, $rootScope, $filter, NetworkService, $interval) {
+            $scope.ExamStartDateTimer = "Loading...";
+              NetworkService.get('PraescioCommon/GetUserAssessmentDetail?assignmentid=@ViewBag.assignmentid').success(function (data) {
+                if (data != null) {
+                  $interval(function () {
+                    $scope.ExamStartDateTimer = GetStopWatchTime(data.ExamStartDate);
+                  }, 1000);
+                } else {
+                  $scope.ExamStartDateTimer = null;
+                }
+            });
 
             $scope.OptionList = [{ Id: 1, Name: 'TRUE' }, { Id: 2, Name: 'FALSE' }]
 
@@ -67,6 +79,20 @@
 
             $scope.SaveAnswer = function () {
                 $scope.savingRequest = true;
+
+                if ($('#tbl-questions select').filter(function () {
+                  return $.trim($(this).val()).length == 0
+                }).length > 0) {
+                  $scope.savingRequest = false;
+                  swal({
+                    title: "Please answer all questions.",
+                    text: "Press Ok to Continue.",
+                    type: "error",
+                    confirmButtonColor: "red",
+                    showCancelButton: false,
+                  });
+                  return;
+                }
 
                 NetworkService.insert('InstitutionStudent/SaveAnswer', $scope.QuestionList).success(function (data) {
                     $scope.savingRequest = false;

@@ -4,10 +4,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="right_col" role="main" style="background:#48c9b0" ng-controller="WriteShortNoteCheckCtrl">
-    <div class="cont">
+<div class="right_col" role="main" ng-controller="WriteShortNoteCheckCtrl">
+    <div class="content">
 
-        <div class="table-agile-info">
+        <div class="table-agile-info1">
             <ol class="breadcrumb">
                 <li><a href="lesson_history.html">Lesson</a></li>
                 <li><a href="test_history.html">Test History</a></li>
@@ -16,26 +16,29 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Write Short note
-                    <span class="tools pull-right" style="font-size:12px;font-weight:600;">
+                    @*<span class="tools pull-right" style="font-size:12px;font-weight:600;">
                         <a href="javascript:;">Total: Duration : ddd:hh:mm</a>
-                    </span>
+                    </span>*@
                 </div>
                 <div class="panel-body">
                     <table class="table table-striped b-t b-light">
                         <tbody>
                             <tr>
-                                <th>Answer</th>
+                                <th>Question</th>
                                 <th>Correct Answer</th>
-                                <th>Result</th>
+                                <th>Student's Answer</th>
+                                <th>Max Score</th>
                                 <th>Marks Obtained</th>
 
                             </tr>
                             <tr ng-repeat="act in Acitivity.studentActivity">
                                 <td>{{$index+1}}. {{act.Question.Title}}</td>
                                 <td>{{act.Question.CorrectAnswer}}</td>
+                                <td>{{act.UserAssessment.Answer}}</td>
                                 <td>
-                                    <i ng-if="act.UserAssessment.MarkScored==1" class="fa fa-check text-success text-active"></i>
-                                    <i ng-if="act.UserAssessment.MarkScored==0" class="fa fa-times text-danger text-active"></i>
+                                  {{act.UserAssessment.MaxScore}}
+                                    @*<i ng-if="act.UserAssessment.MarkScored==1" class="fa fa-check text-success text-active"></i>
+                                    <i ng-if="act.UserAssessment.MarkScored==0" class="fa fa-times text-danger text-active"></i>*@
                                 </td>
                                 <td>{{act.UserAssessment.MarkScored}}</td>
                             </tr>

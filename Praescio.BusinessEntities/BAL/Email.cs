@@ -7,6 +7,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Configuration;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +24,9 @@ namespace Praescio.BusinessEntities
             {
                 if (!string.IsNullOrEmpty(emailto))
                 {
-                    MailMessage newMail = new MailMessage { From = new MailAddress("aliahmedk40@gmail.com", "Praescio") }; //CommonKey.FromEmail
+                    var fromEmail = ConfigurationManager.AppSettings["FromEmail"];
+                    var fromEmailName = ConfigurationManager.AppSettings["FromEmailName"];
+                    MailMessage newMail = new MailMessage { From = new MailAddress(fromEmail, fromEmailName) }; //CommonKey.FromEmail
                     foreach (var item in emailto.Split(',').ToArray().Distinct())
                     {
                         try
@@ -51,14 +54,25 @@ namespace Praescio.BusinessEntities
                     newMail.IsBodyHtml = true;
 
 
-                    SmtpClient smtp = new SmtpClient
-                    {
-                        DeliveryMethod = SmtpDeliveryMethod.Network,
-                        Host = "smtp.gmail.com",//CommonKey.SMTPHost,
-                        Port = 587,//CommonKey.SMTPPort,
-                        Credentials = new NetworkCredential("aliahmedk40@gmail.com", "11081990"),//CommonKey.FromEmail, CommonKey.EmailPwd),
-                        EnableSsl = true//CommonKey.EnableSSL
-                    };
+                    //SmtpClient smtp = new SmtpClient
+                    //{
+                    //    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    //    Host = "smtp.gmail.com",//CommonKey.SMTPHost,
+                    //    //Port = 587,//CommonKey.SMTPPort,
+                    //    Credentials = new NetworkCredential("aliahmedk40@gmail.com", "11081990"),//CommonKey.FromEmail, CommonKey.EmailPwd),
+                    //    EnableSsl = true//CommonKey.EnableSSL
+                    //};
+                    
+                    SmtpClient smtp = new SmtpClient();
+                    //var smtpCredentials = new System.Net.Configuration.SmtpSection().Network;
+                    var smtpCredentials = (SmtpSection)ConfigurationManager.GetSection("system.net/mailSettings/smtp");
+                    smtp.Host = smtpCredentials.Network.Host;
+                    smtp.Port = smtpCredentials.Network.Port;
+                    smtp.Credentials = new NetworkCredential(smtpCredentials.Network.UserName, smtpCredentials.Network.Password);
+                    //smtp.UseDefaultCredentials = false;
+                    smtp.EnableSsl = smtpCredentials.Network.EnableSsl;
+                    //smtp.EnableSsl = false;
+                    
                     smtp.Send(newMail);
 
                     smtp.Dispose();
@@ -79,7 +93,7 @@ namespace Praescio.BusinessEntities
             }
             catch (Exception ex)
             {
-                new Praescio.BusinessEntities.BAL.ExceptionLogging().AddLogToDB(ex.StackTrace, ex.Message, "", ExceptionType.Email);
+                new Praescio.BusinessEntities.BAL.ExceptionLogging().AddLogToDB(ex.StackTrace, ex.InnerException.Message, "", ExceptionType.Email);
             }
         }
 
@@ -115,8 +129,8 @@ namespace Praescio.BusinessEntities
                     }
                     else if (MailType.IndividualStudentRegister == type || MailType.IndividualTeacherRegister == type || MailType.InstitutionTeacher == type || MailType.InstitutionStudent == type)
                     {
-                        mailcontent = "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><title></title></head><body><img src = \"//www.aspsnippets.com/images/Blue/Logo.png\" /><br /><br /><div style = \"border-top:3px solid #22BCE5\">&nbsp;</div><span style = \"font-family:Arial;font-size:10pt\">Hello " + Convert.ToString(content["name"]) + "<br /><br />please find your registered username and password below ,<br /><br />Username: <b>" + Convert.ToString(content["username"]) + "</b>.<br /> Password: <b>" + Convert.ToString(content["password"]) + "</b><br /><br />Thanks<br />Praescio</span></body></html>";
-                        subject = "Account has been created successfully!!!";
+                        mailcontent = "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><title></title></head><body><img src = \"//www.aspsnippets.com/images/Blue/Logo.png\" /><br /><br /><div style = \"border-top:3px solid #22BCE5\">&nbsp;</div><span style = \"font-family:Arial;font-size:10pt\">Hello " + (content.ContainsKey("name") ? Convert.ToString(content["name"]) : "") + "<br /><br />please find your registered username and password below ,<br /><br />Username: <b>" + (content.ContainsKey("username") ? Convert.ToString(content["username"]) : "") + "</b>.<br /> Password: <b>" + (content.ContainsKey("password") ? Convert.ToString(content["password"]) : "") + "</b><br /><br />Thanks<br />Praescio</span></body></html>";
+                        subject = "Praescio : Account has been created successfully!!!";
                     }
 
                     #endregion

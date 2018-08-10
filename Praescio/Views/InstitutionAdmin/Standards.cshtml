@@ -2,6 +2,8 @@
 @{
     ViewBag.Title = "Standared";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var InstitutionId = Praescio.Models.Common.ACCOUNT.InstitutionAccountId;
 }
 
 <div class="right_col" ng-controller="UserStandardCountCtrl">
@@ -30,7 +32,7 @@
                     </h2>
                 </div>
                 <div class="row">
-                    <a href="select_view.html">
+                    <a href="@Url.Action("StudentList", "Praescio")?institutionId=@InstitutionId&standardId=1">
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                             <div class="info-box bg-red">
                                 <div class="icon">
@@ -43,7 +45,7 @@
                             </div>
                         </div>
                     </a>
-                    <a href="select_view.html">
+                    <a href="@Url.Action("StudentList", "Praescio")?institutionId=@InstitutionId&standardId=2">
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                             <div class="info-box bg-green">
                                 <div class="icon">
@@ -56,7 +58,7 @@
                             </div>
                         </div>
                     </a>
-                    <a href="select_view.html">
+                    <a href="@Url.Action("StudentList", "Praescio")?institutionId=@InstitutionId&standardId=3">
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                             <div class="info-box bg-yellow">
                                 <div class="icon">
@@ -69,7 +71,7 @@
                             </div>
                         </div>
                     </a>
-                    <a href="select_view.html">
+                    <a href="@Url.Action("StudentList", "Praescio")?institutionId=@InstitutionId&standardId=4">
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                             <div class="info-box bg-pink">
                                 <div class="icon">
@@ -82,7 +84,7 @@
                             </div>
                         </div>
                     </a>
-                    <a href="select_view.html">
+                    <a href="@Url.Action("StudentList", "Praescio")?institutionId=@InstitutionId&standardId=5">
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                             <div class="info-box bg-teal">
                                 <div class="icon">
@@ -95,7 +97,7 @@
                             </div>
                         </div>
                     </a>
-                    <a href="select_view.html">
+                    <a href="@Url.Action("StudentList", "Praescio")?institutionId=@InstitutionId&standardId=6">
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                             <div class="info-box bg-blue">
                                 <div class="icon">

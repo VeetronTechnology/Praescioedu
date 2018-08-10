@@ -215,7 +215,7 @@
                     </div>
                     <div class="body">
                         <div class="body table-responsive">
-                            <table class="table">
+                            @*<table class="table">
                                 <tbody>
                                     <tr>
                                         <th>Question</th>
@@ -239,7 +239,42 @@
                                     </tr>
 
                                 </tbody>
-                            </table>
+                            </table>*@
+
+                          <table class="table table-bordered" ng-repeat="question in QuestionList">
+                            <tbody>
+                              <tr>
+                                <th class="col-lg-9 col-md-9 col-sm-9 col-xs-6">Question No {{($index+1)}}</th>
+                                <th class="col-lg-3 col-md-3 col-sm-3 col-xs-6">Answer</th>
+                              </tr>
+                              <tr>
+                                <td>
+                                {{question.Title}}
+                                <br />
+                                  <a ng-hide="question.MCQQuestionImageSrc.indexOf('.pdf') > -1" target="_blank" href="~/{{question.MCQQuestionImageSrc}}" class="thumbnail" ng-if="question.MCQQuestionImageSrc != null && question.MCQQuestionImageSrc != ''" style="width: 100px;height: 100px">
+                                    <img width="100" src="~/{{question.MCQQuestionImageSrc}}">
+                                  </a>
+                                  <a ng-hide="question.MCQQuestionImageSrc.indexOf('.pdf') === -1" target="_blank" href="~/{{question.MCQQuestionImageSrc}}" class="thumbnail" ng-if="question.MCQQuestionImageSrc != null && question.MCQQuestionImageSrc != ''" style="width: 100px;height: 100px">
+                                    <i class="fa fa-file-pdf-o" style="font-size:48px;color:red"></i>
+                                  </a>
+                                </td>
+                                <td>{{question.CorrectAnswer}}</td>
+                              </tr>
+                              <tr>
+                                <td colspan="2">
+                                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" ng-repeat="option in question.QuestionOption">
+                                    <p>{{option.Category + '.  '+ option.Option}}</p>
+                                    <a ng-hide="option.ImageSrc.indexOf('.pdf') > -1" target="_blank" href="~/{{option.ImageSrc}}" class="thumbnail" ng-if="option.ImageSrc != null && option.ImageSrc != ''" style="width: 100px;height: 100px">
+                                      <img width="100" src="~/{{option.ImageSrc}}">
+                                    </a>
+                                    <a ng-hide="option.ImageSrc.indexOf('.pdf') === -1" target="_blank" href="~/{{option.ImageSrc}}" class="thumbnail" ng-if="option.ImageSrc != null && option.ImageSrc != ''" style="width: 100px;height: 100px">
+                                      <i class="fa fa-file-pdf-o" style="font-size:48px;color:red"></i>
+                                    </a>
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
 
                         </div>
                     </div>
@@ -348,11 +383,20 @@
                                         <tbody>
                                             <tr>
                                                 <th>Difference Between</th>
-                                                <td colspan="2">Living and Nonliving Things</td>
+                                                <td colspan="2">Correct Answer</td>
                                             </tr>
-                                            <tr ng-repeat="question in QuestionList">
-                                                <td>{{question.Title}}</td>
-                                                <td>{{question.CorrectAnswer}}</td>
+                                            <tr>
+                                                <td>{{QuestionList.Title}}</td>
+                                                <td>
+                                                  <div>
+                                                    <table width="100%">
+                                                      <tr ng-repeat="opt in QuestionList.QuestionOption">
+                                                        <td><textarea style="width:95%" disabled="disabled" class="form-control">{{opt.Option}}</textarea></td>
+                                                        <td><textarea style="width:95%" disabled="disabled" class="form-control">{{opt.MatchQuestion}}</textarea></td>
+                                                      </tr>
+                                                    </table>
+                                                  </div>
+                                              </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -375,10 +419,10 @@
                         </h2>
                     </div>
                     <div class="body">
-                        <div class="body table-responsive">
+                        <div class="body table-responsive1">
 
                             <div class="panel-body">
-                                <table class="table table-striped b-t b-light">
+                                @*<table class="table table-striped b-t b-light">
                                     <tbody>
                                         <tr>
                                             <th>Lesson Summary:</th>
@@ -390,10 +434,10 @@
                                             </td>
                                         </tr>
                                     </tbody>
-                                </table>
+                                </table>*@
                                 <table class="table table-striped b-t b-light">
                                     <tbody>
-                                        <tr>
+                                        @*<tr>
                                             <th>Question</th>
                                             <th>Answer</th>
 
@@ -412,7 +456,15 @@
                                             <td>3. Why was Pinocchio not go to school ?</td>
                                             <td>Lorem Ipsum is simply dummy text of the printing and typesetting industry</td>
 
-                                        </tr>
+                                        </tr>*@
+                                      <tr>
+                                        <th class="col-md-6">Questions</th>
+                                        <th class="col-md-6">Answer</th>
+                                      </tr>
+                                      <tr ng-repeat="act in QuestionList">
+                                        <td>{{$index+1}}. {{act.Title}}</td>
+                                        <td>{{act.CorrectAnswer}}</td>
+                                      </tr>
 
                                     </tbody>
                                 </table>
@@ -433,24 +485,16 @@
                         </h2>
                     </div>
                     <div class="body">
-                        <div class="body table-responsive">
+                        <div class="body table-responsive1">
                             <table class="table table-striped b-t b-light">
                                 <tbody>
                                     <tr>
-                                        <th>Questions</th>
-                                        <th>Answer</th>
+                                        <th class="col-md-6">Questions</th>
+                                        <th class="col-md-6">Answer</th>
                                     </tr>
-                                    <tr>
-                                        <td>What are stages in butterfly life cycle ?</td>
-                                        <td><div data-toggle="modal" data-target="#myModal" id="div2">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</div></td>
-                                    </tr>
-                                    <tr>
-                                        <td>What is The Solar system ?</td>
-                                        <td><div data-toggle="modal" data-target="#myModal" id="div2">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</div></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Why was Pinocchio not go to school ?</td>
-                                        <td><div data-toggle="modal" data-target="#myModal" id="div2">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</div></td>
+                                    <tr ng-repeat="act in QuestionList">
+                                      <td>{{$index+1}}. {{act.Title}}</td>
+                                      <td>{{act.CorrectAnswer}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -470,13 +514,13 @@
 
                     </div>
                     <div class="body">
-                        <div class="body table-responsive">
+                        <div class="body table-responsive1">
 
                             <div class="panel-body">
 
                                 <table class="table table-striped b-t b-light">
                                     <tbody>
-                                        <tr>
+                                        @*<tr>
                                             <th>Name Of Topic</th>
                                             <td>The Living World</td>
                                         </tr>
@@ -488,6 +532,14 @@
                                                 The emphasis on the relative value of money begins for Sylvia when Miss Moore gives her a five-dollar bill to pay the taxi fare to the store. Sylvia is told to include a 10 percent tip for the driver and return the change to Miss Moore. Sylvia gives the cab driver the fare of eighty-five cents but decides that she needs money more than he does and keeps not only the tip but the remainder of the money.
                                                 At the toy store, the children feel uneasy and out of place. Looking through the window, they are stunned by the products offered and by their high prices. Ronald sees what he recognizes as a...
                                             </td>
+                                        </tr>*@
+                                        <tr>
+                                          <th class="col-md-6">Questions</th>
+                                          <th class="col-md-6">Answer</th>
+                                        </tr>
+                                        <tr ng-repeat="act in QuestionList">
+                                          <td>{{$index+1}}. {{act.Title}}</td>
+                                          <td>{{act.CorrectAnswer}}</td>
                                         </tr>
                                     </tbody>
                                 </table>

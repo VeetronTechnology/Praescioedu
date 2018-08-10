@@ -1,4 +1,4 @@
-﻿
+﻿@using Praescio.BusinessEntities.Common
 @{
     ViewBag.Title = "Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -16,7 +16,7 @@
 
             <div class="market-updates">
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <a href="@Url.Action("AssignmentList", "InstitutionStudent")">
+                    <a href="@Url.Action("ViewAssignment", "Praescio", new { assignmentType = (int)AssignmentType.IndividualAssignment })">
                         <div class="info-box bg-red hover-expand-effect">
                             <div class="icon">
                                 <i class="fa fa-eye"> </i>
@@ -72,7 +72,7 @@
 
         </div><!-- /.row -->
 
-        <div class="row">
+        @*<div class="row">
             <div class="col-md-12">
                 <div class="x_panel">
                     <div class="x_title">
@@ -133,7 +133,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>*@
     </div>
 
 

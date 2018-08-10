@@ -82,13 +82,17 @@
 
                             <div class="form-group">
                                 <label for="regno">Save XML Question</label>
-                                <input type="file" name="file" class="form-control" ng-files="getTheFiles($files)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                <input type="file" name="file" class="form-control" ng-files="getTheFiles($files)" accept="text/xml,application/xml"
                                        onchange="angular.element(this).scope().loadFile(this.files)" />
+                              <span>(*Choose only XML)</span>
                             </div>
 
                             <br />
-                            <span class="btn btn-primary">Reset</span>
-                            <span class="btn btn-primary" ng-click="SaveXML()">Submit</span>
+                            @*<span class="btn btn-primary">Reset</span>*@
+                          <button type="button" class="btn btn-primary waves-effect" ng-click="SaveXML()" ng-disabled="savingRequest">
+                            SUBMIT
+                            <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                          </button>
                         </form>
                         <!-- end form for validations -->
                     </div>
@@ -149,8 +153,8 @@
             $scope.Assignment = {};
             $scope.AssignmentListAll = [];
             NetworkService.get('PraescioCommon/GetAssignmentListDropDown?AssignmentType=@ViewBag.AssignmentType').success(function (data) {
-                $scope.AssignmentListAll = data.dataContent;
-                console.log(data);
+                $scope.AssignmentListAll = data.dataContent.filter(m => m.IsPublished == false);
+                //console.log(data);
             });
 
             var formdata = new FormData();
@@ -176,41 +180,104 @@
 
             $scope.VersionType = [{ Id: 1, Name: 'Paid' }, { Id: 2, Name: 'Trail' }];
 
+            $scope.TeacherMappingStandard = [];
+            $scope.TeacherSubjects = [];
+            if ("@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)"
+              || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"
+            )
+            {
+              NetworkService.get('PraescioCommon/GetUserRegisterationDetail?accountId=@Praescio.Models.Common.ACCOUNT.AccountId').success(function (data) {
+                $scope.TeacherMappingStandard = data.teacherMappingStandard;
+                var standards = [];
+
+                $scope.TeacherMappingStandard.forEach(function (k) {
+                  standards.push(k.StandardId);
+                  k.SubjectId.forEach(function (k2) {
+                    $scope.TeacherSubjects.push(k2);
+                  });
+                });
+
+                $scope.StandardList = $scope.StandardList.filter(m => standards.indexOf(m.Id) > -1);
+              });
+            }
+
             NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
-                $scope.BoardList = data;
+                if ("@((int)Praescio.BusinessEntities.Common.AssignmentType.PExtra)" == "@ViewBag.AssignmentType") {
+                  $scope.BoardList = data.filter(m => m.Id == 4);
+                } else {
+                  $scope.BoardList = data.filter(m => m.Id != 4);
+                }
+
+                if (
+                  "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)"
+                  || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"
+                  || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Admin)"
+                )
+                {
+                  $scope.BoardList = $scope.BoardList.filter(m => m.Id == "@Praescio.Models.Common.ACCOUNT.BoardId");
+                }
+
+                $scope.Assignment.BoardId = $scope.BoardList[0].Id;
+                $scope.ChangeBoard($scope.Assignment.BoardId);
             });
 
 
             NetworkService.get('PraescioAdmin/GetAssignmentTeacherList?institutionId=@Praescio.Models.Common.ACCOUNT.OrganizationAccount.InstitutionAccountId').success(function (data) {
-                console.log(data);
+                //console.log(data);
                 $scope.TeacherList = data;
             });
 
             NetworkService.get('PraescioAdmin/GetMedium').success(function (data) {
+              if ("@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Student)"
+                || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)"
+                || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"
+                || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)"
+                || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Admin)")
+              {
+                var usrMediumId = "@Praescio.Models.Common.ACCOUNT.MediumId";
+                if (usrMediumId == "" || usrMediumId == null) {
+                  usrMediumId = 1;
+                }
+                $scope.MediumList = data.filter(m => m.Id == usrMediumId);
+              } else {
                 $scope.MediumList = data;
+              }
             });
 
             $scope.ChangeBoard = function (boardname) {
                 if (boardname > 1) {
                     $scope.Assignment.MediumId = 1;
                 }
+                $scope.ChangeAssignmentList();
             }
 
             $scope.ChangeStandard = function (id) {
-                NetworkService.get('PraescioCommon/GetSubject?standardid=' + id + '&mediumid=' + $scope.Assignment.MediumId).success(function (data) {
-                    $scope.SubjectList = data;
-                });
+              NetworkService.get('PraescioCommon/GetSubjectSingleMedium?standardid=' + id + '&mediumid=' + $scope.Assignment.MediumId + '&boardid=' + $scope.Assignment.BoardId).success(function (data) {
+                $scope.SubjectList = data;
+                if (
+                  "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)"
+                  || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"
+                )
+                {
+                  $scope.SubjectList = $scope.SubjectList.filter(m => $scope.TeacherSubjects.indexOf(m.Id) > -1);
+                }
+
+                $scope.ChangeAssignmentList();
+              });
             }
 
             $scope.ChangeSubject = function (id) {
                 $scope.ChangeAssignmentList();
             }
 
-            $scope.ChangeAssignmentList = function (id) {
-                console.log('$scope.Assignment', $scope.Assignment)
-                console.log('$scope.AssignmentList', $scope.AssignmentList)
-                $scope.AssignmentList = $scope.AssignmentListAll.filter(m => m.SubjectId == $scope.Assignment.SubjectId);
-                console.log('$scope.AssignmentList', $scope.AssignmentList)
+            $scope.ChangeAssignmentList = function () {
+              console.log('ChangeAssignmentList', $scope.Assignment.BoardId, $scope.Assignment.MediumId, $scope.Assignment.StandardId, $scope.Assignment.SubjectId)
+              $scope.AssignmentList = $scope.AssignmentListAll.filter(m =>
+                m.BoardId == $scope.Assignment.BoardId
+                && m.MediumId == $scope.Assignment.MediumId
+                && m.StandardId == $scope.Assignment.StandardId
+                && m.SubjectId == $scope.Assignment.SubjectId);
+              console.log('$scope.AssignmentList ', $scope.AssignmentList )
             }
 
             $scope.ChangeAssignment = function (id) {
@@ -230,7 +297,7 @@
                 })
 
             }
-
+            $scope.savingRequest = false;
             $scope.SaveXML = function () {
                 var file = $scope.selectedFile;
 
@@ -251,6 +318,7 @@
                         var sheet2 = XLSX.utils.sheet_to_json(workbook.Sheets[secound_sheet_name]);
 
                         var QuestionViewModel = [];
+                        $scope.savingRequest = true;
 
                         NetworkService.UploadFiles('@Url.Content("~/PraescioAdmin/SaveFile")', formdata).then(function (response) {
                             $scope.QuestionExcelLocation = response.data.filelocation;
@@ -262,9 +330,9 @@
                                 QuestionViewModel.push({ "Question": sheet1[i], "QuestionOption": questiondata });
                             }
 
-                            console.log(QuestionViewModel);
+                            //console.log(QuestionViewModel);
                             NetworkService.insert('PraescioCommon/SaveXMLQuestion?uploadFileLocation=' + $scope.QuestionExcelLocation, JSON.stringify(QuestionViewModel)).success(function (data) {
-
+                              $scope.savingRequest = false;
                                 if (data.isAlreadyExist == true) {
                                     swal({
                                         title: "Assignment have been already loaded, Do you want to override",
@@ -286,10 +354,12 @@
                                                     confirmButtonColor: "green",
                                                     showCancelButton: false,
                                                 });
+                                                $scope.savingRequest = false;
                                             });
                                             //swal("Deleted!", "Your imaginary file has been deleted.", "success");
                                         } else {
                                             //swal("Cancelled", "Your imaginary file is safe :)", "error");
+                                          $scope.savingRequest = false;
                                         }
                                     });
                                 } else {
@@ -301,15 +371,17 @@
                                         confirmButtonColor: "green",
                                         showCancelButton: false,
                                     });
+                                    $scope.savingRequest = false;
                                 }
                             }).error(function (data, status) {
+                                $scope.savingRequest = false;
                                 $scope.messages = data || "Request failed";
                                 $scope.status = status;
-                                console.log(data);
-                                console.log(status);
+                                //console.log(data);
+                                //console.log(status);
                             });;
 
-                            
+
                         });
                     }
 

@@ -4,9 +4,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="right_col" role="main" style="background:#48c9b0">
-    <div class="cont">
-        <div class="table-agile-info">
+<div class="right_col" role="main">
+    <div class="content">
+        <div class="table-agile-info1">
             <ol class="breadcrumb">
                 <li><a href="asgn_index.html">Lesson</a></li>
                 <li><a href="start_test.html">Start Test</a></li>
@@ -15,8 +15,10 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     View Video
-                    <span class="tools pull-right" style="font-size:12px;font-weight:600;">
-                        <a href="javascript:;">Active: Duration : ddd:hh:mm</a>
+                    <span title="Days:Hours:Minutes" class="tools pull-right" style="font-size:12px;font-weight:600;">
+                      Active Duration:
+                      <span ng-if="ExamStartDateTimer == null">Not Started</span>
+                      <span ng-if="ExamStartDateTimer != null">{{ ExamStartDateTimer }}</span>
                     </span>
                 </div>
                 <div>
@@ -49,7 +51,17 @@
 
    <script type="text/javascript">
 
-        myApp.controller('SynonymsCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+        myApp.controller('SynonymsCtrl', function ($scope, $rootScope, $filter, NetworkService, $interval) {
+            $scope.ExamStartDateTimer = "Loading...";
+            NetworkService.get('PraescioCommon/GetUserAssessmentDetail?assignmentid=@ViewBag.assignmentid').success(function (data) {
+                if (data != null) {
+                  $interval(function () {
+                    $scope.ExamStartDateTimer = GetStopWatchTime(data.ExamStartDate);
+                  }, 1000);
+                } else {
+                  $scope.ExamStartDateTimer = null;
+                }
+            });
 
             NetworkService.get('InstitutionStudent/GetAssignmentQuestion?assignmentid=@ViewBag.Assignmentid&typeOfQuestion=@ViewBag.TypeOfQuestion').success(function (data) {
                 $scope.Question = data;

@@ -21,6 +21,11 @@ namespace Praescio.Domain.Entities
         public int? InstitutionAccountId { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? ModifiedOn { get; set; }
+        public string IntervalType { get; set; }
+        public int Interval { get; set; }
+        public int BoardId { get; set; }
+        public int MediumId { get; set; }
+        public int StandardId { get; set; }
 
         private bool _isactive = true;
         public bool IsActive
@@ -335,5 +340,35 @@ namespace Praescio.Domain.Entities
         }
         public virtual Mst_Account CreatedAccount { get; set; }
     }
-
+    
+    public class PaymentTransaction
+    {
+        [Key]
+        public Int64 PaymentTransactionId { get; set; }
+        [ForeignKey("Account")]
+        public int AccountId { get; set; }
+        [ForeignKey("InstitutionAccount")]
+        public int? InstitutionAccountId { get; set; }
+        [ForeignKey("Package")]
+        public int? PackageId { get; set; }
+        public string PaymentRequestId { get; set; }
+        public string PaymentMethod { get; set; }
+        public string ReferenceNumber { get; set; }
+        public string TransactionId { get; set; }
+        public string TransactionType { get; set; }
+        public DateTime TransactionDate { get; set; }
+        public string CurrencyCode { get; set; }
+        public decimal Amount { get; set; }
+        public string Status { get; set; }
+        public string ErrorCode { get; set; }
+        public string ErrorText { get; set; }
+        public string MetaData { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        [ForeignKey("CreatedAccount")]
+        public int? CreatedBy { get; set; }
+        public virtual Mst_Account CreatedAccount { get; set; }
+        public virtual Mst_Account Account { get; set; }
+        public virtual Mst_InstitutionAccount InstitutionAccount { get; set; }
+        public virtual Mst_Package Package { get; set; }
+    }
 }

@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewBag.Title = "Payment Request";
+
+    var assignmentTitle = Praescio.Models.Common.ACCOUNT.AccountTypeId == (int)Praescio.BusinessEntities.Common.AccountType.SuperAdmin ? "Lessons" : "Assignment";
+    
+}
+
+<!-- page content -->
+<div class="right_col" role="main" ng-controller="PaymentCtrl">
+    <div class="content">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>@ViewBag.Title</h3>
+            </div>
+            <div class="title_right">
+                
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Payment Request</h2>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        
+                      <div class="row">
+                        <div class="col-md-12" id="pnl-frmPU">
+                          <div class="alert alert-warning text-center">
+                            Payment failed. Please try again...
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script type="text/javascript">
+      
+      myApp.controller('PaymentCtrl', function ($scope, $rootScope, $filter, NetworkService, $http) {
+          $scope.itemPerPage = 10;
+          $scope.BoardId = 0;
+          $scope.MediumId = 0;
+          $scope.StandardId = 0;
+          $scope.frm = {};
+      
+      });
+    </script>
+}

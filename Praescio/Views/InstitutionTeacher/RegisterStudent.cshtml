@@ -161,7 +161,7 @@
                                 </div>*@
 
                             <br />
-                            <span class="btn btn-primary">Reset</span>
+                            @*<span class="btn btn-primary">Reset</span>*@
                             <span class="btn btn-primary" ng-click="RegisterStudent()" ng-disabled="savingRequest">
                                 Submit
                                 <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
@@ -220,13 +220,15 @@
                     var expiredDate = $scope.Student.ExpiredDate;
                     $scope.Student.ActivateDate = ConvertDateFormat($scope.Student.ActivateDate);
                     $scope.Student.ExpiredDate = ConvertDateFormat($scope.Student.ExpiredDate);
+                    //var dob = moment($scope.Student.DateOfBirth, 'DD/MM/YYYY');
+                    //$scope.Student.DateOfBirth = dob.format('YYYY-MM-DD HH:mm:ss.SSS Z');
+                    $scope.Student.DateOfBirth = ConvertDateFormat($scope.Student.DateOfBirth);
 
                     $scope.savingRequest = true;
                     $scope.Student.IsIndividual = false;
                     $scope.Student.InstitutionAccountId = '@Praescio.Models.Common.ACCOUNT.InstitutionAccountId';
                     $scope.Student.AccountTypeId = '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Student)';
-                    var dob = moment($scope.Student.DateOfBirth, 'DD/MM/YYYY');
-                    $scope.Student.DateOfBirth = dob.format('YYYY-MM-DD HH:mm:ss.SSS Z');
+                    
                     var data = '{"account":' + JSON.stringify($scope.Student) + ',"studentsubject":' + JSON.stringify($scope.Student.Subject) + ',"accounttypeid":' + '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)' + ',"isTeacher":' + false + '}';
                     NetworkService.insert('PraescioAdmin/RegisterStudent', data).success(function (data) {
                         $scope.savingRequest = false;

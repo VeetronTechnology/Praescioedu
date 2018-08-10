@@ -1,4 +1,4 @@
-﻿
+﻿@using Praescio.BusinessEntities.Common
 @{
     ViewBag.Title = "Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -17,7 +17,7 @@
 
                 <div class="market-updates">
                     <div class="col-md-3 market-update-gd">
-                        <a href="@Url.Action("AssignmentList", "InstitutionStudent")">
+                        <a href="@Url.Action("ViewAssignment", "Praescio", new { assignmentType = (int)AssignmentType.InstitutionAssignment })">
                             <div class="market-update-block clr-block-2">
                                 <div class="col-md-4 market-update-right">
                                     <i class="fa fa-eye"> </i>
@@ -56,7 +56,7 @@
                         </a>
                     </div>
                     <div class="col-md-3 market-update-gd">
-                        <a href="@Url.Action("TestHistory", "InstitutionStudent")">
+                        <a href="@Url.Action("AssignmentResult", "Praescio", new { assignmentType = (int)AssignmentType.InstitutionAssignment })">
                             <div class="market-update-block clr-block-4">
                                 <div class="col-md-4 market-update-right">
                                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>
@@ -73,7 +73,7 @@
 
             </div><!-- /.row -->
 
-            <div class="row">
+            @*<div class="row">
                 <div class="col-md-12">
                     <div class="x_panel">
                         <div class="x_title">
@@ -134,7 +134,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>*@
         </div>
 
        

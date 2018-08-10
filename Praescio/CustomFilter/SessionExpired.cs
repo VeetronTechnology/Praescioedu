@@ -22,6 +22,11 @@ namespace Praescio.CustomFilter
                     filterContext.Result = new RedirectResult("~/Account/Login?returnUrl=" + filterContext.HttpContext.Request.Url);
                     return;
                 }
+                //if (Common.ACCOUNT != null)
+                //{
+                //    filterContext.Result = new RedirectResult("~/Account/AccountInactive");
+                //    return;
+                //}
             }
             catch (Exception)
             {

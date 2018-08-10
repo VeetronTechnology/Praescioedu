@@ -7,7 +7,7 @@
 
 <div class="right_col" role="main" ng-controller="addVideoCtrl">
     <div class="cont">
-        <ol class="breadcrumb breadcrumb-bg-teal align-right">
+        <ol class="breadcrumb align-right">
             <li><a href="index.html"><i class="material-icons">home</i> Home</a></li>
             <li><a href="add_question.html"> Add Questions</a></li>
             <li>Add Video</li>
@@ -24,83 +24,86 @@
                             </h2>
                         </div>
                         <div class="body">
-                            
-                                <label for="Title">Title:</label>
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" placeholder="Title">
-                                    </div>
+                          <form class="form-horizontal form-label-left" name="AssignmentForm">
+
+                            <label for="Title" class="required">Title:</label>
+                            <div class="form-group">
+                              <input type="text" id="Title" ng-model="Video.Title" class="form-control" name="Title" placeholder="Title" required />
+                              <p ng-show="AssignmentForm.Title.$invalid && (AssignmentForm.Title.$dirty || submitted ||AssignmentForm.Title.$touched )" class="text-danger">Title is required.</p>
+                            </div>
+
+                            <div class="form-group">
+
+                              <label for="Version">Select @assignmentTitle Type</label>
+                              <select id="Assignment" name="Assignment" class="input-sm form-control" ng-model="AssignmentTypeId" ng-options="option.AssignmentTypeId as option.AssignmentTypeName for option in AssignmentTypeList" ng-change="GetAssignmentByType(AssignmentTypeId)" ng-required="true">
+                                <option value="">-- Select @assignmentTitle Type--</option>
+                              </select>
+                            </div>
+
+                              <div class="form-group">
+                                <label for="heard" class="required">Select Board</label>
+                                <select id="Board" name="Board" ng-change="ChangeBoard(Assignment.BoardId)" class="input-sm form-control" ng-model="Assignment.BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-required="true">
+                                  <option value="">-- Select Board --</option>
+                                </select>
+                                <p ng-show="AssignmentForm.Board.$invalid && (AssignmentForm.Board.$dirty || submitted ||AssignmentForm.Board.$touched )" class="text-danger">Board is required.</p>
+                              </div>
+
+                              <div class="form-group">
+                                <div>
+                                  <label for="heard">Select Medium</label>
+                                  <select id="Medium" name="Medium" class="input-sm form-control" ng-model="Assignment.MediumId" ng-disabled="Assignment.BoardId>1" ng-options="option.Id as option.Name for option in MediumList" ng-change="ChangeMedium(Assignment.MediumId)" ng-required="true">
+                                    <option value="">-- Select Medium --</option>
+                                  </select>
                                 </div>
+                                <p ng-show="AssignmentForm.Medium.$invalid && (AssignmentForm.Medium.$dirty || submitted ||AssignmentForm.Medium.$touched )" class="text-danger">Medium is required.</p>
+                              </div>
 
-
-                                <!--Below New Add views-->
-
-                                <form id="SchoolForm" name="SchoolForm" data-parsley-validate>
-
-                                <div class="form-group">
-                                    <label for="heard" class="required">Select Board</label>
-                                    <select id="Board" name="Board" ng-change="ChangeBoard(Assignment.BoardId)" class="input-sm form-control" ng-model="Assignment.BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-required="true">
-                                        <option value="">-- Select Board --</option>
-                                    </select>
-                                    <p ng-show="AssignmentForm.Board.$invalid && (AssignmentForm.Board.$dirty || submitted ||AssignmentForm.Board.$touched )" class="text-danger">Board is required.</p>
+                              <div class="form-group">
+                                <div>
+                                  <label for="heard">Select Standard</label>
+                                  <select id="Standard" name="Standard" class="input-sm form-control" ng-model="Assignment.StandardId" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="ChangeStandard(Assignment.StandardId)" ng-required="true">
+                                    <option value="">-- Select Standard --</option>
+                                  </select>
                                 </div>
+                                <p ng-show="AssignmentForm.Standard.$invalid && (AssignmentForm.Standard.$dirty || submitted ||AssignmentForm.Standard.$touched )" class="text-danger">Standard is required.</p>
+                              </div>
 
-                                <div class="form-group">
-                                    <div>
-                                        <label for="heard">Select Medium</label>
-                                        <select id="Medium" name="Medium" class="input-sm form-control" ng-model="Assignment.MediumId" ng-disabled="Assignment.BoardId>1" ng-options="option.Id as option.Name for option in MediumList" ng-change="ChangeMedium(Assignment.MediumId)" ng-required="true">
-                                            <option value="">-- Select Medium --</option>
-                                        </select>
-                                    </div>
-                                    <p ng-show="AssignmentForm.Medium.$invalid && (AssignmentForm.Medium.$dirty || submitted ||AssignmentForm.Medium.$touched )" class="text-danger">Medium is required.</p>
+                              <div class="form-group">
+                                <div>
+                                  <label for="heard">Select Subject</label>
+                                  <select id="Subject" name="Subject" class="input-sm form-control" ng-model="Assignment.SubjectId" ng-options="option.Id as option.SubjectName for option in SubjectList" ng-change="ChangeSubject(Assignment.SubjectId)" ng-required="true">
+                                    <option value="">-- Select Subject --</option>
+                                  </select>
                                 </div>
+                              </div>
 
-                                <div class="form-group">
-                                    <div>
-                                        <label for="heard">Select Standard</label>
-                                        <select id="Standard" name="Standard" class="input-sm form-control" ng-model="Assignment.StandardId" ng-options="option.Id as option.StandardName for option in StandardList" ng-change="ChangeStandard(Assignment.StandardId)" ng-required="true">
-                                            <option value="">-- Select Standard --</option>
-                                        </select>
-                                    </div>
-                                    <p ng-show="AssignmentForm.Standard.$invalid && (AssignmentForm.Standard.$dirty || submitted ||AssignmentForm.Standard.$touched )" class="text-danger">Standard is required.</p>
+                              <div class="form-group">
+                                <label for="Version">Select @assignmentTitle</label>
+                                <select id="Assignment" name="Assignment" class="input-sm form-control" ng-model="AssignmentId" ng-options="option.AssignmentId as option.Title for option in AssignmentList" ng-change="" ng-required="true">
+                                  <option value="">-- Select @assignmentTitle --</option>
+                                </select>
+                              </div>
+
+                              <!--Above New Add views-->
+
+
+                              <div class="form-group">
+                                <label for="VideoSrc">Youtube Video URL</label>
+                                @*<div class="">
+                                  <input id="Video" ng-model="file" valid-file name="file" required type="file" ng-files="getTheFiles($files)" accept="video/*" onselect="Call()" />
+                                  <span>(*Choose only Video)</span>
+                                </div>*@
+                                <div class="">
+                                  <input type="text" id="VideoSrc" ng-model="Video.VideoSrc" class="form-control" name="VideoSrc" placeholder="Youtube Video URL" required />
+                                  <p ng-show="AssignmentForm.VideoSrc.$invalid && (AssignmentForm.VideoSrc.$dirty || submitted ||AssignmentForm.Title.$touched )" class="text-danger">Youtube Video URL is required.</p>
                                 </div>
+                              </div>
 
-                                    <div class="form-group">
-                                        <div>
-                                            <label for="heard">Select Subject</label>
-                                            <select id="Subject" name="Subject" class="input-sm form-control" ng-model="Assignment.SubjectId" ng-options="option.Id as option.SubjectName for option in SubjectList" ng-change="ChangeSubject(Assignment.SubjectId)" ng-required="true">
-                                                <option value="">-- Select Subject --</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-
-                                        <label for="Version">Select @assignmentTitle Type</label>
-                                        <select id="Assignment" name="Assignment" class="input-sm form-control" ng-model="AssignmentTypeId" ng-options="option.AssignmentTypeId as option.AssignmentTypeName for option in AssignmentTypeList" ng-change="GetAssignmentByType(AssignmentTypeId)" ng-required="true">
-                                            <option value="">-- Select @assignmentTitle Type--</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="Version">Select @assignmentTitle</label>
-                                        <select id="Assignment" name="Assignment" class="input-sm form-control" ng-model="AssignmentId" ng-options="option.AssignmentId as option.Title for option in AssignmentList" ng-change="" ng-required="true">
-                                            <option value="">-- Select @assignmentTitle --</option>
-                                        </select>
-                                    </div>
-
-                                    <!--Above New Add views-->
-
-
-                                <label for="Add Video">Add Video:</label>
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="file">
-                                    </div>
-                                </div>
-
-                                <br>
-                                <button type="button" class="btn btn-primary waves-effect">SUBMIT</button>
+                              <br>
+                              <button type="button" class="btn btn-primary waves-effect" ng-click="SaveFile()" ng-disabled="savingRequest || fileUploading">
+                              SUBMIT 
+                                <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
+                              </button>
                             </form>
                         </div>
                     </div>
@@ -108,125 +111,307 @@
             </div>
 
             <!-- #END# Vertical Layout -->
-
         </div>
-
     </div>
 </div>
-
-
-
-
 
 @section Scripts{
 
     <script type="text/javascript">
+      //myApp.directive('ngFiles', ['$parse', function ($parse) {
+      //  function fn_link(scope, element, attrs) {
+      //    var onChange = $parse(attrs.ngFiles);
+      //    element.on('change', function (event) {
+      //      onChange(scope, { $files: event.target.files });
+      //    });
+      //  };
 
-        myApp.controller('addVideoCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+      //  return {
+      //    link: fn_link
+      //  }
+      //}])
+      //  .directive('ngInitial', function () {
+      //    return {
+      //      restrict: 'A',
+      //      controller: [
+      //        '$scope', '$element', '$attrs', '$parse', function ($scope, $element, $attrs, $parse) {
+      //          var getter, setter, val;
+      //          val = $attrs.ngInitial || $attrs.value;
+      //          getter = $parse($attrs.ngModel);
+      //          setter = getter.assign;
+      //          setter($scope, val);
+      //        }
+      //      ]
+      //    };
+      //  })
+      //  .directive('validFile', function () {
+      //    return {
+      //      require: 'ngModel',
+      //      link: function (scope, el, attrs, ngModel) {
+      //        //change event is fired when file is selected
+      //        el.bind('change', function () {
+      //          scope.$apply(function () {
+      //            ngModel.$setViewValue(el.val());
+      //            ngModel.$render();
+      //          });
+      //        });
+      //      }
+      //    }
+      //  })
 
-            $scope.Assignment = {};
-            $scope.AssignmentListAll = [];
-            NetworkService.get('PraescioCommon/GetAssignmentListDropDown?AssignmentType=@ViewBag.AssignmentType').success(function (data) {
-                $scope.AssignmentListAll = data.dataContent;
-                //console.log(data);
+      myApp.controller('addVideoCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+
+        $scope.Assignment = {};
+        $scope.AssignmentListAll = [];
+        $scope.AssignmentTypeId = null;
+        $scope.Video = {};
+        //$scope.fileUploading = false;
+
+        @*var formdata = new FormData();
+        $scope.getTheFiles = function ($files) {
+          formdata = new FormData();
+          $scope.isDisplay = true;
+          $scope.fileUploading = true;
+          if ($files.length != 0)
+            $scope.FileUpload = [];
+          for (var i = 0; i < $files.length; i++) {
+            $scope.FileUpload.push({ FileName: $files[i].name, ContentType: $files[i].type, Size: $files[i].size });
+          }
+          $scope.isDisplay = true;
+          angular.forEach($files, function (value, key) {
+            formdata.append(0, value);
+          });
+
+          NetworkService.UploadFiles('@Url.Content("~/PraescioCommon/SaveFile")', formdata).success(function (response) {
+              //console.log('response', response)
+              $scope.fileUploading = false;
+              $scope.Video.VideoSrc = response.filelocation;
+          }).error(function (data) {
+            $scope.fileUploading = false;
+            $scope.FileUpload = [];
+            $scope.files = null;
+            angular.element("input[type='file']").val(null);
+            swal({
+              title: "File upload failed. Please try again.",
+              text: "Press Ok to Continue.",
+              type: "error",
+              confirmButtonColor: "red",
+              showCancelButton: false,
             });
+          });
+        };*@
 
-            var formdata = new FormData();
-            $scope.getTheFiles = function ($files) {
-                $scope.isDisplay = true;
-                if ($files.length != 0)
-                    $scope.FileUpload = [];
-                for (var i = 0; i < $files.length; i++) {
-                    $scope.FileUpload.push({ FileName: $files[i].name, ContentType: $files[i].type, Size: $files[i].size });
+        $scope.selectedFile = null;
+        $scope.msg = "";
+
+        NetworkService.get('PraescioCommon/GetAssignmentTypeList').success(function (data) {
+          $scope.AssignmentTypeList = [];
+          if (data) {
+            if ("@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.SuperAdmin)") {
+              $scope.AssignmentTypeList = data.filter(m => m.AssignmentTypeId == parseInt("@((int)Praescio.BusinessEntities.Common.AssignmentType.PraescioLesson)") || m.AssignmentTypeId == parseInt("@((int)Praescio.BusinessEntities.Common.AssignmentType.PExtra)"));
+            } else {
+              //$scope.AssignmentTypeList = data.filter(m => m.AssignmentTypeName.toLowerCase() == 'praescio lesson' || m.AssignmentTypeName.toLowerCase() == 'pextra');
+              if (parseInt("@Praescio.Models.Common.ACCOUNT.BoardId") == 4) {
+                $scope.AssignmentTypeList = data.filter(m => m.AssignmentTypeId == parseInt("@((int)Praescio.BusinessEntities.Common.AssignmentType.PExtra)"));
+              } else {
+                if ("@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)" || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Admin)") {
+                  $scope.AssignmentTypeList = data.filter(m => m.AssignmentTypeId == parseInt("@((int)Praescio.BusinessEntities.Common.AssignmentType.InstitutionAssignment)"));
+                } else if ("@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)") {
+                  $scope.AssignmentTypeList = data.filter(m => m.AssignmentTypeId == parseInt("@((int)Praescio.BusinessEntities.Common.AssignmentType.IndividualAssignment)"));
+                } else {
+                  $scope.AssignmentTypeList = data.filter(m => m.AssignmentTypeId == parseInt("@((int)Praescio.BusinessEntities.Common.AssignmentType.PraescioLesson)"));
                 }
-                $scope.isDisplay = true;
-                angular.forEach($files, function (value, key) {
-                    formdata.append(0, value);
-                });
-
-            };
-
-            $scope.selectedFile = null;
-            $scope.msg = "";
-
-
-
-                $scope.MCQAnswerList = [{ "id": 'A', "text": 'A' }, { "id": 'B', "text": 'B' }, { "id": 'C', "text": 'C' }, { "id": 'D', "text": 'D' }];
-
-
-
-                NetworkService.get('PraescioCommon/GetAssignmentTypeList').success(function (data) {
-                  $scope.AssignmentTypeList = [];
-                  if (data) {
-                    $scope.AssignmentTypeList = data.filter(m => m.AssignmentTypeName.toLowerCase() == 'praescio lesson' || m.AssignmentTypeName.toLowerCase() == 'pextra');
-                  }
-                });
-
-                $scope.GetAssignmentByType = function (AssignmentTypeId) {
-                    NetworkService.get('PraescioCommon/GetAssignmentList?AssignmentType=' + AssignmentTypeId).success(function (data) {
-                        $scope.AssignmentList = data.dataContent;
-                        console.log(data);
-                    });
-                }
-
-            $scope.selectedFile = null;
-            $scope.msg = "";
-
-              $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
-                               { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }]
-
-            NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
-                $scope.BoardList = data;
-            });
-
-
-            NetworkService.get('PraescioAdmin/GetMedium').success(function (data) {
-                $scope.MediumList = data;
-
-            });
-            $scope.ChangeBoard = function (boardname) {
-                if (boardname > 1) {
-                    $scope.Assignment.MediumId = 1;
-                }
+              }
             }
-
-                $scope.ChangeStandard = function (id) {
-                    NetworkService.get('PraescioCommon/GetSubjectSingleMedium?standardid=' + id + '&mediumid=' + $scope.Assignment.MediumId).success(function (data) {
-                        $scope.SubjectList = data;
-                    });
-                }
-                NetworkService.get('PraescioCommon/GetAssignmentTypeList').success(function (data) {
-                    $scope.AssignmentTypeList = data;
-                });
-
-                $scope.GetAssignmentByType = function (AssignmentTypeId) {
-                    NetworkService.get('PraescioCommon/GetAssignmentList?AssignmentType=' + AssignmentTypeId).success(function (data) {
-                        $scope.AssignmentListAll = data.dataContent;
-                        console.log(data.dataContent);
-                        $scope.ChangeAssignmentList();
-                    });
-                }
-
-                $scope.ChangeSubject = function (id) {
-                    $scope.ChangeAssignmentList();
-                }
-
-                $scope.ChangeAssignmentList = function () {
-                    //console.log('$scope.Assignment', $scope.Assignment, $scope.Assignment.SubjectId)
-                    //console.log('$scope.AssignmentList', $scope.AssignmentListAll)
-                    $scope.AssignmentList = $scope.AssignmentListAll.filter(m => m.SubjectId == $scope.Assignment.SubjectId);
-                    //console.log('$scope.AssignmentList', $scope.AssignmentList)
-                }
-
-            $scope.ChangeAssignment = function (id) {
-                NetworkService.get('PraescioCommon/GetAssignmentDetail?assignmentid=' + id).success(function (data) {
-                    $scope.Assignment = data.Assignment;
-                    $scope.ChangeStandard(data.Assignment.StandardId);
-
-                });
-            }
-
-
+          }
         });
+
+        $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
+        { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }]
+
+        $scope.TeacherMappingStandard = [];
+        $scope.TeacherSubjects = [];
+        if ("@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)"
+          || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"
+        )
+        {
+          NetworkService.get('PraescioCommon/GetUserRegisterationDetail?accountId=@Praescio.Models.Common.ACCOUNT.AccountId').success(function (data) {
+            $scope.TeacherMappingStandard = data.teacherMappingStandard;
+            var standards = [];
+
+            $scope.TeacherMappingStandard.forEach(function (k) {
+              standards.push(k.StandardId);
+              k.SubjectId.forEach(function (k2) {
+                $scope.TeacherSubjects.push(k2);
+              });
+            });
+
+            $scope.StandardList = $scope.StandardList.filter(m => standards.indexOf(m.Id) > -1);
+          });
+        }
+
+        NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
+          //$scope.BoardList = data;
+          @*if (parseInt("@Praescio.Models.Common.ACCOUNT.BoardId") == "@(Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.PExtra))") {
+            // Show only PE Board for PExtra
+            // 4 => PE Board
+            $scope.BoardList = data.filter(m => m.Id == 4);
+            $scope.Assignment.BoardId = 4;
+            $scope.ChangeBoard(4);
+          } else {
+            $scope.BoardList = data.filter(m => m.Id != 4);
+          }*@
+
+          $scope.BoardList = data;
+          if (
+            "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)"
+            || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"
+            || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Admin)"
+          )
+          {
+            $scope.BoardList = $scope.BoardList.filter(m => m.Id == "@Praescio.Models.Common.ACCOUNT.BoardId");
+          }
+
+          $scope.Assignment.BoardId = $scope.BoardList[0].Id;
+          $scope.ChangeBoard($scope.Assignment.BoardId);
+        });
+
+        $scope.MediumListAll = [];
+        NetworkService.get('PraescioAdmin/GetMedium').success(function (data) {
+          //$scope.MediumListAll = data;
+          if ("@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Student)"
+            || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)"
+            || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"
+            || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Admin)"
+            || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)")
+          {
+            var usrMediumId = "@Praescio.Models.Common.ACCOUNT.MediumId";
+            if (usrMediumId == "" || usrMediumId == null) {
+              usrMediumId = 1;
+            }
+            $scope.MediumList = data.filter(m => m.Id == usrMediumId);
+          } else {
+            $scope.MediumList = data;
+          }
+
+          $scope.Assignment.MediumId = $scope.MediumList[0].Id;
+        });
+
+        $scope.ChangeBoard = function (boardname) {
+          if (boardname > 1) {
+            $scope.Assignment.MediumId = 1;
+          }
+          $scope.SubjectList = [];
+          $scope.Assignment.StandardId = '';
+        }
+
+        $scope.ChangeMedium = function (MediumId) {
+          $scope.SubjectList = [];
+          $scope.Assignment.StandardId = '';
+        }
+
+        $scope.ChangeStandard = function (id) {
+          NetworkService.get('PraescioCommon/GetSubjectSingleMedium?standardid=' + id + '&mediumid=' + $scope.Assignment.MediumId + '&boardid=' + $scope.Assignment.BoardId).success(function (data) {
+            $scope.SubjectList = data;
+
+            if (
+              "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)"
+              || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"
+            )
+            {
+              $scope.SubjectList = $scope.SubjectList.filter(m => $scope.TeacherSubjects.indexOf(m.Id) > -1);
+            }
+          });
+        }
+
+        $scope.GetAssignmentByType = function (AssignmentTypeId) {
+          $scope.AssignmentTypeId = AssignmentTypeId;
+          $scope.ChangeAssignmentList();
+
+          NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
+            if ($scope.AssignmentTypeId == "@(Convert.ToInt16(Praescio.BusinessEntities.Common.AssignmentType.PExtra))") {
+              // Show only PE Board for PExtra
+              // 4 => PE Board
+              $scope.BoardList = data.filter(m => m.Id == 4);
+              //$scope.Assignment.BoardId = 4;
+              //$scope.ChangeBoard(4);
+            } else {
+              $scope.BoardList = data.filter(m => m.Id != 4);
+            }
+
+            if (
+              "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)"
+              || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"
+              || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Admin)"
+            )
+            {
+              $scope.BoardList = $scope.BoardList.filter(m => m.Id == "@Praescio.Models.Common.ACCOUNT.BoardId");
+            }
+
+            $scope.Assignment.BoardId = $scope.BoardList[0].Id;
+            $scope.ChangeBoard($scope.Assignment.BoardId);
+          });
+        }
+
+        $scope.ChangeSubject = function (id) {
+          $scope.ChangeAssignmentList();
+        }
+
+        $scope.ChangeAssignmentList = function () {
+          //$scope.AssignmentList = $scope.AssignmentListAll.filter(m => m.SubjectId == $scope.Assignment.SubjectId);
+          var url = 'pageNo=1&itemPerPage=9999&AssignmentType=' + $scope.AssignmentTypeId + '&HidePublished=true';
+          url += '&BoardId=' + ($scope.Assignment.BoardId == '' || $scope.Assignment.BoardId == undefined ? 0 : $scope.Assignment.BoardId) +
+            '&MediumId=' + ($scope.Assignment.MediumId == '' || $scope.Assignment.MediumId == undefined ? 0 : $scope.Assignment.MediumId) +
+            '&StandardId=' + ($scope.Assignment.StandardId == '' || $scope.Assignment.StandardId == undefined ? 0 : $scope.Assignment.StandardId) +
+            '&SubjectId=' + ($scope.Assignment.SubjectId == '' || $scope.Assignment.SubjectId == undefined ? 0 : $scope.Assignment.SubjectId) +
+            '&AttemptedOnly=false';
+          NetworkService.get('PraescioCommon/GetAssignmentListV2?' + url).success(function (data) {
+            $scope.AssignmentList = data.dataContent;
+          });
+        }
+
+        $scope.ChangeAssignment = function (id) {
+          NetworkService.get('PraescioCommon/GetAssignmentDetail?assignmentid=' + id).success(function (data) {
+            $scope.Assignment = data.Assignment;
+            $scope.ChangeStandard(data.Assignment.StandardId);
+
+          });
+        }
+
+        $scope.SaveFile = function () {
+          $scope.savingRequest = true;
+
+          $scope.Video = {
+            Title: $scope.Video.Title,
+            VideoSrc: $scope.Video.VideoSrc,
+            AssignmentId: $scope.AssignmentId
+          }
+
+          NetworkService.insert('PraescioCommon/SaveVideo?assignmentId=' + $scope.AssignmentId, $scope.Video).then(function (response) {
+            $scope.Principal = response.data.filelocation;
+            $scope.savingRequest = false;
+
+            swal({
+              title: "Video has been successfully saved!!!",
+              text: "Press Ok to Continue.",
+              type: "success",
+              confirmButtonColor: "green",
+              showCancelButton: false,
+
+            });
+          }).error(function (data, status) {
+            $scope.savingRequest = false;
+            swal({
+              title: data.Message,
+              text: "Press Ok to Continue.",
+              type: "error",
+              confirmButtonColor: "red",
+              showCancelButton: false,
+            });
+          });
+        }
+
+
+      });
     </script>
 }

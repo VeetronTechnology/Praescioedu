@@ -19,6 +19,7 @@ namespace Praescio.Controllers
     }
 
     [SessionExpired]
+    [ChangePasswordFirstLogin]
     public class PraescioAdminController : BaseController
     {
         // GET: Registration
@@ -48,8 +49,9 @@ namespace Praescio.Controllers
             return View();
         }
 
-        public ActionResult RegisterIndividualTeacher(string version, int accountid = 0)
+        public ActionResult RegisterIndividualTeacher(int institutionId = 0, string version = "Trial", int accountid = 0)
         {
+            ViewBag.InstitutionId = institutionId;
             ViewBag.AccountId = accountid;
             ViewBag.Version = version;
             return View();
@@ -71,8 +73,9 @@ namespace Praescio.Controllers
             }
         }
 
-        public ActionResult RegisterIndividualStudent(string version, int accountid = 0)
+        public ActionResult RegisterIndividualStudent(int institutionId = 0, string version = "Trial", int accountid = 0)
         {
+            ViewBag.InstitutionId = institutionId;
             ViewBag.AccountId = accountid;
             ViewBag.Version = version;
             return View();

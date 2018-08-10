@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Praescio.CustomFilter;
+using Praescio.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -6,6 +8,7 @@ using System.Web.Mvc;
 
 namespace Praescio.Controllers
 {
+    [ChangePasswordFirstLogin]
     public class ParentsController : Controller
     {
         // GET: Parents
@@ -43,6 +46,13 @@ namespace Praescio.Controllers
 
         public ActionResult SchoolInformation()
         {
+            ViewBag.InstitutionId = Common.ACCOUNT.InstitutionAccountId;
+            return View();
+        }
+
+        public ActionResult GiveComments(int CreativityId)
+        {
+            ViewBag.CreativityId = CreativityId;
             return View();
         }
 

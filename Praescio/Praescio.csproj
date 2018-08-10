@@ -27,6 +27,7 @@
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
     <UseGlobalApplicationHostFile />
     <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,9 +55,8 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http">
@@ -3996,7 +3996,9 @@
     <Content Include="Scripts\Neoquant.js" />
     <Content Include="Scripts\pikaday.js" />
     <Content Include="Scripts\toastr.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
@@ -4014,8 +4016,11 @@
     <Compile Include="Controllers\ParentsController.cs" />
     <Compile Include="Controllers\PraescioAdminController.cs" />
     <Compile Include="Controllers\PraescioCommonController.cs" />
+    <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\SchoolAdminController.cs" />
     <Compile Include="Controllers\TeacherController.cs" />
+    <Compile Include="CustomFilter\AccountInactive.cs" />
+    <Compile Include="CustomFilter\ChangePasswordFirstLogin.cs" />
     <Compile Include="CustomFilter\SessionExpired.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -4983,7 +4988,7 @@
     <Content Include="Views\InstitutionTeacher\TeacherProfile.cshtml" />
     <Content Include="Views\InstitutionTeacher\SchoolProfile.cshtml" />
     <Content Include="Views\InstitutionTeacher\Students.cshtml" />
-    <Content Include="Views\PraescioCommon\AddHandwritingAssigment.cshtml" />
+    <Content Include="Views\PraescioCommon\AddHandwritingAssignment.cshtml" />
     <Content Include="Views\PraescioCommon\ViewHandwritingAssigment.cshtml" />
     <Content Include="Views\PraescioCommon\AddPronunciationAssignment.cshtml" />
     <Content Include="Views\PraescioCommon\ViewPronunciationAssignment.cshtml" />
@@ -5028,6 +5033,17 @@
     <Content Include="Views\IndividualTeacher\AddStudent.cshtml" />
     <Content Include="Views\IndividualTeacher\RegisterStudentHistory.cshtml" />
     <Content Include="Views\IndividualTeacher\UpgradePackage.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
+    <Content Include="Views\Account\AccountInactive.cshtml" />
+    <Content Include="Views\PraescioCommon\ViewAssignmentHKP.cshtml" />
+    <Content Include="Views\PraescioCommon\ViewAssignmentHKPStudent.cshtml" />
+    <Content Include="Views\PraescioCommon\TestHKP.cshtml" />
+    <Content Include="Views\Payment\PaymentRequest.cshtml" />
+    <Content Include="Views\Payment\PaymentFailed.cshtml" />
+    <Content Include="Views\Payment\PaymentCancelled.cshtml" />
+    <Content Include="Views\Parents\SchoolInformation.cshtml" />
+    <Content Include="Views\PraescioCommon\CreativityDetails.cshtml" />
+    <Content Include="Views\Payment\PaymentResponse.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

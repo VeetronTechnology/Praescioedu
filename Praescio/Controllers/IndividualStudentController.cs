@@ -8,6 +8,7 @@ using System.Web.Mvc;
 namespace Praescio.Controllers
 {
     [SessionExpired]
+    [ChangePasswordFirstLogin]
     public class IndividualStudentController : Controller
     {
         // GET: IndividualStudent

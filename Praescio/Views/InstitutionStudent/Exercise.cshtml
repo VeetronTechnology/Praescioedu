@@ -5,19 +5,21 @@
 }
 
 
-<div class="right_col" role="main" style="background:#48c9b0" ng-controller="ExerciseCtrl">
-    <div class="cont">
-        <div class="table-agile-info">
+<div class="right_col" role="main" ng-controller="ExerciseCtrl">
+    <div class="content">
+        <div class="table-agile-info1">
             <ol class="breadcrumb">
                 <li><a href="lesson_index.html">Lesson</a></li>
                 <li><a href="start_test.html">Start Test</a></li>
                 <li class="active">Exercise - [other type of Question] </li>
             </ol>
-            <div class="panel panel-default">
+            <div class="panel panel-default" id="tbl-questions">
                 <div class="panel-heading">
                     Exercise - [other type of Question]
-                    <span class="tools pull-right" style="font-size:12px;font-weight:600;">
-                        <a href="javascript:;">Active: Duration : ddd:hh:mm</a>
+                    <span title="Days:Hours:Minutes" class="tools pull-right" style="font-size:12px;font-weight:600;">
+                      Active Duration:
+                      <span ng-if="ExamStartDateTimer == null">Not Started</span>
+                      <span ng-if="ExamStartDateTimer != null">{{ ExamStartDateTimer }}</span>
                     </span>
                 </div>
                 <div class="panel-body" ng-repeat="q in QuestionList">
@@ -46,7 +48,7 @@
                         </div>
                         @*<button type="submit" class="btn btn-danger">Clear</button>*@
                         <a class="btn btn-success" ng-click="SaveAnswer();" ng-disabled="savingRequest">
-                            Submit
+                            Save
                             <i class="fa fa-spinner fa-spin" ng-show="savingRequest"></i>
                         </a>
                     </form>
@@ -63,7 +65,17 @@
 
     <script type="text/javascript">
 
-        myApp.controller('ExerciseCtrl', function ($scope, $rootScope, $filter, NetworkService) {
+        myApp.controller('ExerciseCtrl', function ($scope, $rootScope, $filter, NetworkService, $interval) {
+            $scope.ExamStartDateTimer = "Loading...";
+            NetworkService.get('PraescioCommon/GetUserAssessmentDetail?assignmentid=@ViewBag.assignmentid').success(function (data) {
+                if (data != null) {
+                  $interval(function () {
+                    $scope.ExamStartDateTimer = GetStopWatchTime(data.ExamStartDate);
+                  }, 1000);
+                } else {
+                  $scope.ExamStartDateTimer = null;
+                }
+            });
 
             NetworkService.get('InstitutionStudent/GetAssignmentQuestion?assignmentid=@ViewBag.Assignmentid&typeOfQuestion=@ViewBag.TypeOfQuestion').success(function (data) {
                 $scope.QuestionList = data;
@@ -71,6 +83,20 @@
 
             $scope.SaveAnswer = function () {
                 $scope.savingRequest = true;
+
+                if ($('#tbl-questions input[type=text]').filter(function () {
+                  return $.trim($(this).val()).length == 0
+                }).length > 0) {
+                  $scope.savingRequest = false;
+                  swal({
+                    title: "Please fill in all the values.",
+                    text: "Press Ok to Continue.",
+                    type: "error",
+                    confirmButtonColor: "red",
+                    showCancelButton: false,
+                  });
+                  return;
+                }
 
                 NetworkService.insert('InstitutionStudent/SaveAnswer', $scope.QuestionList).success(function (data) {
                     $scope.savingRequest = false;

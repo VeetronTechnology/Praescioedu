@@ -11,7 +11,7 @@
                   @if (ViewBag.IsIndividual == false)
                   {
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                      <h2 class="text-left">Student Profile</h2>
+                      <h2 class="text-left">School Student Profile</h2>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                       <h2 class="text-left">
@@ -25,7 +25,7 @@
                   else
                   {
                     <div class="col-md-12">
-                      <h2 class="text-left">Student Profile</h2>
+                      <h2 class="text-left">Individual Student Profile</h2>
                     </div>
                   }
                 </div>
@@ -49,7 +49,12 @@
                       </tr>
                       <tr data-expanded="true">
                         <th>Password</th>
-                        <td>*********  <a href="#" ng-click="SendResetPasswordLink()" class="btn btn-success">Reset Password</a></td>
+                        <td>*********  
+                        @if (Praescio.Models.Common.ACCOUNT.AccountTypeId != (int)Praescio.BusinessEntities.Common.AccountType.StudentParent)
+                        {
+                            <a href="#" ng-click="SendResetPasswordLink()" class="btn btn-success">Reset Password</a>
+                        }
+                        </td>
                       </tr>
                       <tr data-expanded="true">
                         <th>Gender</th>
@@ -73,12 +78,12 @@
                         <td>{{Student.MotherName}}</td>
                       </tr>
                       <tr data-expanded="true">
-                        <th>Parent Email</th>
+                        <th>Alternate Email</th>
                         <td>{{Student.ParentEmail}}</td>
                       </tr>
                       <tr data-expanded="true">
-                        <th>Parent Phone No.</th>
-                        <td>{{Student.ParentNo}}</td>
+                        <th>Phone No.</th>
+                        <td>{{Student.MobileNo}}</td>
                       </tr>
                       <tr data-expanded="true">
                         <th>Activation Start Date</th>
@@ -92,6 +97,18 @@
                         <th>Student Address</th>
                         <td>{{Student.Address}}</td>
                       </tr>
+                        <tr data-expanded="true" ng-if="!SchoolStudentParent && Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)">
+                          <th>Version</th>
+                          <td>{{Student.VersionType}}</td>
+                        </tr>
+                        <tr data-expanded="true" ng-if="!SchoolStudentParent && Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)">
+                          <th>Package</th>
+                          <td>{{PackageName}}</td>
+                        </tr>
+                        <tr data-expanded="true" ng-if="!SchoolStudentParent && Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)">
+                          <th>Amount Paid</th>
+                          <td>{{Student.AmountPaid}}</td>
+                        </tr>
 
                       <tr data-expanded="true">
                         <th>Students School Name</th>
@@ -215,6 +232,8 @@
         myApp.controller('StudentProfileCtrl', function ($scope, $rootScope, $filter, NetworkService) {
           $scope.itemPerPage = 10;
           $scope.AllowEdit = false;
+          $scope.PackageName = '';
+          $scope.SchoolStudentParent = true;
 
             $scope.LoadUser = function () {
                 NetworkService.get('PraescioCommon/GetStudentProfile?userid=@ViewBag.StudentAccountId').success(function (data) {
@@ -241,37 +260,60 @@
                       $scope.AllowEdit = true;
                     }
 
-                    console.log('$scope.Student.IsIndividual', $scope.Student.IsIndividual,"@Praescio.Models.Common.ACCOUNT.AccountTypeId", "@Praescio.Models.Common.ACCOUNT.AccountId","@Praescio.Models.Common.ACCOUNT.InstitutionAccountId", $scope.Student.InstitutionAccountId)
+                    NetworkService.get('PraescioCommon/GetPackage?userPackageRole=@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualStudent)').success(function (data) {
+                        $scope.PackageList = data;
+
+                        var package = data.filter(m => m.id == $scope.Student.PackageId);
+                        if (package) {
+                          $scope.PackageName = ($scope.Student.VersionType == null || $scope.Student.VersionType == "@Praescio.BusinessEntities.Common.VersionType.Trial" ? 'Free' : package[0].text);
+                        }
+                    });
+      
+                    $scope.SchoolStudentParent = ($scope.Student.AccountTypeId==@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.Student) && @Praescio.Models.Common.ACCOUNT.AccountTypeId == @Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.StudentParent) ? true : false);
+                    //console.log('$scope.Student.IsIndividual', $scope.Student.IsIndividual,"@Praescio.Models.Common.ACCOUNT.AccountTypeId", "@Praescio.Models.Common.ACCOUNT.AccountId","@Praescio.Models.Common.ACCOUNT.InstitutionAccountId", $scope.Student.InstitutionAccountId)
                 });
             }
             $scope.LoadUser();
 
             $scope.ChangePassword = function () {
-                if (!$scope.ChangePasswordForm.$valid) {
-                    $scope.submitted = true;
-                }
-                else {
-                    NetworkService.insert('PraescioCommon/ChangePassword?oldpassword=' + $scope.OldPassword + '&NewPassword=' + $scope.NewPassword).success(function (data) {
+                swal({
+                    title: "Do you really want to change password?",
+                    text: "Press Ok to Continue.",
+                    type: "info",
+                    confirmButtonColor: "info",
+                    showCancelButton: true,
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        if (!$scope.ChangePasswordForm.$valid) {
+                            $scope.submitted = true;
+                        }
+                        else {
+                            NetworkService.insert('PraescioCommon/ChangePassword?oldpassword=' + $scope.OldPassword + '&NewPassword=' + $scope.NewPassword).success(function (data) {
 
 
-                        swal({
-                            title: "Password has been changed successfully!!!",
-                            text: "Press Ok to Continue.",
-                            type: "success",
-                            confirmButtonColor: "green",
-                            showCancelButton: false,
-                        });
-                    }).error(function (data) {
-                        $scope.savingRequest = false;
-                        swal({
-                            title: data,
-                            text: "Press Ok to Continue.",
-                            type: "error",
-                            confirmButtonColor: "red",
-                            showCancelButton: false,
-                        });
-                    });
-                }
+                                swal({
+                                    title: "Password has been changed successfully!!!",
+                                    text: "Press Ok to Continue.",
+                                    type: "success",
+                                    confirmButtonColor: "green",
+                                    showCancelButton: false,
+                                });
+                            }).error(function (data) {
+                                $scope.savingRequest = false;
+                                swal({
+                                    title: data,
+                                    text: "Press Ok to Continue.",
+                                    type: "error",
+                                    confirmButtonColor: "red",
+                                    showCancelButton: false,
+                                });
+                            });
+                        }
+                    }
+                });
             }
 
             $scope.ToggleBlockUser = function () {
@@ -322,32 +364,42 @@
             }
 
             $scope.SendResetPasswordLink = function () {
-                $scope.savingRequest = true;
-                console.log('SendResetPasswordLink', $scope.Student, $scope.Student.UserName, $scope.Student.Email)
-                NetworkService.get('Account/SendResetPasswordLink?username=' + $scope.Student.UserName + '&email=' + $scope.Student.Email).success(function (data) {
+                //console.log('SendResetPasswordLink', $scope.Student, $scope.Student.UserName, $scope.Student.Email)
+                swal({
+                    title: "Do you really want to reset password?",
+                    text: "Press Ok to Continue.",
+                    type: "info",
+                    confirmButtonColor: "info",
+                    showCancelButton: true,
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $scope.savingRequest = true;
+                        NetworkService.get('Account/SendResetPasswordLink?username=' + $scope.Student.UserName + '&email=' + $scope.Student.Email).success(function (data) {
+                            swal({
+                                title: "Email has been sent to reset your password !!!",
+                                text: "Press Ok to Continue.",
+                                type: "success",
+                                confirmButtonColor: "green",
+                                showCancelButton: false,
+                            });
+                            $scope.savingRequest = false;
+                        }).error(function (data) {
+                            $scope.savingRequest = false;
 
-                    swal({
-                        title: "Email has been sent to reset your password !!!",
-                        text: "Press Ok to Continue.",
-                        type: "success",
-                        confirmButtonColor: "green",
-                        showCancelButton: false,
-                    });
-                    $scope.savingRequest = false;
-
-                }).error(function (data) {
-                    $scope.savingRequest = false;
-
-                    swal({
-                        title: data,
-                        text: "Press Ok to Continue.",
-                        type: "error",
-                        confirmButtonColor: "red",
-                        showCancelButton: false,
-                    });
+                            swal({
+                                title: data,
+                                text: "Press Ok to Continue.",
+                                type: "error",
+                                confirmButtonColor: "red",
+                                showCancelButton: false,
+                            });
+                        });
+                    }
                 });
             }
-
         });
     </script>
 }

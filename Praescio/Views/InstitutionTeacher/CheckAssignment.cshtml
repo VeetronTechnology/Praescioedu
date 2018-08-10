@@ -4,10 +4,15 @@
     string assignmentTypeTitle = "Assignment";
     if(ViewBag.AssignmentType == 1)
     {
-        assignmentTypeTitle = "Lesson";
+      assignmentTypeTitle = "Lesson";
     } else if (ViewBag.AssignmentType == 6)
     {
-        assignmentTypeTitle = "P-Extra";
+      assignmentTypeTitle = "P-Extra";
+    }
+
+    if (Praescio.Models.Common.ACCOUNT.AccountTypeId == ((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher))
+    {
+      assignmentTypeTitle = (assignmentTypeTitle == "Lesson" ? "Assignment" : assignmentTypeTitle);
     }
 }
 
@@ -52,10 +57,10 @@
                     <div class="row" id="pnl-ats">
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <label class="radio-inline info-box bg-pink hover-expand-effect active">
-                                <input type="radio" ng-model="assignmentType" ng-change="ChangeAssignmentType(1)" name="assignmentType" id="assignmentType1" value="1"> 
-                                <span class="icon">
+                                <input type="radio" ng-model="assignmentType" ng-change="ChangeAssignmentType(@((int)Praescio.BusinessEntities.Common.AssignmentType.PraescioLesson))" name="assignmentType" id="assignmentType1" value="@(ViewBag.AssignmentType)"> 
+                                @*<span class="icon">
                                     <i class="material-icons">assignment</i>
-                                </span>
+                                </span>*@
                                 <span class="content">
                                     <span class="text text-uppercase">@assignmentTypeTitle</span>
                                     <span class="number count-to" data-from="0" data-to="125" data-speed="15" data-fresh-interval="20"></span>
@@ -64,10 +69,10 @@
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <label class="radio-inline info-box bg-aqua hover-expand-effect">
-                                <input type="radio" ng-model="assignmentType" ng-change="ChangeAssignmentType(2)" name="assignmentType" id="assignmentType2" value="2">
-                                <span class="icon">
+                                <input type="radio" ng-model="assignmentType" ng-change="ChangeAssignmentType(@((int)Praescio.BusinessEntities.Common.AssignmentType.Handwriting))" name="assignmentType" id="assignmentType2" value="@((int)Praescio.BusinessEntities.Common.AssignmentType.Handwriting)">
+                                @*<span class="icon">
                                     <i class="material-icons">border_color</i>
-                                </span>
+                                </span>*@
                                 <span class="content">
                                     <span class="text text-uppercase">HANDWRITING @assignmentTypeTitle</span>
                                     <span class="number count-to" data-from="0" data-to="125" data-speed="15" data-fresh-interval="20"></span>
@@ -76,10 +81,10 @@
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <label class="radio-inline info-box bg-green hover-expand-effect">
-                                <input type="radio" ng-model="assignmentType" ng-change="ChangeAssignmentType(3)" name="assignmentType" id="assignmentType3" value="3">
-                                <span class="icon">
+                                <input type="radio" ng-model="assignmentType" ng-change="ChangeAssignmentType(@((int)Praescio.BusinessEntities.Common.AssignmentType.Pronounciation))" name="assignmentType" id="assignmentType3" value="@((int)Praescio.BusinessEntities.Common.AssignmentType.Pronounciation)">
+                                @*<span class="icon">
                                     <i class="material-icons">assignment</i>
-                                </span>
+                                </span>*@
                                 <span class="content">
                                     <span class="text text-uppercase">PRONUNCIATION @assignmentTypeTitle</span>
                                     <span class="number count-to" data-from="0" data-to="125" data-speed="15" data-fresh-interval="20"></span>
@@ -93,7 +98,7 @@
 
                             <div class="form-group">
                                 <label for="heard" class="required">Select Board</label>
-                                <select id="Board" name="Board" class="input-sm form-control" ng-model="Boardid" ng-options="option.Id as option.BoardName for option in BoardList" ng-change="ChangeBoard(Boardid)" ng-required="true">
+                                <select id="Board" name="Board" class="input-sm form-control" ng-model="BoardId" ng-options="option.Id as option.BoardName for option in BoardList" ng-change="ChangeBoard(BoardId)" ng-required="true">
                                     <option value="">-- Select Board --</option>
                                 </select>
                                 <p ng-show="SearchStudent.Board.$invalid && (SearchStudent.Board.$dirty || submitted ||SearchStudent.Board.$touched )" class="text-danger">Board is required.</p>
@@ -120,7 +125,7 @@
                             </div>
 
 
-                            <div class="form-group">
+                            <div class="form-group" ng-hide="assignmentType == @((int)Praescio.BusinessEntities.Common.AssignmentType.Handwriting) || assignmentType == @((int)Praescio.BusinessEntities.Common.AssignmentType.Pronounciation)">
                                 <div>
                                     <label for="SubjectName">Select Subject</label>
                                     <select id="Subject" name="Subject" class="input-sm form-control" ng-model="SubjectId" ng-options="option.Id as option.SubjectName for option in SubjectList" ng-change="ChangeLessons()" ng-required="true">
@@ -134,7 +139,7 @@
                                 <div>
                                     <label for="Version">Select @assignmentTypeTitle</label>
                                     <select id="Assignment" name="Assignment" class="input-sm form-control" ng-model="AssignmentId" ng-options="option.AssignmentId as option.Title for option in AssignmentList" ng-change="" ng-required="true">
-                                        <option value="">-- Select @assignmentTypeTitle List --</option>
+                                        <option value="">-- Select @assignmentTypeTitle --</option>
                                     </select>
                                 </div>
                                 <p ng-show="SearchStudent.Subject.$invalid && (SearchStudent.Subject.$dirty || submitted ||SearchStudent.Subject.$touched )" class="text-danger">@assignmentTypeTitle is required.</p>
@@ -180,19 +185,24 @@
                                     <th>Phone No.</th>
                                     @*<th>Registration Date</th>
                                     <th>Expiry Date</th>*@
-                                    <th>Status</th>
+                                    @*<th>Status</th>*@
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr dir-paginate="student in StudentList |itemsPerPage:10|filter:searchText" total-items="totalcount">
-                                    <td>{{student.FirstName}}</td>
-                                    <td>{{student.Email}}</td>
-                                    <td>{{student.MobileNo}}</td>
+                                    <td>{{student.Student.FirstName}}</td>
+                                    <td>{{student.Student.Email}}</td>
+                                    <td>{{student.Student.MobileNo}}</td>
                                     @*<td>{{student.CreatedOn| date:'dd MMM yyyy'}}</td>
                                     <td>{{student.ExpiredOn}}</td>*@
-                                    <td>{{student.IsActive==true?'Active':'DeActive'}}</td>
-                                    <td><a href="@Url.Action("TestHistory", "InstitutionTeacher")?StandardId={{StandardId}}&subjectId={{SubjectId}}&AssignmentId={{AssignmentId}}&userId={{student.AccountId}}">Check Answer</a></td>
+                                    @*<td>{{student.Student.IsActive==true?'Active':'DeActive'}}</td>*@
+                                    <td>
+                                      <a ng-if="student.Assesment.StatusId == @((int)Praescio.BusinessEntities.Common.AssignmentStatus.SubmittedByStudent)" ng-href="~/{{getCheckAnswerURL(student.Student)}}">Check Answer</a>
+                                      <span ng-if="student.Assesment.StatusId >= @((int)Praescio.BusinessEntities.Common.AssignmentStatus.CheckedByTeacher)" class="text-green">
+                                        <a href="#" class="btn btn-info btn-xs " ng-click="setModalViewResult(student.Assesment)">View Result</a>
+                                      </span>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -226,35 +236,26 @@
         myApp.controller('CheckAssignmentCtrl', function ($scope, $rootScope, $filter, NetworkService) {
             $scope.itemPerPage = 10;
             $scope.Assignment = {};
-            $scope.AssignmentListAll = [];
-            $scope.assignmentType = 1;
+            //$scope.AssignmentListAll = [];
+            $scope.assignmentType = @ViewBag.AssignmentType;
             $scope.MediumId = 1;
 
-            NetworkService.get('PraescioCommon/GetAssignmentList?assignmentType=@ViewBag.AssignmentType').success(function (data) {
+            @*NetworkService.get('PraescioCommon/GetAssignmentList?assignmentType=@ViewBag.AssignmentType').success(function (data) {
                 $scope.AssignmentListAll = data.dataContent;
-            });
+            });*@
 
             $scope.ChangeAssignmentType = function (id) {
-                NetworkService.get('PraescioCommon/GetAssignmentList?assignmentType='+id).success(function (data) {
-                    $scope.AssignmentListAll = data.dataContent;
-                });
-            }
-            
-            NetworkService.get('PraescioAdmin/GetMedium').success(function (data) {
-                $scope.MediumList = data;
-            });
+                //NetworkService.get('PraescioCommon/GetAssignmentList?assignmentType='+id).success(function (data) {
+                //    $scope.AssignmentListAll = data.dataContent;
+                //});
 
-            $scope.ChangeMedium = function (id) {
-                
+                $scope.ChangeAssignmentList();
             }
 
-            NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
-                $scope.BoardList = data;
-
-                if ('@Praescio.Models.Common.ACCOUNT.AccountTypeId' == '@Convert.ToInt16(Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)') {
-                    $scope.Boardid = parseInt('@Praescio.Models.Common.ACCOUNT.BoardId');
-                }
-            });
+            $scope.getCheckAnswerURL = function (student) {
+              //console.log('$scope.AssignmentType', $scope.assignmentType, @((int)Praescio.BusinessEntities.Common.AssignmentType.Handwriting), @((int)Praescio.BusinessEntities.Common.AssignmentType.Pronounciation))
+              return ($scope.assignmentType == @((int)Praescio.BusinessEntities.Common.AssignmentType.Handwriting) || $scope.assignmentType == @((int)Praescio.BusinessEntities.Common.AssignmentType.Pronounciation) ? 'Praescio/TestHKP' : 'InstitutionTeacher/TestHistory') + '?StandardId=' + $scope.StandardId + '&subjectId=' + $scope.SubjectId + '&AssignmentId=' + $scope.AssignmentId + '&userId=' + student.AccountId;
+            }
 
             $scope.StandardList = [{ Id: 1, StandardName: '5th' }, { Id: 2, StandardName: '6th' }, { Id: 3, StandardName: '7th' },
                             { Id: 4, StandardName: '8th' }, { Id: 5, StandardName: '9th' }, { Id: 6, StandardName: '10th' }]
@@ -262,19 +263,95 @@
             $scope.SubjectList = [{ Id: 1, SubjectName: 'English' }, { Id: 2, SubjectName: 'Marathi' },
                                { Id: 3, SubjectName: 'Science' }, { Id: 4, SubjectName: 'Mathematics' }];
 
+            $scope.TeacherMappingStandard = [];
+            $scope.TeacherSubjects = [];
+            if (
+              "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)"
+              || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"
+            )
+            {
+              NetworkService.get('PraescioCommon/GetUserRegisterationDetail?accountId=@Praescio.Models.Common.ACCOUNT.AccountId').success(function (data) {
+                $scope.TeacherMappingStandard = data.teacherMappingStandard;
+                var standards = [];
+
+                $scope.TeacherMappingStandard.forEach(function (k) {
+                  standards.push(k.StandardId);
+                  k.SubjectId.forEach(function (k2) {
+                    $scope.TeacherSubjects.push(k2);
+                  });
+                });
+
+                $scope.StandardList = $scope.StandardList.filter(m => standards.indexOf(m.Id) > -1);
+              });
+            }
+
+            NetworkService.get('PraescioAdmin/GetBoardList').success(function (data) {
+              if ("@((int)Praescio.BusinessEntities.Common.AssignmentType.PExtra)" == "@ViewBag.AssignmentType") {
+                $scope.BoardList = data.filter(m => m.Id == 4);
+              } else {
+                $scope.BoardList = data.filter(m => m.Id != 4);
+              }
+
+              if (
+                "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)"
+                || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"
+              )
+              {
+                $scope.BoardList = $scope.BoardList.filter(m => m.Id == "@Praescio.Models.Common.ACCOUNT.BoardId");
+                $scope.BoardId = parseInt('@Praescio.Models.Common.ACCOUNT.BoardId');
+              }
+
+              $scope.BoardId = $scope.BoardList[0].Id;
+              $scope.ChangeBoard($scope.Assignment.BoardId);
+            });
+
             $scope.ChangeBoard = function (boardname) {
-                //if (boardname > 1) {
-                //    $scope.Student.MediumId = 1;
-                //}
+              console.log('boardname', boardname)
+                if (boardname > 1) {
+                    $scope.MediumId = 1;
+                }
+            }
+
+            NetworkService.get('PraescioAdmin/GetMedium').success(function (data) {
+              @*$scope.MediumList = data.filter(m => m.Id == "@(Praescio.Models.Common.ACCOUNT.MediumId != null ? Praescio.Models.Common.ACCOUNT.MediumId : 1)");*@
+              if ("@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Student)"
+                || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualStudent)"
+                || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"
+                || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)")
+              {
+                var usrMediumId = "@Praescio.Models.Common.ACCOUNT.MediumId";
+                if (usrMediumId == "" || usrMediumId == null) {
+                  usrMediumId = 1;
+                }
+                $scope.MediumList = data.filter(m => m.Id == usrMediumId);
+              } else {
+                $scope.MediumList = data;
+              }
+
+              $scope.MediumId = $scope.MediumList[0].Id;
+            });
+
+            $scope.ChangeMedium = function (id) {
+
             }
 
             $scope.ChangeStandard = function (id) {
                 $scope.AssignmentList = [];
                 $scope.SubjectList = [];
-                NetworkService.get('PraescioCommon/GetSubjectSingleMedium?standardid=' + id + '&mediumid=' + $scope.MediumId).success(function (data) {
-                    $scope.SubjectList = data;
+                NetworkService.get('PraescioCommon/GetSubjectSingleMedium?standardid=' + id + '&mediumid=' + $scope.MediumId + '&boardid=' + $scope.BoardId).success(function (data) {
+                  $scope.SubjectList = data;
+
+                  if (
+                    "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.IndividualTeacher)"
+                    || "@Praescio.Models.Common.ACCOUNT.AccountTypeId" == "@((int)Praescio.BusinessEntities.Common.AccountType.Teacher)"
+                  )
+                  {
+                    $scope.SubjectList = $scope.SubjectList.filter(m => $scope.TeacherSubjects.indexOf(m.Id) > -1);
+                  }
+
+                  $scope.ChangeAssignmentList();
                 });
-            }
+              }
 
             $scope.ChangeSubject = function (id) {
                 //$scope.ChangeAssignmentList();
@@ -285,7 +362,18 @@
             }
 
             $scope.ChangeAssignmentList = function () {
-              $scope.AssignmentList = $scope.AssignmentListAll.filter(m => m.SubjectId == $scope.SubjectId && m.StandardId == $scope.StandardId && m.AssignmentTypeId == $scope.assignmentType);
+              //$scope.AssignmentList = $scope.AssignmentListAll.filter(m => m.SubjectId == $scope.SubjectId && m.StandardId == $scope.StandardId && m.AssignmentTypeId == $scope.assignmentType);
+
+              var url = 'pageNo=1&itemPerPage=9999&AssignmentType=' + $scope.assignmentType + '&HidePublished=false';
+              url += '&BoardId=' + ($scope.BoardId == '' || $scope.BoardId == undefined ? 0 : $scope.BoardId) +
+                '&MediumId=' + ($scope.MediumId == '' || $scope.MediumId == undefined ? 0 : $scope.MediumId) +
+                '&StandardId=' + ($scope.StandardId == '' || $scope.StandardId == undefined ? 0 : $scope.StandardId) +
+                '&SubjectId=' + ($scope.SubjectId == '' || $scope.SubjectId == undefined ? 0 : $scope.SubjectId) +
+                '&AttemptedOnly=false';
+                NetworkService.get('PraescioCommon/GetAssignmentListV2?' + url).success(function (data) {
+                    $scope.AssignmentList = data.dataContent;
+                    //$scope.totalcount = data.totalRecord;
+                });
             }
 
             $scope.ChangeAssignment = function (id) {
@@ -300,7 +388,13 @@
 
                 $scope.savingRequest = true;
 
-                NetworkService.get('InstitutionTeacher/GetStudentByAssignment?boardid=' + $scope.Boardid + '&standardId=' + $scope.StandardId + '&subjectId=' + $scope.SubjectId + '&assignmentId=' + $scope.AssignmentId, $scope.Question).success(function (data) {
+                var url = '?boardid=' + ($scope.BoardId == '' || $scope.BoardId == undefined ? 0 : $scope.BoardId) +
+                //'&MediumId=' + ($scope.MediumId == '' || $scope.MediumId == undefined ? 0 : $scope.MediumId) +
+                '&standardId=' + ($scope.StandardId == '' || $scope.StandardId == undefined ? 0 : $scope.StandardId) +
+                  '&subjectId=' + ($scope.SubjectId == '' || $scope.SubjectId == undefined ? 0 : $scope.SubjectId) +
+                  '&assignmentId=' + $scope.AssignmentId;
+
+                NetworkService.get('InstitutionTeacher/GetStudentByAssignment' + url, $scope.Question).success(function (data) {
                     $scope.StudentList = data.studentList;
                     $scope.totalcount = data.TotalRecord;
 
@@ -325,6 +419,22 @@
                     $scope.StudentList = data.studentList;
                     $scope.totalcount = data.TotalRecord;
                 });
+            }
+
+            $scope.setModalViewResult = function (assignment) {
+              swal({
+                title: 'View Result',
+                html: true,
+                text: '<table class="table table-bordered table-stripped text-left"><tbody>' +
+                '<tr><td><strong>Assignment Title</strong></td><td>' + assignment.Assignment.Title + '</td></tr>' +
+                //'<tr><td><strong>Assignment Description</strong></td><td>' + assignment.Assignment.Description + '</td></tr>' +
+                '<tr><td><strong>Marks Scored</strong></td><td>' + assignment.TotalMarksScored + '</td></tr>' +
+                '<tr><td><strong>Teacher Name</strong></td><td>' + (assignment.Assignment.Account.FirstName + ' ' + assignment.Assignment.Account.LastName) + '</td></tr>' +
+                '</tbody></table>',
+                //type: "info",
+                confirmButtonColor: "info",
+                showCancelButton: false
+              });
             }
 
         });
